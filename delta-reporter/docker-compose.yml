@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  delta_backend:
+    container_name: delta_backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    volumes:
+      - './backend:/app'
+    ports:
+      - '8080:8080'
+
+  delta_frontend:
+    container_name: delta_frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - '3001:3000'
+    environment:
+      - NODE_ENV=development
+
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+    ports:
+      - '6379:6379'
