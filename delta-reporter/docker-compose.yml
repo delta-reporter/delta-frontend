@@ -4,10 +4,10 @@ services:
   delta_backend:
     container_name: delta_backend
     build:
-      context: backend
+      context: backend/old_backend
       dockerfile: Dockerfile
     volumes:
-      - './backend:/app'
+      - './backend/old_backend:/app'
     ports:
       - '8080:8080'
 
