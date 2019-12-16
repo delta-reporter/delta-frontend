@@ -1,15 +1,55 @@
 version: '3.7'
 
 services:
-  delta_backend:
-    container_name: delta_backend
+  delta_launcher_service:
+    container_name: delta_launcher
     build:
-      context: backend/old_backend
+      context: backend/delta-launcher-service
       dockerfile: Dockerfile
     volumes:
-      - './backend/old_backend:/app'
+      - './backend/delta-launcher-service:/app'
     ports:
-      - '8080:8080'
+      - '5001:5000'
+
+  delta_projects_service:
+    container_name: delta_projects
+    build:
+      context: backend/delta-projects-service
+      dockerfile: Dockerfile
+    volumes:
+      - './backend/delta-projects-service:/app'
+    ports:
+      - '5002:5000'
+
+  delta_tests_service:
+    container_name: delta_tests
+    build:
+      context: backend/delta-tests-service
+      dockerfile: Dockerfile
+    volumes:
+      - './backend/delta-tests-service:/app'
+    ports:
+      - '5003:5000'
+
+  delta_testsuites_service:
+    container_name: delta_testsuites
+    build:
+      context: backend/delta-testsuite-service
+      dockerfile: Dockerfile
+    volumes:
+      - './backend/delta-testsuite-service:/app'
+    ports:
+      - '5004:5000'
+
+  delta_websockets_service:
+    container_name: delta_websockets
+    build:
+      context: backend/delta-websockets-service
+      dockerfile: Dockerfile
+    volumes:
+      - './backend/delta-websockets-service:/app'
+    ports:
+      - '5000:5000'
 
   delta_frontend:
     container_name: delta_frontend
