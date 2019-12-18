@@ -14,10 +14,10 @@ services:
   delta_frontend:
     container_name: delta_frontend
     build:
-      context: frontend
+      context: delta-frontend
       dockerfile: Dockerfile
     volumes:
-      - './frontend:/app'
+      - './delta-frontend:/app'
       - '/app/node_modules'
     ports:
       - '3000:3000'
