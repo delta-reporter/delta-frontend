@@ -4,11 +4,11 @@ Delta Reporter is based on a micro service architecture, as the first micro serv
 
 ## Backend
 
-- Based on Golang
+- Based on Flask
 
 ## Frontend
 
-- Based on React
+- Based on NextJS
 
 
 ## Deployment
@@ -25,7 +25,11 @@ If no errors are met, the environment should be live on:
 
 #### Backend
 
-- http://localhost:8080/
+- http://localhost:5000/ | Delta Websockets Service
+- http://localhost:5001/ | Delta Launcher Service
+- http://localhost:5002/ | Delta Projects Service
+- http://localhost:5003/ | Delta Tests Service
+- http://localhost:5004/ | Delta Testsuites Service
 
 #### The server will restart automatically on any change in the code
 
