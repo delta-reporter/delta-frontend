@@ -6,6 +6,8 @@ services:
     build:
       context: backend/delta-launcher-service
       dockerfile: Dockerfile
+    environment:
+      - FLASK_ENV=development
     volumes:
       - './backend/delta-launcher-service:/app'
     ports:
@@ -16,6 +18,8 @@ services:
     build:
       context: backend/delta-projects-service
       dockerfile: Dockerfile
+    environment:
+      - FLASK_ENV=development
     volumes:
       - './backend/delta-projects-service:/app'
     ports:
@@ -26,6 +30,8 @@ services:
     build:
       context: backend/delta-tests-service
       dockerfile: Dockerfile
+    environment:
+      - FLASK_ENV=development
     volumes:
       - './backend/delta-tests-service:/app'
     ports:
@@ -36,6 +42,8 @@ services:
     build:
       context: backend/delta-testsuite-service
       dockerfile: Dockerfile
+    environment:
+      - FLASK_ENV=development
     volumes:
       - './backend/delta-testsuite-service:/app'
     ports:
@@ -46,6 +54,8 @@ services:
     build:
       context: backend/delta-websockets-service
       dockerfile: Dockerfile
+    environment:
+      - FLASK_ENV=development
     volumes:
       - './backend/delta-websockets-service:/app'
     ports:
