@@ -1,0 +1,1 @@
+web: cd delta-reporter/backend/delta-launcher-service; gunicorn app:app
