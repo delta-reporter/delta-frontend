@@ -14,16 +14,19 @@ const useStyles = makeStyles((_: Theme) =>
   })
 )
 
-type Props = {}
+type Props = {
+  httpStatusCode: number
+}
 
-function About(props: Props) {
+function Error(props: Props) {
+  const { httpStatusCode } = props
   const classes = useStyles(props)
   return (
     <Layout className={classes.root}>
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography variant="h5">
-            Still looking forward to put something here.
+            Http status code {httpStatusCode} error !
           </Typography>
         </SpacingPaper>
       </HeaderArticleContainer>
@@ -34,17 +37,19 @@ function About(props: Props) {
 /**
  * Server side rendering
  */
-About.getInitialProps = async (ctx: AppContext): Promise<Props> => {
-  const { store } = ctx
+Error.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+  const { res, store } = ctx
 
   const pagePayload: IPagePayload = {
-    selectedPage: Page.ABOUT,
+    selectedPage: Page.ERROR,
   }
   store.dispatch({
     type: PageActions.changePage.toString(),
     payload: pagePayload,
   })
-  return {}
+  return {
+    httpStatusCode: res.statusCode,
+  }
 }
 
-export default About
+export default Error

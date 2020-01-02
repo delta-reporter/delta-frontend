@@ -18,8 +18,20 @@ The server will reload automatically after a change is saved
 
 ## Technology in service
 
-- NextJS
-- React
-- Typescript
-- Serverless Framework
-- MaterialUI
+- [NextJS](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Serverless Framework](https://github.com/serverless/serverless)
+- [MaterialUI](https://material-ui.com/)
+- [Redux](https://redux.js.org/)
+- [Redux Saga](https://redux-saga.js.org/)
+
+## Recommended Google Chrome & VSCode addons
+
+- [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=ja)
+- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
+- [Bracket Pair Colorizer 2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+
+#### Based on template provided on https://github.com/treetips/typescript-nextjs-redux-material-ui-example.git
