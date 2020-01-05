@@ -1,17 +1,50 @@
-import * as React from 'react'
-import Link from '@material-ui/core/Link';
-import Layout from '../components/Layout'
+import { Typography } from "@material-ui/core"
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import React from "react"
+import { AppContext } from "../components/AppContext"
+import { SpacingPaper } from "../components/atoms"
+import { HeaderArticleContainer } from "../components/organisms"
+import { Layout } from "../components/templates"
+import { Page } from "../constants"
+import { IPagePayload, PageActions } from "../store/page"
 
-const AboutPage: React.FunctionComponent = () => (
-  <Layout title="About | Next.js + TypeScript Example">
-    <h1>About</h1>
-    <p>This is the about page</p>
-    <p>
-      <Link href="/">
-        <a>Go home</a>
-      </Link>
-    </p>
-  </Layout>
+const useStyles = makeStyles((_: Theme) =>
+  createStyles({
+    root: {},
+  })
 )
 
-export default AboutPage
+type Props = {}
+
+function About(props: Props) {
+  const classes = useStyles(props)
+  return (
+    <Layout className={classes.root}>
+      <HeaderArticleContainer>
+        <SpacingPaper>
+          <Typography variant="h5">
+            Still looking forward to put something here.
+          </Typography>
+        </SpacingPaper>
+      </HeaderArticleContainer>
+    </Layout>
+  )
+}
+
+/**
+ * Server side rendering
+ */
+About.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+  const { store } = ctx
+
+  const pagePayload: IPagePayload = {
+    selectedPage: Page.ABOUT,
+  }
+  store.dispatch({
+    type: PageActions.changePage.toString(),
+    payload: pagePayload,
+  })
+  return {}
+}
+
+export default About
