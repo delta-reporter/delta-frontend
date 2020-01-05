@@ -7,11 +7,14 @@ services:
       context: backend/delta-launcher-service
       dockerfile: Dockerfile
     environment:
-      - FLASK_ENV=development
+      - APP_SETTINGS=config.DevelopmentConfig
+      - DATABASE_URL=db
     volumes:
       - './backend/delta-launcher-service:/app'
     ports:
       - '5001:5000'
+    links:
+      - db
 
   delta_projects_service:
     container_name: delta_projects
