@@ -1,56 +1,20 @@
 version: '3.7'
 
 services:
-  delta_launcher_service:
-    container_name: delta_launcher
+  delta_core_service:
+    container_name: delta_core
     build:
-      context: backend/delta-launcher-service
+      context: backend/delta-core-service
       dockerfile: Dockerfile
     environment:
       - APP_SETTINGS=config.DevelopmentConfig
       - DATABASE_URL=db
     volumes:
-      - './backend/delta-launcher-service:/app'
+      - './backend/delta-core-service:/app'
     ports:
       - '5001:5000'
     links:
       - db
-
-  delta_projects_service:
-    container_name: delta_projects
-    build:
-      context: backend/delta-projects-service
-      dockerfile: Dockerfile
-    environment:
-      - FLASK_ENV=development
-    volumes:
-      - './backend/delta-projects-service:/app'
-    ports:
-      - '5002:5000'
-
-  delta_tests_service:
-    container_name: delta_tests
-    build:
-      context: backend/delta-tests-service
-      dockerfile: Dockerfile
-    environment:
-      - FLASK_ENV=development
-    volumes:
-      - './backend/delta-tests-service:/app'
-    ports:
-      - '5003:5000'
-
-  delta_testsuites_service:
-    container_name: delta_testsuites
-    build:
-      context: backend/delta-testsuite-service
-      dockerfile: Dockerfile
-    environment:
-      - FLASK_ENV=development
-    volumes:
-      - './backend/delta-testsuite-service:/app'
-    ports:
-      - '5004:5000'
 
   delta_websockets_service:
     container_name: delta_websockets
