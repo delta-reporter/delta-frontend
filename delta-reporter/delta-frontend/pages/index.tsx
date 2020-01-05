@@ -38,52 +38,25 @@ function Index(props: Props) {
         </SpacingPaper>
 
         <SpacingPaper noPadding>
-          <Typography variant="h5">Launcher Service</Typography>
+          <Typography variant="h5">Core Service</Typography>
           <Typography variant="h6">
             <Link href="http://localhost:5001/">
-              <a>Launcher Info Page</a>
+              <a>Core Info Page</a>
             </Link>
             <br/>
             <Link href="http://localhost:5001/launches">
               <a>Launcher Endpoint Example</a>
             </Link>
-          </Typography>
-        </SpacingPaper>
-
-        <SpacingPaper noPadding>
-          <Typography variant="h5">Projects Service</Typography>
-          <Typography variant="h6">
-            <Link href="http://localhost:5002/">
-              <a>Projects Info Page</a>
-            </Link>
             <br/>
-            <Link href="http://localhost:5002/projects">
+            <Link href="http://localhost:5001/projects">
               <a>Projects Endpoint Example</a>
             </Link>
-          </Typography>
-        </SpacingPaper>
-
-        <SpacingPaper noPadding>
-          <Typography variant="h5">Tests Service</Typography>
-          <Typography variant="h6">
-            <Link href="http://localhost:5003/">
-              <a>Tests Info Page</a>
-            </Link>
             <br/>
-            <Link href="http://localhost:5003/tests">
+            <Link href="http://localhost:5001/tests">
               <a>Tests Endpoint Example</a>
             </Link>
-          </Typography>
-        </SpacingPaper>
-
-        <SpacingPaper noPadding>
-          <Typography variant="h5">Test Suites Service</Typography>
-          <Typography variant="h6">
-            <Link href="http://localhost:5004/">
-              <a>Test Suites Info Page</a>
-            </Link>
             <br/>
-            <Link href="http://localhost:5004/testsuites">
+            <Link href="http://localhost:5001/testsuites">
               <a>Test Suites Endpoint Example</a>
             </Link>
           </Typography>
