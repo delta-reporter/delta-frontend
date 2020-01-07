@@ -24,33 +24,33 @@ export class Page implements IEnum<Page> {
     Home,
     pink
   )
-  public static readonly REDUX = new Page(
+  public static readonly LAUNCHES = new Page(
     2,
     "Launches",
     "Check latest launches",
     "Δ | Launches",
     "Latest launches",
-    "/redux",
+    "/launches",
     Save,
     blue
   )
-  public static readonly REDUX_SAGAA = new Page(
+  public static readonly PROJECTS = new Page(
     3,
     "Projects",
     "Add, Update or Remove projects",
     "Δ | Projects",
     "Here you can create, update or remove a project",
-    "/redux-saga",
+    "/projects",
     Whatshot,
     teal
   )
-  public static readonly ABOUT = new Page(
+  public static readonly REPORTS = new Page(
     10,
     "Reports",
     "Global charts and stats",
     "Δ | Reports",
     "Global information and resumes to keep the eye on",
-    "/about",
+    "/reports",
     Info,
     orange
   )

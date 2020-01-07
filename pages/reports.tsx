@@ -16,7 +16,7 @@ const useStyles = makeStyles((_: Theme) =>
 
 type Props = {}
 
-function About(props: Props) {
+function Reports(props: Props) {
   const classes = useStyles(props)
   return (
     <Layout className={classes.root}>
@@ -34,11 +34,11 @@ function About(props: Props) {
 /**
  * Server side rendering
  */
-About.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+Reports.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
   const pagePayload: IPagePayload = {
-    selectedPage: Page.ABOUT,
+    selectedPage: Page.REPORTS,
   }
   store.dispatch({
     type: PageActions.changePage.toString(),
@@ -47,4 +47,4 @@ About.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   return {}
 }
 
-export default About
+export default Reports

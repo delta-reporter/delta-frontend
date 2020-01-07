@@ -35,7 +35,7 @@ type Props = {
   defaultInputNumber: number
 }
 
-function Redux(props: Props) {
+function Launches(props: Props) {
   const { defaultInputNumber: defaultCount } = props
   const classes = useStyles(props)
   const dispatch = useDispatch()
@@ -83,7 +83,7 @@ function Redux(props: Props) {
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography variant="h2" gutterBottom className={classes.title}>
-            Increment / Decrement
+            Increment / Decr
           </Typography>
           <CurrentNumber />
           <Button variant="contained" color="primary" onClick={handleIncrement}>
@@ -128,11 +128,11 @@ function Redux(props: Props) {
 /**
  * Server side rendering
  */
-Redux.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
   const pagePayload: IPagePayload = {
-    selectedPage: Page.REDUX,
+    selectedPage: Page.LAUNCHES,
   }
   store.dispatch({
     type: PageActions.changePage.toString(),
@@ -143,4 +143,4 @@ Redux.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   }
 }
 
-export default Redux
+export default Launches
