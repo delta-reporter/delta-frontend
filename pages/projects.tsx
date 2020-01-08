@@ -6,7 +6,7 @@ import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
 import {
   HeaderArticleContainer,
-  ReduxSagaSample,
+  ReduxSagaSample
 } from "../components/organisms"
 import { Layout } from "../components/templates"
 import { Page, SagaSetting } from "../constants"

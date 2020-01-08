@@ -19,6 +19,8 @@
     "@material-ui/styles": "^4.7.1",
     "@zeit/next-css": "^1.0.1",
     "compression": "^1.7.4",
+    "echarts": "^4.6.0",
+    "echarts-for-react": "^2.0.15-beta.1",
     "express": "^4.17.1",
     "immer": "^4.0.2",
     "next": "^9.1.5",

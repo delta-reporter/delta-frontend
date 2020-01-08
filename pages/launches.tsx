@@ -1,19 +1,12 @@
-import {
-  Avatar,
-  Button,
-  FormControl,
-  TextField,
-  Typography,
-} from "@material-ui/core"
+import { Typography } from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
-import React, { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import React from "react"
+import ReactEcharts from "echarts-for-react"
 import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
 import { HeaderArticleContainer } from "../components/organisms"
 import { Layout } from "../components/templates"
 import { Page } from "../constants"
-import { CounterActions, countSelector } from "../store/counter"
 import { IPagePayload, PageActions } from "../store/page"
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,89 +29,118 @@ type Props = {
 }
 
 function Launches(props: Props) {
-  const { defaultInputNumber: defaultCount } = props
   const classes = useStyles(props)
-  const dispatch = useDispatch()
-  const count = useSelector(countSelector)
-  const [inputNumber, setInputNumber] = useState<number>(defaultCount)
+  const perfectDist = [
+    { value: 20, name: "Apps Tests" },
+    { value: 40, name: "Visual Regression Tests" },
+    { value: 60, name: "End2End Tests" },
+    { value: 80, name: "Integration Tests" },
+    { value: 100, name: "Unit Tests" },
+  ]
 
-  /**
-   * Increment
-   */
-  const handleIncrement = () => dispatch(CounterActions.increment())
+  const expectedDist = [
+    { value: 0, name: "Apps Tests" },
+    { value: 50, name: "Visual Regression Tests" },
+    { value: 60, name: "End2End Tests" },
+    { value: 40, name: "Integration Tests" },
+    { value: 48, name: "Unit Tests" },
+  ]
 
-  /**
-   * Decrement
-   */
-  const handleDecrement = () => dispatch(CounterActions.decrement())
+  const nighmareDist = [
+    { value: 100, name: "Apps Tests" },
+    { value: 80, name: "Visual Regression Tests" },
+    { value: 60, name: "End2End Tests" },
+    { value: 40, name: "Integration Tests" },
+    { value: 20, name: "Unit Tests" },
+  ]
 
-  /**
-   * Change inputNumber value
-   */
-  const handleChangeCount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value
-    // ignore not number
-    if (val.match(/^([1-9]|0)+[0-9]*$/i)) {
-      setInputNumber(Number(val))
-    }
-  }
+  const option = data => ({
+    title: {
+      text: "Release Zero",
+      subtext: "DoneDeal Search",
+    },
+    tooltip: {
+      trigger: "item",
+      formatter: "{a} <br/>{b} : {c}%",
+    },
+    toolbox: {
+      feature: {
+        dataView: { readOnly: false },
+        restore: {},
+        saveAsImage: {},
+      },
+    },
+    legend: {
+      data: [
+        "Unit Tests",
+        "Integration Tests",
+        "End2End Tests",
+        "Visual Regression Tests",
+        "Apps Tests",
+      ],
+    },
 
-  /**
-   * Calculate input number
-   */
-  const handleCalculate = () => {
-    dispatch(
-      CounterActions.calculate({
-        inputNumber: Number(inputNumber),
-      })
-    )
-  }
-
-  const CurrentNumber = () => (
-    <Avatar className={classes.counter}>{count}</Avatar>
-  )
+    series: [
+      {
+        name: "Tests Distribution",
+        type: "funnel",
+        left: "10%",
+        top: 40,
+        // x2: 80,
+        bottom: 50,
+        width: "50%",
+        // height: {totalHeight} - y - y2,
+        min: 0,
+        max: 100,
+        minSize: "0%",
+        maxSize: "80%",
+        sort: "ascending",
+        gap: 2,
+        label: {
+          show: true,
+          position: "inside",
+        },
+        labelLine: {
+          length: 10,
+          lineStyle: {
+            width: 1,
+            type: "solid",
+          },
+        },
+        itemStyle: {
+          borderColor: "#fff",
+          borderWidth: 1,
+        },
+        emphasis: {
+          label: {
+            fontSize: 20,
+          },
+        },
+        data: data,
+      },
+    ],
+  })
 
   return (
     <Layout className={classes.root}>
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography variant="h2" gutterBottom className={classes.title}>
-            Increment / Decr
+            Launch Zero
           </Typography>
-          <CurrentNumber />
-          <Button variant="contained" color="primary" onClick={handleIncrement}>
-            + 1
-          </Button>
-          &nbsp;
-          <Button variant="contained" color="primary" onClick={handleDecrement}>
-            - 1
-          </Button>
+          <ReactEcharts option={option(perfectDist)} />
         </SpacingPaper>
-
         <SpacingPaper>
-          <FormControl>
-            <Typography variant="h2" gutterBottom className={classes.title}>
-              Calculate
-            </Typography>
-
-            <CurrentNumber />
-
-            <TextField
-              id="standard-name"
-              label="Input number !!"
-              value={inputNumber}
-              onChange={handleChangeCount}
-              margin="normal"
-            />
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleCalculate}
-            >
-              calculate
-            </Button>
-          </FormControl>
+          <Typography variant="h2" gutterBottom className={classes.title}>
+            Launch Zero
+          </Typography>
+          <ReactEcharts option={option(expectedDist)} />
+        </SpacingPaper>
+        <SpacingPaper>
+          <Typography variant="h2" gutterBottom className={classes.title}>
+            Launch Zero
+          </Typography>
+          <ReactEcharts option={option(nighmareDist)} />
         </SpacingPaper>
       </HeaderArticleContainer>
     </Layout>
