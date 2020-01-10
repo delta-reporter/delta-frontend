@@ -47,12 +47,20 @@ function Launches(props: Props) {
   ]
 
   const nighmareDist = [
-    { value: 100, name: "Apps Tests" },
-    { value: 80, name: "Visual Regression Tests" },
-    { value: 60, name: "End2End Tests" },
-    { value: 40, name: "Integration Tests" },
-    { value: 20, name: "Unit Tests" },
+    { value: 78, name: "Apps Tests" },
+    { value: 66, name: "Visual Regression Tests" },
+    { value: 52, name: "End2End Tests" },
+    { value: 50, name: "Integration Tests" },
+    { value: 40, name: "Unit Tests" },
   ]
+
+  const normalQADist = [
+    { value: 40, name: "Visual Regression Tests" },
+    { value: 60, name: "End2End Tests" },
+    { value: 80, name: "Integration Tests" },
+  ]
+
+  const end2endDist = [{ value: 100, name: "End2End Tests" }]
 
   const option = data => ({
     title: {
@@ -126,21 +134,33 @@ function Launches(props: Props) {
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography variant="h2" gutterBottom className={classes.title}>
-            Launch Zero
+            Launch Zero - Perfect Distribution
           </Typography>
           <ReactEcharts option={option(perfectDist)} />
         </SpacingPaper>
         <SpacingPaper>
           <Typography variant="h2" gutterBottom className={classes.title}>
-            Launch Zero
+            Launch Zero - Expected Distribution
           </Typography>
           <ReactEcharts option={option(expectedDist)} />
         </SpacingPaper>
         <SpacingPaper>
           <Typography variant="h2" gutterBottom className={classes.title}>
-            Launch Zero
+            Launch Zero - Ho hell noo! Distribution
           </Typography>
           <ReactEcharts option={option(nighmareDist)} />
+        </SpacingPaper>
+        <SpacingPaper>
+          <Typography variant="h2" gutterBottom className={classes.title}>
+            Launch Zero - QA Tests Distribution
+          </Typography>
+          <ReactEcharts option={option(normalQADist)} />
+        </SpacingPaper>
+        <SpacingPaper>
+          <Typography variant="h2" gutterBottom className={classes.title}>
+            Launch Zero - Just WebdriverIO tests Distribution
+          </Typography>
+          <ReactEcharts option={option(end2endDist)} />
         </SpacingPaper>
       </HeaderArticleContainer>
     </Layout>
