@@ -7,6 +7,7 @@ import { Layout } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import Link from "@material-ui/core/Link";
+import fetch from 'isomorphic-unfetch';
 
 const useStyles = makeStyles((_: Theme) =>
   createStyles({
@@ -61,6 +62,15 @@ function Index(props: Props) {
             </Link>
           </Typography>
         </SpacingPaper>
+        <ul>
+          {/* {props.projects.map(project => (
+            <li key={project.id}>
+              <Link href="/p/[id]" as={`/p/${project.id}`}>
+                <a>{project.name}</a>
+              </Link>
+            </li>
+          ))} */}
+        </ul>
       </HeaderArticleContainer>
     </Layout>
   )
@@ -71,6 +81,17 @@ function Index(props: Props) {
  */
 Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
+  const res = await fetch("http://delta_core_service:5000/get_projects", {
+    method: "POST",
+  })
+  const data = await res.json()
+
+  console.log(`Show data fetched. Count: ${data.length}`)
+  console.log(`Show data fetched. Count: ${data}`)
+  console.log(`Show data fetched. Count: ${data.id}`)
+  console.log(`Show data fetched. Count: ${data.name}`)
+  console.log(`Show data fetched. Count: ${data.data}`)
+  console.log(`Show data fetched. Count: ${data.project_status}`)
 
   const pagePayload: IPagePayload = {
     selectedPage: Page.TOP,
@@ -79,7 +100,9 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     type: PageActions.changePage.toString(),
     payload: pagePayload,
   })
-  return {}
+  return {
+    projects: data.map(project => project.data)
+  }
 }
 
 export default Index
