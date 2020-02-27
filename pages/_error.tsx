@@ -41,7 +41,7 @@ Error.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { res, store } = ctx
 
   const pagePayload: IPagePayload = {
-    selectedPage: Page.ERROR,
+    selectedPage: Page.TOP,
   }
   store.dispatch({
     type: PageActions.changePage.toString(),

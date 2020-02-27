@@ -8,6 +8,7 @@ import { HeaderArticleContainer } from "../components/organisms"
 import { Layout } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
+import { TestLaunch } from "."
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,8 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 type Props = {
-  // passed from getInitialProps
-  defaultInputNumber: number
+  test_launches: TestLaunch[]
 }
 
 function Launches(props: Props) {
@@ -173,6 +173,14 @@ function Launches(props: Props) {
 Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
+  const launchesReq = await fetch(
+    "http://delta_core_service:5000/get_launches",
+    {
+      method: "POST",
+    }
+  )
+  const launches = await launchesReq.json()
+  
   const pagePayload: IPagePayload = {
     selectedPage: Page.LAUNCHES,
   }
@@ -181,7 +189,7 @@ Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     payload: pagePayload,
   })
   return {
-    defaultInputNumber: 2,
+    test_launches: launches,
   }
 }
 

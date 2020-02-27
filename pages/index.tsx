@@ -6,8 +6,8 @@ import { HeaderArticleContainer } from "../components/organisms"
 import { Layout } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
-import Link from "@material-ui/core/Link";
-import fetch from 'isomorphic-unfetch';
+import Link from "@material-ui/core/Link"
+import fetch from "isomorphic-unfetch"
 
 const useStyles = makeStyles((_: Theme) =>
   createStyles({
@@ -102,19 +102,19 @@ function Index(props: Props) {
             <Link href="http://localhost:5001/">
               <a>Core Info Page</a>
             </Link>
-            <br/>
+            <br />
             <Link href="http://localhost:5001/launches">
               <a>Launcher Endpoint Example</a>
             </Link>
-            <br/>
+            <br />
             <Link href="http://localhost:5001/projects">
               <a>Projects Endpoint Example</a>
             </Link>
-            <br/>
+            <br />
             <Link href="http://localhost:5001/tests">
               <a>Tests Endpoint Example</a>
             </Link>
-            <br/>
+            <br />
             <Link href="http://localhost:5001/testsuites">
               <a>Test Suites Endpoint Example</a>
             </Link>
@@ -126,11 +126,11 @@ function Index(props: Props) {
           {props.test_projects.map(project => (
             <Typography variant="h6">
               {project.id}
-              <br/>
+              <br />
               {project.name}
-              <br/>
+              <br />
               {project.project_status}
-              <br/>
+              <br />
               {project.data.url}
             </Typography>
           ))}
@@ -141,13 +141,13 @@ function Index(props: Props) {
           {props.test_launches.map(testLaunch => (
             <Typography variant="h6">
               {testLaunch.id}
-              <br/>
+              <br />
               {testLaunch.name}
-              <br/>
+              <br />
               {testLaunch.launch_status}
-              <br/>
+              <br />
               {testLaunch.project}
-              <br/>
+              <br />
               {testLaunch.data.url}
             </Typography>
           ))}
@@ -158,17 +158,17 @@ function Index(props: Props) {
           {props.test_runs.map(testRun => (
             <Typography variant="h6">
               {testRun.id}
-              <br/>
+              <br />
               {testRun.launch}
-              <br/>
+              <br />
               {testRun.start_datetime}
-              <br/>
+              <br />
               {testRun.end_datetime}
-              <br/>
+              <br />
               {testRun.test_run_status}
-              <br/>
+              <br />
               {testRun.test_type}
-              <br/>
+              <br />
               {testRun.data.url}
             </Typography>
           ))}
@@ -179,49 +179,49 @@ function Index(props: Props) {
           {props.test_suites.map(testSuite => (
             <Typography variant="h6">
               {testSuite.id}
-              <br/>
+              <br />
               {testSuite.name}
-              <br/>
+              <br />
               {testSuite.start_datetime}
-              <br/>
+              <br />
               {testSuite.end_datetime}
-              <br/>
+              <br />
               {testSuite.test_suite_status}
-              <br/>
+              <br />
               {testSuite.test_type}
-              <br/>
+              <br />
               {testSuite.data.url}
-              <br/>
+              <br />
               {testSuite.test_run.id}
-              <br/>
+              <br />
               {testSuite.test_run.launch}
-              <br/>
+              <br />
               {testSuite.test_run.test_run_status}
-              <br/>
+              <br />
               {testSuite.test_run.test_type}
-              <br/>
+              <br />
             </Typography>
           ))}
         </SpacingPaper>
-        
+
         <SpacingPaper noPadding>
           <Typography variant="h5">Tests</Typography>
           {props.tests.map(test => (
             <Typography variant="h6">
               {test.id}
-              <br/>
+              <br />
               {test.name}
-              <br/>
+              <br />
               {test.start_datetime}
-              <br/>
+              <br />
               {test.end_datetime}
-              <br/>
+              <br />
               {test.test_resolution}
-              <br/>
+              <br />
               {test.test_status}
-              <br/>
+              <br />
               {test.test_suite}
-              <br/>
+              <br />
               {test.data.url}
             </Typography>
           ))}
@@ -239,15 +239,17 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const projectReq = await fetch(
     "http://delta_core_service:5000/get_projects",
     {
-    method: "POST",
-  })
+      method: "POST",
+    }
+  )
   const projects = await projectReq.json()
 
   const launchesReq = await fetch(
     "http://delta_core_service:5000/get_launches",
     {
-    method: "POST",
-  })
+      method: "POST",
+    }
+  )
   const launches = await launchesReq.json()
 
   const runsReq = await fetch("http://delta_core_service:5000/get_test_runs", {
@@ -258,7 +260,7 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const suitesReq = await fetch(
     "http://delta_core_service:5000/get_test_suites",
     {
-    method: "POST",
+      method: "POST",
     }
   )
   const suites = await suitesReq.json()
@@ -280,7 +282,7 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     test_launches: launches,
     test_runs: runs,
     test_suites: suites,
-    tests: tests
+    tests: tests,
   }
 }
 

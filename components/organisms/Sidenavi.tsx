@@ -63,7 +63,6 @@ export const Sidenavi = function(props: Props) {
       <div className={`${classes.siteNameContainer} ${classes.toolbar}`}>
         {SiteInfo.SITE_NAME}
       </div>
-
       <List className={classes.list}>
         {Page.values.map(page => {
           const Icon = page.icon
