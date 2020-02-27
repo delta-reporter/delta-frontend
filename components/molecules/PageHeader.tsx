@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       backgroundColor: theme.palette.primary.light,
       color: theme.palette.primary.contrastText,
-      padding: theme.spacing(2),
+      padding: theme.spacing(10),
       textAlign: "center",
     },
     title: {
@@ -42,6 +42,7 @@ export const PageHeader = function(props: Props) {
         color="inherit"
         className={classes.description}
       >
+                {selectedPage.metaDescription}
       </Typography>
     </Paper>
   )

@@ -62,7 +62,7 @@ function Projects(props: Props) {
  */
 Projects.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
-  
+
   const projectReq = await fetch(
     "http://delta_core_service:5000/get_projects",
     {

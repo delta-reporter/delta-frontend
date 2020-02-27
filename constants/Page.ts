@@ -1,7 +1,7 @@
 import { Color } from "@material-ui/core"
-import { blue, pink, teal } from "@material-ui/core/colors"
+import { blue, deepOrange } from "@material-ui/core/colors"
 import { SvgIconProps } from "@material-ui/core/SvgIcon"
-import { Home, Save, Whatshot } from "@material-ui/icons"
+import { Home, Whatshot, Save } from "@material-ui/icons"
 import { IEnum } from "."
 
 /**
@@ -22,7 +22,7 @@ export class Page implements IEnum<Page> {
     "List of services and endpoints",
     "/",
     Home,
-    pink
+    deepOrange
   )
   public static readonly PROJECTS = new Page(
     3,
@@ -32,14 +32,14 @@ export class Page implements IEnum<Page> {
     "Select a project to view last launches and test runs",
     "/projects",
     Whatshot,
-    teal
+    blue
   )
   public static readonly LAUNCHES = new Page(
     2,
     "Launches",
-    "",
+    "Check latest launches",
     "Δ | Launches",
-    "View the latest test launches of your Project",
+    "Latest launches",
     "/launches",
     Save,
     blue
