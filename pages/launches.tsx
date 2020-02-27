@@ -38,6 +38,8 @@ function Launches(props: Props) {
               <ListItem button>
                 <Link href="http://localhost:3000/testsuites">
                   <ListItemText primary={launch.name} />
+                  <br />
+                  {launch.launch_status}
                 </Link>
               </ListItem>
               <Divider />

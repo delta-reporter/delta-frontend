@@ -37,7 +37,7 @@ export class Page implements IEnum<Page> {
   public static readonly LAUNCHES = new Page(
     2,
     "Launches",
-    "Check latest launches",
+    "",
     "Δ | Launches",
     "Latest launches",
     "/launches",
