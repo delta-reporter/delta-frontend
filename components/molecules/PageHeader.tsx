@@ -7,18 +7,17 @@ import { selectedPageSelector } from "../../store/page"
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.light,
       color: theme.palette.primary.contrastText,
-      padding: theme.spacing(2),
+      padding: theme.spacing(10),
       textAlign: "center",
     },
     title: {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      fontWeight: "bold",
       fontSize: "3em",
-      padding: theme.spacing(2),
+      padding: theme.spacing(3),
     },
     description: {},
   })
@@ -43,7 +42,7 @@ export const PageHeader = function(props: Props) {
         color="inherit"
         className={classes.description}
       >
-        {selectedPage.metaDescription}
+                {selectedPage.metaDescription}
       </Typography>
     </Paper>
   )

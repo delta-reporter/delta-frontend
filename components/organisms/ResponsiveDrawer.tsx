@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "none",
       },
     },
-    toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
       borderRightColor: theme.palette.primary.dark, // sidenavi border right
@@ -119,10 +118,7 @@ export const ResponsiveDrawer = function(props: Props) {
         </Drawer>
       </Hidden>
 
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {children}
-      </main>
+      <main className={classes.content}>{children}</main>
     </div>
   )
 }

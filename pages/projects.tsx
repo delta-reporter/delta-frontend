@@ -1,21 +1,21 @@
-import { Typography } from "@material-ui/core"
+import {
+  Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+  Divider,
+  Link,
+} from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import React from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
-import {
-  HeaderArticleContainer,
-  ReduxSagaSample
-} from "../components/organisms"
+import { HeaderArticleContainer } from "../components/organisms"
 import { Layout } from "../components/templates"
-import { Page, SagaSetting } from "../constants"
+import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
-import {
-  ReduxSagaActions,
-  reduxSagaDebounceSelector,
-  reduxSagaThrottleSelector,
-} from "../store/redux-saga"
+import { TestProject } from "."
+import fetch from "isomorphic-unfetch"
 
 const useStyles = makeStyles((_: Theme) =>
   createStyles({
@@ -23,60 +23,34 @@ const useStyles = makeStyles((_: Theme) =>
   })
 )
 
-type Props = {}
+type Props = {
+  test_projects: TestProject[]
+}
 
 function Projects(props: Props) {
   const {} = props
   const classes = useStyles(props)
-  const dispatch = useDispatch()
-  const reduxSagaDebounceState = useSelector(reduxSagaDebounceSelector)
-  const reduxSagaThrottleState = useSelector(reduxSagaThrottleSelector)
-
-  const onDebounce = (inputValue: string) => {
-    dispatch(
-      ReduxSagaActions.fetchDebounce({
-        input: inputValue,
-      })
-    )
-  }
-
-  const onThrottle = (inputValue: string) => {
-    dispatch(
-      ReduxSagaActions.fetchThrottle({
-        input: inputValue,
-      })
-    )
-  }
 
   return (
     <Layout className={classes.root}>
       <HeaderArticleContainer>
-        <SpacingPaper>
-          <ReduxSagaSample
-            title="debounce"
-            description={
-              <>
-                <Typography variant="subtitle1" gutterBottom>
-                  Open DevTools of Google Chrome, open the network tab, and
-                  check the execution frequency and timing of api.
-                </Typography>
-              </>
-            }
-            storeState={reduxSagaDebounceState}
-            responseResultMax={10}
-            interval={SagaSetting.DEBOUNCE_INTERVAL}
-            onChange={onDebounce}
-          />
-        </SpacingPaper>
-
-        <SpacingPaper>
-          <ReduxSagaSample
-            title="throttle"
-            storeState={reduxSagaThrottleState}
-            responseResultMax={10}
-            interval={SagaSetting.THROTTLE_INTERVAL}
-            onChange={onThrottle}
-          />
+        <SpacingPaper noPadding>
+          {props.test_projects.map(project => (
+            <div>
+              <Card>
+                <CardActionArea>
+                  <CardContent>
+                    <Link href="http://localhost:3000/launches">
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {project.name}{" "}
+                      </Typography>
+                    </Link>
+                  </CardContent>
+                </CardActionArea>
+                <Divider variant="inset" />
+              </Card>
+            </div>
+          ))}
         </SpacingPaper>
       </HeaderArticleContainer>
     </Layout>
@@ -89,6 +63,14 @@ function Projects(props: Props) {
 Projects.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
+  const projectReq = await fetch(
+    "http://delta_core_service:5000/get_projects",
+    {
+      method: "POST",
+    }
+  )
+  const projects = await projectReq.json()
+
   const pagePayload: IPagePayload = {
     selectedPage: Page.PROJECTS,
   }
@@ -96,7 +78,9 @@ Projects.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     type: PageActions.changePage.toString(),
     payload: pagePayload,
   })
-  return {}
+  return {
+    test_projects: projects,
+  }
 }
 
 export default Projects

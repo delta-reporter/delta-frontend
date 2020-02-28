@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     listItemPrimary: {
       color: theme.palette.primary.contrastText,
-      fontWeight: "bold",
       fontSize: "20px",
     },
     listItemSecondary: {

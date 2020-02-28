@@ -1,7 +1,7 @@
 import { Color } from "@material-ui/core"
-import { blue, orange, pink, red, teal } from "@material-ui/core/colors"
+import { blue, deepOrange } from "@material-ui/core/colors"
 import { SvgIconProps } from "@material-ui/core/SvgIcon"
-import { Home, Info, Save, Whatshot } from "@material-ui/icons"
+import { Home, Whatshot, Save } from "@material-ui/icons"
 import { IEnum } from "."
 
 /**
@@ -16,54 +16,54 @@ export class Page implements IEnum<Page> {
 
   public static readonly TOP = new Page(
     1,
-    "Services",
-    "Services status",
-    "Δ | Services",
+    "Homepage",
+    "",
+    "Δ | Homepage",
     "List of services and endpoints",
     "/",
     Home,
-    pink
+    deepOrange
+  )
+  public static readonly PROJECTS = new Page(
+    3,
+    "Projects",
+    "",
+    "Δ | Projects",
+    "Select a project to view last launches and test runs",
+    "/projects",
+    Whatshot,
+    blue
   )
   public static readonly LAUNCHES = new Page(
     2,
     "Launches",
-    "Check latest launches",
+    "",
     "Δ | Launches",
     "Latest launches",
     "/launches",
     Save,
     blue
   )
-  public static readonly PROJECTS = new Page(
-    3,
-    "Projects",
-    "Add, Update or Remove projects",
-    "Δ | Projects",
-    "Here you can create, update or remove a project",
-    "/projects",
-    Whatshot,
-    teal
-  )
-  public static readonly REPORTS = new Page(
-    10,
-    "Reports",
-    "Global charts and stats",
-    "Δ | Reports",
-    "Global information and resumes to keep the eye on",
-    "/reports",
-    Info,
-    orange
-  )
-  public static readonly ERROR = new Page(
-    99,
-    "Error",
-    "Error",
-    "Δ | sample",
-    "Error.",
-    "/error",
-    Info,
-    red
-  )
+  // public static readonly REPORTS = new Page(
+  //   10,
+  //   "Reports",
+  //   "Global charts and stats",
+  //   "Δ | Reports",
+  //   "Global information and resumes to keep the eye on",
+  //   "/reports",
+  //   Info,
+  //   orange
+  // )
+  // public static readonly ERROR = new Page(
+  //   99,
+  //   "Error",
+  //   "Error",
+  //   "Δ | sample",
+  //   "Error.",
+  //   "/error",
+  //   Info,
+  //   red
+  // )
 
   /**
    * constructor
