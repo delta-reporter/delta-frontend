@@ -219,7 +219,7 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const projectReq = await fetch(
     "http://delta_core_service:5000/get_projects",
     {
-      method: "POST",
+      method: "GET",
     }
   )
   const projects = await projectReq.json()
@@ -227,26 +227,26 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const launchesReq = await fetch(
     "http://delta_core_service:5000/get_launches",
     {
-      method: "POST",
+      method: "GET",
     }
   )
   const launches = await launchesReq.json()
 
   const runsReq = await fetch("http://delta_core_service:5000/get_test_runs", {
-    method: "POST",
+    method: "GET",
   })
   const runs = await runsReq.json()
 
   const suitesReq = await fetch(
     "http://delta_core_service:5000/get_test_suites",
     {
-      method: "POST",
+      method: "GET",
     }
   )
   const suites = await suitesReq.json()
 
   const testsReq = await fetch("http://delta_core_service:5000/get_tests", {
-    method: "POST",
+    method: "GET",
   })
   const tests = await testsReq.json()
 
