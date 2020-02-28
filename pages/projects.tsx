@@ -66,7 +66,7 @@ Projects.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const projectReq = await fetch(
     "http://delta_core_service:5000/get_projects",
     {
-      method: "POST",
+      method: "GET",
     }
   )
   const projects = await projectReq.json()

@@ -79,11 +79,35 @@ export interface Test {
   data: { url?: string }
 }
 
+export interface TestHistory {
+  id: number
+  start_datetime: string
+  end_datetime: string
+  launch: string
+  test_run_status: string
+  test_type: string
+  test: {
+    name: string
+    start_datetime: string
+    end_datetime: string
+    resolution: string
+    status: string
+    data: any
+  }
+  test_suite: {
+    name: string
+    test_suite_status: string
+    start_datetime: string
+    end_datetime: string
+  }
+}
+
 type Props = {
   test_projects: TestProject[]
   test_launches: TestLaunch[]
   test_runs: TestRun[]
   test_suites: TestSuite[]
+  tests_history: TestHistory[]
   tests: Test[]
 }
 
@@ -206,6 +230,41 @@ function Index(props: Props) {
             </List>
           ))}
         </SpacingPaper>
+        <SpacingPaper noPadding>
+          <Typography variant="h5">Tests History</Typography>
+          {props.tests_history.map(testHistory => (
+            <List>
+              <ListItem button>
+              <ListItemText primary={testHistory.id} />
+                <br />
+                {testHistory.launch}
+                <br />
+                {testHistory.start_datetime}
+                <br />
+                {testHistory.end_datetime}
+                <br />
+                {testHistory.test_type}
+                <br />
+                {testHistory.test_run_status}
+                <br /> 
+                {testHistory.test_suite.name}
+                <br /> 
+                {testHistory.test_suite.test_suite_status}
+                <br /> 
+                {testHistory.test_suite.start_datetime}
+                <br /> 
+                {testHistory.test_suite.end_datetime}
+                <br /> 
+                {testHistory.test.name}
+                <br /> 
+                {testHistory.test.status}
+                <br /> 
+                {testHistory.test.resolution}
+              </ListItem>
+              <Divider />
+            </List>
+          ))}
+        </SpacingPaper>
       </HeaderArticleContainer>
     </Layout>
   )
@@ -250,6 +309,11 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   })
   const tests = await testsReq.json()
 
+  const testsHistoryReq = await fetch("http://delta_core_service:5000/tests_history/test_run_id/1", {
+    method: "GET",
+  })
+  const testsHistory = await testsHistoryReq.json()
+
   const pagePayload: IPagePayload = {
     selectedPage: Page.TOP,
   }
@@ -262,6 +326,7 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     test_launches: launches,
     test_runs: runs,
     test_suites: suites,
+    tests_history: testsHistory,
     tests: tests,
   }
 }
