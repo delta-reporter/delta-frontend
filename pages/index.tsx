@@ -7,9 +7,7 @@ import {
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import { AppContext } from "../components/AppContext"
-import { SpacingPaper } from "../components/atoms"
-import { HeaderArticleContainer } from "../components/organisms"
-import { Dashboard } from "../components/templates"
+import { SpacingPaper, BasePage } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
@@ -112,159 +110,157 @@ type Props = {
 function Index(props: Props) {
   const classes = useStyles(props)
   return (
-    <Dashboard className={classes.root}>
-      <HeaderArticleContainer>
-        <SpacingPaper>
-          <Typography>
-            Each service its running isolated from each other, so its possible
-            to scale each of them based on the demand.
-          </Typography>
-        </SpacingPaper>
+    <BasePage className={classes.root}>
+      <SpacingPaper>
+        <Typography>
+          Each service its running isolated from each other, so its possible to
+          scale each of them based on the demand.
+        </Typography>
+      </SpacingPaper>
 
-        <SpacingPaper>
-          <Typography variant="h5">WebSockets Service</Typography>
+      <SpacingPaper>
+        <Typography variant="h5">WebSockets Service</Typography>
+        <List>
+          <ListItem button href="http://localhost:5000/">
+            <ListItemText primary="WebSockets Info Page" />
+          </ListItem>
+        </List>
+      </SpacingPaper>
+
+      <SpacingPaper>
+        <Typography variant="h5">Core Service</Typography>
+        <List>
+          <ListItem button href="http://localhost:5001/">
+            <ListItemText primary="Core Info Page" />
+          </ListItem>
+          <Divider />
+          <ListItem button href="http://localhost:5001/launches">
+            <ListItemText primary="Launcher Endpoint Example" />
+          </ListItem>
+          <Divider />
+          <ListItem button href="http://localhost:5001/launches">
+            <ListItemText primary="Projects Endpoint Example" />
+          </ListItem>
+          <Divider />
+          <ListItem button href="http://localhost:5001/launches">
+            <ListItemText primary="Tests Endpoint Example" />
+          </ListItem>
+          <Divider />
+          <ListItem button href="http://localhost:5001/testsuites">
+            <ListItemText primary="Test Suites Endpoint Example" />
+          </ListItem>
+        </List>
+      </SpacingPaper>
+
+      <SpacingPaper>
+        <Typography variant="h5">Projects</Typography>
+        {props.test_projects.map(project => (
           <List>
-            <ListItem button href="http://localhost:5000/">
-              <ListItemText primary="WebSockets Info Page" />
+            <ListItem button>
+              <ListItemText primary={project.name} />
             </ListItem>
+            <Divider />
           </List>
-        </SpacingPaper>
+        ))}
+      </SpacingPaper>
 
-        <SpacingPaper>
-          <Typography variant="h5">Core Service</Typography>
+      <SpacingPaper>
+        <Typography variant="h5">Launches</Typography>
+        {props.test_launches.map(launch => (
           <List>
-            <ListItem button href="http://localhost:5001/">
-              <ListItemText primary="Core Info Page" />
+            <ListItem button>
+              <ListItemText primary={launch.name} />
+              <br />
+              {launch.launch_status}
             </ListItem>
             <Divider />
-            <ListItem button href="http://localhost:5001/launches">
-              <ListItemText primary="Launcher Endpoint Example" />
-            </ListItem>
-            <Divider />
-            <ListItem button href="http://localhost:5001/launches">
-              <ListItemText primary="Projects Endpoint Example" />
-            </ListItem>
-            <Divider />
-            <ListItem button href="http://localhost:5001/launches">
-              <ListItemText primary="Tests Endpoint Example" />
-            </ListItem>
-            <Divider />
-            <ListItem button href="http://localhost:5001/testsuites">
-              <ListItemText primary="Test Suites Endpoint Example" />
-            </ListItem>
           </List>
-        </SpacingPaper>
+        ))}
+      </SpacingPaper>
 
-        <SpacingPaper>
-          <Typography variant="h5">Projects</Typography>
-          {props.test_projects.map(project => (
-            <List>
-              <ListItem button>
-                <ListItemText primary={project.name} />
-              </ListItem>
-              <Divider />
-            </List>
-          ))}
-        </SpacingPaper>
+      <SpacingPaper>
+        <Typography variant="h5">Runs</Typography>
+        {props.test_runs.map(testRun => (
+          <List>
+            <ListItem button>
+              <ListItemText primary={testRun.id} />
+              <br />
+              {testRun.test_run_status}
+              <br />
+              {testRun.test_type}
+            </ListItem>
+            <Divider />
+          </List>
+        ))}
+      </SpacingPaper>
 
-        <SpacingPaper>
-          <Typography variant="h5">Launches</Typography>
-          {props.test_launches.map(launch => (
-            <List>
-              <ListItem button>
-                <ListItemText primary={launch.name} />
-                <br />
-                {launch.launch_status}
-              </ListItem>
-              <Divider />
-            </List>
-          ))}
-        </SpacingPaper>
+      <SpacingPaper>
+        <Typography variant="h5">Suites</Typography>
+        {props.test_suites.map(testSuite => (
+          <List>
+            <ListItem button>
+              <ListItemText primary={testSuite.name} />
+              <br />
+              {testSuite.start_datetime}
+              <br />
+              {testSuite.end_datetime}
+            </ListItem>
+            <Divider />
+          </List>
+        ))}
+      </SpacingPaper>
 
-        <SpacingPaper>
-          <Typography variant="h5">Runs</Typography>
-          {props.test_runs.map(testRun => (
-            <List>
-              <ListItem button>
-                <ListItemText primary={testRun.id} />
-                <br />
-                {testRun.test_run_status}
-                <br />
-                {testRun.test_type}
-              </ListItem>
-              <Divider />
-            </List>
-          ))}
-        </SpacingPaper>
-
-        <SpacingPaper>
-          <Typography variant="h5">Suites</Typography>
-          {props.test_suites.map(testSuite => (
-            <List>
-              <ListItem button>
-                <ListItemText primary={testSuite.name} />
-                <br />
-                {testSuite.start_datetime}
-                <br />
-                {testSuite.end_datetime}
-              </ListItem>
-              <Divider />
-            </List>
-          ))}
-        </SpacingPaper>
-
-        <SpacingPaper>
-          <Typography variant="h5">Tests</Typography>
-          {props.tests.map(test => (
-            <List>
-              <ListItem button>
-                <ListItemText primary={test.name} />
-                <br />
-                {test.test_status}
-                <br />
-                {test.test_resolution}
-              </ListItem>
-              <Divider />
-            </List>
-          ))}
-        </SpacingPaper>
-        <SpacingPaper noPadding>
-          <Typography variant="h5">Tests History</Typography>
-          {props.tests_history.map(testHistory => (
-            <List>
-              <ListItem button>
+      <SpacingPaper>
+        <Typography variant="h5">Tests</Typography>
+        {props.tests.map(test => (
+          <List>
+            <ListItem button>
+              <ListItemText primary={test.name} />
+              <br />
+              {test.test_status}
+              <br />
+              {test.test_resolution}
+            </ListItem>
+            <Divider />
+          </List>
+        ))}
+      </SpacingPaper>
+      <SpacingPaper noPadding>
+        <Typography variant="h5">Tests History</Typography>
+        {props.tests_history.map(testHistory => (
+          <List>
+            <ListItem button>
               <ListItemText primary={testHistory.id} />
-                <br />
-                {testHistory.launch}
-                <br />
-                {testHistory.start_datetime}
-                <br />
-                {testHistory.end_datetime}
-                <br />
-                {testHistory.test_type}
-                <br />
-                {testHistory.test_run_status}
-                <br /> 
-                {testHistory.test_suite.name}
-                <br /> 
-                {testHistory.test_suite.test_suite_status}
-                <br /> 
-                {testHistory.test_suite.start_datetime}
-                <br /> 
-                {testHistory.test_suite.end_datetime}
-                <br /> 
-                {testHistory.test.name}
-                <br /> 
-                {testHistory.test.status}
-                <br /> 
-                {testHistory.test.resolution}
-              </ListItem>
-              <Divider />
-            </List>
-          ))}
-        </SpacingPaper>
-      </HeaderArticleContainer>
-    </Dashboard>
+              <br />
+              {testHistory.launch}
+              <br />
+              {testHistory.start_datetime}
+              <br />
+              {testHistory.end_datetime}
+              <br />
+              {testHistory.test_type}
+              <br />
+              {testHistory.test_run_status}
+              <br />
+              {testHistory.test_suite.name}
+              <br />
+              {testHistory.test_suite.test_suite_status}
+              <br />
+              {testHistory.test_suite.start_datetime}
+              <br />
+              {testHistory.test_suite.end_datetime}
+              <br />
+              {testHistory.test.name}
+              <br />
+              {testHistory.test.status}
+              <br />
+              {testHistory.test.resolution}
+            </ListItem>
+            <Divider />
+          </List>
+        ))}
+      </SpacingPaper>
+    </BasePage>
   )
 }
 
@@ -307,9 +303,12 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   })
   const tests = await testsReq.json()
 
-  const testsHistoryReq = await fetch("http://delta_core_service:5000/tests_history/test_run_id/1", {
-    method: "GET",
-  })
+  const testsHistoryReq = await fetch(
+    "http://delta_core_service:5000/tests_history/test_run_id/1",
+    {
+      method: "GET",
+    }
+  )
   const testsHistory = await testsHistoryReq.json()
 
   const pagePayload: IPagePayload = {

@@ -41,7 +41,7 @@ export const PageHeader = function(props: Props) {
         color="inherit"
         className={classes.description}
       >
-                {selectedPage.metaDescription}
+        {selectedPage.metaDescription}
       </Typography>
     </Paper>
   )
