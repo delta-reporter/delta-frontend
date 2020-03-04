@@ -58,7 +58,7 @@ Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const launchesReq = await fetch(
     "http://delta_core_service:5000/get_launches",
     {
-      method: "POST",
+      method: "GET",
     }
   )
   const launches = await launchesReq.json()
