@@ -4,9 +4,9 @@ import React from "react"
 import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
 import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
+import { Dashboard } from "../components/templates/Dashboard"
 
 const useStyles = makeStyles((_: Theme) =>
   createStyles({
@@ -19,7 +19,7 @@ type Props = {}
 function Reports(props: Props) {
   const classes = useStyles(props)
   return (
-    <Layout className={classes.root}>
+    <Dashboard className={classes.root}>
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography variant="h5">
@@ -27,7 +27,7 @@ function Reports(props: Props) {
           </Typography>
         </SpacingPaper>
       </HeaderArticleContainer>
-    </Layout>
+    </Dashboard>
   )
 }
 

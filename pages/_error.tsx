@@ -4,9 +4,9 @@ import React from "react"
 import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
 import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
+import { Dashboard } from "../components/templates/Dashboard"
 
 const useStyles = makeStyles((_: Theme) =>
   createStyles({
@@ -22,7 +22,7 @@ function Error(props: Props) {
   const { httpStatusCode } = props
   const classes = useStyles(props)
   return (
-    <Layout className={classes.root}>
+    <Dashboard className={classes.root}>
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography variant="h5">
@@ -30,7 +30,7 @@ function Error(props: Props) {
           </Typography>
         </SpacingPaper>
       </HeaderArticleContainer>
-    </Layout>
+    </Dashboard>
   )
 }
 

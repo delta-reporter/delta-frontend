@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
 import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
+import { Dashboard } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import { TestLaunch } from "."
@@ -13,8 +13,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     counter: {
       margin: 10,
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
     },
     title: {
       fontSize: "2em",
@@ -30,7 +28,7 @@ function Launches(props: Props) {
   const classes = useStyles(props)
 
   return (
-    <Layout className={classes.root}>
+    <Dashboard className={classes.root}>
       <HeaderArticleContainer>
         <List component="nav">
           {props.test_launches.map(launch => (
@@ -47,7 +45,7 @@ function Launches(props: Props) {
           ))}
         </List>
       </HeaderArticleContainer>
-    </Layout>
+    </Dashboard>
   )
 }
 

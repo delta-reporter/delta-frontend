@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
       fontWeight: "bold",
       boxShadow: theme.shadows[4],
       zIndex: theme.zIndex.drawer + 1,

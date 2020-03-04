@@ -4,11 +4,11 @@ import {
   ListItemAvatar,
   ListItemText,
 } from "@material-ui/core"
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import { createStyles, makeStyles } from "@material-ui/core/styles"
 import Link from "next/link"
 import React from "react"
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {},
     anchorLink: {
@@ -16,12 +16,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textDecoration: "none",
     },
     listItemPrimary: {
-      color: theme.palette.primary.contrastText,
       fontSize: "20px",
     },
-    listItemSecondary: {
-      color: theme.palette.primary.contrastText,
-    },
+    listItemSecondary: {},
   })
 )
 

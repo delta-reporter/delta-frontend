@@ -5,22 +5,20 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core"
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import { createStyles, makeStyles } from "@material-ui/core/styles"
 import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
 import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
+import { Dashboard } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {},
     counter: {
       margin: 10,
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
     },
     title: {
       fontSize: "2em",
@@ -90,7 +88,7 @@ type Props = {
 function Index(props: Props) {
   const classes = useStyles(props)
   return (
-    <Layout className={classes.root}>
+    <Dashboard className={classes.root}>
       <HeaderArticleContainer>
         <SpacingPaper>
           <Typography>
@@ -207,7 +205,7 @@ function Index(props: Props) {
           ))}
         </SpacingPaper>
       </HeaderArticleContainer>
-    </Layout>
+    </Dashboard>
   )
 }
 

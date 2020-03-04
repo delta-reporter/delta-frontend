@@ -11,7 +11,7 @@ import React from "react"
 import { AppContext } from "../components/AppContext"
 import { SpacingPaper } from "../components/atoms"
 import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
+import { Dashboard } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import { TestProject } from "."
@@ -32,7 +32,7 @@ function Projects(props: Props) {
   const classes = useStyles(props)
 
   return (
-    <Layout className={classes.root}>
+    <Dashboard className={classes.root}>
       <HeaderArticleContainer>
         <SpacingPaper noPadding>
           {props.test_projects.map(project => (
@@ -53,7 +53,7 @@ function Projects(props: Props) {
           ))}
         </SpacingPaper>
       </HeaderArticleContainer>
-    </Layout>
+    </Dashboard>
   )
 }
 
