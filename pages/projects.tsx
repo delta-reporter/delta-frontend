@@ -9,9 +9,7 @@ import {
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
-import { SpacingPaper } from "../components/atoms"
-import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
+import { BasePage, SpacingPaper } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import { TestProject } from "."
@@ -32,28 +30,26 @@ function Projects(props: Props) {
   const classes = useStyles(props)
 
   return (
-    <Layout className={classes.root}>
-      <HeaderArticleContainer>
-        <SpacingPaper noPadding>
-          {props.test_projects.map(project => (
-            <div>
-              <Card>
-                <CardActionArea>
-                  <CardContent>
-                    <Link href="http://localhost:3000/launches">
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {project.name}{" "}
-                      </Typography>
-                    </Link>
-                  </CardContent>
-                </CardActionArea>
-                <Divider variant="inset" />
-              </Card>
-            </div>
-          ))}
-        </SpacingPaper>
-      </HeaderArticleContainer>
-    </Layout>
+    <BasePage className={classes.root}>
+      <SpacingPaper noPadding>
+        {props.test_projects.map(project => (
+          <div>
+            <Card>
+              <CardActionArea>
+                <CardContent>
+                  <Link href="http://localhost:3000/launches">
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {project.name}{" "}
+                    </Typography>
+                  </Link>
+                </CardContent>
+              </CardActionArea>
+              <Divider variant="inset" />
+            </Card>
+          </div>
+        ))}
+      </SpacingPaper>
+    </BasePage>
   )
 }
 

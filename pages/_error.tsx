@@ -2,11 +2,10 @@ import { Typography } from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
-import { SpacingPaper } from "../components/atoms"
-import { HeaderArticleContainer } from "../components/organisms"
-import { Layout } from "../components/templates"
+import { SpacingPaper } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
+import { BasePage } from "../components/templates/BasePage"
 
 const useStyles = makeStyles((_: Theme) =>
   createStyles({
@@ -22,15 +21,13 @@ function Error(props: Props) {
   const { httpStatusCode } = props
   const classes = useStyles(props)
   return (
-    <Layout className={classes.root}>
-      <HeaderArticleContainer>
-        <SpacingPaper>
-          <Typography variant="h5">
-            Http status code {httpStatusCode} error !
-          </Typography>
-        </SpacingPaper>
-      </HeaderArticleContainer>
-    </Layout>
+    <BasePage className={classes.root}>
+      <SpacingPaper>
+        <Typography variant="h5">
+          Http status code {httpStatusCode} error !
+        </Typography>
+      </SpacingPaper>
+    </BasePage>
   )
 }
 

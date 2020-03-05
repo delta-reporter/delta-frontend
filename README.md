@@ -34,4 +34,4 @@ The server will reload automatically after a change is saved
 - [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
 - [Bracket Pair Colorizer 2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
 
-#### Based on template provided on https://github.com/treetips/typescript-nextjs-redux-material-ui-example.git
+#### Based on template provided on https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/dashboard

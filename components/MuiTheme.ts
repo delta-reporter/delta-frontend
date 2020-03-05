@@ -1,4 +1,3 @@
-import green from "@material-ui/core/colors/green"
 import { createMuiTheme } from "@material-ui/core/styles"
 
 /**
@@ -8,15 +7,15 @@ import { createMuiTheme } from "@material-ui/core/styles"
 export const MuiTheme = createMuiTheme({
   palette: {
     primary: {
-      light: "#cfcfcf",
-      main: "#707070",
-      dark: "#bdb9b7",
-      contrastText: "#000000",
+      light: "#90caf9",
+      main: "#90caf9",
+      dark: "#90caf9",
     },
+    // #64b5f6
     secondary: {
-      light: green[300],
-      main: green[500],
-      dark: green[700],
+      light: "#000000",
+      main: "#000000",
+      dark: "#000000",
     },
   },
 })

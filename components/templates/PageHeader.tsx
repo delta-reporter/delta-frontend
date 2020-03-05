@@ -8,7 +8,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.contrastText,
       padding: theme.spacing(10),
       textAlign: "center",
     },
@@ -42,7 +41,7 @@ export const PageHeader = function(props: Props) {
         color="inherit"
         className={classes.description}
       >
-                {selectedPage.metaDescription}
+        {selectedPage.metaDescription}
       </Typography>
     </Paper>
   )
