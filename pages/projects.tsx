@@ -1,25 +1,50 @@
 import {
+  // Typography,
+  // Card,
+  // CardActionArea,
+  // CardContent,
+  // Divider,
+  // Link,
+  Container,
+  Paper,
+  Grid,
   Typography,
-  Card,
-  CardActionArea,
-  CardContent,
-  Divider,
   Link,
 } from "@material-ui/core"
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import clsx from "clsx"
+import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
-import { BasePage, SpacingPaper } from "../components/templates"
+import { BasePage } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import { TestProject } from "."
 import fetch from "isomorphic-unfetch"
 
-const useStyles = makeStyles((_: Theme) =>
-  createStyles({
-    root: {},
-  })
-)
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+  fixedHeight: {
+    height: 240,
+  },
+  context: {
+    flex: 1,
+  },
+  title: {
+    paddingTop: theme.spacing(2),
+  },
+}))
 
 type Props = {
   test_projects: TestProject[]
@@ -28,27 +53,37 @@ type Props = {
 function Projects(props: Props) {
   const {} = props
   const classes = useStyles(props)
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
   return (
     <BasePage className={classes.root}>
-      <SpacingPaper noPadding>
-        {props.test_projects.map(project => (
-          <div>
-            <Card>
-              <CardActionArea>
-                <CardContent>
-                  <Link href="http://localhost:3000/launches">
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {project.name}{" "}
-                    </Typography>
-                  </Link>
-                </CardContent>
-              </CardActionArea>
-              <Divider variant="inset" />
-            </Card>
-          </div>
-        ))}
-      </SpacingPaper>
+      <Container maxWidth="lg" className={classes.container}>
+        <Grid container spacing={3}>
+          {props.test_projects.map(project => (
+            <Grid item xs={12} md={4} lg={3}>
+              <Link underline="none" href="http://localhost:3000/launches">
+                <Paper className={fixedHeightPaper}>
+                  <Typography
+                    component="p"
+                    variant="h4"
+                    className={classes.title}
+                  >
+                    {project.name}
+                  </Typography>
+                  <Typography color="textSecondary" className={classes.context}>
+                    last updated on 15 March
+                  </Typography>
+                  <div>
+                    <Link color="primary" href="http://localhost:3000/launches">
+                      View details
+                    </Link>
+                  </div>
+                </Paper>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </BasePage>
   )
 }

@@ -9,7 +9,7 @@ import BarChartIcon from "@material-ui/icons/BarChart"
 import LayersIcon from "@material-ui/icons/Layers"
 import AssignmentIcon from "@material-ui/icons/Assignment"
 
-export const mainListItems = (
+export const SideBarMainItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
@@ -38,7 +38,7 @@ export const mainListItems = (
   </div>
 )
 
-export const secondaryListItems = (
+export const SideBarSecondaryItems = (
   <div>
     <ListSubheader inset>Reports</ListSubheader>
     <ListItem button>
