@@ -9,7 +9,7 @@ import {
   TableBody,
   Link,
   Typography,
-} from "@material-ui/core" // Link, Divider, List, ListItem, ListItemText,
+} from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
@@ -70,17 +70,27 @@ function Launches(props: Props) {
                     <TableCell>Reason</TableCell>
                     <TableCell>Duration</TableCell>
                     <TableCell>Status</TableCell>
+
+                    <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {props.test_launches.map(launch => (
                     <TableRow key={launch.id} hover>
-                      {/* <Link underline="none" href="http://localhost:3000/testsuites"> </Link> */}
                       <TableCell>12:00 Mar 2</TableCell>
                       <TableCell>{launch.name}</TableCell>
-                      <TableCell>Release</TableCell>
+                      <TableCell> 12:00 Mar 2</TableCell>
                       <TableCell>34 min</TableCell>
                       <TableCell>{launch.launch_status}</TableCell>
+                      <TableCell>
+                        {" "}
+                        <Link
+                          underline="none"
+                          href="http://localhost:3000/testruns"
+                        >
+                          View{" "}
+                        </Link>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
