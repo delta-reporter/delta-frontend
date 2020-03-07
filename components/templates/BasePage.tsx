@@ -13,19 +13,9 @@ import IconButton from "@material-ui/core/IconButton"
 import Badge from "@material-ui/core/Badge"
 import MenuIcon from "@material-ui/icons/Menu"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
-import { mainListItems, secondaryListItems } from "./Sidebar"
+import { SideBarMainItems, SideBarSecondaryItems } from "./Sidebar"
 import { Search } from "@material-ui/icons"
 import { PageHeader } from "./PageHeader"
-
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {"Delta Reporter © "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   )
-// }
 
 const drawerWidth = 240
 
@@ -127,7 +117,6 @@ export const BasePage = function(props: Props) {
   const handleDrawerClose = () => {
     setOpen(false)
   }
-  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
   return (
     <div className={`${classes.root} ${className}`}>
@@ -181,35 +170,14 @@ export const BasePage = function(props: Props) {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>{SideBarMainItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <List>{SideBarSecondaryItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <PageHeader />
         <section className={classes.pageDescription}>{children}</section>
-
-        {/* <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}></Paper>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>  */}
       </main>
     </div>
   )

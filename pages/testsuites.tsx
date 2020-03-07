@@ -13,10 +13,10 @@ import {
 import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
-import { BasePage } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
-import { TestLaunch } from "."
+import { BasePage } from "../components/templates/BasePage"
+import { TestSuite } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -42,12 +42,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  test_launches: TestLaunch[]
+  test_suites: TestSuite[]
 }
 
-function Launches(props: Props) {
+function Testsuites(props: Props) {
   const classes = useStyles(props)
-
   return (
     <BasePage className={classes.root}>
       <Container maxWidth="lg" className={classes.container}>
@@ -60,14 +59,12 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Launches for {props.test_launches[0].project} project
+                Test suites for {props.test_suites[0].test_type} tests
               </Typography>{" "}
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
                     <TableCell>Name</TableCell>
-                    <TableCell>Reason</TableCell>
                     <TableCell>Duration</TableCell>
                     <TableCell>Status</TableCell>
 
@@ -75,18 +72,16 @@ function Launches(props: Props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {props.test_launches.map(launch => (
-                    <TableRow key={launch.id} hover>
-                      <TableCell>12:00 Mar 2</TableCell>
-                      <TableCell>{launch.name}</TableCell>
-                      <TableCell> 12:00 Mar 2</TableCell>
-                      <TableCell>34 min</TableCell>
-                      <TableCell>{launch.launch_status}</TableCell>
+                  {props.test_suites.map(testSuite => (
+                    <TableRow key={testSuite.id} hover>
+                      <TableCell>{testSuite.name}</TableCell>
+                      <TableCell>12 min</TableCell>
+                      <TableCell>{testSuite.test_suite_status}</TableCell>
                       <TableCell>
                         {" "}
                         <Link
                           underline="none"
-                          href="http://localhost:3000/testruns"
+                          href="http://localhost:3000/tests"
                         >
                           View{" "}
                         </Link>
@@ -95,11 +90,6 @@ function Launches(props: Props) {
                   ))}
                 </TableBody>
               </Table>
-              <div className={classes.seeMore}>
-                <Link color="primary" href="#">
-                  See more launches
-                </Link>
-              </div>
             </Paper>
           </Grid>
         </Grid>
@@ -111,27 +101,26 @@ function Launches(props: Props) {
 /**
  * Server side rendering
  */
-Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+Testsuites.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
-  const launchesReq = await fetch(
-    "http://delta_core_service:5000/get_launches",
+  const suitesReq = await fetch(
+    "http://delta_core_service:5000/get_test_suites",
     {
       method: "GET",
     }
   )
-  const launches = await launchesReq.json()
+  const suites = await suitesReq.json()
 
   const pagePayload: IPagePayload = {
-    selectedPage: Page.LAUNCHES,
+    selectedPage: Page.TEST_SUITES,
   }
   store.dispatch({
     type: PageActions.changePage.toString(),
     payload: pagePayload,
   })
   return {
-    test_launches: launches,
+    test_suites: suites,
   }
 }
-
-export default Launches
+export default Testsuites

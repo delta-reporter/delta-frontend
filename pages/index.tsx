@@ -131,19 +131,19 @@ function Index(props: Props) {
         <Typography variant="h5">Core Service</Typography>
         <List>
           <ListItem button href="http://localhost:5001/">
-            <ListItemText primary="Core Info Page" />
+            <ListItemText primary="Core Info (Home) Page" />
           </ListItem>
           <Divider />
           <ListItem button href="http://localhost:5001/launches">
             <ListItemText primary="Launcher Endpoint Example" />
           </ListItem>
           <Divider />
-          <ListItem button href="http://localhost:5001/launches">
+          <ListItem button href="http://localhost:5001/projects">
             <ListItemText primary="Projects Endpoint Example" />
           </ListItem>
           <Divider />
-          <ListItem button href="http://localhost:5001/launches">
-            <ListItemText primary="Tests Endpoint Example" />
+          <ListItem button href="http://localhost:5001/testruns">
+            <ListItemText primary="Test Runs Endpoint Example" />
           </ListItem>
           <Divider />
           <ListItem button href="http://localhost:5001/testsuites">
