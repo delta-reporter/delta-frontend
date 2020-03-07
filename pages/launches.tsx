@@ -60,7 +60,7 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Recent Launches
+                Launches for {props.test_launches[0].project} project
               </Typography>{" "}
               <Table size="small">
                 <TableHead>
