@@ -59,7 +59,11 @@ function Testsuites(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Test suites for {props.test_suites[0].test_type} tests
+                Test suites for{" "}
+                <Link underline="always" href="/testruns">
+                  {props.test_suites[0].test_type}
+                </Link>{" "}
+                test run
               </Typography>{" "}
               <Table size="small">
                 <TableHead>
@@ -79,10 +83,7 @@ function Testsuites(props: Props) {
                       <TableCell>{testSuite.test_suite_status}</TableCell>
                       <TableCell>
                         {" "}
-                        <Link
-                          underline="none"
-                          href="http://localhost:3000/tests"
-                        >
+                        <Link underline="none" href="/tests">
                           View{" "}
                         </Link>
                       </TableCell>

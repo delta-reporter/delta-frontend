@@ -60,7 +60,11 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Launches for {props.test_launches[0].project} project
+                Launches for{" "}
+                <Link underline="always" href="/projects">
+                  {props.test_launches[0].project}
+                </Link>{" "}
+                project
               </Typography>{" "}
               <Table size="small">
                 <TableHead>
@@ -84,10 +88,7 @@ function Launches(props: Props) {
                       <TableCell>{launch.launch_status}</TableCell>
                       <TableCell>
                         {" "}
-                        <Link
-                          underline="none"
-                          href="http://localhost:3000/testruns"
-                        >
+                        <Link underline="none" href="/testruns">
                           View{" "}
                         </Link>
                       </TableCell>

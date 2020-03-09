@@ -1,21 +1,23 @@
 import React from "react"
 import clsx from "clsx"
 import { makeStyles } from "@material-ui/core/styles"
-import CssBaseline from "@material-ui/core/CssBaseline"
-import Drawer from "@material-ui/core/Drawer"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import List from "@material-ui/core/List"
-import Link from "@material-ui/core/Link"
-import Typography from "@material-ui/core/Typography"
-import Divider from "@material-ui/core/Divider"
-import IconButton from "@material-ui/core/IconButton"
-import Badge from "@material-ui/core/Badge"
-import MenuIcon from "@material-ui/icons/Menu"
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
+import {
+  Drawer,
+  CssBaseline,
+  Badge,
+  AppBar,
+  List,
+  Typography,
+  Divider,
+  IconButton,
+  Link,
+  Toolbar,
+} from "@material-ui/core"
+import { Search, Info, AccountBox } from "@material-ui/icons"
 import { SideBarMainItems, SideBarSecondaryItems } from "./Sidebar"
-import { Search } from "@material-ui/icons"
 import { PageHeader } from "./PageHeader"
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
+import MenuIcon from "@material-ui/icons/Menu"
 
 const drawerWidth = 240
 
@@ -83,19 +85,6 @@ const useStyles = makeStyles(theme => ({
     height: "100vh",
     overflow: "auto",
   },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
   pageDescription: {
     padding: theme.spacing(1),
   },
@@ -145,14 +134,23 @@ export const BasePage = function(props: Props) {
             noWrap
             className={classes.title}
           >
-            <Link color="inherit" href="/">
+            <Link underline="none" color="inherit" href="/">
               Δ Delta Reporter
             </Link>
           </Typography>
-
-          <IconButton color="inherit">
+          <IconButton color="inherit" disabled>
             <Badge color="secondary">
               <Search />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit" disabled>
+            <Badge color="secondary">
+              <AccountBox />{" "}
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit" href="/about">
+            <Badge color="secondary">
+              <Info />{" "}
             </Badge>
           </IconButton>
         </Toolbar>

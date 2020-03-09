@@ -49,6 +49,12 @@ export class Page implements IEnum<Page> {
     "/tests"
   )
 
+  public static readonly ERROR = new Page(
+    2,
+    "Ooops, something went wrong....",
+    "There is an error here, we are sorry for that!",
+    "/error"
+  )
   /**
    * constructor
    * @param number page id

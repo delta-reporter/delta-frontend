@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Link,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
@@ -18,9 +19,6 @@ import { Test } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {},
-  counter: {
-    margin: 10,
-  },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -31,16 +29,9 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
     flexDirection: "column",
   },
-  expand: {
-    transform: "rotate(180deg)",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-    margin: 0,
-    padding: 0,
-  },
   list: {
     width: 700,
+    padding: theme.spacing(2),
   },
 }))
 
@@ -65,14 +56,23 @@ function Tests(props: Props) {
     setState({ ...state, [side]: open })
   }
 
-  const sideList = (side, testName) => (
+  const sideList = (side, test) => (
     <div
       className={classes.list}
       role="presentation"
       onClick={toggleDrawer(side, false)}
       onKeyDown={toggleDrawer(side, false)}
     >
-      This is the test name: {testName}
+      {" "}
+      <Paper className={classes.paper}>
+        <Typography component="h2">This is the test name:</Typography>
+        {test.name}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test result:</Typography>
+      </Paper>
+      {test.test_status}
     </div>
   )
 
@@ -81,7 +81,11 @@ function Tests(props: Props) {
       <Container maxWidth="lg" className={classes.container}>
         <Paper className={classes.paper}>
           <Typography component="h2" variant="h6" color="primary" gutterBottom>
-            Test suites for {props.tests[0].test_suite} suite
+            Tests for{" "}
+            <Link underline="always" href="/testsuites">
+              {props.tests[0].test_suite}
+            </Link>{" "}
+            suite
           </Typography>
           {props.tests.map(test => (
             <div>
@@ -89,14 +93,14 @@ function Tests(props: Props) {
                 <ListItem button onClick={toggleDrawer("right", true)}>
                   <ListItemText primary={test.name} />
                 </ListItem>
-                <Divider></Divider>
+                <Divider />
               </List>
               <Drawer
                 anchor="right"
                 open={state.right}
                 onClose={toggleDrawer("right", false)}
               >
-                {sideList("right", test.name)}
+                {sideList("right", test)}
               </Drawer>
             </div>
           ))}
