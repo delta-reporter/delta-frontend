@@ -129,12 +129,11 @@ export const BasePage = function(props: Props) {
           </IconButton>
           <Typography
             component="h1"
-            variant="h6"
+            variant="h5"
             color="inherit"
-            noWrap
             className={classes.title}
           >
-            <Link underline="none" color="inherit" href="/">
+            <Link underline="none" color="secondary" href="/">
               Δ Delta Reporter
             </Link>
           </Typography>

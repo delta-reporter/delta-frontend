@@ -60,12 +60,12 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Launches for{" "}
+                Launches for
                 <Link underline="always" href="/projects">
                   {props.test_launches[0].project}
-                </Link>{" "}
+                </Link>
                 project
-              </Typography>{" "}
+              </Typography>
               <Table size="small">
                 <TableHead>
                   <TableRow>
@@ -74,7 +74,6 @@ function Launches(props: Props) {
                     <TableCell>Reason</TableCell>
                     <TableCell>Duration</TableCell>
                     <TableCell>Status</TableCell>
-
                     <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
@@ -87,9 +86,8 @@ function Launches(props: Props) {
                       <TableCell>34 min</TableCell>
                       <TableCell>{launch.launch_status}</TableCell>
                       <TableCell>
-                        {" "}
                         <Link underline="none" href="/testruns">
-                          View{" "}
+                          View
                         </Link>
                       </TableCell>
                     </TableRow>

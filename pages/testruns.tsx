@@ -59,12 +59,12 @@ function Testruns(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Test runs for{" "}
+                Test runs for
                 <Link underline="always" href="/launches">
                   {props.test_runs[0].launch}
-                </Link>{" "}
+                </Link>
                 launch
-              </Typography>{" "}
+              </Typography>
               <Table size="small">
                 <TableHead>
                   <TableRow>
@@ -84,9 +84,8 @@ function Testruns(props: Props) {
                       <TableCell>34 min</TableCell>
                       <TableCell>{testRun.test_run_status}</TableCell>
                       <TableCell>
-                        {" "}
-                        <Link underline="none" href="/testsuites">
-                          View{" "}
+                        <Link underline="none" href="/tests">
+                          View
                         </Link>
                       </TableCell>
                     </TableRow>
