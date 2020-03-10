@@ -35,20 +35,26 @@ export class Page implements IEnum<Page> {
     "/testruns"
   )
 
-  public static readonly TEST_SUITES = new Page(
-    2,
-    "Test Suites",
-    "Select a suite (group) of tests",
-    "/testsuites"
-  )
-
   public static readonly TESTS = new Page(
     2,
     "Tests",
-    "Here are the tests for selected suite",
+    "Here are the tests for selected run",
     "/tests"
   )
 
+  public static readonly ERROR = new Page(
+    2,
+    "Ooops, something went wrong....",
+    "There is an error here, we are sorry for that!",
+    "/error"
+  )
+
+  public static readonly ABOUT = new Page(
+    2,
+    "About Us",
+    "Info about creators of this tool",
+    "/about"
+  )
   /**
    * constructor
    * @param number page id

@@ -49,7 +49,7 @@ function Projects(props: Props) {
         <Grid container spacing={3}>
           {props.test_projects.map(project => (
             <Grid item xs={12} md={4} lg={3}>
-              <Link underline="none" href="http://localhost:3000/launches">
+              <Link underline="none" href="/launches">
                 <Paper className={fixedHeightPaper}>
                   <Typography
                     component="p"
@@ -62,7 +62,7 @@ function Projects(props: Props) {
                     last updated on 15 March
                   </Typography>
                   <div>
-                    <Link color="primary" href="http://localhost:3000/launches">
+                    <Link color="primary" href="/launches">
                       View details
                     </Link>
                   </div>

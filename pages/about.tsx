@@ -18,15 +18,14 @@ type Props = {
   httpStatusCode: number
 }
 
-function Error(props: Props) {
-  const { httpStatusCode } = props
+function About(props: Props) {
   const classes = useStyles(props)
   return (
     <BasePage className={classes.root}>
       <Container className={classes.container}>
         <Typography component="h3" variant="h6" color="error" gutterBottom>
           {" "}
-          Http status code {httpStatusCode} error
+          We are the best!
         </Typography>
       </Container>
     </BasePage>
@@ -36,11 +35,11 @@ function Error(props: Props) {
 /**
  * Server side rendering
  */
-Error.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+About.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { res, store } = ctx
 
   const pagePayload: IPagePayload = {
-    selectedPage: Page.ERROR,
+    selectedPage: Page.ABOUT,
   }
   store.dispatch({
     type: PageActions.changePage.toString(),
@@ -51,4 +50,4 @@ Error.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   }
 }
 
-export default Error
+export default About

@@ -20,9 +20,6 @@ import { TestRun } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {},
-  counter: {
-    margin: 10,
-  },
   title: {
     fontSize: "2em",
   },
@@ -59,8 +56,12 @@ function Testruns(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Test runs for {props.test_runs[0].launch} launch
-              </Typography>{" "}
+                Test runs for{" "}
+                <Link underline="always" href="/launches">
+                  {props.test_runs[0].launch}
+                </Link>{" "}
+                launch
+              </Typography>
               <Table size="small">
                 <TableHead>
                   <TableRow>
@@ -80,12 +81,8 @@ function Testruns(props: Props) {
                       <TableCell>34 min</TableCell>
                       <TableCell>{testRun.test_run_status}</TableCell>
                       <TableCell>
-                        {" "}
-                        <Link
-                          underline="none"
-                          href="http://localhost:3000/testsuites"
-                        >
-                          View{" "}
+                        <Link underline="none" href="/tests">
+                          View
                         </Link>
                       </TableCell>
                     </TableRow>

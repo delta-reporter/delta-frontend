@@ -11,49 +11,49 @@ import AssignmentIcon from "@material-ui/icons/Assignment"
 
 export const SideBarMainItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <Link color="inherit" href="/">
+    <Link color="inherit" href="/">
+      <ListItem button href="/">
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
         <ListItemText primary="Homepage" />
-      </Link>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <Link color="inherit" href="/projects">
+      </ListItem>
+    </Link>
+    <Link color="inherit" href="/projects">
+      <ListItem button href="/projects">
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
         <ListItemText primary="Projects" />
-      </Link>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <Link color="inherit" href="/">
+      </ListItem>
+    </Link>
+    <Link color="inherit" href="/">
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
         <ListItemText primary="Charts" />
-      </Link>
-    </ListItem>
+      </ListItem>
+    </Link>
   </div>
 )
 
 export const SideBarSecondaryItems = (
   <div>
     <ListSubheader inset>Reports</ListSubheader>
-    <ListItem button>
+    <ListItem button disabled>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Current month" />
     </ListItem>
-    <ListItem button>
+    <ListItem button disabled>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Current month" />
     </ListItem>
-    <ListItem button>
+    <ListItem button disabled>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>

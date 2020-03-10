@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.primary.light,
-      padding: theme.spacing(10),
+      padding: theme.spacing(4),
       textAlign: "center",
     },
     title: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       alignItems: "center",
       fontSize: "3em",
-      padding: theme.spacing(3),
+      padding: theme.spacing(5),
     },
     description: {},
   })

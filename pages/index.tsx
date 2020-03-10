@@ -15,12 +15,6 @@ import fetch from "isomorphic-unfetch"
 const useStyles = makeStyles(() =>
   createStyles({
     root: {},
-    counter: {
-      margin: 10,
-    },
-    title: {
-      fontSize: "2em",
-    },
   })
 )
 export interface TestProject {
