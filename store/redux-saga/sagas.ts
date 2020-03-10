@@ -1,5 +1,4 @@
 import { call, debounce, put, throttle } from "redux-saga/effects"
-import { SagaSetting } from "../../constants"
 import { InputResponseModel } from "../../model"
 import { fetchInputApi } from "../api"
 import {
@@ -16,11 +15,7 @@ import {
  * Monitor specific redux-debounce-action fire when detected
  */
 export const watchFetchDebounce = function*() {
-  yield debounce(
-    SagaSetting.DEBOUNCE_INTERVAL,
-    ReduxSagaActions.fetchDebounce,
-    executeFetchDebounce
-  )
+  yield debounce(2000, ReduxSagaActions.fetchDebounce, executeFetchDebounce)
 }
 
 function* executeFetchDebounce(action: ReduxSagaActionTypes) {
@@ -61,11 +56,7 @@ function* executeFetchDebounce(action: ReduxSagaActionTypes) {
  * Monitor specific redux-throttle-action fire when detected
  */
 export const watchFetchThrottle = function*() {
-  yield throttle(
-    SagaSetting.THROTTLE_INTERVAL,
-    ReduxSagaActions.fetchThrottle,
-    executeFetchThrottle
-  )
+  yield throttle(1000, ReduxSagaActions.fetchThrottle, executeFetchThrottle)
 }
 
 function* executeFetchThrottle(action: ReduxSagaActionTypes) {

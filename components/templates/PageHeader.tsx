@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       alignItems: "center",
       fontSize: "3em",
-      padding: theme.spacing(3),
+      padding: theme.spacing(5),
     },
     description: {},
   })

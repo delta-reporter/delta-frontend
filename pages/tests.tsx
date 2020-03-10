@@ -7,7 +7,7 @@ import {
   ExpansionPanelDetails,
   List,
   ListItem,
-  // ListItemText,
+  ListItemSecondaryAction,
   Divider,
   Drawer,
 } from "@material-ui/core"
@@ -23,6 +23,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
+    maxWidth: 3500,
   },
   counter: {
     margin: 10,
@@ -137,7 +138,7 @@ function Tests(props: Props) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               {/* Expanded tests list for each suite */}
-              <List>
+              <List className={classes.root}>
                 {props.tests.map(test => (
                   <div>
                     <ListItem
@@ -146,6 +147,9 @@ function Tests(props: Props) {
                       onClick={toggleDrawer("right", true)}
                     >
                       {test.name}
+                      <ListItemSecondaryAction>
+                        <Typography align="right">PASSED</Typography>
+                      </ListItemSecondaryAction>
                     </ListItem>
                     <Divider />
 

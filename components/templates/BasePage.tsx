@@ -86,7 +86,7 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
   },
   pageDescription: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
   },
 }))
 

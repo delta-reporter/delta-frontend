@@ -6,9 +6,9 @@ export interface IReduxSagaFetchPayload {
   input: string
 }
 
-//-------------------------------------------------------
+// -------------------------------------------------------
 // debounce
-//-------------------------------------------------------
+// -------------------------------------------------------
 export interface IReduxSagaDebounceSuccessPayload {
   input: string
   timestamp: string
@@ -18,9 +18,9 @@ export interface IReduxSagaDebounceFailurePayload {
   error: Error
 }
 
-//-------------------------------------------------------
+// -------------------------------------------------------
 // throttle
-//-------------------------------------------------------
+// -------------------------------------------------------
 export interface IReduxSagaThrottleSuccessPayload {
   input: string
   timestamp: string
