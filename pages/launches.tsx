@@ -60,10 +60,10 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Launches for
+                Launches for{" "}
                 <Link underline="always" href="/projects">
                   {props.test_launches[0].project}
-                </Link>
+                </Link>{" "}
                 project
               </Typography>
               <Table size="small">

@@ -10,13 +10,15 @@ import {
   ListItemSecondaryAction,
   Divider,
   Drawer,
+  Container,
+  Grid,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
 import { AppContext } from "../components/AppContext"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
-import { BasePage, SpacingPaper } from "../components/templates"
+import { BasePage } from "../components/templates"
 import { Test, TestSuite } from "."
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
@@ -112,61 +114,74 @@ function Tests(props: Props) {
 
   return (
     <BasePage className={classes.root}>
-      <SpacingPaper>
-        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-          Test suites for{" "}
-          <Link underline="always" href="/testruns">
-            Testrun X
-          </Link>{" "}
-          test run
-        </Typography>{" "}
-        {/* Expandable Suites list */}
-        {props.test_suites.map(suite => (
-          <ExpansionPanel
-            expanded={expanded === suite.name}
-            onChange={handleChange(suite.name)}
-          >
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1bh-content"
-            >
-              <Typography className={classes.heading}>{suite.name}</Typography>
+      <Container maxWidth="lg" className={classes.container}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Typography
+                component="h2"
+                variant="h6"
+                color="primary"
+                gutterBottom
+              >
+                Test suites for{" "}
+                <Link underline="always" href="/testruns">
+                  Testrun X
+                </Link>{" "}
+                test run
+              </Typography>{" "}
+              {/* Expandable Suites list */}
+              {props.test_suites.map(suite => (
+                <ExpansionPanel
+                  expanded={expanded === suite.name}
+                  onChange={handleChange(suite.name)}
+                >
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                  >
+                    <Typography className={classes.heading}>
+                      {suite.name}
+                    </Typography>
 
-              <Typography className={classes.secondaryHeading}>
-                {suite.test_suite_status}
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {/* Expanded tests list for each suite */}
-              <List className={classes.root}>
-                {props.tests.map(test => (
-                  <div>
-                    <ListItem
-                      className={classes.root}
-                      button
-                      onClick={toggleDrawer("right", true)}
-                    >
-                      {test.name}
-                      <ListItemSecondaryAction>
-                        <Typography align="right">PASSED</Typography>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider />
+                    <Typography className={classes.secondaryHeading}>
+                      {suite.test_suite_status}
+                    </Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    {/* Expanded tests list for each suite */}
+                    <List className={classes.root}>
+                      {props.tests.map(test => (
+                        <div>
+                          <ListItem
+                            className={classes.root}
+                            button
+                            onClick={toggleDrawer("right", true)}
+                          >
+                            {test.name}
+                            <ListItemSecondaryAction>
+                              <Typography align="right">PASSED</Typography>
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                          <Divider />
 
-                    <Drawer
-                      anchor="right"
-                      open={state.right}
-                      onClose={toggleDrawer("right", false)}
-                    >
-                      {sideList("right", test)}
-                    </Drawer>
-                  </div>
-                ))}
-              </List>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        ))}
-      </SpacingPaper>
+                          <Drawer
+                            anchor="right"
+                            open={state.right}
+                            onClose={toggleDrawer("right", false)}
+                          >
+                            {sideList("right", test)}
+                          </Drawer>
+                        </div>
+                      ))}
+                    </List>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              ))}
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
     </BasePage>
   )
 }
