@@ -39,7 +39,6 @@ type Props = {
 }
 
 function Projects(props: Props) {
-  const {} = props
   const classes = useStyles(props)
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
@@ -49,7 +48,7 @@ function Projects(props: Props) {
         <Grid container spacing={3}>
           {props.test_projects.map(project => (
             <Grid item xs={12} md={4} lg={3}>
-              <Link underline="none" href="/launches">
+              <Link underline="none" href={`/launches?project=${project.id}`}>
                 <Paper className={fixedHeightPaper}>
                   <Typography
                     component="p"
@@ -59,7 +58,7 @@ function Projects(props: Props) {
                     {project.name}
                   </Typography>
                   <Typography color="textSecondary" className={classes.context}>
-                    last updated on 15 March
+                    {project.project_status}
                   </Typography>
                   <div>
                     <Link color="primary" href="/launches">
@@ -83,7 +82,7 @@ Projects.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
   const projectReq = await fetch(
-    "http://delta_core_service:5000/get_projects",
+    "http://delta_core_service:5000/api/v1/projects",
     {
       method: "GET",
     }

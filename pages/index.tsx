@@ -37,6 +37,7 @@ export interface TestRun {
   launch: string
   start_datetime: string
   end_datetime: string
+  duration: string
   test_run_status: string
   test_type: string
   data: { url?: string }
@@ -50,46 +51,37 @@ export interface TestSuite {
   test_suite_status: string
   test_type: string
   data: { url?: string }
-  test_run: {
-    id: number
-    launch: string
-    test_run_status: string
-    test_type: string
-  }
 }
 
-export interface Test {
+export interface TestConfig {
   id: number
   name: string
   start_datetime: string
   end_datetime: string
+  duration: string
   test_resolution: string
   test_status: string
   test_suite: string
   data: { url?: string }
 }
 
-export interface TestHistory {
-  id: number
-  start_datetime: string
+export interface Test {
+  duration: {
+    days: number
+    hours: number
+    minutes: number
+    months: number
+    seconds: number
+    years: number
+  }
   end_datetime: string
-  launch: string
-  test_run_status: string
-  test_type: string
-  test: {
-    name: string
-    start_datetime: string
-    end_datetime: string
-    resolution: string
-    status: string
-    data: any
-  }
-  test_suite: {
-    name: string
-    test_suite_status: string
-    start_datetime: string
-    end_datetime: string
-  }
+  id: number
+  name: string
+  start_datetime: string
+  test_resolution: string
+  test_status: string
+  test_type: number
+  test_suite: string
 }
 
 type Props = {
@@ -97,12 +89,13 @@ type Props = {
   test_launches: TestLaunch[]
   test_runs: TestRun[]
   test_suites: TestSuite[]
-  tests_history: TestHistory[]
-  tests: Test[]
+  tests_history: Test[]
+  tests: TestConfig[]
 }
 
 function Index(props: Props) {
   const classes = useStyles(props)
+
   return (
     <BasePage className={classes.root}>
       <SpacingPaper>
@@ -128,19 +121,19 @@ function Index(props: Props) {
             <ListItemText primary="Core Info (Home) Page" />
           </ListItem>
           <Divider />
-          <ListItem button href="http://localhost:5001/launches">
+          <ListItem button href="http://localhost:5001/api/v1/launches">
             <ListItemText primary="Launcher Endpoint Example" />
           </ListItem>
           <Divider />
-          <ListItem button href="http://localhost:5001/projects">
+          <ListItem button href="http://localhost:5001/api/v1/projects">
             <ListItemText primary="Projects Endpoint Example" />
           </ListItem>
           <Divider />
-          <ListItem button href="http://localhost:5001/testruns">
+          <ListItem button href="http://localhost:5001/api/v1/testruns">
             <ListItemText primary="Test Runs Endpoint Example" />
           </ListItem>
           <Divider />
-          <ListItem button href="http://localhost:5001/testsuites">
+          <ListItem button href="http://localhost:5001/api/v1/testsuites">
             <ListItemText primary="Test Suites Endpoint Example" />
           </ListItem>
         </List>
@@ -226,29 +219,19 @@ function Index(props: Props) {
             <ListItem button>
               <ListItemText primary={testHistory.id} />
               <br />
-              {testHistory.launch}
-              <br />
               {testHistory.start_datetime}
               <br />
               {testHistory.end_datetime}
               <br />
               {testHistory.test_type}
               <br />
-              {testHistory.test_run_status}
+              {testHistory.test_status}
               <br />
-              {testHistory.test_suite.name}
+              {testHistory.test_suite}
               <br />
-              {testHistory.test_suite.test_suite_status}
+              {testHistory.name}
               <br />
-              {testHistory.test_suite.start_datetime}
-              <br />
-              {testHistory.test_suite.end_datetime}
-              <br />
-              {testHistory.test.name}
-              <br />
-              {testHistory.test.status}
-              <br />
-              {testHistory.test.resolution}
+              {testHistory.test_resolution}
             </ListItem>
             <Divider />
           </List>
@@ -264,7 +247,7 @@ function Index(props: Props) {
 Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
   const projectReq = await fetch(
-    "http://delta_core_service:5000/get_projects",
+    "http://delta_core_service:5000/api/v1/projects",
     {
       method: "GET",
     }
@@ -272,33 +255,36 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const projects = await projectReq.json()
 
   const launchesReq = await fetch(
-    "http://delta_core_service:5000/get_launches",
+    "http://delta_core_service:5000/api/v1/launches",
     {
       method: "GET",
     }
   )
   const launches = await launchesReq.json()
 
-  const runsReq = await fetch("http://delta_core_service:5000/get_test_runs", {
-    method: "GET",
-  })
+  const runsReq = await fetch(
+    "http://delta_core_service:5000/api/v1/test_runs",
+    {
+      method: "GET",
+    }
+  )
   const runs = await runsReq.json()
 
   const suitesReq = await fetch(
-    "http://delta_core_service:5000/get_test_suites",
+    "http://delta_core_service:5000/api/v1/test_suites",
     {
       method: "GET",
     }
   )
   const suites = await suitesReq.json()
 
-  const testsReq = await fetch("http://delta_core_service:5000/get_tests", {
+  const testsReq = await fetch("http://delta_core_service:5000/api/v1/tests", {
     method: "GET",
   })
   const tests = await testsReq.json()
 
   const testsHistoryReq = await fetch(
-    "http://delta_core_service:5000/tests_history/test_run_id/1",
+    "http://delta_core_service:5000/api/v1/tests_history/test_suite/1",
     {
       method: "GET",
     }
