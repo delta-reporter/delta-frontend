@@ -59,7 +59,7 @@ function Testruns(props: Props) {
               >
                 Test runs for{" "}
                 <Link underline="always" href="/launches">
-                  {props.test_runs[0].launch}
+                  {props.test_runs[0].launch_name}
                 </Link>{" "}
                 launch
               </Typography>
@@ -108,7 +108,7 @@ Testruns.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
   const runsByLaunchIdReq = await fetch(
-    "http://delta_core_service:5000/api/v1/test_runs",
+    "http://delta_core_service:5000/api/v1/test_run/launch/1",
     {
       method: "GET",
     }

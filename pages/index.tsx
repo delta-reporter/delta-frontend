@@ -34,7 +34,7 @@ export interface TestLaunch {
 
 export interface TestRun {
   id: number
-  launch: string
+  launch_name: string
   start_datetime: string
   end_datetime: string
   duration: string
@@ -44,7 +44,7 @@ export interface TestRun {
 }
 
 export interface TestSuite {
-  id: number
+  test_suite_id: number
   name: string
   start_datetime: string
   end_datetime: string
