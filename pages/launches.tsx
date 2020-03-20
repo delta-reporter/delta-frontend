@@ -47,6 +47,8 @@ type Props = {
 
 function Launches(props: Props) {
   const classes = useStyles(props)
+  // const urlParams = new URLSearchParams(window.location.search)
+  // const product = urlParams.get("project")
 
   return (
     <BasePage className={classes.root}>
@@ -72,7 +74,6 @@ function Launches(props: Props) {
                     <TableCell>Date</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Reason</TableCell>
-                    <TableCell>Duration</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
@@ -82,11 +83,13 @@ function Launches(props: Props) {
                     <TableRow key={launch.id} hover>
                       <TableCell>12:00 Mar 2</TableCell>
                       <TableCell>{launch.name}</TableCell>
-                      <TableCell> 12:00 Mar 2</TableCell>
-                      <TableCell>34 min</TableCell>
+                      <TableCell> RELEASE</TableCell>
                       <TableCell>{launch.launch_status}</TableCell>
                       <TableCell>
-                        <Link underline="none" href="/testruns">
+                        <Link
+                          underline="none"
+                          href={`/testruns?launch=${launch.id}`}
+                        >
                           View
                         </Link>
                       </TableCell>
@@ -113,13 +116,13 @@ function Launches(props: Props) {
 Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
-  const launchesReq = await fetch(
-    "http://delta_core_service:5000/get_launches",
+  const launchesByProjectIdReq = await fetch(
+    "http://delta_core_service:5000/api/v1/launch/project/1",
     {
       method: "GET",
     }
   )
-  const launches = await launchesReq.json()
+  const launchesByProjectId = await launchesByProjectIdReq.json()
 
   const pagePayload: IPagePayload = {
     selectedPage: Page.LAUNCHES,
@@ -129,7 +132,7 @@ Launches.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     payload: pagePayload,
   })
   return {
-    test_launches: launches,
+    test_launches: launchesByProjectId,
   }
 }
 

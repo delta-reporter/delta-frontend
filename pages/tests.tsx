@@ -70,7 +70,7 @@ function Tests(props: Props) {
   const classes = useStyles(props)
   const [expanded, setExpanded] = React.useState<string | false>(false)
 
-  const handleChange = (panel: string) => (
+  const handleExpandCollapseEvent = (panel: string) => (
     _event: React.ChangeEvent<{}>,
     isExpanded: boolean
   ) => {
@@ -81,23 +81,22 @@ function Tests(props: Props) {
     right: false,
   })
 
-  const toggleDrawer = (side, open) => event => {
+  const expandSuite = open => event => {
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return
     }
-
-    setState({ ...state, [side]: open })
+    setState({ ...state, ["right"]: open })
   }
 
-  const sideList = (side, test) => (
+  const testsTab = test => (
     <div
       className={classes.list}
       role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
+      onClick={expandSuite(false)}
+      onKeyDown={expandSuite(false)}
     >
       {" "}
       <Paper className={classes.paper}>
@@ -107,8 +106,8 @@ function Tests(props: Props) {
       <Paper className={classes.paper}>
         {" "}
         <Typography component="h2">This is the test result:</Typography>
+        {test.test_status}
       </Paper>
-      {test.test_status}
     </div>
   )
 
@@ -134,7 +133,7 @@ function Tests(props: Props) {
               {props.test_suites.map(suite => (
                 <ExpansionPanel
                   expanded={expanded === suite.name}
-                  onChange={handleChange(suite.name)}
+                  onChange={handleExpandCollapseEvent(suite.name)}
                 >
                   <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -156,21 +155,22 @@ function Tests(props: Props) {
                           <ListItem
                             className={classes.root}
                             button
-                            onClick={toggleDrawer("right", true)}
+                            onClick={expandSuite(true)}
                           >
                             {test.name}
                             <ListItemSecondaryAction>
-                              <Typography align="right">PASSED</Typography>
+                              <Typography align="right">
+                                {test.test_status}
+                              </Typography>
                             </ListItemSecondaryAction>
                           </ListItem>
                           <Divider />
-
                           <Drawer
                             anchor="right"
                             open={state.right}
-                            onClose={toggleDrawer("right", false)}
+                            onClose={expandSuite(false)}
                           >
-                            {sideList("right", test)}
+                            {testsTab(test)}
                           </Drawer>
                         </div>
                       ))}
@@ -193,19 +193,22 @@ Tests.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
   // Suites
-  const suitesReq = await fetch(
-    "http://delta_core_service:5000/get_test_suites",
+  const suitesByTestRunIdReq = await fetch(
+    "http://delta_core_service:5000/api/v1/tests_suite_history/test_run/1",
     {
       method: "GET",
     }
   )
-  const suites = await suitesReq.json()
+  const suites = await suitesByTestRunIdReq.json()
 
   // Tests
-  const testsReq = await fetch("http://delta_core_service:5000/get_tests", {
-    method: "GET",
-  })
-  const tests = await testsReq.json()
+  const testsBySuiteIdReq = await fetch(
+    "http://delta_core_service:5000/api/v1/tests_history/test_suite/1",
+    {
+      method: "GET",
+    }
+  )
+  const tests = await testsBySuiteIdReq.json()
 
   const pagePayload: IPagePayload = {
     selectedPage: Page.TESTS,

@@ -44,6 +44,7 @@ type Props = {
 
 function Testruns(props: Props) {
   const classes = useStyles(props)
+
   return (
     <BasePage className={classes.root}>
       <Container maxWidth="lg" className={classes.container}>
@@ -58,7 +59,7 @@ function Testruns(props: Props) {
               >
                 Test runs for{" "}
                 <Link underline="always" href="/launches">
-                  {props.test_runs[0].launch}
+                  {props.test_runs[0].launch_name}
                 </Link>{" "}
                 launch
               </Typography>
@@ -81,7 +82,10 @@ function Testruns(props: Props) {
                       <TableCell>34 min</TableCell>
                       <TableCell>{testRun.test_run_status}</TableCell>
                       <TableCell>
-                        <Link underline="none" href="/tests">
+                        <Link
+                          underline="none"
+                          href={`/tests?testsrun=${testRun.id}`}
+                        >
                           View
                         </Link>
                       </TableCell>
@@ -103,10 +107,13 @@ function Testruns(props: Props) {
 Testruns.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
-  const runsReq = await fetch("http://delta_core_service:5000/get_test_runs", {
-    method: "GET",
-  })
-  const runs = await runsReq.json()
+  const runsByLaunchIdReq = await fetch(
+    "http://delta_core_service:5000/api/v1/test_run/launch/1",
+    {
+      method: "GET",
+    }
+  )
+  const runs = await runsByLaunchIdReq.json()
 
   const pagePayload: IPagePayload = {
     selectedPage: Page.TEST_RUNS,
