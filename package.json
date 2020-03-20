@@ -11,7 +11,10 @@
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "keywords": [],
-  "author": "Juan Negrier <juannegrier@gmail.com>",
+  "contributors": [
+    "Oleksandra Pishcheiko <alpish2@gmail.com>",
+    "Juan Negrier <juannegrier@gmail.com>"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
     "@material-ui/core": "^4.8.0",
