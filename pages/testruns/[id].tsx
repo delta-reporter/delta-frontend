@@ -1,3 +1,7 @@
+import fetch from "../../node_modules/isomorphic-unfetch"
+import { makeStyles } from "../../node_modules/@material-ui/core/styles"
+import { TestRun } from "../index"
+import { BasePage } from "../../components/templates/BasePage"
 import {
   Container,
   Grid,
@@ -7,16 +11,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Link,
   Typography,
+  Link,
 } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
-import React from "react"
-import { AppContext } from "../components/AppContext"
-import { Page } from "../constants"
-import { IPagePayload, PageActions } from "../store/page"
-import { BasePage } from "../components/templates/BasePage"
-import { TestRun } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -38,21 +35,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-let urlParam = ""
-if (typeof window !== "undefined") {
-  urlParam = window.location.search
-}
-const launchIdFromUrl = new URLSearchParams(urlParam).get("launch")
-
 type Props = {
   test_runs: TestRun[]
 }
 
 function Testruns(props: Props) {
   const classes = useStyles(props)
-
   return (
     <BasePage className={classes.root}>
+      <h1>Runs retrieved by launch id!!!! </h1>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -63,13 +54,8 @@ function Testruns(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Test runs for{" "}
-                <Link underline="always" href="/launches">
-                  {props.test_runs[0].launch_name}
-                </Link>{" "}
-                launch
+                Test runs for (TODO) launch
               </Typography>
-              THIS IS LAUNCH ID FROM URL {launchIdFromUrl}
               <Table size="small">
                 <TableHead>
                   <TableRow>
@@ -77,7 +63,6 @@ function Testruns(props: Props) {
                     <TableCell>Test Type</TableCell>
                     <TableCell>Duration</TableCell>
                     <TableCell>Status</TableCell>
-
                     <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
@@ -89,12 +74,14 @@ function Testruns(props: Props) {
                       <TableCell>34 min</TableCell>
                       <TableCell>{testRun.test_run_status}</TableCell>
                       <TableCell>
+                        {" "}
                         <Link
                           underline="none"
-                          href={`/tests?testsrun=${testRun.id}`}
+                          href={`/testsuites/${testRun.id}`}
                         >
-                          View
-                        </Link>
+                          {" "}
+                          View{" "}
+                        </Link>{" "}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -108,29 +95,19 @@ function Testruns(props: Props) {
   )
 }
 
-/**
- * Server side rendering
- */
-Testruns.getInitialProps = async (ctx: AppContext): Promise<Props> => {
-  const { store } = ctx
-
+Testruns.getInitialProps = async (context): Promise<Props> => {
+  const { id } = context.query
   const runsByLaunchIdReq = await fetch(
-    "http://delta_core_service:5000/api/v1/test_run/launch/1",
+    `http://delta_core_service:5000/api/v1/test_run/launch/${id}`,
     {
       method: "GET",
     }
   )
   const runs = await runsByLaunchIdReq.json()
 
-  const pagePayload: IPagePayload = {
-    selectedPage: Page.TEST_RUNS,
-  }
-  store.dispatch({
-    type: PageActions.changePage.toString(),
-    payload: pagePayload,
-  })
   return {
     test_runs: runs,
   }
 }
+
 export default Testruns

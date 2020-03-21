@@ -47,6 +47,7 @@ type Props = {
 
 function Launches(props: Props) {
   const classes = useStyles(props)
+  // keeping for now in case I need it
   // const urlParams = new URLSearchParams(window.location.search)
   // const product = urlParams.get("project")
 
@@ -86,11 +87,9 @@ function Launches(props: Props) {
                       <TableCell> RELEASE</TableCell>
                       <TableCell>{launch.launch_status}</TableCell>
                       <TableCell>
-                        <Link
-                          underline="none"
-                          href={`/testruns?launch=${launch.id}`}
-                        >
-                          View
+                        <Link underline="none" href={`/testruns/${launch.id}`}>
+                          {" "}
+                          View{" "}
                         </Link>
                       </TableCell>
                     </TableRow>
