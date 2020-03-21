@@ -38,6 +38,12 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+let urlParam = ""
+if (typeof window !== "undefined") {
+  urlParam = window.location.search
+}
+const launchIdFromUrl = new URLSearchParams(urlParam).get("launch")
+
 type Props = {
   test_runs: TestRun[]
 }
@@ -63,6 +69,7 @@ function Testruns(props: Props) {
                 </Link>{" "}
                 launch
               </Typography>
+              THIS IS LAUNCH ID FROM URL {launchIdFromUrl}
               <Table size="small">
                 <TableHead>
                   <TableRow>
