@@ -1,7 +1,7 @@
 import fetch from "../../node_modules/isomorphic-unfetch"
 import { makeStyles } from "../../node_modules/@material-ui/core/styles"
-import { TestRun } from "../index"
 import { BasePage } from "../../components/templates/BasePage"
+import { TestLaunch } from "../index"
 import {
   Container,
   Grid,
@@ -30,10 +30,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  test_runs: TestRun[]
+  launches: TestLaunch[]
 }
 
-function Testruns(props: Props) {
+function Launches(props: Props) {
   const classes = useStyles(props)
   return (
     <BasePage className={classes.root}>
@@ -47,29 +47,28 @@ function Testruns(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Test runs for (TODO:) launch
+                Launches for (TODO:) project
               </Typography>
-              {props.test_runs[0] ? ( // checking if props exist
+              {props.launches[0] ? ( // checking if props exist
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Test Type</TableCell>
-                      <TableCell>Duration</TableCell>
+                      <TableCell>Name</TableCell>
                       <TableCell>Status</TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {props.test_runs.map(testRun => (
-                      <TableRow key={testRun.id} hover>
-                        <TableCell>{testRun.start_datetime}</TableCell>
-                        <TableCell>{testRun.test_type}</TableCell>
-                        <TableCell>34 min</TableCell>
-                        <TableCell>{testRun.test_run_status}</TableCell>
+                    {props.launches.map(launch => (
+                      <TableRow key={launch.id} hover>
+                        <TableCell>{launch.name}</TableCell>
+                        <TableCell>{launch.launch_status}</TableCell>
                         <TableCell>
                           {" "}
-                          <Link underline="none" href={`/tests/${testRun.id}`}>
+                          <Link
+                            underline="none"
+                            href={`/testruns/${launch.id}`}
+                          >
                             {" "}
                             View{" "}
                           </Link>{" "}
@@ -90,19 +89,19 @@ function Testruns(props: Props) {
   )
 }
 
-Testruns.getInitialProps = async (context): Promise<Props> => {
+Launches.getInitialProps = async (context): Promise<Props> => {
   const { id } = context.query
-  const runsByLaunchIdReq = await fetch(
-    `http://delta_core_service:5000/api/v1/test_run/launch/${id}`,
+  const launchesByProjectIdReq = await fetch(
+    `http://delta_core_service:5000/api/v1/launch/project/${id}`,
     {
       method: "GET",
     }
   )
-  const runs = await runsByLaunchIdReq.json()
+  const launches = await launchesByProjectIdReq.json()
 
   return {
-    test_runs: runs,
+    launches: launches,
   }
 }
 
-export default Testruns
+export default Launches

@@ -12,8 +12,8 @@ export class Page implements IEnum<Page> {
 
   public static readonly TOP = new Page(
     1,
-    "Homepage",
-    "List of services and endpoints",
+    "[TODO: make this text generic]",
+    "[TODO: make this text generic]",
     "/"
   )
   public static readonly PROJECTS = new Page(
@@ -21,25 +21,6 @@ export class Page implements IEnum<Page> {
     "Projects",
     "Select a project to view last launches and test runs",
     "/projects"
-  )
-  public static readonly LAUNCHES = new Page(
-    2,
-    "Launches",
-    "Select a launch to view all the tests",
-    "/launches"
-  )
-  public static readonly TEST_RUNS = new Page(
-    2,
-    "Test Runs",
-    "Select a set of tests you want to view in detail",
-    "/testruns"
-  )
-
-  public static readonly TESTS = new Page(
-    2,
-    "Tests",
-    "Here are the tests for selected run",
-    "/tests"
   )
 
   public static readonly ERROR = new Page(
