@@ -84,6 +84,59 @@ export interface Test {
   test_suite: string
 }
 
+export interface TestHistory {
+  duration: {
+    days: number
+    hours: number
+    minutes: number
+    months: number
+    seconds: number
+    years: number
+  }
+  id: number
+  launch: string
+  start_datetime: string
+  end_datetime: string
+  test_run_status: string
+  test_type: string
+  test_suites: [
+    {
+      id: number
+      name: string
+      start_datetime: string
+      end_datetime: string
+      test_suite_status: string
+      duration: {
+        days: number
+        hours: number
+        minutes: number
+        months: number
+        seconds: number
+        years: number
+      }
+      tests: [
+        {
+          duration: {
+            days: number
+            hours: number
+            minutes: number
+            months: number
+            seconds: number
+            years: number
+          }
+          end_datetime: string
+          id: number
+          name: string
+          start_datetime: string
+          resolution: string
+          status: string
+          data?: {}
+        }
+      ]
+    }
+  ]
+}
+
 type Props = {
   test_projects: TestProject[]
   test_launches: TestLaunch[]
