@@ -45,7 +45,7 @@ function Projects(props: Props) {
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           {props.test_projects.map(project => (
-            <Grid item xs={12} md={4} lg={3}>
+            <Grid item xs={12} md={4} lg={3} key={project.id}>
               <Link underline="none" href={`/launches/${project.id}`}>
                 <Paper className={fixedHeightPaper}>
                   <Typography
@@ -55,14 +55,14 @@ function Projects(props: Props) {
                   >
                     {project.name}
                   </Typography>
-                  <Typography color="textSecondary" className={classes.context}>
+                  <Typography
+                    color="textSecondary"
+                    className={classes.context}
+                    component="p"
+                  >
                     {project.project_status}
                   </Typography>
-                  <div>
-                    <Link color="primary" href={`/launches/${project.id}`}>
-                      View details
-                    </Link>
-                  </div>
+                  <Typography color="primary"> View details</Typography>
                 </Paper>
               </Link>
             </Grid>

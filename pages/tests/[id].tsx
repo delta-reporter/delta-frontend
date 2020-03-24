@@ -1,7 +1,7 @@
 import React from "react"
 import fetch from "../../node_modules/isomorphic-unfetch"
 import { makeStyles } from "../../node_modules/@material-ui/core/styles"
-import { TestSuite, Test } from "../index"
+import { Test } from "../index"
 import { BasePage } from "../../components/templates/BasePage"
 import {
   Container,
@@ -59,8 +59,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  test_suites: TestSuite[]
-  tests: Test[]
+  test_history: Test[]
 }
 
 function Tests(props: Props) {
@@ -90,6 +89,7 @@ function Tests(props: Props) {
 
   const testsTab = test => (
     <div
+      key={test.id}
       className={classes.list}
       role="presentation"
       onClick={expandSuite(false)}
@@ -103,7 +103,12 @@ function Tests(props: Props) {
       <Paper className={classes.paper}>
         {" "}
         <Typography component="h2">This is the test result:</Typography>
-        {test.test_status}
+        {test.status}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test data:</Typography>
+        {test.trace}
       </Paper>
     </div>
   )
@@ -122,55 +127,60 @@ function Tests(props: Props) {
               >
                 Test suites for (TODO:) run
               </Typography>
-              {props.test_suites[0] ? ( // checking if props exist
+              {props.test_history[0] ? ( // checking if props exist
                 <div>
-                  {props.test_suites.map(suite => (
-                    <ExpansionPanel
-                      expanded={expanded === suite.name}
-                      onChange={handleExpandCollapseEvent(suite.name)}
-                    >
-                      <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                      >
-                        <Typography className={classes.heading}>
-                          {suite.name}
-                        </Typography>
+                  {props.test_history.map(testRun => (
+                    <div key={testRun.id}>
+                      {testRun.test_suites.map(suite => (
+                        <ExpansionPanel
+                          key={suite.id}
+                          expanded={expanded === suite.name}
+                          onChange={handleExpandCollapseEvent(suite.name)}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1bh-content"
+                          >
+                            <Typography className={classes.heading}>
+                              {suite.name}
+                            </Typography>
 
-                        <Typography className={classes.secondaryHeading}>
-                          {suite.test_suite_status}
-                        </Typography>
-                      </ExpansionPanelSummary>
-                      <ExpansionPanelDetails>
-                        {/* Expanded tests list for each suite */}
-                        <List className={classes.root}>
-                          {props.tests.map(test => (
-                            <div>
-                              <ListItem
-                                className={classes.root}
-                                button
-                                onClick={expandSuite(true)}
-                              >
-                                {test.name}
-                                <ListItemSecondaryAction>
-                                  <Typography align="right">
-                                    {test.test_status}
-                                  </Typography>
-                                </ListItemSecondaryAction>
-                              </ListItem>
-                              <Divider />
-                              <Drawer
-                                anchor="right"
-                                open={state.right}
-                                onClose={expandSuite(false)}
-                              >
-                                {testsTab(test)}
-                              </Drawer>
-                            </div>
-                          ))}
-                        </List>
-                      </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                            <Typography className={classes.secondaryHeading}>
+                              {suite.test_suite_status}
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            {/* Expanded tests list for each suite */}
+                            <List className={classes.root}>
+                              {suite.tests.map(test => (
+                                <div key={test.id}>
+                                  <ListItem
+                                    className={classes.root}
+                                    button
+                                    onClick={expandSuite(true)}
+                                  >
+                                    {test.name}
+                                    <ListItemSecondaryAction>
+                                      <Typography align="right">
+                                        {test.status}
+                                      </Typography>
+                                    </ListItemSecondaryAction>
+                                  </ListItem>
+                                  <Divider />
+                                  <Drawer
+                                    anchor="right"
+                                    open={state.right}
+                                    onClose={expandSuite(false)}
+                                  >
+                                    {testsTab(test)}
+                                  </Drawer>
+                                </div>
+                              ))}
+                            </List>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      ))}
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -188,27 +198,17 @@ function Tests(props: Props) {
 Tests.getInitialProps = async (context): Promise<Props> => {
   const { id } = context.query
 
-  // Suites
-  const suitesByTestRunIdReq = await fetch(
-    `http://delta_core_service:5000/api/v1/tests_suite_history/test_run/${id}`,
+  // Suites and tests (inside suites)
+  const testsByTestRunIdReq = await fetch(
+    `http://delta_core_service:5000/api/v1/tests_history/test_run/${id}`,
     {
       method: "GET",
     }
   )
-  const suites = await suitesByTestRunIdReq.json()
-
-  // Tests
-  const testsBySuiteIdReq = await fetch(
-    `http://delta_core_service:5000/api/v1/tests_history/test_suite/1`,
-    {
-      method: "GET",
-    }
-  )
-  const tests = await testsBySuiteIdReq.json()
+  const tests = await testsByTestRunIdReq.json()
 
   return {
-    tests: tests,
-    test_suites: suites,
+    test_history: tests,
   }
 }
 

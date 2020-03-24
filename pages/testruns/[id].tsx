@@ -47,7 +47,7 @@ function Testruns(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Test runs for (TODO:) launch
+                Test runs for {props.test_runs[0].launch_name} launch
               </Typography>
               {props.test_runs[0] ? ( // checking if props exist
                 <Table size="small">
@@ -63,7 +63,7 @@ function Testruns(props: Props) {
                   <TableBody>
                     {props.test_runs.map(testRun => (
                       <TableRow key={testRun.id} hover>
-                        <TableCell>{testRun.start_datetime}</TableCell>
+                        <TableCell>{testRun.duration.minutes}</TableCell>
                         <TableCell>{testRun.test_type}</TableCell>
                         <TableCell>34 min</TableCell>
                         <TableCell>{testRun.test_run_status}</TableCell>

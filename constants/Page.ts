@@ -12,8 +12,8 @@ export class Page implements IEnum<Page> {
 
   public static readonly TOP = new Page(
     1,
-    "[TODO: make this text generic]",
-    "[TODO: make this text generic]",
+    "Delta Reporter",
+    "Universal tool that will suit all your needs",
     "/"
   )
   public static readonly PROJECTS = new Page(

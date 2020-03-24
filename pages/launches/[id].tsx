@@ -14,6 +14,7 @@ import {
   Typography,
   Link,
 } from "@material-ui/core"
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -40,6 +41,10 @@ function Launches(props: Props) {
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
+            <Link underline="hover" href={`/projects`}>
+              <ChevronLeftIcon fontSize="inherit"></ChevronLeftIcon> Go back to
+              Projects
+            </Link>{" "}
             <Paper className={classes.paper}>
               <Typography
                 component="h2"
@@ -47,7 +52,7 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Launches for (TODO:) project
+                Launches for {props.launches[0].project} project
               </Typography>
               {props.launches[0] ? ( // checking if props exist
                 <Table size="small">

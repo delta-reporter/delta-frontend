@@ -35,9 +35,14 @@ export interface TestLaunch {
 export interface TestRun {
   id: number
   launch_name: string
-  start_datetime: string
-  end_datetime: string
-  duration: string
+  duration: {
+    days: number
+    hours: number
+    minutes: number
+    months: number
+    seconds: number
+    years: number
+  }
   test_run_status: string
   test_type: string
   data: { url?: string }
@@ -49,23 +54,6 @@ export interface TestSuite {
   start_datetime: string
   end_datetime: string
   test_suite_status: string
-  test_type: string
-  data: { url?: string }
-}
-
-export interface TestConfig {
-  id: number
-  name: string
-  start_datetime: string
-  end_datetime: string
-  duration: string
-  test_resolution: string
-  test_status: string
-  test_suite: string
-  data: { url?: string }
-}
-
-export interface Test {
   duration: {
     days: number
     hours: number
@@ -74,14 +62,45 @@ export interface Test {
     seconds: number
     years: number
   }
-  end_datetime: string
+  test_type: string
+  data: { url?: string }
+}
+
+export interface Test {
   id: number
-  name: string
-  start_datetime: string
-  test_resolution: string
-  test_status: string
-  test_type: number
-  test_suite: string
+  test_suites: [
+    {
+      id: number
+      name: string
+      test_suite_status: string
+      duration: {
+        days: number
+        hours: number
+        minutes: number
+        months: number
+        seconds: number
+        years: number
+      }
+      tests: [
+        {
+          duration: {
+            days: number
+            hours: number
+            minutes: number
+            months: number
+            seconds: number
+            years: number
+          }
+          id: number
+          name: string
+          resolution: string
+          status: string
+          trace: string
+          file: string
+        }
+      ]
+    }
+  ]
 }
 
 export interface TestHistory {
@@ -143,7 +162,6 @@ type Props = {
   test_runs: TestRun[]
   test_suites: TestSuite[]
   tests_history: Test[]
-  tests: TestConfig[]
 }
 
 function Index(props: Props) {
@@ -194,101 +212,126 @@ function Index(props: Props) {
 
       <SpacingPaper>
         <Typography variant="h5">Projects</Typography>
-        {props.test_projects.map(project => (
-          <List>
-            <ListItem button>
-              <ListItemText primary={project.name} />
-            </ListItem>
-            <Divider />
-          </List>
-        ))}
+        {props.test_projects[0] ? ( // checking if props exist
+          <div>
+            {props.test_projects.map(project => (
+              <List>
+                <ListItem button>
+                  <ListItemText primary={project.name} />
+                </ListItem>
+                <Divider />
+              </List>
+            ))}
+          </div>
+        ) : (
+          // if props don't exist
+          <h1>No projects were found! </h1>
+        )}
       </SpacingPaper>
 
       <SpacingPaper>
         <Typography variant="h5">Launches</Typography>
-        {props.test_launches.map(launch => (
-          <List>
-            <ListItem button>
-              <ListItemText primary={launch.name} />
-              <br />
-              {launch.launch_status}
-            </ListItem>
-            <Divider />
-          </List>
-        ))}
+        {props.test_launches[0] ? ( // checking if props exist
+          <div>
+            {props.test_launches.map(launch => (
+              <List>
+                <ListItem button>
+                  <ListItemText primary={launch.name} />
+                  <br />
+                  {launch.launch_status}
+                </ListItem>
+                <Divider />
+              </List>
+            ))}
+          </div>
+        ) : (
+          // if props don't exist
+          <h1>No launches were found! </h1>
+        )}
       </SpacingPaper>
 
       <SpacingPaper>
         <Typography variant="h5">Runs</Typography>
-        {props.test_runs.map(testRun => (
-          <List>
-            <ListItem button>
-              <ListItemText primary={testRun.id} />
-              <br />
-              {testRun.test_run_status}
-              <br />
-              {testRun.test_type}
-            </ListItem>
-            <Divider />
-          </List>
-        ))}
+        {props.test_runs[0] ? ( // checking if props exist
+          <div>
+            {props.test_runs.map(testRun => (
+              <List>
+                <ListItem button>
+                  <ListItemText primary={testRun.id} />
+                  <br />
+                  {testRun.test_run_status}
+                  <br />
+                  {testRun.test_type}
+                </ListItem>
+                <Divider />
+              </List>
+            ))}
+          </div>
+        ) : (
+          // if props don't exist
+          <h1>No runs were found! </h1>
+        )}
       </SpacingPaper>
 
       <SpacingPaper>
         <Typography variant="h5">Suites</Typography>
-        {props.test_suites.map(testSuite => (
-          <List>
-            <ListItem button>
-              <ListItemText primary={testSuite.name} />
-              <br />
-              {testSuite.start_datetime}
-              <br />
-              {testSuite.end_datetime}
-            </ListItem>
-            <Divider />
-          </List>
-        ))}
+        {props.test_suites[0] ? ( // checking if props exist
+          <div>
+            {props.test_suites.map(testSuite => (
+              <List>
+                <ListItem button>
+                  <ListItemText primary={testSuite.name} />
+                  <br />
+                  {testSuite.start_datetime}
+                  <br />
+                  {testSuite.end_datetime}
+                </ListItem>
+                <Divider />
+              </List>
+            ))}
+          </div>
+        ) : (
+          // if props don't exist
+          <h1>No suites were found! </h1>
+        )}
       </SpacingPaper>
 
-      <SpacingPaper>
-        <Typography variant="h5">Tests</Typography>
-        {props.tests.map(test => (
-          <List>
-            <ListItem button>
-              <ListItemText primary={test.name} />
-              <br />
-              {test.test_status}
-              <br />
-              {test.test_resolution}
-            </ListItem>
-            <Divider />
-          </List>
-        ))}
-      </SpacingPaper>
       <SpacingPaper noPadding>
         <Typography variant="h5">Tests History</Typography>
-        {props.tests_history.map(testHistory => (
-          <List>
-            <ListItem button>
-              <ListItemText primary={testHistory.id} />
-              <br />
-              {testHistory.start_datetime}
-              <br />
-              {testHistory.end_datetime}
-              <br />
-              {testHistory.test_type}
-              <br />
-              {testHistory.test_status}
-              <br />
-              {testHistory.test_suite}
-              <br />
-              {testHistory.name}
-              <br />
-              {testHistory.test_resolution}
-            </ListItem>
-            <Divider />
-          </List>
-        ))}
+        {props.tests_history[0] ? ( // checking if props exist
+          <div>
+            {/* runs */}
+            {props.tests_history.map(testHistory => (
+              <div key={testHistory.id}>
+                {/* suites */}
+                {testHistory.test_suites.map(testSuite => (
+                  <div key={testSuite.id}>
+                    {/* tests */}
+                    {testSuite.tests.map(test => (
+                      <List key={test.id}>
+                        <ListItem button>
+                          <ListItemText primary={test.id} />
+                          <br />
+                          Test: {test.name}
+                          <br />
+                          Duration: {test.duration.minutes}
+                          <br />
+                          Status: {test.status}
+                          <br />
+                          Resolution: {test.resolution}
+                        </ListItem>
+                        <Divider />
+                      </List>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : (
+          // if props don't exist
+          <h1>No tests were found for test run 2! </h1>
+        )}
       </SpacingPaper>
     </BasePage>
   )
@@ -331,13 +374,8 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   )
   const suites = await suitesReq.json()
 
-  const testsReq = await fetch("http://delta_core_service:5000/api/v1/tests", {
-    method: "GET",
-  })
-  const tests = await testsReq.json()
-
   const testsHistoryReq = await fetch(
-    "http://delta_core_service:5000/api/v1/tests_history/test_suite/1",
+    "http://delta_core_service:5000/api/v1/tests_history/test_run/2",
     {
       method: "GET",
     }
@@ -357,7 +395,6 @@ Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
     test_runs: runs,
     test_suites: suites,
     tests_history: testsHistory,
-    tests: tests,
   }
 }
 
