@@ -89,6 +89,7 @@ function Tests(props: Props) {
 
   const testsTab = test => (
     <div
+      key={test.id}
       className={classes.list}
       role="presentation"
       onClick={expandSuite(false)}
@@ -102,12 +103,22 @@ function Tests(props: Props) {
       <Paper className={classes.paper}>
         {" "}
         <Typography component="h2">This is the test result:</Typography>
-        {test.test_status}
+        {test.status}
       </Paper>
       <Paper className={classes.paper}>
         {" "}
-        <Typography component="h2">This is the test data:</Typography>
-        {test.data}
+        <Typography component="h2">This is the test trace:</Typography>
+        {test.trace}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test file:</Typography>
+        {test.file}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test retries:</Typography>
+        {test.retries}
       </Paper>
     </div>
   )
@@ -130,6 +141,7 @@ function Tests(props: Props) {
                 <div>
                   {props.test_history.map(test_run => (
                     <ExpansionPanel
+                      key={test_run.id}
                       expanded={expanded === test_run.test_type}
                       onChange={handleExpandCollapseEvent(test_run.test_type)}
                     >
@@ -149,7 +161,7 @@ function Tests(props: Props) {
                         {/* Expanded tests list for each suite */}
                         <List className={classes.root}>
                           {test_run.test_suites.map(test_suite => (
-                            <div>
+                            <div key={test_suite.id}>
                               <ListItem
                                 className={classes.root}
                                 button
