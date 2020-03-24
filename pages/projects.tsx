@@ -10,9 +10,7 @@ import { TestProject } from "."
 import fetch from "isomorphic-unfetch"
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-  },
+  root: {},
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -47,8 +45,8 @@ function Projects(props: Props) {
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           {props.test_projects.map(project => (
-            <Grid item xs={12} md={4} lg={3}>
-              <Link underline="none" href={`/launches?project=${project.id}`}>
+            <Grid item xs={12} md={4} lg={3} key={project.id}>
+              <Link underline="none" href={`/launches/${project.id}`}>
                 <Paper className={fixedHeightPaper}>
                   <Typography
                     component="p"
@@ -57,14 +55,14 @@ function Projects(props: Props) {
                   >
                     {project.name}
                   </Typography>
-                  <Typography color="textSecondary" className={classes.context}>
+                  <Typography
+                    color="textSecondary"
+                    className={classes.context}
+                    component="p"
+                  >
                     {project.project_status}
                   </Typography>
-                  <div>
-                    <Link color="primary" href="/launches">
-                      View details
-                    </Link>
-                  </div>
+                  <Typography color="primary"> View details</Typography>
                 </Paper>
               </Link>
             </Grid>
