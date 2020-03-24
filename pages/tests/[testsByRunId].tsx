@@ -105,7 +105,7 @@ function Tests(props: Props) {
         <Typography component="h2">This is the test result:</Typography>
         {test.status}
       </Paper>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} style={{ whiteSpace: "pre-wrap" }}>
         {" "}
         <Typography component="h2">This is the test data:</Typography>
         {test.trace}

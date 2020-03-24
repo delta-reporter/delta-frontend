@@ -105,7 +105,7 @@ function Tests(props: Props) {
         <Typography component="h2">This is the test result:</Typography>
         {test.status}
       </Paper>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} style={{ whiteSpace: "pre-wrap" }}>
         {" "}
         <Typography component="h2">This is the test trace:</Typography>
         {test.trace}
@@ -139,38 +139,38 @@ function Tests(props: Props) {
               </Typography>
               {props.test_history[0] ? ( // checking if props exist
                 <div>
-                  {props.test_history.map(test_run => (
+                  {props.test_history.map(testRun => (
                     <ExpansionPanel
-                      key={test_run.id}
-                      expanded={expanded === test_run.test_type}
-                      onChange={handleExpandCollapseEvent(test_run.test_type)}
+                      key={testRun.id}
+                      expanded={expanded === testRun.test_type}
+                      onChange={handleExpandCollapseEvent(testRun.test_type)}
                     >
                       <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1bh-content"
                       >
                         <Typography className={classes.heading}>
-                          {test_run.test_type}
+                          {testRun.test_type}
                         </Typography>
 
                         <Typography className={classes.secondaryHeading}>
-                          {test_run.test_run_status}
+                          {testRun.test_run_status}
                         </Typography>
                       </ExpansionPanelSummary>
                       <ExpansionPanelDetails>
                         {/* Expanded tests list for each suite */}
                         <List className={classes.root}>
-                          {test_run.test_suites.map(test_suite => (
-                            <div key={test_suite.id}>
+                          {testRun.test_suites.map(testSuite => (
+                            <div key={testSuite.id}>
                               <ListItem
                                 className={classes.root}
                                 button
                                 onClick={expandSuite(true)}
                               >
-                                {test_suite.name}
+                                {testSuite.name}
                                 <ListItemSecondaryAction>
                                   <Typography align="right">
-                                    {test_suite.test_suite_status}
+                                    {testSuite.test_suite_status}
                                   </Typography>
                                 </ListItemSecondaryAction>
                               </ListItem>
@@ -180,7 +180,7 @@ function Tests(props: Props) {
                                 open={state.right}
                                 onClose={expandSuite(false)}
                               >
-                                {test_suite.tests.map(test => testsTab(test))}
+                                {testSuite.tests.map(test => testsTab(test))}
                               </Drawer>
                             </div>
                           ))}
