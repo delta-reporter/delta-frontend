@@ -1,5 +1,5 @@
-import fetch from "../../node_modules/isomorphic-unfetch"
-import { makeStyles } from "../../node_modules/@material-ui/core/styles"
+import fetch from "isomorphic-unfetch"
+import { makeStyles } from "@material-ui/core/styles"
 import { TestRun } from "../index"
 import { BasePage } from "../../components/templates/BasePage"
 import {
@@ -91,9 +91,9 @@ function Testruns(props: Props) {
 }
 
 Testruns.getInitialProps = async (context): Promise<Props> => {
-  const { id } = context.query
+  const { runsByLaunchId } = context.query
   const runsByLaunchIdReq = await fetch(
-    `http://delta_core_service:5000/api/v1/test_run/launch/${id}`,
+    `http://delta_core_service:5000/api/v1/test_run/launch/${runsByLaunchId}`,
     {
       method: "GET",
     }

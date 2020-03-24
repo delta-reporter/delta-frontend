@@ -1,6 +1,6 @@
 import React from "react"
-import fetch from "../../node_modules/isomorphic-unfetch"
-import { makeStyles } from "../../node_modules/@material-ui/core/styles"
+import fetch from "isomorphic-unfetch"
+import { makeStyles } from "@material-ui/core/styles"
 import { Test } from "../index"
 import { BasePage } from "../../components/templates/BasePage"
 import {
@@ -196,11 +196,11 @@ function Tests(props: Props) {
 }
 
 Tests.getInitialProps = async (context): Promise<Props> => {
-  const { id } = context.query
+  const { testsByRunId } = context.query
 
   // Suites and tests (inside suites)
   const testsByTestRunIdReq = await fetch(
-    `http://delta_core_service:5000/api/v1/tests_history/test_run/${id}`,
+    `http://delta_core_service:5000/api/v1/tests_history/test_run/${testsByRunId}`,
     {
       method: "GET",
     }
