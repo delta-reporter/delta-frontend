@@ -13,6 +13,7 @@ import {
   TableBody,
   Typography,
   Link,
+  Breadcrumbs,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -37,6 +38,18 @@ function Testruns(props: Props) {
   const classes = useStyles(props)
   return (
     <BasePage className={classes.root}>
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link color="inherit" href="/">
+          Delta Reporter
+        </Link>
+        <Link color="inherit" href={`/projects`}>
+          Projects
+        </Link>
+        <Link color="inherit" href={`/launches/1`}>
+          Launches
+        </Link>
+        <Typography color="textPrimary">Test Runs</Typography>
+      </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -53,7 +66,7 @@ function Testruns(props: Props) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date</TableCell>
+                      <TableCell>Duration</TableCell>
                       <TableCell>Test Type</TableCell>
                       <TableCell>Duration</TableCell>
                       <TableCell>Status</TableCell>

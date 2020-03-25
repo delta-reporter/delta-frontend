@@ -16,6 +16,8 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ExpansionPanelDetails,
+  Link,
+  Breadcrumbs,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
@@ -29,6 +31,11 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     fontSize: "2em",
+  },
+  suiteStatus: {
+    paddingLeft: theme.spacing(4),
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary,
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -47,10 +54,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     flexBasis: "33.33%",
     flexShrink: 0,
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
   },
   list: {
     width: 700,
@@ -115,6 +118,21 @@ function Tests(props: Props) {
 
   return (
     <BasePage className={classes.root}>
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link color="inherit" href="/">
+          Delta Reporter
+        </Link>
+        <Link color="inherit" href={`/projects`}>
+          Projects
+        </Link>
+        <Link color="inherit" href={`/launches/1`}>
+          Launches
+        </Link>
+        <Link color="inherit" href={`/testruns/1`}>
+          Test Runs
+        </Link>
+        <Typography color="textPrimary">Tests</Typography>
+      </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -139,14 +157,12 @@ function Tests(props: Props) {
                         >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1bh-content"
                           >
-                            <Typography className={classes.heading}>
+                            <Typography
+                              className={classes.suiteStatus}
+                              color="textPrimary"
+                            >
                               {suite.name}
-                            </Typography>
-
-                            <Typography className={classes.secondaryHeading}>
-                              {suite.test_suite_status}
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
@@ -161,9 +177,7 @@ function Tests(props: Props) {
                                   >
                                     {test.name}
                                     <ListItemSecondaryAction>
-                                      <Typography align="right">
-                                        {test.status}
-                                      </Typography>
+                                      <Typography>{test.status}</Typography>
                                     </ListItemSecondaryAction>
                                   </ListItem>
                                   <Divider />
