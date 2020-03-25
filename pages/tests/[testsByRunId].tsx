@@ -168,6 +168,7 @@ function Tests(props: Props) {
 
   return (
     <BasePage className={classes.root}>
+      <title>Δ | Tests</title>
       <Breadcrumbs aria-label="breadcrumb">
         <Link color="inherit" href="/">
           Delta Reporter

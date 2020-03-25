@@ -22,6 +22,7 @@ function About(props: Props) {
   const classes = useStyles(props)
   return (
     <BasePage className={classes.root}>
+      <title>Δ | About</title>
       <Container className={classes.container}>
         <Typography component="h3" variant="h6" color="error" gutterBottom>
           {" "}

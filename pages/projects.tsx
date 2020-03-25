@@ -53,6 +53,7 @@ function Projects(props: Props) {
 
   return (
     <BasePage className={classes.root}>
+      <title>Δ | Projects</title>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           {props.test_projects.map(project => (

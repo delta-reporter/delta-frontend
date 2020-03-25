@@ -38,6 +38,7 @@ function Launches(props: Props) {
   const classes = useStyles(props)
   return (
     <BasePage className={classes.root}>
+      <title>Δ | Launches</title>
       <Breadcrumbs aria-label="breadcrumb">
         <Link color="inherit" href="/">
           Delta Reporter
