@@ -97,6 +97,7 @@ export interface Test {
           status: string
           trace: string
           file: string
+          retries: string
         }
       ]
     }

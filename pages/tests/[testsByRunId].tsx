@@ -20,6 +20,8 @@ import {
   Breadcrumbs,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked"
+import UseAnimations from "react-useanimations"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -112,9 +114,57 @@ function Tests(props: Props) {
         {" "}
         <Typography component="h2">This is the test data:</Typography>
         {test.trace}
+        {test.file}
+        {test.retries}
       </Paper>
     </div>
   )
+
+  function setStatusColor(status) {
+    let button
+    switch (status) {
+      case "Passed":
+        button = (
+          <RadioButtonCheckedIcon
+            style={{
+              color: "green",
+            }}
+          />
+        )
+        break
+      case "Failed":
+        button = (
+          <RadioButtonCheckedIcon
+            style={{
+              color: "red",
+            }}
+          />
+        )
+        break
+      case "Skipped":
+        button = (
+          <RadioButtonCheckedIcon
+            style={{
+              color: "grey",
+            }}
+          />
+        )
+        break
+      case "Running":
+        button = (
+          <UseAnimations
+            animationKey="loading"
+            style={{
+              color: "orange",
+            }}
+          />
+        )
+        break
+      default:
+        button = <RadioButtonCheckedIcon />
+    }
+    return button
+  }
 
   return (
     <BasePage className={classes.root}>
@@ -158,6 +208,7 @@ function Tests(props: Props) {
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                           >
+                            {setStatusColor(suite.test_suite_status)}
                             <Typography
                               className={classes.suiteStatus}
                               color="textPrimary"
