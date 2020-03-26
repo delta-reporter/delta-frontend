@@ -105,10 +105,30 @@ function Tests(props: Props) {
         <Typography component="h2">This is the test result:</Typography>
         {test.status}
       </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test message:</Typography>
+        {test.message}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test error type:</Typography>
+        {test.error_type}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test file:</Typography>
+        {test.file}
+      </Paper>
       <Paper className={classes.paper} style={{ whiteSpace: "pre-wrap" }}>
         {" "}
-        <Typography component="h2">This is the test data:</Typography>
+        <Typography component="h2">This is the test trace:</Typography>
         {test.trace}
+      </Paper>
+      <Paper className={classes.paper}>
+        {" "}
+        <Typography component="h2">This is the test retries:</Typography>
+        {test.retries}
       </Paper>
     </div>
   )
