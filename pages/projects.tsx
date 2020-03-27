@@ -1,4 +1,11 @@
-import { Container, Paper, Grid, Typography, Link } from "@material-ui/core"
+import {
+  Container,
+  Paper,
+  Grid,
+  Typography,
+  ListItem,
+  List,
+} from "@material-ui/core"
 import clsx from "clsx"
 import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
@@ -8,9 +15,12 @@ import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import { TestProject } from "."
 import fetch from "isomorphic-unfetch"
+import Router from "next/router"
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    flexGrow: 1,
+  },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -21,8 +31,9 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
     flexDirection: "column",
   },
-  fixedHeight: {
+  fixedHeightAndWidth: {
     height: 240,
+    width: 300,
   },
   context: {
     flex: 1,
@@ -38,33 +49,39 @@ type Props = {
 
 function Projects(props: Props) {
   const classes = useStyles(props)
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeightAndWidth)
 
   return (
     <BasePage className={classes.root}>
+      <title>Δ | Projects</title>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           {props.test_projects.map(project => (
-            <Grid item xs={12} md={4} lg={3} key={project.id}>
-              <Link underline="none" href={`/launches/${project.id}`}>
-                <Paper className={fixedHeightPaper}>
-                  <Typography
-                    component="p"
-                    variant="h4"
-                    className={classes.title}
-                  >
-                    {project.name}
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    className={classes.context}
-                    component="p"
-                  >
-                    {project.project_status}
-                  </Typography>
-                  <Typography color="primary"> View details</Typography>
-                </Paper>
-              </Link>
+            <Grid item xs={12} sm={3} key={project.id}>
+              <List>
+                <ListItem
+                  button
+                  onClick={() => Router.push(`/launches/${project.id}`)}
+                >
+                  <Paper className={fixedHeightPaper}>
+                    <Typography
+                      component="p"
+                      variant="h4"
+                      className={classes.title}
+                    >
+                      {project.name}
+                    </Typography>
+                    <Typography
+                      color="textSecondary"
+                      className={classes.context}
+                      component="p"
+                    >
+                      {project.project_status}
+                    </Typography>
+                    <Typography color="primary"> View details</Typography>
+                  </Paper>{" "}
+                </ListItem>
+              </List>
             </Grid>
           ))}
         </Grid>

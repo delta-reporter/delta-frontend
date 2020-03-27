@@ -10,28 +10,26 @@ export class Page implements IEnum<Page> {
    */
   private static _values = new Array<Page>()
 
-  public static readonly TOP = new Page(
-    1,
-    "Delta Reporter",
-    "Universal tool that will suit all your needs",
-    "/"
-  )
+  public static readonly TOP = new Page(3, "", "", "/")
+
   public static readonly PROJECTS = new Page(
-    3,
+    2,
     "Projects",
     "Select a project to view last launches and test runs",
     "/projects"
   )
 
+  public static readonly TESTS = new Page(3, "TESTS", "", "")
+
   public static readonly ERROR = new Page(
-    2,
+    4,
     "Ooops, something went wrong....",
     "There is an error here, we are sorry for that!",
     "/error"
   )
 
   public static readonly ABOUT = new Page(
-    2,
+    5,
     "About Us",
     "Info about creators of this tool",
     "/about"

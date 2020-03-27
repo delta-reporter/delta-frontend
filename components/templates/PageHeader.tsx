@@ -3,12 +3,14 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import React from "react"
 import { useSelector } from "react-redux"
 import { selectedPageSelector } from "../../store/page"
+import { Page } from "../../constants"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    root: {},
+    headerContainer: {
       backgroundColor: theme.palette.primary.light,
-      padding: theme.spacing(4),
+      padding: theme.spacing(5),
       textAlign: "center",
     },
     title: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       alignItems: "center",
       fontSize: "3em",
-      padding: theme.spacing(5),
+      padding: theme.spacing(1),
     },
     description: {},
   })
@@ -32,17 +34,26 @@ export const PageHeader = function(props: Props) {
   const classes = useStyles(props)
   const selectedPage = useSelector(selectedPageSelector)
   return (
-    <Paper square={true} className={classes.root}>
-      <Typography variant="h1" color="inherit" className={classes.title}>
-        {selectedPage.pageTitle}
-      </Typography>
-      <Typography
-        variant="subtitle1"
-        color="inherit"
-        className={classes.description}
-      >
-        {selectedPage.pageDescription}
-      </Typography>
-    </Paper>
+    <div>
+      {/* show blue wide header only on info pages */}
+      {selectedPage === Page.TOP ? (
+        <div className={classes.root}>
+          <h1> </h1>{" "}
+        </div>
+      ) : (
+        <Paper square={true} className={classes.headerContainer}>
+          <Typography variant="h1" color="inherit" className={classes.title}>
+            {selectedPage.pageTitle}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            color="inherit"
+            className={classes.description}
+          >
+            {selectedPage.pageDescription}
+          </Typography>
+        </Paper>
+      )}
+    </div>
   )
 }

@@ -97,6 +97,7 @@ export interface Test {
           status: string
           trace: string
           file: string
+          retries: string
         }
       ]
     }
@@ -169,6 +170,7 @@ function Index(props: Props) {
 
   return (
     <BasePage className={classes.root}>
+      <title>Δ | Homepage</title>
       <SpacingPaper>
         <Typography>
           Each service its running isolated from each other, so its possible to
