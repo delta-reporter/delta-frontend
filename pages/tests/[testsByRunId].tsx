@@ -21,7 +21,7 @@ import {
   Table,
   TableCell,
   TableBody,
-  Box,
+  TableRow,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked"
@@ -93,7 +93,7 @@ function Tests(props: Props) {
     right: false,
   })
 
-  const expandSuite = open => event => {
+  const expandContainer = open => event => {
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
@@ -108,18 +108,18 @@ function Tests(props: Props) {
       key={test.id}
       className={classes.list}
       role="presentation"
-      onClick={expandSuite(false)}
-      onKeyDown={expandSuite(false)}
+      onClick={expandContainer(false)}
+      onKeyDown={expandContainer(false)}
     >
       <Table size="small">
         <TableBody>
-          <TableCell>
-            {" "}
-            <h3 style={{ fontWeight: "normal" }}>{test.name}</h3>
-          </TableCell>
-          <TableCell>
-            <Typography>{setStatusColor(test.status)}</Typography>
-          </TableCell>
+          <TableRow>
+            <TableCell>
+              {" "}
+              <h3 style={{ fontWeight: "normal" }}>{test.name}</h3>
+            </TableCell>
+            <TableCell>{setStatusColor(test.status)}</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
       {test.message ? (
@@ -134,7 +134,7 @@ function Tests(props: Props) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <List>
-                <ListItem button onClick={expandSuite(true)}>
+                <ListItem button onClick={expandContainer(true)}>
                   {" "}
                   {test.error_type}
                   {test.trace}
@@ -156,12 +156,9 @@ function Tests(props: Props) {
       >
         Overview
       </Typography>
-
-      <Typography className={classes.seeMore}>
-        Location:
-        <Typography component="h2" color="textSecondary">
-          {test.file}
-        </Typography>{" "}
+      <Typography className={classes.seeMore}>Location: </Typography>{" "}
+      <Typography component="h2" color="textSecondary">
+        {test.file}
       </Typography>
     </div>
   )
@@ -237,72 +234,76 @@ function Tests(props: Props) {
         <Typography color="textPrimary">Tests</Typography>
       </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
-        <Grid xs={12}>
-          <Paper className={classes.paper}>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
-              Test suites for {props.test_history[0].test_type} run
-            </Typography>
-            {props.test_history[0] ? ( // checking if props exist
-              <div>
-                {props.test_history.map(testRun => (
-                  <div key={testRun.id}>
-                    {testRun.test_suites.map(suite => (
-                      <ExpansionPanel
-                        key={suite.id}
-                        expanded={expanded === suite.name}
-                        onChange={handleExpandCollapseEvent(suite.name)}
-                      >
-                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                          {setStatusColor(suite.test_suite_status)}
-                          <Typography
-                            className={classes.suiteStatus}
-                            color="textPrimary"
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Typography
+                component="h2"
+                variant="h6"
+                color="primary"
+                gutterBottom
+              >
+                Test suites for {props.test_history[0].test_type} run
+              </Typography>
+              {props.test_history[0] ? ( // checking if props exist
+                <div>
+                  {props.test_history.map(testRun => (
+                    <div key={testRun.id}>
+                      {testRun.test_suites.map(suite => (
+                        <ExpansionPanel
+                          key={suite.id}
+                          expanded={expanded === suite.name}
+                          onChange={handleExpandCollapseEvent(suite.name)}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
                           >
-                            {suite.name}
-                          </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                          {/* Expanded tests list for each suite */}
-                          <List className={classes.root}>
-                            {suite.tests.map(test => (
-                              <div key={test.id}>
-                                <ListItem
-                                  className={classes.root}
-                                  button
-                                  onClick={expandSuite(true)}
-                                >
-                                  {test.name}
-                                  <ListItemSecondaryAction>
-                                    <Typography>{test.status}</Typography>
-                                  </ListItemSecondaryAction>
-                                </ListItem>
-                                <Divider />
-                                <Drawer
-                                  anchor="right"
-                                  open={state.right}
-                                  onClose={expandSuite(false)}
-                                >
-                                  {testsTab(test)}
-                                </Drawer>
-                              </div>
-                            ))}
-                          </List>
-                        </ExpansionPanelDetails>
-                      </ExpansionPanel>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              // if props don't exist
-              <h1>No suites were found for this run! </h1>
-            )}
-          </Paper>
+                            {setStatusColor(suite.test_suite_status)}
+                            <Typography
+                              className={classes.suiteStatus}
+                              color="textPrimary"
+                            >
+                              {suite.name}
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            {/* Expanded tests list for each suite */}
+                            <List key={suite.id} className={classes.root}>
+                              {suite.tests.map(test => (
+                                <div key={test.id}>
+                                  <ListItem
+                                    className={classes.root}
+                                    button
+                                    onClick={expandContainer(true)}
+                                  >
+                                    {test.name}
+                                    <ListItemSecondaryAction>
+                                      <Typography>{test.status}</Typography>
+                                    </ListItemSecondaryAction>
+                                  </ListItem>
+                                  <Divider />
+                                  <Drawer
+                                    anchor="right"
+                                    open={state.right}
+                                    onClose={expandContainer(false)}
+                                  >
+                                    {testsTab(test)}
+                                  </Drawer>
+                                </div>
+                              ))}{" "}
+                            </List>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // if props don't exist
+                <h1>No suites were found for this run! </h1>
+              )}
+            </Paper>
+          </Grid>
         </Grid>
       </Container>
     </BasePage>
