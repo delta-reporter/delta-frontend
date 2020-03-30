@@ -18,6 +18,10 @@ import {
   ExpansionPanelDetails,
   Link,
   Breadcrumbs,
+  Table,
+  TableCell,
+  TableBody,
+  Box,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked"
@@ -45,6 +49,13 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+  paperWithSpace: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
@@ -100,43 +111,58 @@ function Tests(props: Props) {
       onClick={expandSuite(false)}
       onKeyDown={expandSuite(false)}
     >
-      {" "}
-      <Paper className={classes.paper}>
-        <Typography component="h2">This is the test name:</Typography>
-        {test.name}
-      </Paper>
-      <Paper className={classes.paper}>
-        {" "}
-        <Typography component="h2">This is the test result:</Typography>
-        {test.status}
-      </Paper>
-      <Paper className={classes.paper}>
-        {" "}
-        <Typography component="h2">This is the test message:</Typography>
-        {test.message}
-      </Paper>
-      <Paper className={classes.paper}>
-        {" "}
-        <Typography component="h2">This is the test error type:</Typography>
-        {test.error_type}
-      </Paper>
-      <Paper className={classes.paper}>
-        {" "}
-        <Typography component="h2">This is the test file:</Typography>
-        {test.file}
-      </Paper>
-      <Paper className={classes.paper} style={{ whiteSpace: "pre-wrap" }}>
-        {" "}
-        <Typography component="h2">This is the test trace:</Typography>
-        {test.trace}
-        {test.file}
-        {test.retries}
-      </Paper>
-      <Paper className={classes.paper}>
-        {" "}
-        <Typography component="h2">This is the test retries:</Typography>
-        {test.retries}
-      </Paper>
+      <Table size="small">
+        <TableBody>
+          <TableCell>
+            {" "}
+            <h3 style={{ fontWeight: "normal" }}>{test.name}</h3>
+          </TableCell>
+          <TableCell>
+            <Typography>{setStatusColor(test.status)}</Typography>
+          </TableCell>
+        </TableBody>
+      </Table>
+      {test.message ? (
+        <Paper className={classes.paper}>
+          <ExpansionPanel
+            key={test.id}
+            expanded={expanded === test.message}
+            onChange={handleExpandCollapseEvent(test.message)}
+          >
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography color="textPrimary">{test.message}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List>
+                <ListItem button onClick={expandSuite(true)}>
+                  {" "}
+                  {test.error_type}
+                  {test.trace}
+                  {test.retries}
+                </ListItem>
+              </List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Paper>
+      ) : (
+        <div></div>
+      )}
+      <Typography
+        component="h2"
+        variant="h6"
+        color="secondary"
+        gutterBottom
+        className={classes.seeMore}
+      >
+        Overview
+      </Typography>
+
+      <Typography className={classes.seeMore}>
+        Location:
+        <Typography component="h2" color="textSecondary">
+          {test.file}
+        </Typography>{" "}
+      </Typography>
     </div>
   )
 
@@ -145,29 +171,35 @@ function Tests(props: Props) {
     switch (status) {
       case "Passed":
         button = (
-          <RadioButtonCheckedIcon
+          <Typography
             style={{
               color: "green",
             }}
-          />
+          >
+            Passed{" "}
+          </Typography>
         )
         break
       case "Failed":
         button = (
-          <RadioButtonCheckedIcon
+          <Typography
             style={{
               color: "red",
             }}
-          />
+          >
+            Failed{" "}
+          </Typography>
         )
         break
       case "Skipped":
         button = (
-          <RadioButtonCheckedIcon
+          <Typography
             style={{
               color: "grey",
             }}
-          />
+          >
+            Failed{" "}
+          </Typography>
         )
         break
       case "Running":
@@ -205,76 +237,72 @@ function Tests(props: Props) {
         <Typography color="textPrimary">Tests</Typography>
       </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Typography
-                component="h2"
-                variant="h6"
-                color="primary"
-                gutterBottom
-              >
-                Test suites for (TODO:) run
-              </Typography>
-              {props.test_history[0] ? ( // checking if props exist
-                <div>
-                  {props.test_history.map(testRun => (
-                    <div key={testRun.id}>
-                      {testRun.test_suites.map(suite => (
-                        <ExpansionPanel
-                          key={suite.id}
-                          expanded={expanded === suite.name}
-                          onChange={handleExpandCollapseEvent(suite.name)}
-                        >
-                          <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
+        <Grid xs={12}>
+          <Paper className={classes.paper}>
+            <Typography
+              component="h2"
+              variant="h6"
+              color="primary"
+              gutterBottom
+            >
+              Test suites for {props.test_history[0].test_type} run
+            </Typography>
+            {props.test_history[0] ? ( // checking if props exist
+              <div>
+                {props.test_history.map(testRun => (
+                  <div key={testRun.id}>
+                    {testRun.test_suites.map(suite => (
+                      <ExpansionPanel
+                        key={suite.id}
+                        expanded={expanded === suite.name}
+                        onChange={handleExpandCollapseEvent(suite.name)}
+                      >
+                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                          {setStatusColor(suite.test_suite_status)}
+                          <Typography
+                            className={classes.suiteStatus}
+                            color="textPrimary"
                           >
-                            {setStatusColor(suite.test_suite_status)}
-                            <Typography
-                              className={classes.suiteStatus}
-                              color="textPrimary"
-                            >
-                              {suite.name}
-                            </Typography>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            {/* Expanded tests list for each suite */}
-                            <List className={classes.root}>
-                              {suite.tests.map(test => (
-                                <div key={test.id}>
-                                  <ListItem
-                                    className={classes.root}
-                                    button
-                                    onClick={expandSuite(true)}
-                                  >
-                                    {test.name}
-                                    <ListItemSecondaryAction>
-                                      <Typography>{test.status}</Typography>
-                                    </ListItemSecondaryAction>
-                                  </ListItem>
-                                  <Divider />
-                                  <Drawer
-                                    anchor="right"
-                                    open={state.right}
-                                    onClose={expandSuite(false)}
-                                  >
-                                    {testsTab(test)}
-                                  </Drawer>
-                                </div>
-                              ))}
-                            </List>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                // if props don't exist
-                <h1>No suites were found for this run! </h1>
-              )}
-            </Paper>
-          </Grid>
+                            {suite.name}
+                          </Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                          {/* Expanded tests list for each suite */}
+                          <List className={classes.root}>
+                            {suite.tests.map(test => (
+                              <div key={test.id}>
+                                <ListItem
+                                  className={classes.root}
+                                  button
+                                  onClick={expandSuite(true)}
+                                >
+                                  {test.name}
+                                  <ListItemSecondaryAction>
+                                    <Typography>{test.status}</Typography>
+                                  </ListItemSecondaryAction>
+                                </ListItem>
+                                <Divider />
+                                <Drawer
+                                  anchor="right"
+                                  open={state.right}
+                                  onClose={expandSuite(false)}
+                                >
+                                  {testsTab(test)}
+                                </Drawer>
+                              </div>
+                            ))}
+                          </List>
+                        </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              // if props don't exist
+              <h1>No suites were found for this run! </h1>
+            )}
+          </Paper>
         </Grid>
       </Container>
     </BasePage>

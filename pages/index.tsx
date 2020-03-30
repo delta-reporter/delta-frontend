@@ -68,6 +68,7 @@ export interface TestSuite {
 
 export interface Test {
   id: number
+  test_type: string
   test_suites: [
     {
       id: number
