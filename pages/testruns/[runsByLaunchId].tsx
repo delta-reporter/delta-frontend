@@ -107,7 +107,7 @@ function Testruns(props: Props) {
 Testruns.getInitialProps = async (context): Promise<Props> => {
   const { runsByLaunchId } = context.query
   const runsByLaunchIdReq = await fetch(
-    `http://delta_core_service:5000/api/v1/test_run/launch/${runsByLaunchId}`,
+    `${process.env.deltaCore}/api/v1/test_run/launch/${runsByLaunchId}`,
     {
       method: "GET",
     }

@@ -344,40 +344,28 @@ function Index(props: Props) {
  */
 Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
-  const projectReq = await fetch(
-    "http://delta_core_service:5000/api/v1/projects",
-    {
-      method: "GET",
-    }
-  )
+  const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
+    method: "GET",
+  })
   const projects = await projectReq.json()
 
-  const launchesReq = await fetch(
-    "http://delta_core_service:5000/api/v1/launches",
-    {
-      method: "GET",
-    }
-  )
+  const launchesReq = await fetch(`${process.env.deltaCore}/api/v1/launches`, {
+    method: "GET",
+  })
   const launches = await launchesReq.json()
 
-  const runsReq = await fetch(
-    "http://delta_core_service:5000/api/v1/test_runs",
-    {
-      method: "GET",
-    }
-  )
+  const runsReq = await fetch(`${process.env.deltaCore}/api/v1/test_runs`, {
+    method: "GET",
+  })
   const runs = await runsReq.json()
 
-  const suitesReq = await fetch(
-    "http://delta_core_service:5000/api/v1/test_suites",
-    {
-      method: "GET",
-    }
-  )
+  const suitesReq = await fetch(`${process.env.deltaCore}/api/v1/test_suites`, {
+    method: "GET",
+  })
   const suites = await suitesReq.json()
 
   const testsHistoryReq = await fetch(
-    "http://delta_core_service:5000/api/v1/tests_history/test_run/2",
+    `${process.env.deltaCore}/api/v1/tests_history/test_run/2`,
     {
       method: "GET",
     }
