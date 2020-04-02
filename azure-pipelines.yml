@@ -1,0 +1,17 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    git checkout $(Build.SourceBranchName)
+    git remote add heroku https://heroku:$(heroku_token)@git.heroku.com/delta-frontend.git
+    git push heroku $(Build.SourceBranchName)
+  displayName: 'Delta Frontend Heroku Deployment'
