@@ -96,7 +96,7 @@ function Projects(props: Props) {
 Projects.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
 
-  const projectReq = await fetch(`${process.env.deltaCore}/projects`, {
+  const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
     method: "GET",
   })
   const projects = await projectReq.json()

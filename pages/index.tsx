@@ -344,28 +344,28 @@ function Index(props: Props) {
  */
 Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
-  const projectReq = await fetch(`${process.env.deltaCore}/projects`, {
+  const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
     method: "GET",
   })
   const projects = await projectReq.json()
 
-  const launchesReq = await fetch(`${process.env.deltaCore}/launches`, {
+  const launchesReq = await fetch(`${process.env.deltaCore}/api/v1/launches`, {
     method: "GET",
   })
   const launches = await launchesReq.json()
 
-  const runsReq = await fetch(`${process.env.deltaCore}/test_runs`, {
+  const runsReq = await fetch(`${process.env.deltaCore}/api/v1/test_runs`, {
     method: "GET",
   })
   const runs = await runsReq.json()
 
-  const suitesReq = await fetch(`${process.env.deltaCore}/test_suites`, {
+  const suitesReq = await fetch(`${process.env.deltaCore}/api/v1/test_suites`, {
     method: "GET",
   })
   const suites = await suitesReq.json()
 
   const testsHistoryReq = await fetch(
-    `${process.env.deltaCore}/tests_history/test_run/2`,
+    `${process.env.deltaCore}/api/v1/tests_history/test_run/2`,
     {
       method: "GET",
     }

@@ -103,7 +103,7 @@ function Launches(props: Props) {
 Launches.getInitialProps = async (context): Promise<Props> => {
   const { launchesByProjectId } = context.query
   const launchesByProjectIdReq = await fetch(
-    `${process.env.deltaCore}/launch/project/${launchesByProjectId}`,
+    `${process.env.deltaCore}/api/v1/launch/project/${launchesByProjectId}`,
     {
       method: "GET",
     }

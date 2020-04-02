@@ -286,7 +286,7 @@ Tests.getInitialProps = async (context): Promise<Props> => {
 
   // Suites and tests (inside suites)
   const testsByTestRunIdReq = await fetch(
-    `${process.env.deltaCore}/tests_history/test_run/${testsByRunId}`,
+    `${process.env.deltaCore}/api/v1/tests_history/test_run/${testsByRunId}`,
     {
       method: "GET",
     }
