@@ -281,11 +281,8 @@ export const TestsBlock = function(props: Props) {
   }
 
   const [historyTabValue, setHistoryTabValue] = React.useState(0)
-  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setHistoryTabValue(newValue)
-  }
-  const handleTabChangeIndex = (index: number) => {
-    setHistoryTabValue(index)
   }
 
   return (
