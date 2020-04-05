@@ -15,6 +15,7 @@ import {
   Link,
   Breadcrumbs,
 } from "@material-ui/core"
+import UseAnimations from "react-useanimations"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -29,6 +30,81 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
 }))
+
+function setStatusColor(status) {
+  let button
+  switch (status) {
+    case "Passed":
+      button = (
+        <Typography
+          style={{
+            color: "green",
+          }}
+        >
+          {status}
+        </Typography>
+      )
+      break
+    case "Failed":
+      button = (
+        <Typography
+          style={{
+            color: "red",
+          }}
+        >
+          {status}
+        </Typography>
+      )
+      break
+    case "In Progress":
+      button = (
+        <UseAnimations
+          animationKey="loading"
+          style={{
+            color: "orange",
+          }}
+        />
+      )
+      break
+    default:
+      button = (
+        <Typography
+          style={{
+            color: "red",
+          }}
+        >
+          {status}
+        </Typography>
+      )
+  }
+  return button
+}
+
+function setTestTypeBadge(testType) {
+  let badge
+  switch (testType) {
+    case "PHP Unit Tests":
+      badge = <img alt={testType} src="/unit.png" width="40" height="30" />
+      break
+    case "End to End":
+      badge = <img alt={testType} src="/ui.png" width="40" height="30" />
+      break
+    case "Integration Tests":
+      badge = <img alt={testType} src="/api.png" width="40" height="30" />
+      break
+    default:
+      badge = (
+        <Typography
+          style={{
+            color: "grey",
+          }}
+        >
+          {testType}
+        </Typography>
+      )
+  }
+  return badge
+}
 
 type Props = {
   test_runs: TestRun[]
@@ -69,7 +145,6 @@ function Testruns(props: Props) {
                     <TableRow>
                       <TableCell>Duration</TableCell>
                       <TableCell>Test Type</TableCell>
-                      <TableCell>Duration</TableCell>
                       <TableCell>Status</TableCell>
                       <TableCell></TableCell>
                     </TableRow>
@@ -77,10 +152,20 @@ function Testruns(props: Props) {
                   <TableBody>
                     {props.test_runs.map(testRun => (
                       <TableRow key={testRun.id} hover>
-                        <TableCell>{testRun.duration.minutes}</TableCell>
-                        <TableCell>{testRun.test_type}</TableCell>
-                        <TableCell>34 min</TableCell>
-                        <TableCell>{testRun.test_run_status}</TableCell>
+                        {testRun.duration.minutes === 0 ? (
+                          <TableCell>{testRun.duration.seconds} sec</TableCell>
+                        ) : (
+                          <TableCell>
+                            {testRun.duration.minutes} min{" "}
+                            {testRun.duration.seconds} sec
+                          </TableCell>
+                        )}
+                        <TableCell>
+                          {setTestTypeBadge(testRun.test_type)}
+                        </TableCell>
+                        <TableCell>
+                          {setStatusColor(testRun.test_run_status)}
+                        </TableCell>
                         <TableCell>
                           {" "}
                           <Link underline="none" href={`/tests/${testRun.id}`}>

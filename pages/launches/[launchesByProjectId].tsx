@@ -15,6 +15,7 @@ import {
   Link,
   Breadcrumbs,
 } from "@material-ui/core"
+import UseAnimations from "react-useanimations"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -29,6 +30,55 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
 }))
+
+function setStatusColor(status) {
+  let button
+  switch (status) {
+    case "Passed":
+      button = (
+        <Typography
+          style={{
+            color: "green",
+          }}
+        >
+          {status}
+        </Typography>
+      )
+      break
+    case "Failed":
+      button = (
+        <Typography
+          style={{
+            color: "red",
+          }}
+        >
+          {status}
+        </Typography>
+      )
+      break
+    case "In Progress":
+      button = (
+        <UseAnimations
+          animationKey="loading"
+          style={{
+            color: "orange",
+          }}
+        />
+      )
+      break
+    default:
+      button = (
+        <Typography
+          style={{
+            color: "grey",
+          }}
+        >
+          {status}
+        </Typography>
+      )
+  }
+  return button
+}
 
 type Props = {
   launches: TestLaunch[]
@@ -73,7 +123,11 @@ function Launches(props: Props) {
                     {props.launches.map(launch => (
                       <TableRow key={launch.id} hover>
                         <TableCell>{launch.name}</TableCell>
-                        <TableCell>{launch.launch_status}</TableCell>
+                        <TableCell>
+                          {" "}
+                          {setStatusColor(launch.launch_status)}
+                        </TableCell>
+
                         <TableCell>
                           {" "}
                           <Link

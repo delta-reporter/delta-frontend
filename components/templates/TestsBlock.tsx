@@ -11,6 +11,10 @@ import {
   ListItem,
   ExpansionPanelDetails,
   withStyles,
+  Box,
+  AppBar,
+  Tabs,
+  Tab,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked"
@@ -52,6 +56,37 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
   },
 }))
+
+interface TabPanelProps {
+  children?: React.ReactNode
+  dir?: string
+  index: any
+  value: any
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={3}>{children}</Box>}
+    </Typography>
+  )
+}
+
+function a11yProps(index: any) {
+  return {
+    id: `full-width-tab-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
+  }
+}
 
 type Props = {
   children: Test[]
@@ -146,38 +181,50 @@ export const TestsBlock = function(props: Props) {
           </Table> */}
       {test.message ? ( // if there is any error message - show the info, else - test passed
         <Paper className={classes.paper} elevation={0}>
-          <Typography
-            component="h2"
-            variant="h6"
-            color="secondary"
-            gutterBottom
-          >
-            Overview
-          </Typography>
-          <Typography className={classes.bigMargin}>Error: </Typography>{" "}
-          <ErrorExpansionPanel
-            key={test.id}
-            expanded={expandedTestMessage === test.message}
-            onChange={expandCollapseTestMessage(test.message)}
-          >
-            <ErrorExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography color="textPrimary">{test.message}</Typography>
-            </ErrorExpansionPanelSummary>
-            <ErrorExpansionPanelDetails>
-              <List>
-                <ListItem button>
-                  {" "}
-                  {test.error_type}
-                  {test.trace}
-                  {test.retries}
-                </ListItem>
-              </List>
-            </ErrorExpansionPanelDetails>
-          </ErrorExpansionPanel>
-          <Typography className={classes.bigMargin}>Location: </Typography>{" "}
-          <Typography component="h2" color="textSecondary">
-            {test.file}
-          </Typography>
+          <div className={classes.root}>
+            <AppBar position="static" color="default">
+              <Tabs
+                value={historyTabValue}
+                onChange={handleTabChange}
+                indicatorColor="primary"
+                textColor="secondary"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+              >
+                <Tab label="Overview" {...a11yProps(0)} />
+                <Tab label="History" {...a11yProps(1)} />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={historyTabValue} index={0}>
+              <Typography className={classes.bigMargin}>Error: </Typography>{" "}
+              <ErrorExpansionPanel
+                key={test.id}
+                expanded={expandedTestMessage === test.message}
+                onChange={expandCollapseTestMessage(test.message)}
+              >
+                <ErrorExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography color="textPrimary">{test.message}</Typography>
+                </ErrorExpansionPanelSummary>
+                <ErrorExpansionPanelDetails>
+                  <List>
+                    <ListItem button>
+                      {" "}
+                      {test.error_type}
+                      {test.trace}
+                      {test.retries}
+                    </ListItem>
+                  </List>
+                </ErrorExpansionPanelDetails>
+              </ErrorExpansionPanel>
+              <Typography className={classes.bigMargin}>Location: </Typography>{" "}
+              <Typography component="h2" color="textSecondary">
+                {test.file}
+              </Typography>
+            </TabPanel>
+            <TabPanel value={historyTabValue} index={1}>
+              TODO: Historical info for this test
+            </TabPanel>
+          </div>
         </Paper>
       ) : (
         <Typography>This test passed</Typography>
@@ -231,6 +278,14 @@ export const TestsBlock = function(props: Props) {
         button = <RadioButtonCheckedIcon />
     }
     return button
+  }
+
+  const [historyTabValue, setHistoryTabValue] = React.useState(0)
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setHistoryTabValue(newValue)
+  }
+  const handleTabChangeIndex = (index: number) => {
+    setHistoryTabValue(index)
   }
 
   return (
