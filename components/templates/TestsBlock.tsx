@@ -216,7 +216,7 @@ export const TestsBlock = function(props: Props) {
                   </List>
                 </ErrorExpansionPanelDetails>
               </ErrorExpansionPanel>
-              <Typography className={classes.bigMargin}>Location: </Typography>{" "}
+              <Typography className={classes.bigMargin}>File Name: </Typography>{" "}
               <Typography component="h2" color="textSecondary">
                 {test.file}
               </Typography>

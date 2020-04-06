@@ -82,26 +82,22 @@ function setStatusColor(status) {
 
 function setTestTypeBadge(testType) {
   let badge
-  switch (testType) {
-    case "PHP Unit Tests":
-      badge = <img alt={testType} src="/unit.png" width="40" height="30" />
-      break
-    case "End to End":
-      badge = <img alt={testType} src="/ui.png" width="40" height="30" />
-      break
-    case "Integration Tests":
-      badge = <img alt={testType} src="/api.png" width="40" height="30" />
-      break
-    default:
-      badge = (
-        <Typography
-          style={{
-            color: "grey",
-          }}
-        >
-          {testType}
-        </Typography>
-      )
+  if (/.*[uUnit].*/.test(testType)) {
+    badge = <img alt={testType} src="/unit.png" width="40" height="30" />
+  } else if (/.*[iIntegration].*/.test(testType)) {
+    badge = <img alt={testType} src="/api.png" width="40" height="30" />
+  } else if (/.*[eEnd].*/.test(testType)) {
+    badge = <img alt={testType} src="/ui.png" width="40" height="30" />
+  } else {
+    badge = (
+      <Typography
+        style={{
+          color: "grey",
+        }}
+      >
+        {testType}
+      </Typography>
+    )
   }
   return badge
 }
