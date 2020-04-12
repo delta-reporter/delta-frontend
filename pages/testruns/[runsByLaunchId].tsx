@@ -83,11 +83,11 @@ function setStatusColor(status) {
 
 function setTestTypeBadge(testType) {
   let badge
-  if (/.*[uUnit].*/.test(testType)) {
+  if (/.*(\w*nit\w*)\b/.test(testType)) {
     badge = <img alt={testType} src="/unit.png" width="40" height="30" />
-  } else if (/.*[iIntegration].*/.test(testType)) {
+  } else if (/.*(\w*ntegration\w*)\b/.test(testType)) {
     badge = <img alt={testType} src="/api.png" width="40" height="30" />
-  } else if (/.*[eEnd].*/.test(testType)) {
+  } else if (/.*(\w*end\w*)\b/.test(testType)) {
     badge = <img alt={testType} src="/ui.png" width="40" height="30" />
   } else {
     badge = (
