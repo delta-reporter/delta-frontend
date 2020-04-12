@@ -160,12 +160,9 @@ function Index(props: Props) {
  */
 Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
-  const projectReq = await fetch(
-    "http://delta_core_service:5000/api/v1/projects",
-    {
-      method: "GET",
-    }
-  )
+  const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
+    method: "GET",
+  })
   const projects = await projectReq.json()
 
   const pagePayload: IPagePayload = {
