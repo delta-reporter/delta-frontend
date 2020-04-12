@@ -2,7 +2,6 @@ import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { Test } from "../../pages/index"
 import {
-  Grid,
   Paper,
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -17,7 +16,7 @@ import {
   Tab,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked"
+import TripOriginIcon from "@material-ui/icons/TripOrigin"
 import UseAnimations from "react-useanimations"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
@@ -167,18 +166,6 @@ export const TestsBlock = function(props: Props) {
 
   const testsTab = test => (
     <div key={test.id} className={classes.root}>
-      {/* TODO: To be used later when it's in a separate section */}
-      {/* <Table size="small">
-            <TableBody>
-              <TableRow>
-                <TableCell>
-                  {" "}
-                  <h3 style={{ fontWeight: "normal" }}>{test.name}</h3>
-                </TableCell>
-                <TableCell>{setStatusColor(test.status)}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table> */}
       {test.message ? ( // if there is any error message - show the info, else - test passed
         <Paper className={classes.paper} elevation={0}>
           <div className={classes.root}>
@@ -233,51 +220,52 @@ export const TestsBlock = function(props: Props) {
   )
 
   function setStatusColor(status) {
-    let button
-    switch (status) {
-      case "Passed":
-        button = (
-          <RadioButtonCheckedIcon
-            style={{
-              color: "green",
-            }}
-          ></RadioButtonCheckedIcon>
-        )
-        break
-      case "Failed":
-        button = (
-          <RadioButtonCheckedIcon
-            style={{
-              color: "red",
-            }}
-          ></RadioButtonCheckedIcon>
-        )
-        break
-      case "Skipped":
-        button = (
-          <Typography
-            style={{
-              color: "grey",
-            }}
-          >
-            Failed{" "}
-          </Typography>
-        )
-        break
-      case "Running":
-        button = (
-          <UseAnimations
-            animationKey="loading"
-            style={{
-              color: "orange",
-            }}
-          />
-        )
-        break
-      default:
-        button = <RadioButtonCheckedIcon />
+    let statusIcon
+    if (/.*(\w*ass\w*)\b/.test(status)) {
+      statusIcon = (
+        <TripOriginIcon
+          style={{
+            color: "green",
+          }}
+        ></TripOriginIcon>
+      )
+    } else if (/.*(\w*ail\w*)\b/.test(status)) {
+      statusIcon = (
+        <TripOriginIcon
+          style={{
+            color: "red",
+          }}
+        ></TripOriginIcon>
+      )
+    } else if (/.*(\w*kip\w*)\b/.test(status)) {
+      statusIcon = (
+        <TripOriginIcon
+          style={{
+            color: "grey",
+          }}
+        ></TripOriginIcon>
+      )
+    } else if (/.*(\w*run\w*)\b/.test(status)) {
+      statusIcon = (
+        <UseAnimations
+          animationKey="loading"
+          style={{
+            color: "orange",
+          }}
+        />
+      )
+    } else {
+      statusIcon = (
+        <Typography
+          style={{
+            color: "grey",
+          }}
+        >
+          {status}
+        </Typography>
+      )
     }
-    return button
+    return statusIcon
   }
 
   const [historyTabValue, setHistoryTabValue] = React.useState(0)
@@ -287,73 +275,56 @@ export const TestsBlock = function(props: Props) {
 
   return (
     <div>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
+      {children.map(testRun => (
+        <div key={testRun.id}>
+          {testRun.test_suites.map(suite => (
+            <ExpansionPanel
+              key={suite.id}
+              expanded={expandedSuite === suite.name}
+              onChange={expandCollapseSuite(suite.name)}
             >
-              Test suites for {children[0].test_type} run
-            </Typography>
-            {children.map(testRun => (
-              <div key={testRun.id}>
-                {testRun.test_suites.map(suite => (
-                  <ExpansionPanel
-                    key={suite.id}
-                    expanded={expandedSuite === suite.name}
-                    onChange={expandCollapseSuite(suite.name)}
-                  >
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      {setStatusColor(suite.test_suite_status)}
-                      <Typography
-                        className={classes.suiteStatus}
-                        color="textPrimary"
-                      >
-                        {suite.name}
-                      </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      {/* Expanded tests list for each suite */}
-                      <List key={suite.id} className={classes.root}>
-                        {suite.tests.map(test => (
-                          <div key={test.id}>
-                            <ListItem className={classes.root} button>
-                              <ExpansionPanel
-                                className={classes.root}
-                                key={test.id}
-                                expanded={expandedTest === test.name}
-                                onChange={expandCollapseTest(test.name)}
-                              >
-                                <ExpansionPanelSummary
-                                  expandIcon={<ExpandMoreIcon />}
-                                >
-                                  {setStatusColor(test.status)}
-                                  <Typography
-                                    className={classes.suiteStatus}
-                                    color="textPrimary"
-                                  >
-                                    {test.name}{" "}
-                                  </Typography>{" "}
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                  {testsTab(test)}
-                                </ExpansionPanelDetails>
-                              </ExpansionPanel>
-                            </ListItem>
-                          </div>
-                        ))}{" "}
-                      </List>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                ))}
-              </div>
-            ))}
-          </Paper>
-        </Grid>
-      </Grid>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                {setStatusColor(suite.test_suite_status)}
+                <Typography className={classes.suiteStatus} color="textPrimary">
+                  {suite.name}
+                </Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                {/* Expanded tests list for each suite */}
+                <List key={suite.id} className={classes.root}>
+                  {suite.tests.map(test => (
+                    <div key={test.id}>
+                      <ListItem className={classes.root} button>
+                        <ExpansionPanel
+                          className={classes.root}
+                          key={test.id}
+                          expanded={expandedTest === test.name}
+                          onChange={expandCollapseTest(test.name)}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                          >
+                            {setStatusColor(test.status)}
+                            <Typography
+                              className={classes.suiteStatus}
+                              color="textPrimary"
+                            >
+                              {test.name}{" "}
+                            </Typography>{" "}
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            {testsTab(test)}
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      </ListItem>
+                    </div>
+                  ))}{" "}
+                </List>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          ))}
+        </div>
+      ))}
     </div>
   )
 }

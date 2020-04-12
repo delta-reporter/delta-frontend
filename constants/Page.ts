@@ -16,7 +16,7 @@ export class Page implements IEnum<Page> {
     2,
     "Projects",
     "Select a project to view last launches and test runs",
-    "/projects"
+    "/"
   )
 
   public static readonly TESTS = new Page(3, "TESTS", "", "")
@@ -28,12 +28,6 @@ export class Page implements IEnum<Page> {
     "/error"
   )
 
-  public static readonly ABOUT = new Page(
-    5,
-    "About Us",
-    "Info about creators of this tool",
-    "/about"
-  )
   /**
    * constructor
    * @param number page id

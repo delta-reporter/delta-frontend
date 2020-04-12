@@ -16,6 +16,7 @@ import {
   Breadcrumbs,
 } from "@material-ui/core"
 import UseAnimations from "react-useanimations"
+import TripOriginIcon from "@material-ui/icons/TripOrigin"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -32,52 +33,52 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function setStatusColor(status) {
-  let button
-  switch (status) {
-    case "Passed":
-      button = (
-        <Typography
-          style={{
-            color: "green",
-          }}
-        >
-          {status}
-        </Typography>
-      )
-      break
-    case "Failed":
-      button = (
-        <Typography
-          style={{
-            color: "red",
-          }}
-        >
-          {status}
-        </Typography>
-      )
-      break
-    case "In Progress":
-      button = (
-        <UseAnimations
-          animationKey="loading"
-          style={{
-            color: "orange",
-          }}
-        />
-      )
-      break
-    default:
-      button = (
-        <Typography
-          style={{
-            color: "red",
-          }}
-        >
-          {status}
-        </Typography>
-      )
+  let statusIcon
+  if (/.*(\w*ass\w*)\b/.test(status)) {
+    statusIcon = (
+      <TripOriginIcon
+        style={{
+          color: "green",
+        }}
+      ></TripOriginIcon>
+    )
+  } else if (/.*(\w*ail\w*)\b/.test(status)) {
+    statusIcon = (
+      <TripOriginIcon
+        style={{
+          color: "red",
+        }}
+      ></TripOriginIcon>
+    )
+  } else if (/.*(\w*kip\w*)\b/.test(status)) {
+    statusIcon = (
+      <TripOriginIcon
+        style={{
+          color: "grey",
+        }}
+      ></TripOriginIcon>
+    )
+  } else if (/.*(\w*ess\w*)\b/.test(status)) {
+    statusIcon = (
+      <UseAnimations
+        animationKey="loading"
+        style={{
+          color: "orange",
+        }}
+      />
+    )
+  } else {
+    statusIcon = (
+      <Typography
+        style={{
+          color: "grey",
+        }}
+      >
+        {status}
+      </Typography>
+    )
   }
-  return button
+  return statusIcon
 }
 
 function setTestTypeBadge(testType) {
@@ -115,7 +116,7 @@ function Testruns(props: Props) {
         <Link color="inherit" href="/">
           Delta Reporter
         </Link>
-        <Link color="inherit" href={`/projects`}>
+        <Link color="inherit" href={`/`}>
           Projects
         </Link>
         <Link color="inherit" href={`/launches/1`}>

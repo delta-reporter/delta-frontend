@@ -13,7 +13,7 @@ import {
   Link,
   Toolbar,
 } from "@material-ui/core"
-import { Search, Info, AccountBox, Settings } from "@material-ui/icons"
+import { Search, AccountBox } from "@material-ui/icons"
 import { SideBarMainItems, SideBarSecondaryItems } from "./Sidebar"
 import { PageHeader } from "./PageHeader"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
@@ -145,16 +145,6 @@ export const BasePage = function(props: Props) {
           <IconButton color="inherit" disabled>
             <Badge color="secondary">
               <AccountBox />{" "}
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit" href="/about">
-            <Badge color="secondary">
-              <Info />{" "}
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit" href="/settings">
-            <Badge color="secondary">
-              <Settings />
             </Badge>
           </IconButton>
         </Toolbar>
