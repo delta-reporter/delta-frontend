@@ -3,7 +3,14 @@ import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { Test } from "../index"
 import { BasePage, TestsBlock } from "../../components/templates"
-import { Container, Typography, Link, Breadcrumbs } from "@material-ui/core"
+import {
+  Grid,
+  Paper,
+  Container,
+  Typography,
+  Link,
+  Breadcrumbs,
+} from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,10 +24,17 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
 }))
 
 type Props = {
   test_history: Test[]
+  test_history_failed: Test[]
 }
 
 function Tests(props: Props) {
@@ -33,7 +47,7 @@ function Tests(props: Props) {
         <Link color="inherit" href="/">
           Delta Reporter
         </Link>
-        <Link color="inherit" href={`/projects`}>
+        <Link color="inherit" href={`/`}>
           Projects
         </Link>
         <Link color="inherit" href={`/launches/1`}>
@@ -46,7 +60,24 @@ function Tests(props: Props) {
       </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
         {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
-          <TestsBlock>{props.test_history}</TestsBlock>
+          <div>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Typography
+                    component="h2"
+                    variant="h6"
+                    color="primary"
+                    gutterBottom
+                  >
+                    Test suites for {props.test_history[0].test_type} run{" "}
+                  </Typography>
+
+                  <TestsBlock>{props.test_history}</TestsBlock>
+                </Paper>
+              </Grid>
+            </Grid>{" "}
+          </div>
         ) : (
           <h1>No suites were found for this run! </h1>
         )}
@@ -67,8 +98,17 @@ Tests.getInitialProps = async (context): Promise<Props> => {
   )
   const tests = await testsByTestRunIdReq.json()
 
+  const failedTestsOnlyByTestRunIdReq = await fetch(
+    `http://delta_core_service:5000//api/v1/tests_history/test_status/1/test_run/${testsByRunId}`,
+    {
+      method: "GET",
+    }
+  )
+  const failedTestsOnly = await failedTestsOnlyByTestRunIdReq.json()
+
   return {
     test_history: tests,
+    test_history_failed: failedTestsOnly,
   }
 }
 
