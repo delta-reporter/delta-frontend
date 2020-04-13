@@ -99,7 +99,7 @@ Tests.getInitialProps = async (context): Promise<Props> => {
   const tests = await testsByTestRunIdReq.json()
 
   const failedTestsOnlyByTestRunIdReq = await fetch(
-    `http://delta_core_service:5000//api/v1/tests_history/test_status/1/test_run/${testsByRunId}`,
+    `${process.env.deltaCore}/api/v1/tests_history/test_status/1/test_run/${testsByRunId}`,
     {
       method: "GET",
     }
