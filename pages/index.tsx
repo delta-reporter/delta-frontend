@@ -120,36 +120,40 @@ function Index(props: Props) {
     <BasePage className={classes.root}>
       <title>Δ | Projects</title>
       <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-          {props.test_projects.map(project => (
-            <Grid item xs={12} sm={3} key={project.id}>
-              <List>
-                <ListItem
-                  button
-                  onClick={() => Router.push(`/launches/${project.id}`)}
-                >
-                  <Paper className={fixedHeightPaper}>
-                    <Typography
-                      component="p"
-                      variant="h4"
-                      className={classes.title}
-                    >
-                      {project.name}
-                    </Typography>
-                    <Typography
-                      color="textSecondary"
-                      className={classes.context}
-                      component="p"
-                    >
-                      {project.project_status}
-                    </Typography>
-                    <Typography color="primary"> View details</Typography>
-                  </Paper>{" "}
-                </ListItem>
-              </List>
-            </Grid>
-          ))}
-        </Grid>
+        {props.test_projects[0] ? ( // checking if props exist (if there are projects)
+          <Grid container spacing={3}>
+            {props.test_projects.map(project => (
+              <Grid item xs={12} sm={3} key={project.id}>
+                <List>
+                  <ListItem
+                    button
+                    onClick={() => Router.push(`/launches/${project.id}`)}
+                  >
+                    <Paper className={fixedHeightPaper}>
+                      <Typography
+                        component="p"
+                        variant="h4"
+                        className={classes.title}
+                      >
+                        {project.name}
+                      </Typography>
+                      <Typography
+                        color="textSecondary"
+                        className={classes.context}
+                        component="p"
+                      >
+                        {project.project_status}
+                      </Typography>
+                      <Typography color="primary"> View details</Typography>
+                    </Paper>{" "}
+                  </ListItem>
+                </List>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <h1>No projects were found! </h1>
+        )}
       </Container>
     </BasePage>
   )
