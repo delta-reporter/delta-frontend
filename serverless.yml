@@ -1,2 +1,7 @@
 deltaFrontend:
   component: serverless-next.js
+  inputs:
+    build:
+        env:
+            DELTA_CORE_URL: ${env.deltaCore}
+
