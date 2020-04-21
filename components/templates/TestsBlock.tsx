@@ -14,6 +14,10 @@ import {
   AppBar,
   Tabs,
   Tab,
+  Dialog,
+  DialogTitle,
+  ListItemText,
+  Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import CheckIcon from "@material-ui/icons/Check"
@@ -57,6 +61,9 @@ const useStyles = makeStyles(theme => ({
   },
   bigMargin: {
     marginTop: theme.spacing(1),
+    marginButtom: theme.spacing(3),
+  },
+  marginBottom: {
     marginButtom: theme.spacing(3),
   },
   paperNoPadding: {
@@ -182,6 +189,67 @@ export const TestsBlock = function(props: Props) {
     },
   }))(MuiExpansionPanelDetails)
 
+  interface ResolutionProps {
+    open: boolean
+    selectedValue: string
+    onClose: (value: string) => void
+  }
+
+  const testResolutions = [
+    "Not set",
+    "Test is flaky",
+    "Product defect",
+    "Test needs to be updated",
+    "To investigate",
+  ]
+
+  const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
+  const [selectedResolutionValue, setSelectedResolutionValue] = React.useState(
+    testResolutions[0]
+  )
+
+  const handleResolutionDialogOpen = () => {
+    setOpenResolutionDialog(true)
+  }
+
+  const handleResolutionDialogClose = (value: string) => {
+    setOpenResolutionDialog(false)
+    setSelectedResolutionValue(value)
+  }
+
+  function SetTestResolution(props: ResolutionProps) {
+    const { onClose, selectedValue, open } = props
+
+    const handleClose = () => {
+      onClose(selectedValue)
+    }
+
+    const handleListItemClick = (value: string) => {
+      onClose(value)
+    }
+
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <DialogTitle id="simple-dialog-title">Set resolution:</DialogTitle>
+        <List>
+          {testResolutions.map(resolution => (
+            <ListItem
+              button
+              onClick={() => handleListItemClick(resolution)}
+              key={resolution}
+            >
+              <ListItemText primary={resolution} />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
+    )
+  }
+
   const testsTab = test => (
     <div key={test.id} className={classes.root}>
       <Typography className={classes.bigMargin}>
@@ -235,6 +303,37 @@ export const TestsBlock = function(props: Props) {
                 </List>
               </ErrorMessagePanelDetails>
             </ErrorMessagePanel>
+            <div>
+              <Typography className={classes.bigMargin}>
+                <Button
+                  disabled
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleResolutionDialogOpen}
+                  className={classes.bigMargin}
+                >
+                  Set test resolution
+                </Button>{" "}
+                {/* <span style={{ marginLeft: "15px" }}>Selected: </span>
+                <span style={{ color: "grey", fontStyle: "italic" }}>
+                  {selectedResolutionValue}
+                </span> */}
+                <span
+                  style={{
+                    color: "grey",
+                    fontStyle: "italic",
+                    marginLeft: "15px",
+                  }}
+                >
+                  Coming Soon
+                </span>
+              </Typography>
+              <SetTestResolution
+                open={openResolutionDialog}
+                selectedValue={selectedResolutionValue}
+                onClose={handleResolutionDialogClose}
+              />
+            </div>
           </TabPanel>
           <TabPanel value={historyTabValue} index={1}>
             TODO: Historical info for this test
