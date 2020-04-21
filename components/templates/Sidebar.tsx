@@ -1,11 +1,7 @@
 import React from "react"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import ListItemText from "@material-ui/core/ListItemText"
-import ListSubheader from "@material-ui/core/ListSubheader"
+import { ListItem, ListItemText, ListItemIcon, Link } from "@material-ui/core/"
 import DashboardIcon from "@material-ui/icons/Dashboard"
 import BarChartIcon from "@material-ui/icons/Assignment" // AssignmentIcon, LayersIcon, BarChartIcon
-import Link from "@material-ui/core/Link"
 
 export const SideBarMainItems = (
   <div>
@@ -16,18 +12,25 @@ export const SideBarMainItems = (
         </ListItemIcon>
         <ListItemText primary="Projects" />
       </ListItem>
+      <ListItem button disabled>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Charts" />
+      </ListItem>
     </Link>
   </div>
 )
 
 export const SideBarSecondaryItems = (
   <div>
-    <ListSubheader inset>Charts</ListSubheader>
+    {/* for the later use */}
+    {/* <ListSubheader inset>Title</ListSubheader>
     <ListItem button disabled>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
-      <ListItemText primary="Coming Soon" />
-    </ListItem>
+      <ListItemText primary="Text" />
+    </ListItem> */}
   </div>
 )

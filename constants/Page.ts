@@ -15,7 +15,7 @@ export class Page implements IEnum<Page> {
   public static readonly PROJECTS = new Page(
     2,
     "Projects",
-    "Select a project to view last launches and test runs",
+    "Select a project to view latest test runs",
     "/"
   )
 

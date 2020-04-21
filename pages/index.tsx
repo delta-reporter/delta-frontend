@@ -34,11 +34,14 @@ const useStyles = makeStyles(theme => ({
     height: 240,
     width: 300,
   },
-  context: {
+  projectStatus: {
     flex: 1,
+    paddingTop: theme.spacing(1),
+    textAlign: "center",
   },
-  title: {
-    paddingTop: theme.spacing(2),
+  projectTitle: {
+    paddingTop: theme.spacing(7),
+    textAlign: "center",
   },
 }))
 export interface TestProject {
@@ -133,18 +136,17 @@ function Index(props: Props) {
                       <Typography
                         component="p"
                         variant="h4"
-                        className={classes.title}
+                        className={classes.projectTitle}
                       >
                         {project.name}
                       </Typography>
                       <Typography
                         color="textSecondary"
-                        className={classes.context}
+                        className={classes.projectStatus}
                         component="p"
                       >
                         {project.project_status}
                       </Typography>
-                      <Typography color="primary"> View details</Typography>
                     </Paper>{" "}
                   </ListItem>
                 </List>
