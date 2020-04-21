@@ -16,6 +16,8 @@ import {
   Tab,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import CheckIcon from "@material-ui/icons/Check"
+import CloseIcon from "@material-ui/icons/Close"
 import TripOriginIcon from "@material-ui/icons/TripOrigin"
 import UseAnimations from "react-useanimations"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
@@ -53,6 +55,9 @@ const useStyles = makeStyles(theme => ({
   },
   smallMargin: {
     marginTop: theme.spacing(1),
+  },
+  tab: {
+    width: "50%",
   },
 }))
 
@@ -97,7 +102,8 @@ export const TestsBlock = function(props: Props) {
 
   const ErrorExpansionPanel = withStyles({
     root: {
-      border: "1px solid rgba(0, 0, 0, .125)",
+      backgroundColor: "#ffa9a9",
+      borderBottom: "1px solid #ec7d7d",
       boxShadow: "none",
       "&:not(:last-child)": {
         borderBottom: 0,
@@ -114,8 +120,8 @@ export const TestsBlock = function(props: Props) {
 
   const ErrorExpansionPanelSummary = withStyles({
     root: {
-      backgroundColor: "rgba(0, 0, 0, .03)",
-      borderBottom: "1px solid rgba(0, 0, 0, .125)",
+      backgroundColor: "#f0a9a9",
+      borderBottom: "1px solid #ec7d7d",
       marginBottom: -1,
       minHeight: 56,
       "&$expanded": {
@@ -221,23 +227,23 @@ export const TestsBlock = function(props: Props) {
 
   function setStatusColor(status) {
     let statusIcon
-    if (/.*(\w*ass\w*)\b/.test(status)) {
+    if (status === "Passed" || status === "Successful") {
       statusIcon = (
-        <TripOriginIcon
+        <CheckIcon
           style={{
             color: "green",
           }}
-        ></TripOriginIcon>
+        ></CheckIcon>
       )
-    } else if (/.*(\w*ail\w*)\b/.test(status)) {
+    } else if (status === "Failed") {
       statusIcon = (
-        <TripOriginIcon
+        <CloseIcon
           style={{
             color: "red",
           }}
-        ></TripOriginIcon>
+        ></CloseIcon>
       )
-    } else if (/.*(\w*kip\w*)\b/.test(status)) {
+    } else if (status === "Skipped" || status === "Incomplete") {
       statusIcon = (
         <TripOriginIcon
           style={{
@@ -245,7 +251,7 @@ export const TestsBlock = function(props: Props) {
           }}
         ></TripOriginIcon>
       )
-    } else if (/.*(\w*run\w*)\b/.test(status)) {
+    } else if (status === "Running") {
       statusIcon = (
         <UseAnimations
           animationKey="loading"

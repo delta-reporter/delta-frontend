@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 function setStatusColor(status) {
   let statusIcon
-  if (/.*(\w*ass\w*)\b/.test(status)) {
+  if (status === "Successful") {
     statusIcon = (
       <TripOriginIcon
         style={{
@@ -42,7 +42,7 @@ function setStatusColor(status) {
         }}
       ></TripOriginIcon>
     )
-  } else if (/.*(\w*ail\w*)\b/.test(status)) {
+  } else if (status === "Failed") {
     statusIcon = (
       <TripOriginIcon
         style={{
@@ -50,15 +50,7 @@ function setStatusColor(status) {
         }}
       ></TripOriginIcon>
     )
-  } else if (/.*(\w*kip\w*)\b/.test(status)) {
-    statusIcon = (
-      <TripOriginIcon
-        style={{
-          color: "grey",
-        }}
-      ></TripOriginIcon>
-    )
-  } else if (/.*(\w*ess\w*)\b/.test(status)) {
+  } else if (status === "In Process") {
     statusIcon = (
       <UseAnimations
         animationKey="loading"
@@ -91,9 +83,6 @@ function Launches(props: Props) {
     <BasePage className={classes.root}>
       <title>Δ | Launches</title>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href="/">
-          Delta Reporter
-        </Link>
         <Link color="inherit" href={`/`}>
           Projects
         </Link>
@@ -115,20 +104,19 @@ function Launches(props: Props) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Status</TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {props.launches.map(launch => (
                       <TableRow key={launch.id} hover>
-                        <TableCell>{launch.name}</TableCell>
                         <TableCell>
                           {" "}
                           {setStatusColor(launch.launch_status)}
                         </TableCell>
-
+                        <TableCell>{launch.name}</TableCell>
                         <TableCell>
                           {" "}
                           <Link
