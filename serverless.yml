@@ -3,5 +3,4 @@ deltaFrontend:
   inputs:
     build:
         env:
-            DELTA_CORE_URL: ${env.deltaCore}
-
+            DELTA_CORE_URL: ${env.DELTA_CORE_URL}
