@@ -12,13 +12,13 @@ export const SideBarMainItems = (
         </ListItemIcon>
         <ListItemText primary="Projects" />
       </ListItem>
-      <ListItem button disabled>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Charts" />
-      </ListItem>
     </Link>
+    <ListItem button disabled>
+      <ListItemIcon>
+        <BarChartIcon />
+      </ListItemIcon>
+      <ListItemText primary="Charts" />
+    </ListItem>
   </div>
 )
 
