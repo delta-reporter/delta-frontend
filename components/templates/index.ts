@@ -1,4 +1,5 @@
 export * from "./BasePage"
 export * from "./PageHeader"
 export * from "./SpacingPaper"
-export * from "./TestsBlock"
+export * from "./SuitesAndTestsList"
+export * from "./TestInfoSection"

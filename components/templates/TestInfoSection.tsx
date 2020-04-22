@@ -1,14 +1,10 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Test } from "../../pages/index"
 import {
   Paper,
-  ExpansionPanel,
-  ExpansionPanelSummary,
   Typography,
   List,
   ListItem,
-  ExpansionPanelDetails,
   withStyles,
   Box,
   AppBar,
@@ -20,10 +16,6 @@ import {
   Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import CheckIcon from "@material-ui/icons/Check"
-import CloseIcon from "@material-ui/icons/Close"
-import TripOriginIcon from "@material-ui/icons/TripOrigin"
-import UseAnimations from "react-useanimations"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
@@ -33,25 +25,8 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     maxWidth: 3500,
   },
-  testLine: {
-    width: "100%",
-    maxWidth: 3500,
-    maxHeight: 50,
-  },
-  counter: {
-    margin: 10,
-  },
   title: {
     fontSize: "2em",
-  },
-  suiteStatus: {
-    paddingLeft: theme.spacing(4),
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
   },
   paper: {
     padding: theme.spacing(2),
@@ -111,31 +86,13 @@ function a11yProps(index: any) {
   }
 }
 
-type Props = {
-  children: Test[]
+interface TestProps {
+  children: any
 }
 
-export const TestsBlock = function(props: Props) {
+export const TestInfoSection = function(props: TestProps) {
   const { children } = props
   const classes = useStyles(props)
-
-  const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
-    false
-  )
-  const expandCollapseSuite = (suitePanel: string) => (
-    _event: React.ChangeEvent<{}>,
-    isExpanded: boolean
-  ) => {
-    setExpandedSuite(isExpanded ? suitePanel : false)
-  }
-
-  const [expandedTest, setExpandedTest] = React.useState<string | false>(false)
-  const expandCollapseTest = (testPanel: string) => (
-    _event: React.ChangeEvent<{}>,
-    isExpanded: boolean
-  ) => {
-    setExpandedTest(isExpanded ? testPanel : false)
-  }
 
   const [expandedErrorMessage, setExpandedErrorMessage] = React.useState<
     string | false
@@ -250,16 +207,18 @@ export const TestsBlock = function(props: Props) {
     )
   }
 
-  const testsTab = test => (
-    <div key={test.id} className={classes.root}>
+  const [historyTabValue, setHistoryTabValue] = React.useState(0)
+  const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
+    setHistoryTabValue(newValue)
+  }
+
+  return (
+    <div key={children.id} className={classes.root}>
       <Typography className={classes.bigMargin}>
         Full path:
-        <span style={{ color: "grey" }}> {test.name.split(":")[0]}.</span>
-        <span style={{ color: "grey", fontWeight: "bold" }}>
-          {test.name.split(":")[1]}
-        </span>
+        <span style={{ color: "grey" }}> {children.name}</span>
       </Typography>
-      {test.message ? ( // if there is any error message - show the info, else - test passed
+      {children.message ? ( // if there is any error message - show the info, else - test passed
         <Paper className={classes.paperNoPadding} elevation={0}>
           <AppBar
             style={{ backgroundColor: "white", border: "none" }}
@@ -281,24 +240,24 @@ export const TestsBlock = function(props: Props) {
           </AppBar>
           <TabPanel value={historyTabValue} index={0}>
             <ErrorMessagePanel
-              key={test.id}
-              expanded={expandedErrorMessage === test.message}
-              onChange={expandCollapseErrorMessage(test.message)}
+              key={children.id}
+              expanded={expandedErrorMessage === children.message}
+              onChange={expandCollapseErrorMessage(children.message)}
               TransitionProps={{ unmountOnExit: true }}
             >
               <ErrorMessageCollapsedLineSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel3bh-content"
               >
-                <Typography color="textPrimary">{test.message}</Typography>
+                <Typography color="textPrimary">{children.message}</Typography>
               </ErrorMessageCollapsedLineSummary>
               <ErrorMessagePanelDetails>
                 <List>
                   <ListItem button>
                     {" "}
-                    {test.error_type}
-                    {test.trace}
-                    {test.retries}
+                    {children.error_type}
+                    {children.trace}
+                    {children.retries}
                   </ListItem>
                 </List>
               </ErrorMessagePanelDetails>
@@ -315,9 +274,9 @@ export const TestsBlock = function(props: Props) {
                   Set test resolution
                 </Button>{" "}
                 {/* <span style={{ marginLeft: "15px" }}>Selected: </span>
-                <span style={{ color: "grey", fontStyle: "italic" }}>
-                  {selectedResolutionValue}
-                </span> */}
+                                  <span style={{ color: "grey", fontStyle: "italic" }}>
+                                    {selectedResolutionValue}
+                                  </span> */}
                 <span
                   style={{
                     color: "grey",
@@ -342,120 +301,6 @@ export const TestsBlock = function(props: Props) {
       ) : (
         <div></div>
       )}
-    </div>
-  )
-
-  function setStatusColor(status) {
-    let statusIcon
-    if (status === "Passed" || status === "Successful") {
-      statusIcon = (
-        <CheckIcon
-          style={{
-            color: "green",
-          }}
-        ></CheckIcon>
-      )
-    } else if (status === "Failed") {
-      statusIcon = (
-        <CloseIcon
-          style={{
-            color: "red",
-          }}
-        ></CloseIcon>
-      )
-    } else if (status === "Skipped" || status === "Incomplete") {
-      statusIcon = (
-        <TripOriginIcon
-          style={{
-            color: "grey",
-          }}
-        ></TripOriginIcon>
-      )
-    } else if (status === "Running") {
-      statusIcon = (
-        <UseAnimations
-          animationKey="loading"
-          style={{
-            color: "orange",
-          }}
-        />
-      )
-    } else {
-      statusIcon = (
-        <Typography
-          style={{
-            color: "grey",
-          }}
-        >
-          {status}
-        </Typography>
-      )
-    }
-    return statusIcon
-  }
-
-  const [historyTabValue, setHistoryTabValue] = React.useState(0)
-  const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
-    setHistoryTabValue(newValue)
-  }
-
-  return (
-    <div>
-      {children.map(testRun => (
-        <div key={testRun.id}>
-          {testRun.test_suites.map(suite => (
-            <ExpansionPanel
-              key={suite.id}
-              expanded={expandedSuite === suite.name}
-              onChange={expandCollapseSuite(suite.name)}
-              TransitionProps={{ unmountOnExit: true }}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-              >
-                {setStatusColor(suite.test_suite_status)}
-                <Typography className={classes.suiteStatus} color="textPrimary">
-                  {suite.name}
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                {/* Expanded tests list for each suite */}
-                <List key={suite.id} className={classes.root} dense>
-                  {suite.tests.map(test => (
-                    <ListItem key={test.id} className={classes.root}>
-                      <ExpansionPanel
-                        className={classes.root}
-                        key={test.id}
-                        expanded={expandedTest === test.name}
-                        onChange={expandCollapseTest(test.name)}
-                        TransitionProps={{ unmountOnExit: true }}
-                      >
-                        <ExpansionPanelSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls="panel2bh-content"
-                        >
-                          {setStatusColor(test.status)}
-                          <Typography
-                            className={classes.suiteStatus}
-                            color="textPrimary"
-                          >
-                            {/* getting the name of the test */}
-                            {test.name.split(":")[1]}
-                          </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                          {testsTab(test)}
-                        </ExpansionPanelDetails>
-                      </ExpansionPanel>
-                    </ListItem>
-                  ))}
-                </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          ))}
-        </div>
-      ))}
     </div>
   )
 }

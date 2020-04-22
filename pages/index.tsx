@@ -101,7 +101,9 @@ export interface Test {
           id: number
           name: string
           resolution: string
+          message: string
           status: string
+          error_type: string
           trace: string
           file: string
           retries: string

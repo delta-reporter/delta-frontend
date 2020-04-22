@@ -2,7 +2,7 @@ import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { Test } from "../index"
-import { BasePage, TestsBlock } from "../../components/templates"
+import { BasePage, SuitesAndTestsList } from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -68,8 +68,7 @@ function Tests(props: Props) {
                   >
                     Test suites for {props.test_history[0].test_type} run{" "}
                   </Typography>
-
-                  <TestsBlock>{props.test_history}</TestsBlock>
+                  <SuitesAndTestsList>{props.test_history}</SuitesAndTestsList>
                 </Paper>
               </Grid>
             </Grid>{" "}
