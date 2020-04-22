@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   test_history: Test[]
-  test_history_failed: Test[]
 }
 
 function Tests(props: Props) {
@@ -44,9 +43,6 @@ function Tests(props: Props) {
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href="/">
-          Delta Reporter
-        </Link>
         <Link color="inherit" href={`/`}>
           Projects
         </Link>
@@ -98,17 +94,8 @@ Tests.getInitialProps = async (context): Promise<Props> => {
   )
   const tests = await testsByTestRunIdReq.json()
 
-  const failedTestsOnlyByTestRunIdReq = await fetch(
-    `${process.env.deltaCore}/api/v1/tests_history/test_status/1/test_run/${testsByRunId}`,
-    {
-      method: "GET",
-    }
-  )
-  const failedTestsOnly = await failedTestsOnlyByTestRunIdReq.json()
-
   return {
     test_history: tests,
-    test_history_failed: failedTestsOnly,
   }
 }
 

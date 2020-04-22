@@ -16,7 +16,8 @@ import {
   Breadcrumbs,
 } from "@material-ui/core"
 import UseAnimations from "react-useanimations"
-import TripOriginIcon from "@material-ui/icons/TripOrigin"
+import CheckIcon from "@material-ui/icons/Check"
+import CloseIcon from "@material-ui/icons/Close"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -34,31 +35,23 @@ const useStyles = makeStyles(theme => ({
 
 function setStatusColor(status) {
   let statusIcon
-  if (/.*(\w*ass\w*)\b/.test(status)) {
+  if (status === "Passed") {
     statusIcon = (
-      <TripOriginIcon
+      <CheckIcon
         style={{
           color: "green",
         }}
-      ></TripOriginIcon>
+      ></CheckIcon>
     )
-  } else if (/.*(\w*ail\w*)\b/.test(status)) {
+  } else if (status === "Failed") {
     statusIcon = (
-      <TripOriginIcon
+      <CloseIcon
         style={{
           color: "red",
         }}
-      ></TripOriginIcon>
+      ></CloseIcon>
     )
-  } else if (/.*(\w*kip\w*)\b/.test(status)) {
-    statusIcon = (
-      <TripOriginIcon
-        style={{
-          color: "grey",
-        }}
-      ></TripOriginIcon>
-    )
-  } else if (/.*(\w*ess\w*)\b/.test(status)) {
+  } else if (status === "Running") {
     statusIcon = (
       <UseAnimations
         animationKey="loading"
@@ -87,7 +80,7 @@ function setTestTypeBadge(testType) {
     badge = <img alt={testType} src="/unit.png" width="40" height="30" />
   } else if (/.*(\w*ntegration\w*)\b/.test(testType)) {
     badge = <img alt={testType} src="/api.png" width="40" height="30" />
-  } else if (/.*(\w*end\w*)\b/.test(testType)) {
+  } else if (/.*(\w*nd\w*)\b/.test(testType)) {
     badge = <img alt={testType} src="/ui.png" width="40" height="30" />
   } else {
     badge = (
@@ -113,9 +106,6 @@ function Testruns(props: Props) {
     <BasePage className={classes.root}>
       <title>Δ | Test Runs</title>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href="/">
-          Delta Reporter
-        </Link>
         <Link color="inherit" href={`/`}>
           Projects
         </Link>
@@ -140,15 +130,21 @@ function Testruns(props: Props) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Duration</TableCell>
-                      <TableCell>Test Type</TableCell>
-                      <TableCell>Status</TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {props.test_runs.map(testRun => (
                       <TableRow key={testRun.id} hover>
+                        <TableCell>
+                          {setStatusColor(testRun.test_run_status)}
+                        </TableCell>
+                        <TableCell>
+                          {setTestTypeBadge(testRun.test_type)}
+                        </TableCell>
                         {testRun.duration.minutes === 0 ? (
                           <TableCell>{testRun.duration.seconds} sec</TableCell>
                         ) : (
@@ -157,12 +153,6 @@ function Testruns(props: Props) {
                             {testRun.duration.seconds} sec
                           </TableCell>
                         )}
-                        <TableCell>
-                          {setTestTypeBadge(testRun.test_type)}
-                        </TableCell>
-                        <TableCell>
-                          {setStatusColor(testRun.test_run_status)}
-                        </TableCell>
                         <TableCell>
                           {" "}
                           <Link underline="none" href={`/tests/${testRun.id}`}>

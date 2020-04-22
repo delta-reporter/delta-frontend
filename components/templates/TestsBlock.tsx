@@ -14,8 +14,14 @@ import {
   AppBar,
   Tabs,
   Tab,
+  Dialog,
+  DialogTitle,
+  ListItemText,
+  Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import CheckIcon from "@material-ui/icons/Check"
+import CloseIcon from "@material-ui/icons/Close"
 import TripOriginIcon from "@material-ui/icons/TripOrigin"
 import UseAnimations from "react-useanimations"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
@@ -26,6 +32,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     maxWidth: 3500,
+  },
+  testLine: {
+    width: "100%",
+    maxWidth: 3500,
+    maxHeight: 50,
   },
   counter: {
     margin: 10,
@@ -49,10 +60,23 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
   bigMargin: {
-    marginTop: theme.spacing(3),
-  },
-  smallMargin: {
     marginTop: theme.spacing(1),
+    marginButtom: theme.spacing(3),
+  },
+  marginBottom: {
+    marginButtom: theme.spacing(3),
+  },
+  paperNoPadding: {
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+  tabs: {
+    marginTop: theme.spacing(1),
+    width: "30%",
+  },
+  backgroundColor: {
+    maxWidth: "50",
   },
 }))
 
@@ -71,8 +95,8 @@ function TabPanel(props: TabPanelProps) {
       component="div"
       role="tabpanel"
       hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
       {...other}
     >
       {value === index && <Box p={3}>{children}</Box>}
@@ -82,8 +106,8 @@ function TabPanel(props: TabPanelProps) {
 
 function a11yProps(index: any) {
   return {
-    id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
+    id: `tab-${index}`,
+    "aria-controls": `tabpanel-${index}`,
   }
 }
 
@@ -94,47 +118,6 @@ type Props = {
 export const TestsBlock = function(props: Props) {
   const { children } = props
   const classes = useStyles(props)
-
-  const ErrorExpansionPanel = withStyles({
-    root: {
-      border: "1px solid rgba(0, 0, 0, .125)",
-      boxShadow: "none",
-      "&:not(:last-child)": {
-        borderBottom: 0,
-      },
-      "&:before": {
-        display: "none",
-      },
-      "&$expanded": {
-        margin: "auto",
-      },
-    },
-    expanded: {},
-  })(MuiExpansionPanel)
-
-  const ErrorExpansionPanelSummary = withStyles({
-    root: {
-      backgroundColor: "rgba(0, 0, 0, .03)",
-      borderBottom: "1px solid rgba(0, 0, 0, .125)",
-      marginBottom: -1,
-      minHeight: 56,
-      "&$expanded": {
-        minHeight: 56,
-      },
-    },
-    content: {
-      "&$expanded": {
-        margin: "12px 0",
-      },
-    },
-    expanded: {},
-  })(MuiExpansionPanelSummary)
-
-  const ErrorExpansionPanelDetails = withStyles(theme => ({
-    root: {
-      padding: theme.spacing(2),
-    },
-  }))(MuiExpansionPanelDetails)
 
   const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
     false
@@ -154,90 +137,233 @@ export const TestsBlock = function(props: Props) {
     setExpandedTest(isExpanded ? testPanel : false)
   }
 
-  const [expandedTestMessage, setExpandedTestMessage] = React.useState<
+  const [expandedErrorMessage, setExpandedErrorMessage] = React.useState<
     string | false
   >(false)
-  const expandCollapseTestMessage = (testMessagePanel: string) => (
+  const expandCollapseErrorMessage = (errorMessagePanel: string) => (
     _event: React.ChangeEvent<{}>,
     isExpanded: boolean
   ) => {
-    setExpandedTestMessage(isExpanded ? testMessagePanel : false)
+    setExpandedErrorMessage(isExpanded ? errorMessagePanel : false)
+  }
+
+  const ErrorMessagePanel = withStyles({
+    root: {
+      backgroundColor: "#f9dbdb", // error message expanded color
+      borderBottom: "1px solid #ffa7a7",
+      boxShadow: "none",
+      "&:not(:last-child)": {
+        borderBottom: 0,
+      },
+      "&:before": {
+        display: "none",
+      },
+      "&$expanded": {
+        margin: "auto",
+      },
+    },
+    expanded: {},
+  })(MuiExpansionPanel)
+
+  const ErrorMessageCollapsedLineSummary = withStyles({
+    root: {
+      backgroundColor: "#f9e6e6", // error message color
+      borderBottom: "1px solid #f9e6e6",
+      marginBottom: -1,
+      minHeight: 56,
+      "&$expanded": {
+        minHeight: 56,
+      },
+    },
+    content: {
+      "&$expanded": {
+        margin: "12px 0",
+      },
+    },
+    expanded: {},
+  })(MuiExpansionPanelSummary)
+
+  const ErrorMessagePanelDetails = withStyles(theme => ({
+    root: {
+      padding: theme.spacing(2),
+    },
+  }))(MuiExpansionPanelDetails)
+
+  interface ResolutionProps {
+    open: boolean
+    selectedValue: string
+    onClose: (value: string) => void
+  }
+
+  const testResolutions = [
+    "Not set",
+    "Test is flaky",
+    "Product defect",
+    "Test needs to be updated",
+    "To investigate",
+  ]
+
+  const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
+  const [selectedResolutionValue, setSelectedResolutionValue] = React.useState(
+    testResolutions[0]
+  )
+
+  const handleResolutionDialogOpen = () => {
+    setOpenResolutionDialog(true)
+  }
+
+  const handleResolutionDialogClose = (value: string) => {
+    setOpenResolutionDialog(false)
+    setSelectedResolutionValue(value)
+  }
+
+  function SetTestResolution(props: ResolutionProps) {
+    const { onClose, selectedValue, open } = props
+
+    const handleClose = () => {
+      onClose(selectedValue)
+    }
+
+    const handleListItemClick = (value: string) => {
+      onClose(value)
+    }
+
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <DialogTitle id="simple-dialog-title">Set resolution:</DialogTitle>
+        <List>
+          {testResolutions.map(resolution => (
+            <ListItem
+              button
+              onClick={() => handleListItemClick(resolution)}
+              key={resolution}
+            >
+              <ListItemText primary={resolution} />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
+    )
   }
 
   const testsTab = test => (
     <div key={test.id} className={classes.root}>
+      <Typography className={classes.bigMargin}>
+        Full path:
+        <span style={{ color: "grey" }}> {test.name.split(":")[0]}.</span>
+        <span style={{ color: "grey", fontWeight: "bold" }}>
+          {test.name.split(":")[1]}
+        </span>
+      </Typography>
       {test.message ? ( // if there is any error message - show the info, else - test passed
-        <Paper className={classes.paper} elevation={0}>
-          <div className={classes.root}>
-            <AppBar position="static" color="default">
-              <Tabs
-                value={historyTabValue}
-                onChange={handleTabChange}
-                indicatorColor="primary"
-                textColor="secondary"
-                variant="fullWidth"
-                aria-label="full width tabs example"
+        <Paper className={classes.paperNoPadding} elevation={0}>
+          <AppBar
+            style={{ backgroundColor: "white", border: "none" }}
+            variant="outlined"
+            position="relative"
+            className={classes.tabs}
+          >
+            <Tabs
+              value={historyTabValue}
+              onChange={handleTabChange}
+              indicatorColor="primary"
+              textColor="secondary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+            >
+              <Tab label="Error" {...a11yProps(0)} />
+              <Tab label="Test History" {...a11yProps(1)} />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={historyTabValue} index={0}>
+            <ErrorMessagePanel
+              key={test.id}
+              expanded={expandedErrorMessage === test.message}
+              onChange={expandCollapseErrorMessage(test.message)}
+              TransitionProps={{ unmountOnExit: true }}
+            >
+              <ErrorMessageCollapsedLineSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3bh-content"
               >
-                <Tab label="Overview" {...a11yProps(0)} />
-                <Tab label="History" {...a11yProps(1)} />
-              </Tabs>
-            </AppBar>
-            <TabPanel value={historyTabValue} index={0}>
-              <Typography className={classes.bigMargin}>Error: </Typography>{" "}
-              <ErrorExpansionPanel
-                key={test.id}
-                expanded={expandedTestMessage === test.message}
-                onChange={expandCollapseTestMessage(test.message)}
-              >
-                <ErrorExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography color="textPrimary">{test.message}</Typography>
-                </ErrorExpansionPanelSummary>
-                <ErrorExpansionPanelDetails>
-                  <List>
-                    <ListItem button>
-                      {" "}
-                      {test.error_type}
-                      {test.trace}
-                      {test.retries}
-                    </ListItem>
-                  </List>
-                </ErrorExpansionPanelDetails>
-              </ErrorExpansionPanel>
-              <Typography className={classes.bigMargin}>File Name: </Typography>{" "}
-              <Typography component="h2" color="textSecondary">
-                {test.file}
+                <Typography color="textPrimary">{test.message}</Typography>
+              </ErrorMessageCollapsedLineSummary>
+              <ErrorMessagePanelDetails>
+                <List>
+                  <ListItem button>
+                    {" "}
+                    {test.error_type}
+                    {test.trace}
+                    {test.retries}
+                  </ListItem>
+                </List>
+              </ErrorMessagePanelDetails>
+            </ErrorMessagePanel>
+            <div>
+              <Typography className={classes.bigMargin}>
+                <Button
+                  disabled
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleResolutionDialogOpen}
+                  className={classes.bigMargin}
+                >
+                  Set test resolution
+                </Button>{" "}
+                {/* <span style={{ marginLeft: "15px" }}>Selected: </span>
+                <span style={{ color: "grey", fontStyle: "italic" }}>
+                  {selectedResolutionValue}
+                </span> */}
+                <span
+                  style={{
+                    color: "grey",
+                    fontStyle: "italic",
+                    marginLeft: "15px",
+                  }}
+                >
+                  Coming Soon
+                </span>
               </Typography>
-            </TabPanel>
-            <TabPanel value={historyTabValue} index={1}>
-              TODO: Historical info for this test
-            </TabPanel>
-          </div>
+              <SetTestResolution
+                open={openResolutionDialog}
+                selectedValue={selectedResolutionValue}
+                onClose={handleResolutionDialogClose}
+              />
+            </div>
+          </TabPanel>
+          <TabPanel value={historyTabValue} index={1}>
+            TODO: Historical info for this test
+          </TabPanel>
         </Paper>
       ) : (
-        <Typography>This test passed</Typography>
+        <div></div>
       )}
     </div>
   )
 
   function setStatusColor(status) {
     let statusIcon
-    if (/.*(\w*ass\w*)\b/.test(status)) {
+    if (status === "Passed" || status === "Successful") {
       statusIcon = (
-        <TripOriginIcon
+        <CheckIcon
           style={{
             color: "green",
           }}
-        ></TripOriginIcon>
+        ></CheckIcon>
       )
-    } else if (/.*(\w*ail\w*)\b/.test(status)) {
+    } else if (status === "Failed") {
       statusIcon = (
-        <TripOriginIcon
+        <CloseIcon
           style={{
             color: "red",
           }}
-        ></TripOriginIcon>
+        ></CloseIcon>
       )
-    } else if (/.*(\w*kip\w*)\b/.test(status)) {
+    } else if (status === "Skipped" || status === "Incomplete") {
       statusIcon = (
         <TripOriginIcon
           style={{
@@ -245,7 +371,7 @@ export const TestsBlock = function(props: Props) {
           }}
         ></TripOriginIcon>
       )
-    } else if (/.*(\w*run\w*)\b/.test(status)) {
+    } else if (status === "Running") {
       statusIcon = (
         <UseAnimations
           animationKey="loading"
@@ -282,8 +408,12 @@ export const TestsBlock = function(props: Props) {
               key={suite.id}
               expanded={expandedSuite === suite.name}
               onChange={expandCollapseSuite(suite.name)}
+              TransitionProps={{ unmountOnExit: true }}
             >
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+              >
                 {setStatusColor(suite.test_suite_status)}
                 <Typography className={classes.suiteStatus} color="textPrimary">
                   {suite.name}
@@ -291,34 +421,35 @@ export const TestsBlock = function(props: Props) {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 {/* Expanded tests list for each suite */}
-                <List key={suite.id} className={classes.root}>
+                <List key={suite.id} className={classes.root} dense>
                   {suite.tests.map(test => (
-                    <div key={test.id}>
-                      <ListItem className={classes.root} button>
-                        <ExpansionPanel
-                          className={classes.root}
-                          key={test.id}
-                          expanded={expandedTest === test.name}
-                          onChange={expandCollapseTest(test.name)}
+                    <ListItem key={test.id} className={classes.root}>
+                      <ExpansionPanel
+                        className={classes.root}
+                        key={test.id}
+                        expanded={expandedTest === test.name}
+                        onChange={expandCollapseTest(test.name)}
+                        TransitionProps={{ unmountOnExit: true }}
+                      >
+                        <ExpansionPanelSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel2bh-content"
                         >
-                          <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
+                          {setStatusColor(test.status)}
+                          <Typography
+                            className={classes.suiteStatus}
+                            color="textPrimary"
                           >
-                            {setStatusColor(test.status)}
-                            <Typography
-                              className={classes.suiteStatus}
-                              color="textPrimary"
-                            >
-                              {test.name}{" "}
-                            </Typography>{" "}
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            {testsTab(test)}
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                      </ListItem>
-                    </div>
-                  ))}{" "}
+                            {/* getting the name of the test */}
+                            {test.name.split(":")[1]}
+                          </Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                          {testsTab(test)}
+                        </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                    </ListItem>
+                  ))}
                 </List>
               </ExpansionPanelDetails>
             </ExpansionPanel>
