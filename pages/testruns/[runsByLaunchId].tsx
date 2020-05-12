@@ -134,6 +134,7 @@ function Testruns(props: Props) {
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
+                      <TableCell></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -154,11 +155,17 @@ function Testruns(props: Props) {
                           </TableCell>
                         )}
                         <TableCell>
-                          {" "}
                           <Link underline="none" href={`/tests/${testRun.id}`}>
-                            {" "}
-                            View{" "}
+                            View All tests
                           </Link>{" "}
+                        </TableCell>
+                        <TableCell>
+                          <Link
+                            underline="none"
+                            href={`/failedTests/${testRun.id}`}
+                          >
+                            View Failed tests
+                          </Link>
                         </TableCell>
                       </TableRow>
                     ))}

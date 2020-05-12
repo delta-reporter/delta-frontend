@@ -1,8 +1,8 @@
 import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { SuiteAndTest } from "../index"
-import { BasePage, SuitesAndTestsList } from "../../components/templates"
+import { Test } from "../index"
+import { BasePage, TestsList } from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  test_history: SuiteAndTest[]
+  tests: Test[]
 }
 
 function Tests(props: Props) {
@@ -55,7 +55,7 @@ function Tests(props: Props) {
         <Typography color="textPrimary">Tests</Typography>
       </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
-        {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
+        {props.tests[0] ? ( // checking if props exist (if there are tests for this run)
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12}>
@@ -66,9 +66,9 @@ function Tests(props: Props) {
                     color="primary"
                     gutterBottom
                   >
-                    Test suites for {props.test_history[0].test_type} run{" "}
+                    Failed Tests
                   </Typography>
-                  <SuitesAndTestsList>{props.test_history}</SuitesAndTestsList>
+                  <TestsList>{props.tests}</TestsList>
                 </Paper>
               </Grid>
             </Grid>{" "}
@@ -82,19 +82,19 @@ function Tests(props: Props) {
 }
 
 Tests.getInitialProps = async (context): Promise<Props> => {
-  const { testsByRunId } = context.query
+  const { failedTestsByRunId } = context.query
 
   // Suites and tests (inside suites)
   const testsByTestRunIdReq = await fetch(
-    `${process.env.deltaCore}/api/v1/tests_history/test_run/${testsByRunId}`,
+    `${process.env.deltaCore}/api/v1/tests_history/test_status/1/test_run/${failedTestsByRunId}`,
     {
       method: "GET",
     }
   )
-  const tests = await testsByTestRunIdReq.json()
+  const failedTests = await testsByTestRunIdReq.json()
 
   return {
-    test_history: tests,
+    tests: failedTests,
   }
 }
 

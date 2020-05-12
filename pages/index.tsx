@@ -72,7 +72,7 @@ export interface TestRun {
   test_type: string
   data: { url?: string }
 }
-export interface Test {
+export interface SuiteAndTest {
   id: number
   test_type: string
   test_suites: [
@@ -111,6 +111,26 @@ export interface Test {
       ]
     }
   ]
+}
+export interface Test {
+  duration: {
+    days: number
+    hours: number
+    minutes: number
+    months: number
+    seconds: number
+    years: number
+  }
+  id: number
+  name: string
+  resolution: string
+  message: string
+  status: string
+  error_type: string
+  trace: string
+  file: string
+  retries: string
+  test_suite_id: number
 }
 
 type Props = {
