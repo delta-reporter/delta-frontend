@@ -174,15 +174,29 @@ export const TestInfoSection = function(props: TestProps) {
     setSelectedResolutionValue(value)
   }
 
-  function SetTestResolution(props: ResolutionProps) {
+  function SetTestResolution(props: ResolutionProps, testHistoryId) {
     const { onClose, selectedValue, open } = props
 
     const handleClose = () => {
       onClose(selectedValue)
     }
 
-    const handleListItemClick = (value: string) => {
-      onClose(value)
+    const handleListItemClick = async (resoluion: string) => {
+      // POST request using fetch with async/await
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          test_history_id: testHistoryId,
+          test_resolution: resoluion,
+        }),
+      }
+      const response = await fetch(
+        `${process.env.deltaCore}/api/v1/test_history_resolution`,
+        requestOptions
+      )
+      const data = await response.json()
+      onClose(data)
     }
 
     return (
@@ -265,7 +279,6 @@ export const TestInfoSection = function(props: TestProps) {
             <div>
               <Typography className={classes.bigMargin}>
                 <Button
-                  disabled
                   variant="outlined"
                   color="primary"
                   onClick={handleResolutionDialogOpen}
@@ -273,24 +286,16 @@ export const TestInfoSection = function(props: TestProps) {
                 >
                   Set test resolution
                 </Button>{" "}
-                {/* <span style={{ marginLeft: "15px" }}>Selected: </span>
-                                  <span style={{ color: "grey", fontStyle: "italic" }}>
-                                    {selectedResolutionValue}
-                                  </span> */}
-                <span
-                  style={{
-                    color: "grey",
-                    fontStyle: "italic",
-                    marginLeft: "15px",
-                  }}
-                >
-                  Coming Soon
+                <span style={{ marginLeft: "15px" }}>Selected: </span>
+                <span style={{ color: "grey", fontStyle: "italic" }}>
+                  {selectedResolutionValue}
                 </span>
               </Typography>
               <SetTestResolution
                 open={openResolutionDialog}
                 selectedValue={selectedResolutionValue}
                 onClose={handleResolutionDialogClose}
+                {...children.id}
               />
             </div>
           </TabPanel>
