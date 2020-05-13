@@ -279,6 +279,7 @@ export const TestInfoSection = function(props: TestProps) {
             <div>
               <Typography className={classes.bigMargin}>
                 <Button
+                  disabled
                   variant="outlined"
                   color="primary"
                   onClick={handleResolutionDialogOpen}
