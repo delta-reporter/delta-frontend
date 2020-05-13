@@ -74,7 +74,7 @@ function Tests(props: Props) {
             </Grid>{" "}
           </div>
         ) : (
-          <h1>No suites were found for this run! </h1>
+          <h1>No failed tests here! </h1>
         )}
       </Container>
     </BasePage>
