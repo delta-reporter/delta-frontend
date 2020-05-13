@@ -1,6 +1,8 @@
+import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { BasePage } from "../../components/templates/BasePage"
+import LaunchesPagination from "../../components/templates/Pagination"
 import { TestLaunch } from "../index"
 import {
   Container,
@@ -76,8 +78,28 @@ function setStatusColor(status) {
 type Props = {
   launches: TestLaunch[]
 }
+
 function Launches(props: Props) {
   const classes = useStyles(props)
+
+  const [launchesList, setLaunchesList] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [launchesPerPage] = useState(20)
+  const indexOfLastItem = currentPage * launchesPerPage
+  const indexOfFirstItem = indexOfLastItem - launchesPerPage
+  const currentLaunches = props.launches.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  )
+
+  useEffect(() => {
+    const fetchLaunches = async () => {
+      setLaunchesList(props.launches)
+    }
+    fetchLaunches()
+  }, [])
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber)
 
   return (
     <BasePage className={classes.root}>
@@ -101,36 +123,43 @@ function Launches(props: Props) {
                 Launches for {props.launches[0].project} project
               </Typography>
               {props.launches[0] ? ( // checking if props exist
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {props.launches.map(launch => (
-                      <TableRow key={launch.id} hover>
-                        <TableCell>
-                          {" "}
-                          {setStatusColor(launch.launch_status)}
-                        </TableCell>
-                        <TableCell>{launch.name}</TableCell>
-                        <TableCell>
-                          {" "}
-                          <Link
-                            underline="none"
-                            href={`/testruns/${launch.id}`}
-                          >
-                            {" "}
-                            View{" "}
-                          </Link>{" "}
-                        </TableCell>
+                <div>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHead>
+                    <TableBody>
+                      {currentLaunches.map(launch => (
+                        <TableRow key={launch.id} hover>
+                          <TableCell>
+                            {" "}
+                            {setStatusColor(launch.launch_status)}
+                          </TableCell>
+                          <TableCell>{launch.name}</TableCell>
+                          <TableCell>
+                            {" "}
+                            <Link
+                              underline="none"
+                              href={`/testruns/${launch.id}`}
+                            >
+                              {" "}
+                              View{" "}
+                            </Link>{" "}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>{" "}
+                  </Table>
+                  <LaunchesPagination
+                    itemsPerPage={launchesPerPage}
+                    totalNumber={launchesList.length}
+                    paginate={paginate}
+                  />
+                </div>
               ) : (
                 // if props don't exist
                 <h1>No runs were found for this launch! </h1>
