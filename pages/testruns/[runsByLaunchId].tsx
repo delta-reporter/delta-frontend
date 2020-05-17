@@ -105,80 +105,98 @@ function Testruns(props: Props) {
   return (
     <BasePage className={classes.root}>
       <title>Δ | Test Runs</title>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href={`/`}>
-          Projects
-        </Link>
-        <Link color="inherit" href={`/launches/1`}>
-          Launches
-        </Link>
-        <Typography color="textPrimary">Test Runs</Typography>
-      </Breadcrumbs>
-      <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Typography
-                component="h2"
-                variant="h6"
-                color="primary"
-                gutterBottom
-              >
-                Test runs for {props.test_runs[0].launch_name} launch
-              </Typography>
-              {props.test_runs[0] ? ( // checking if props exist
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {props.test_runs.map(testRun => (
-                      <TableRow key={testRun.id} hover>
-                        <TableCell>
-                          {setStatusColor(testRun.test_run_status)}
-                        </TableCell>
-                        <TableCell>
-                          {setTestTypeBadge(testRun.test_type)}
-                        </TableCell>
-                        {testRun.duration.minutes === 0 ? (
-                          <TableCell>{testRun.duration.seconds} sec</TableCell>
-                        ) : (
-                          <TableCell>
-                            {testRun.duration.minutes} min{" "}
-                            {testRun.duration.seconds} sec
-                          </TableCell>
-                        )}
-                        <TableCell>
-                          <Link underline="none" href={`/tests/${testRun.id}`}>
-                            View All tests
-                          </Link>{" "}
-                        </TableCell>
-                        <TableCell>
-                          <Link
-                            underline="none"
-                            href={`/failedTests/${testRun.id}`}
-                          >
-                            View Failed tests
-                          </Link>
-                        </TableCell>
+      {props.test_runs[0] ? ( // checking if props exist
+        <div>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="inherit" href={`/`}>
+              Projects
+            </Link>
+            <Link
+              color="inherit"
+              href={`/launches/${props.test_runs[0].launch_id}`}
+            >
+              Launches
+            </Link>
+            <Typography color="textPrimary">Test Runs</Typography>
+          </Breadcrumbs>
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Typography
+                    component="h2"
+                    variant="h6"
+                    color="primary"
+                    gutterBottom
+                  >
+                    Test runs for{" "}
+                    <Link underline="always">
+                      {" "}
+                      {props.test_runs[0].launch_name}
+                    </Link>
+                  </Typography>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                // if props don't exist
-                <h1>No runs were found for this launch! </h1>
-              )}
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
+                    </TableHead>
+                    <TableBody>
+                      {props.test_runs.map(testRun => (
+                        <TableRow key={testRun.id} hover>
+                          <TableCell>
+                            {setStatusColor(testRun.test_run_status)}
+                          </TableCell>
+                          <TableCell>
+                            {setTestTypeBadge(testRun.test_type)}
+                          </TableCell>
+                          {testRun.duration.minutes === 0 ? (
+                            <TableCell>
+                              {testRun.duration.seconds} sec
+                            </TableCell>
+                          ) : (
+                            <TableCell>
+                              {testRun.duration.minutes} min{" "}
+                              {testRun.duration.seconds} sec
+                            </TableCell>
+                          )}
+                          <TableCell>
+                            <Link
+                              underline="none"
+                              href={`/tests/${testRun.id}`}
+                            >
+                              View All tests
+                            </Link>
+                          </TableCell>
+                          {testRun.test_run_status === "Passed" ? (
+                            <TableCell></TableCell>
+                          ) : (
+                            <TableCell>
+                              <Link
+                                underline="none"
+                                href={`/failedTests/${testRun.id}`}
+                              >
+                                View Failed tests
+                              </Link>
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Container>
+        </div>
+      ) : (
+        // if props don't exist
+        <h1>No runs were found for this launch! </h1>
+      )}
     </BasePage>
   )
 }

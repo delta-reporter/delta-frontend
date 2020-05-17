@@ -120,7 +120,9 @@ function Launches(props: Props) {
                 color="primary"
                 gutterBottom
               >
-                Launches for {props.launches[0].project} project
+                Launches for{" "}
+                <Link underline="always"> {props.launches[0].project}</Link>{" "}
+                project
               </Typography>
               {props.launches[0] ? ( // checking if props exist
                 <div>

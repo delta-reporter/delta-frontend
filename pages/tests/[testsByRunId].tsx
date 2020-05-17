@@ -42,21 +42,27 @@ function Tests(props: Props) {
   return (
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href={`/`}>
-          Projects
-        </Link>
-        <Link color="inherit" href={`/launches/1`}>
-          Launches
-        </Link>
-        <Link color="inherit" href={`/testruns/1`}>
-          Test Runs
-        </Link>
-        <Typography color="textPrimary">Tests</Typography>
-      </Breadcrumbs>
-      <Container maxWidth="lg" className={classes.container}>
-        {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
-          <div>
+      {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
+        <div>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="inherit" href={`/`}>
+              Projects
+            </Link>
+            <Link
+              color="inherit"
+              href={`/launches/${props.test_history[0].launch_id}`}
+            >
+              Launches
+            </Link>
+            <Link
+              color="inherit"
+              href={`/testruns/${props.test_history[0].launch_id}`}
+            >
+              Test Runs
+            </Link>
+            <Typography color="textPrimary">Tests</Typography>
+          </Breadcrumbs>
+          <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
@@ -66,17 +72,22 @@ function Tests(props: Props) {
                     color="primary"
                     gutterBottom
                   >
-                    Test suites for {props.test_history[0].test_type} run{" "}
+                    Test suites for{" "}
+                    <Link underline="always">
+                      {" "}
+                      {props.test_history[0].test_type}
+                    </Link>{" "}
+                    run
                   </Typography>
                   <SuitesAndTestsList>{props.test_history}</SuitesAndTestsList>
                 </Paper>
               </Grid>
-            </Grid>{" "}
-          </div>
-        ) : (
-          <h1>No suites were found for this run! </h1>
-        )}
-      </Container>
+            </Grid>
+          </Container>
+        </div>
+      ) : (
+        <h1>No suites were found for this run! </h1>
+      )}
     </BasePage>
   )
 }

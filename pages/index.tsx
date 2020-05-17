@@ -59,6 +59,8 @@ export interface TestLaunch {
 }
 export interface TestRun {
   id: number
+  launch_id: number
+  project_id: number
   launch_name: string
   duration: {
     days: number
@@ -74,6 +76,9 @@ export interface TestRun {
 }
 export interface SuiteAndTest {
   id: number
+  run_id: number
+  launch_id: number
+  project_id: number
   test_type: string
   test_suites: [
     {
