@@ -50,7 +50,7 @@ function Tests(props: Props) {
             </Link>
             <Link
               color="inherit"
-              href={`/launches/${props.test_history[0].launch_id}`}
+              href={`/launches/${props.test_history[0].project_id}`}
             >
               Launches
             </Link>

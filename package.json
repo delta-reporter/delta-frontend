@@ -24,13 +24,13 @@
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
-    "@material-ui/styles": "^4.9.6",
+    "@material-ui/styles": "^4.9.14",
     "@zeit/next-css": "^1.0.1",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "immer": "^4.0.2",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.3.3",
+    "next": "^9.4.1",
     "next-redux-wrapper": "^4.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.13.1",
@@ -43,16 +43,16 @@
   },
   "devDependencies": {
     "@types/next-redux-wrapper": "^2.0.2",
-    "@types/react": "^16.9.16",
-    "@types/react-redux": "^7.1.5",
+    "@types/react": "^16.9.35",
+    "@types/react-redux": "^7.1.8",
     "@types/styled-jsx": "^2.2.8",
     "prettier": "^1.19.1",
     "redux-devtools-extension": "^2.13.8",
-    "serverless-next.js": "^1.9.10",
+    "serverless-next.js": "^1.11.5",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
     "tslint-plugin-prettier": "^2.3.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   }
 }

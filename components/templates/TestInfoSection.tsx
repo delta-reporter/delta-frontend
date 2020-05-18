@@ -181,14 +181,14 @@ export const TestInfoSection = function(props: TestProps) {
       onClose(selectedValue)
     }
 
-    const handleListItemClick = async (resoluion: string) => {
+    const handleListItemClick = async (resolution: string) => {
       // POST request using fetch with async/await
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           test_history_id: testHistoryId,
-          test_resolution: resoluion,
+          test_resolution: resolution,
         }),
       }
       const response = await fetch(
@@ -227,7 +227,7 @@ export const TestInfoSection = function(props: TestProps) {
   }
 
   return (
-    <div key={children.id} className={classes.root}>
+    <div key={children.test_history_id} className={classes.root}>
       <Typography className={classes.bigMargin}>
         Full path:
         <span style={{ color: "grey" }}> {children.name}</span>
@@ -254,7 +254,7 @@ export const TestInfoSection = function(props: TestProps) {
           </AppBar>
           <TabPanel value={historyTabValue} index={0}>
             <ErrorMessagePanel
-              key={children.id}
+              key={children.test_history_id}
               expanded={expandedErrorMessage === children.message}
               onChange={expandCollapseErrorMessage(children.message)}
               TransitionProps={{ unmountOnExit: true }}
@@ -296,12 +296,12 @@ export const TestInfoSection = function(props: TestProps) {
                 open={openResolutionDialog}
                 selectedValue={selectedResolutionValue}
                 onClose={handleResolutionDialogClose}
-                {...children.id}
+                {...children.test_history_id}
               />
             </div>
           </TabPanel>
           <TabPanel value={historyTabValue} index={1}>
-            TODO: Historical info for this test
+            TODO: Historical info for this test {children.test_id}
           </TabPanel>
         </Paper>
       ) : (
