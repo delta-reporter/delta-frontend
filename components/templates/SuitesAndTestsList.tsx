@@ -1,6 +1,6 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Test } from "../../pages/index"
+import { SuiteAndTest } from "../../pages/index"
 import { TestInfoSection } from "../templates"
 
 import {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  children: Test[]
+  children: SuiteAndTest[]
 }
 
 export const SuitesAndTestsList = function(props: Props) {
