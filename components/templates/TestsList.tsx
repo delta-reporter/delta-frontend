@@ -46,10 +46,10 @@ export const TestsList = function(props: Props) {
     <div>
       <List>
         {children.map(test => (
-          <ListItem key={test.id} className={classes.root}>
+          <ListItem key={test.test_history_id} className={classes.root}>
             <ExpansionPanel
               className={classes.root}
-              key={test.id}
+              key={test.test_history_id}
               expanded={expandedTest === test.name}
               onChange={expandCollapseTest(test.name)}
               TransitionProps={{ unmountOnExit: true }}

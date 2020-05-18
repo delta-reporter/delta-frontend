@@ -45,20 +45,20 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 export interface TestProject {
-  id: number
+  project_id: number
   name: string
   project_status: string
   data: { url?: string }
 }
 export interface TestLaunch {
-  id: number
+  launch_id: number
   name: string
   launch_status: string
   project: string
   data: { url?: string }
 }
 export interface TestRun {
-  id: number
+  test_run_id: number
   launch_id: number
   project_id: number
   launch_name: string
@@ -75,14 +75,14 @@ export interface TestRun {
   data: { url?: string }
 }
 export interface SuiteAndTest {
-  id: number
-  run_id: number
+  test_run_id: number
   launch_id: number
   project_id: number
   test_type: string
   test_suites: [
     {
-      id: number
+      test_suite_history_id: number
+      test_suite_id: number
       name: string
       test_suite_status: string
       duration: {
@@ -103,7 +103,8 @@ export interface SuiteAndTest {
             seconds: number
             years: number
           }
-          id: number
+          test_history_id: number
+          test_id: number
           name: string
           resolution: string
           message: string
@@ -126,7 +127,8 @@ export interface Test {
     seconds: number
     years: number
   }
-  id: number
+  test_history_id: number
+  test_id: number
   name: string
   resolution: string
   message: string
@@ -153,11 +155,13 @@ function Index(props: Props) {
         {props.test_projects[0] ? ( // checking if props exist (if there are projects)
           <Grid container spacing={3}>
             {props.test_projects.map(project => (
-              <Grid item xs={12} sm={3} key={project.id}>
+              <Grid item xs={12} sm={3} key={project.project_id}>
                 <List>
                   <ListItem
                     button
-                    onClick={() => Router.push(`/launches/${project.id}`)}
+                    onClick={() =>
+                      Router.push(`/launches/${project.project_id}`)
+                    }
                   >
                     <Paper className={fixedHeightPaper}>
                       <Typography

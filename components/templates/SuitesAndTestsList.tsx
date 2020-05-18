@@ -113,10 +113,10 @@ export const SuitesAndTestsList = function(props: Props) {
   return (
     <div>
       {children.map(testRun => (
-        <div key={testRun.id}>
+        <div key={testRun.test_run_id}>
           {testRun.test_suites.map(suite => (
             <ExpansionPanel
-              key={suite.id}
+              key={suite.test_suite_history_id}
               expanded={expandedSuite === suite.name}
               onChange={expandCollapseSuite(suite.name)}
               TransitionProps={{ unmountOnExit: true }}
@@ -132,12 +132,12 @@ export const SuitesAndTestsList = function(props: Props) {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 {/* Expanded tests list for each suite */}
-                <List key={suite.id} className={classes.root} dense>
+                <List key={suite.test_suite_history_id} className={classes.root} dense>
                   {suite.tests.map(test => (
-                    <ListItem key={test.id} className={classes.root}>
+                    <ListItem key={test.test_history_id} className={classes.root}>
                       <ExpansionPanel
                         className={classes.root}
-                        key={test.id}
+                        key={test.test_history_id}
                         expanded={expandedTest === test.name}
                         onChange={expandCollapseTest(test.name)}
                         TransitionProps={{ unmountOnExit: true }}

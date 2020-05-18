@@ -113,7 +113,7 @@ function Testruns(props: Props) {
             </Link>
             <Link
               color="inherit"
-              href={`/launches/${props.test_runs[0].launch_id}`}
+              href={`/launches/${props.test_runs[0].project_id}`}
             >
               Launches
             </Link>
@@ -147,7 +147,7 @@ function Testruns(props: Props) {
                     </TableHead>
                     <TableBody>
                       {props.test_runs.map(testRun => (
-                        <TableRow key={testRun.id} hover>
+                        <TableRow key={testRun.test_run_id} hover>
                           <TableCell>
                             {setStatusColor(testRun.test_run_status)}
                           </TableCell>
@@ -167,7 +167,7 @@ function Testruns(props: Props) {
                           <TableCell>
                             <Link
                               underline="none"
-                              href={`/tests/${testRun.id}`}
+                              href={`/tests/${testRun.test_run_id}`}
                             >
                               View All tests
                             </Link>
@@ -178,7 +178,7 @@ function Testruns(props: Props) {
                             <TableCell>
                               <Link
                                 underline="none"
-                                href={`/failedTests/${testRun.id}`}
+                                href={`/failedTests/${testRun.test_run_id}`}
                               >
                                 View Failed tests
                               </Link>

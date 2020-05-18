@@ -136,7 +136,7 @@ function Launches(props: Props) {
                     </TableHead>
                     <TableBody>
                       {currentLaunches.map(launch => (
-                        <TableRow key={launch.id} hover>
+                        <TableRow key={launch.launch_id} hover>
                           <TableCell>
                             {" "}
                             {setStatusColor(launch.launch_status)}
@@ -146,7 +146,7 @@ function Launches(props: Props) {
                             {" "}
                             <Link
                               underline="none"
-                              href={`/testruns/${launch.id}`}
+                              href={`/testruns/${launch.launch_id}`}
                             >
                               {" "}
                               View{" "}
