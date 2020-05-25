@@ -16,8 +16,10 @@ import {
   Typography,
   Link,
   Breadcrumbs,
+  Button,
 } from "@material-ui/core"
-import TripOriginIcon from "@material-ui/icons/TripOrigin"
+import CheckIcon from "@material-ui/icons/Check"
+import CloseIcon from "@material-ui/icons/Close"
 import UseAnimations from "react-useanimations"
 
 const useStyles = makeStyles(theme => ({
@@ -38,19 +40,19 @@ function setStatusColor(status) {
   let statusIcon
   if (status === "Successful") {
     statusIcon = (
-      <TripOriginIcon
+      <CheckIcon
         style={{
           color: "green",
         }}
-      ></TripOriginIcon>
+      ></CheckIcon>
     )
   } else if (status === "Failed") {
     statusIcon = (
-      <TripOriginIcon
+      <CloseIcon
         style={{
           color: "red",
         }}
-      ></TripOriginIcon>
+      ></CloseIcon>
     )
   } else if (status === "In Process") {
     statusIcon = (
@@ -143,14 +145,28 @@ function Launches(props: Props) {
                           </TableCell>
                           <TableCell>{launch.name}</TableCell>
                           <TableCell>
-                            {" "}
-                            <Link
-                              underline="none"
-                              href={`/testruns/${launch.launch_id}`}
-                            >
-                              {" "}
-                              View{" "}
-                            </Link>{" "}
+                            {launch.test_run_stats.map(testRun => (
+                              <Button
+                                variant="contained"
+                                href={`/tests/${testRun.test_run_id}`}
+                                style={{
+                                  fontSize: "12px",
+                                  paddingLeft: "8px",
+                                  paddingRight: "3px",
+                                  paddingBottom: "0px",
+                                  paddingTop: "0px",
+                                  marginLeft: "5px",
+                                }}
+                              >
+                                {testRun.test_type}{" "}
+                                {testRun.tests_total ===
+                                testRun.tests_passed + testRun.tests_skipped ? (
+                                  <div> {setStatusColor("Successful")} </div>
+                                ) : (
+                                  <div>{setStatusColor("Failed")} </div>
+                                )}{" "}
+                              </Button>
+                            ))}
                           </TableCell>
                         </TableRow>
                       ))}

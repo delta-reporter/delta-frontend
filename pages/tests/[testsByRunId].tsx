@@ -30,6 +30,10 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
     flexDirection: "column",
   },
+  padding: {
+    paddingBottom: theme.spacing(1),
+    paddingLeft: "80%",
+  },
 }))
 
 type Props = {
@@ -79,6 +83,13 @@ function Tests(props: Props) {
                     </Link>{" "}
                     run
                   </Typography>
+                  <Link
+                    underline="always"
+                    className={classes.padding}
+                    href={`/failedTests/${props.test_history[0].test_run_id}`}
+                  >
+                    Show only Failed Tests
+                  </Link>
                   <SuitesAndTestsList>{props.test_history}</SuitesAndTestsList>
                 </Paper>
               </Grid>

@@ -56,6 +56,18 @@ export interface TestLaunch {
   launch_status: string
   project: string
   data: { url?: string }
+  test_run_stats: [
+    {
+      test_run_id: number
+      test_type: string
+      tests_total: number
+      tests_failed: number
+      tests_passed: number
+      tests_running: number
+      tests_incomplete: number
+      tests_skipped: number
+    }
+  ]
 }
 export interface TestRun {
   test_run_id: number
@@ -93,6 +105,12 @@ export interface SuiteAndTest {
         seconds: number
         years: number
       }
+      tests_total: number
+      tests_failed: number
+      tests_passed: number
+      tests_running: number
+      tests_incomplete: number
+      tests_skipped: number
       tests: [
         {
           duration: {

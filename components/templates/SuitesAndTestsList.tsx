@@ -10,6 +10,7 @@ import {
   List,
   ListItem,
   ExpansionPanelDetails,
+  Tooltip,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import CheckIcon from "@material-ui/icons/Check"
@@ -110,6 +111,85 @@ export const SuitesAndTestsList = function(props: Props) {
     return statusIcon
   }
 
+  function showStats(passed, failed, incomplete, skipped) {
+    return (
+      <div style={{ paddingLeft: "70%" }}>
+        {passed !== 0 ? (
+          <Tooltip title="Passed">
+            <span
+              style={{
+                borderStyle: "ridge",
+                borderColor: "green",
+                color: "green",
+                padding: "3px",
+                margin: "3px",
+                fontWeight: "bold",
+              }}
+            >
+              {passed}
+            </span>
+          </Tooltip>
+        ) : (
+          <span></span>
+        )} 
+        {failed !== 0 ? ( 
+          <Tooltip title="Failed">
+            <span
+              style={{
+                borderStyle: "ridge",
+                borderColor: "red",
+                color: "red",
+                padding: "3px",
+                margin: "3px",
+                fontWeight: "bold",
+              }}
+            >
+              {failed}
+            </span>
+        </Tooltip>
+        ) : (
+          <span></span>
+        )}
+        {incomplete !== 0 ? (
+          <Tooltip title="Incomplete">
+            <span
+              style={{
+                borderStyle: "ridge",
+                borderColor: "orange",
+                color: "orange",
+                padding: "3px",
+                margin: "3px",
+                fontWeight: "bold",
+              }}
+            >
+              {incomplete}
+            </span>
+          </Tooltip>
+        ) : (
+          <span></span>
+        )}
+        {skipped !== 0 ? (
+          <Tooltip title="Skipped">
+            <span
+              style={{
+                borderStyle: "ridge",
+                borderColor: "grey",
+                color: "grey",
+                padding: "3px",
+                margin: "3px",
+                fontWeight: "bold",
+              }}
+            >
+              {skipped}
+            </span>
+          </Tooltip>
+        ) : (
+          <span></span>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div>
       {children.map(testRun => (
@@ -129,12 +209,25 @@ export const SuitesAndTestsList = function(props: Props) {
                 <Typography className={classes.suiteStatus} color="textPrimary">
                   {suite.name}
                 </Typography>
+                {showStats(
+                  suite.tests_passed,
+                  suite.tests_failed,
+                  suite.tests_incomplete,
+                  suite.tests_skipped
+                )}
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 {/* Expanded tests list for each suite */}
-                <List key={suite.test_suite_history_id} className={classes.root} dense>
+                <List
+                  key={suite.test_suite_history_id}
+                  className={classes.root}
+                  dense
+                >
                   {suite.tests.map(test => (
-                    <ListItem key={test.test_history_id} className={classes.root}>
+                    <ListItem
+                      key={test.test_history_id}
+                      className={classes.root}
+                    >
                       <ExpansionPanel
                         className={classes.root}
                         key={test.test_history_id}
