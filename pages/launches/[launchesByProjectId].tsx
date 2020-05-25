@@ -145,23 +145,26 @@ function Launches(props: Props) {
                           </TableCell>
                           <TableCell>{launch.name}</TableCell>
                           <TableCell>
-                            {" "}
                             {launch.test_run_stats.map(testRun => (
-                              <div>
-                                <Button
-                                  variant="contained"
-                                  href={`/tests/${testRun.test_run_id}`}
-                                >
-                                  {testRun.test_type}{" "}
-                                  {testRun.tests_total ===
-                                  testRun.tests_passed +
-                                    testRun.tests_skipped ? (
-                                    <div> {setStatusColor("Successful")} </div>
-                                  ) : (
-                                    <div>{setStatusColor("Failed")} </div>
-                                  )}{" "}
-                                </Button>
-                              </div>
+                              <Button
+                                variant="contained"
+                                href={`/tests/${testRun.test_run_id}`}
+                                style={{
+                                  fontSize: "12px",
+                                  paddingLeft: "8px",
+                                  paddingRight: "3px",
+                                  paddingBottom: "0px",
+                                  paddingTop: "0px",
+                                }}
+                              >
+                                {testRun.test_type}{" "}
+                                {testRun.tests_total ===
+                                testRun.tests_passed + testRun.tests_skipped ? (
+                                  <div> {setStatusColor("Successful")} </div>
+                                ) : (
+                                  <div>{setStatusColor("Failed")} </div>
+                                )}{" "}
+                              </Button>
                             ))}
                           </TableCell>
                         </TableRow>
