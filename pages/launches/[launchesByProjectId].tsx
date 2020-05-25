@@ -155,6 +155,7 @@ function Launches(props: Props) {
                                   paddingRight: "3px",
                                   paddingBottom: "0px",
                                   paddingTop: "0px",
+                                  marginLeft: "5px",
                                 }}
                               >
                                 {testRun.test_type}{" "}
