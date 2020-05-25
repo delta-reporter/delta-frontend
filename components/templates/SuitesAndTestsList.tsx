@@ -113,7 +113,7 @@ export const SuitesAndTestsList = function(props: Props) {
 
   function showStats(passed, failed, incomplete, skipped) {
     return (
-      <div style={{ paddingLeft: "70%" }}>
+      <div style={{ position: "absolute", right: "120px" }}>
         {passed !== 0 ? (
           <Tooltip title="Passed">
             <span
@@ -131,8 +131,8 @@ export const SuitesAndTestsList = function(props: Props) {
           </Tooltip>
         ) : (
           <span></span>
-        )} 
-        {failed !== 0 ? ( 
+        )}
+        {failed !== 0 ? (
           <Tooltip title="Failed">
             <span
               style={{
@@ -146,7 +146,7 @@ export const SuitesAndTestsList = function(props: Props) {
             >
               {failed}
             </span>
-        </Tooltip>
+          </Tooltip>
         ) : (
           <span></span>
         )}
