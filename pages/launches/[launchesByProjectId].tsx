@@ -190,6 +190,10 @@ function Launches(props: Props) {
   )
 }
 
+// It runs  on the server-side, making a request before page is loaded.
+// The data required to render the page is available at build time ahead of a user’s request
+// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
+
 Launches.getInitialProps = async (context): Promise<Props> => {
   const { launchesByProjectId } = context.query
   const launchesByProjectIdReq = await fetch(

@@ -201,6 +201,10 @@ function Testruns(props: Props) {
   )
 }
 
+// It runs  on the server-side, making a request before page is loaded.
+// The data required to render the page is available at build time ahead of a user’s request
+// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
+
 Testruns.getInitialProps = async (context): Promise<Props> => {
   const { runsByLaunchId } = context.query
   const runsByLaunchIdReq = await fetch(

@@ -210,9 +210,10 @@ function Index(props: Props) {
   )
 }
 
-/**
- * Server side rendering
- */
+// It runs  on the server-side, making a request before page is loaded.
+// The data required to render the page is available at build time ahead of a user’s request
+// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
+
 Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
   const { store } = ctx
   const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
