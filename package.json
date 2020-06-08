@@ -26,6 +26,7 @@
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@material-ui/styles": "^4.9.14",
     "@zeit/next-css": "^1.0.1",
+    "axios": "^0.19.2",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "immer": "^4.0.2",

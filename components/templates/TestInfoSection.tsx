@@ -10,15 +10,12 @@ import {
   AppBar,
   Tabs,
   Tab,
-  Dialog,
-  DialogTitle,
-  ListItemText,
-  Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
+import axios from "axios"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,13 +74,6 @@ function TabPanel(props: TabPanelProps) {
       {value === index && <Box p={3}>{children}</Box>}
     </Typography>
   )
-}
-
-function a11yProps(index: any) {
-  return {
-    id: `tab-${index}`,
-    "aria-controls": `tabpanel-${index}`,
-  }
 }
 
 interface TestProps {
@@ -146,110 +136,37 @@ export const TestInfoSection = function(props: TestProps) {
     },
   }))(MuiExpansionPanelDetails)
 
-  interface ResolutionProps {
-    open: boolean
-    selectedValue: string
-    onClose: (value: string) => void
-  }
-
-  const testResolutions = [
-    "Not set",
-    "Test is flaky",
-    "Product defect",
-    "Test needs to be updated",
-    "To investigate",
-  ]
-
-  const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
-  const [selectedResolutionValue, setSelectedResolutionValue] = React.useState(
-    testResolutions[0]
-  )
-
-  const handleResolutionDialogOpen = () => {
-    setOpenResolutionDialog(true)
-  }
-
-  const handleResolutionDialogClose = (value: string) => {
-    setOpenResolutionDialog(false)
-    setSelectedResolutionValue(value)
-  }
-
-  const setTestResolution = (props: ResolutionProps, testHistoryId) => {
-    const { onClose, selectedValue, open } = props
-
-    const handleClose = () => {
-      onClose(selectedValue)
-    }
-
-    async function handleListItemClick(resolution: string) {
-      // POST request using fetch with async/await
-
-      const url = "http://localhost:5000/api/v1/test_history_resolution" // site that doesn’t send Access-Control-*
-      fetch(url)
-        .then(response => response.text())
-        .then(contents => console.log(contents))
-        .catch(() =>
-          console.log("Can’t access " + url + " response. Blocked by browser?")
-        )
-
-      // const requestOptions = {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     test_history_id: testHistoryId,
-      //     test_resolution: resolution,
-      //   }),
-      // }
-      // const response = await fetch(
-      //   `http://localhost:5000/api/v1/test_history_resolution`,
-      //   requestOptions
-      // )
-      // const data = await response.json()
-      // onClose(data)
-    }
-
-    return (
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby="simple-dialog-title"
-        open={open}
-      >
-        <DialogTitle id="simple-dialog-title">Set resolution:</DialogTitle>
-        <List>
-          {testResolutions.map(resolution => (
-            <ListItem
-              button
-              onClick={() => handleListItemClick(resolution)}
-              key={resolution}
-            >
-              <ListItemText primary={resolution} />
-            </ListItem>
-          ))}
-        </List>
-      </Dialog>
-    )
-  }
-
   const [historyTabValue, setHistoryTabValue] = React.useState(0)
+
   const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
     setHistoryTabValue(newValue)
   }
 
-  // TEST
+  const [appState, setAppState] = useState({
+    loading: false,
+    resolution: null,
+  })
 
-  // function setResponce(responce) {
-  //   return <h1>This is your data {responce}</h1>
-  // }
+  const showTheResolutionResponse = function(props) {
+    const { resolution } = props
 
-  // function componentDidMount() {
-  //   const apiUrl = "https://delta-core.dsch.dev/api/v1/projects"
-  //   let responce
-  //   fetch(apiUrl)
-  //     .then(response => response.json())
-  //     .then(data => setResponce(data))
-  // }
+    useEffect(() => {
+      axios
+        .put("https://delta-core.dsch.dev/api/v1/test_history_resolution", {
+          test_history_id: 1529,
+          test_resolution: "Test Issue",
+        })
+        .then(resolution => {
+          const allRepos = resolution.data
+          setAppState({ loading: false, resolution: allRepos })
+        })
+    }, [setAppState])
 
-  // TEST
+    if (!resolution || resolution.length === 0) {
+      return <p>No resolution available</p>
+    }
+    return <p>{resolution.message} </p>
+  }
 
   function handleResolutionLoading(Component) {
     return function handleResolutionLoadingComponent({ isLoading, ...props }) {
@@ -262,29 +179,7 @@ export const TestInfoSection = function(props: TestProps) {
     }
   }
 
-  const showTheResolutionResponse = function(props) {
-    const { resolution } = props
-    // this is for when the page loads and the call for resolution haven't been made yet
-    if (!resolution || resolution.length === 0) {
-      return <p>No resolution available</p>
-    }
-    return <p>{resolution[0].name} </p>
-  }
-
   const LoadResolution = handleResolutionLoading(showTheResolutionResponse)
-  const [appState, setAppState] = useState({
-    loading: false,
-    resolution: null,
-  })
-
-  useEffect(() => {
-    const apiUrl = `https://delta-core.dsch.dev/api/v1/projects`
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(resolutionResponse => {
-        setAppState({ loading: false, resolution: resolutionResponse })
-      })
-  }, [setAppState])
 
   return (
     <div key={children.test_history_id} className={classes.root}>
@@ -292,86 +187,65 @@ export const TestInfoSection = function(props: TestProps) {
         isLoading={appState.loading}
         resolution={appState.resolution}
       />
-
       <Typography className={classes.bigMargin}>
         Full path:
         <span style={{ color: "grey" }}> {children.name}</span>
       </Typography>
-      {/* {children.message ? ( // if there is any error message - show the info, else - test passed */}
-      <Paper className={classes.paperNoPadding} elevation={0}>
-        <AppBar
-          style={{ backgroundColor: "white", border: "none" }}
-          variant="outlined"
-          position="relative"
-          className={classes.tabs}
-        >
-          <Tabs
-            value={historyTabValue}
-            onChange={handleTabChange}
-            indicatorColor="primary"
-            textColor="secondary"
-            variant="fullWidth"
-            aria-label="full width tabs example"
+      {children.message ? ( // if there is any error message - show the info, else - test passed
+        <Paper className={classes.paperNoPadding} elevation={0}>
+          <AppBar
+            style={{ backgroundColor: "white", border: "none" }}
+            variant="outlined"
+            position="relative"
+            className={classes.tabs}
           >
-            <Tab label="Error" {...a11yProps(0)} />
-            <Tab label="Test History" {...a11yProps(1)} />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={historyTabValue} index={0}>
-          <ErrorMessagePanel
-            key={children.test_history_id}
-            expanded={expandedErrorMessage === children.message}
-            onChange={expandCollapseErrorMessage(children.message)}
-            TransitionProps={{ unmountOnExit: true }}
-          >
-            <ErrorMessageCollapsedLineSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel3bh-content"
+            <Tabs
+              value={historyTabValue}
+              onChange={handleTabChange}
+              indicatorColor="primary"
+              textColor="secondary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
             >
-              <Typography color="textPrimary">{children.message}</Typography>
-            </ErrorMessageCollapsedLineSummary>
-            <ErrorMessagePanelDetails>
-              <List>
-                <ListItem button>
-                  {" "}
-                  {children.error_type}
-                  {children.trace}
-                  {children.retries}
-                </ListItem>
-              </List>
-            </ErrorMessagePanelDetails>
-          </ErrorMessagePanel>
-          <div>
-            <Typography className={classes.bigMargin}>
-              <Button
-                // disabled
-                variant="outlined"
-                color="primary"
-                onClick={handleResolutionDialogOpen}
-                className={classes.bigMargin}
+              <Tab label="Error" id="tab-0" />
+              <Tab label="Test History" id="tab-1" />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={historyTabValue} index={0}>
+            <ErrorMessagePanel
+              key={children.test_history_id}
+              expanded={expandedErrorMessage === children.message}
+              onChange={expandCollapseErrorMessage(children.message)}
+              TransitionProps={{ unmountOnExit: true }}
+            >
+              <ErrorMessageCollapsedLineSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3bh-content"
               >
-                Set test resolution
-              </Button>{" "}
-              <span style={{ marginLeft: "15px" }}>Selected: </span>
-              <span style={{ color: "grey", fontStyle: "italic" }}>
-                {selectedResolutionValue}
-              </span>
-            </Typography>
-            {/* <setTestResolution
-              open={openResolutionDialog}
-              selectedValue={selectedResolutionValue}
-              onClose={handleResolutionDialogClose}
-              {...children.test_history_id}
-            /> */}
-          </div>
-        </TabPanel>
-        <TabPanel value={historyTabValue} index={1}>
-          TODO: Historical info for this test {children.test_id}
-        </TabPanel>
-      </Paper>
-      {/* ) : ( */}
-      {/* <div></div> */}
-      {/* )} */}
+                <Typography color="textPrimary">{children.message}</Typography>
+              </ErrorMessageCollapsedLineSummary>
+              <ErrorMessagePanelDetails>
+                <List>
+                  <ListItem button>
+                    {" "}
+                    {children.error_type}
+                    {children.trace}
+                    {children.retries}
+                  </ListItem>
+                </List>
+              </ErrorMessagePanelDetails>
+            </ErrorMessagePanel>
+            <div>
+              <Typography className={classes.bigMargin}></Typography>
+            </div>
+          </TabPanel>
+          <TabPanel value={historyTabValue} index={1}>
+            Historical info for this test {children.test_id}
+          </TabPanel>
+        </Paper>
+      ) : (
+        <div></div>
+      )}
     </div>
   )
 }
