@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/DeltaReporter/Delta%20Reporter/_apis/build/status/delta-reporter.delta-frontend?branchName=master)](https://dev.azure.com/DeltaReporter/Delta%20Reporter/_build/latest?definitionId=3&branchName=master)
+
 # Delta Reporter - Frontend
 
 The frontend for Delta Reporter is designed with the intention to provide enough flexibility to be deployed both on normal servers or on serverless cloud services
