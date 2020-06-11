@@ -1,7 +1,7 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../../pages/index"
-import { TestInfoSection } from "../templates"
+import { TestInfoSection, showStatusIcon, showTestStats } from "../templates"
 
 import {
   ExpansionPanel,
@@ -10,13 +10,8 @@ import {
   List,
   ListItem,
   ExpansionPanelDetails,
-  Tooltip,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import CheckIcon from "@material-ui/icons/Check"
-import CloseIcon from "@material-ui/icons/Close"
-import TripOriginIcon from "@material-ui/icons/TripOrigin"
-import UseAnimations from "react-useanimations"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,134 +57,6 @@ export const SuitesAndTestsList = function(props: Props) {
     } else return testName
   }
 
-  function setStatusColor(status) {
-    let statusIcon
-    if (status === "Passed" || status === "Successful") {
-      statusIcon = (
-        <CheckIcon
-          style={{
-            color: "green",
-          }}
-        ></CheckIcon>
-      )
-    } else if (status === "Failed") {
-      statusIcon = (
-        <CloseIcon
-          style={{
-            color: "red",
-          }}
-        ></CloseIcon>
-      )
-    } else if (status === "Skipped" || status === "Incomplete") {
-      statusIcon = (
-        <TripOriginIcon
-          style={{
-            color: "grey",
-          }}
-        ></TripOriginIcon>
-      )
-    } else if (status === "Running") {
-      statusIcon = (
-        <UseAnimations
-          animationKey="loading"
-          style={{
-            color: "orange",
-          }}
-        />
-      )
-    } else {
-      statusIcon = (
-        <Typography
-          style={{
-            color: "grey",
-          }}
-        >
-          {status}
-        </Typography>
-      )
-    }
-    return statusIcon
-  }
-
-  function showStats(passed, failed, incomplete, skipped) {
-    return (
-      <div style={{ position: "absolute", right: "120px" }}>
-        {passed !== 0 ? (
-          <Tooltip title="Passed">
-            <span
-              style={{
-                borderStyle: "ridge",
-                borderColor: "green",
-                color: "green",
-                padding: "3px",
-                margin: "3px",
-                fontWeight: "bold",
-              }}
-            >
-              {passed}
-            </span>
-          </Tooltip>
-        ) : (
-          <span></span>
-        )}
-        {failed !== 0 ? (
-          <Tooltip title="Failed">
-            <span
-              style={{
-                borderStyle: "ridge",
-                borderColor: "red",
-                color: "red",
-                padding: "3px",
-                margin: "3px",
-                fontWeight: "bold",
-              }}
-            >
-              {failed}
-            </span>
-          </Tooltip>
-        ) : (
-          <span></span>
-        )}
-        {incomplete !== 0 ? (
-          <Tooltip title="Incomplete">
-            <span
-              style={{
-                borderStyle: "ridge",
-                borderColor: "orange",
-                color: "orange",
-                padding: "3px",
-                margin: "3px",
-                fontWeight: "bold",
-              }}
-            >
-              {incomplete}
-            </span>
-          </Tooltip>
-        ) : (
-          <span></span>
-        )}
-        {skipped !== 0 ? (
-          <Tooltip title="Skipped">
-            <span
-              style={{
-                borderStyle: "ridge",
-                borderColor: "grey",
-                color: "grey",
-                padding: "3px",
-                margin: "3px",
-                fontWeight: "bold",
-              }}
-            >
-              {skipped}
-            </span>
-          </Tooltip>
-        ) : (
-          <span></span>
-        )}
-      </div>
-    )
-  }
-
   return (
     <div>
       {children.map(testRun => (
@@ -205,11 +72,11 @@ export const SuitesAndTestsList = function(props: Props) {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
               >
-                {setStatusColor(suite.test_suite_status)}
+                {showStatusIcon(suite.test_suite_status)}
                 <Typography className={classes.suiteStatus} color="textPrimary">
                   {suite.name}
                 </Typography>
-                {showStats(
+                {showTestStats(
                   suite.tests_passed,
                   suite.tests_failed,
                   suite.tests_incomplete,
@@ -239,7 +106,7 @@ export const SuitesAndTestsList = function(props: Props) {
                           expandIcon={<ExpandMoreIcon />}
                           aria-controls="panel2bh-content"
                         >
-                          {setStatusColor(test.status)}
+                          {showStatusIcon(test.status)}
                           <Typography
                             className={classes.suiteStatus}
                             color="textPrimary"

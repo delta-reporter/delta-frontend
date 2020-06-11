@@ -58,12 +58,6 @@ function Tests(props: Props) {
             >
               Launches
             </Link>
-            <Link
-              color="inherit"
-              href={`/testruns/${props.test_history[0].launch_id}`}
-            >
-              Test Runs
-            </Link>
             <Typography color="textPrimary">Tests</Typography>
           </Breadcrumbs>
           <Container maxWidth="lg" className={classes.container}>
