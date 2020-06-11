@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   },
   tabs: {
     marginTop: theme.spacing(1),
-    width: "30%",
+    width: "40%",
   },
   backgroundColor: {
     maxWidth: "50",
@@ -77,13 +77,6 @@ function TabPanel(props: TabPanelProps) {
       {value === index && <Box p={3}>{children}</Box>}
     </Typography>
   )
-}
-
-function a11yProps(index: any) {
-  return {
-    id: `tab-${index}`,
-    "aria-controls": `tabpanel-${index}`,
-  }
 }
 
 interface TestProps {
@@ -150,6 +143,7 @@ export const TestInfoSection = function(props: TestProps) {
     open: boolean
     selectedValue: string
     onClose: (value: string) => void
+    testHistoryId: string | number
   }
 
   const testResolutions = [
@@ -161,7 +155,7 @@ export const TestInfoSection = function(props: TestProps) {
   ]
 
   const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
-  const [selectedResolutionValue, setSelectedResolutionValue] = React.useState(
+  const [resolutionResponse, setResolutionResponse] = React.useState(
     testResolutions[0]
   )
 
@@ -171,32 +165,34 @@ export const TestInfoSection = function(props: TestProps) {
 
   const handleResolutionDialogClose = (value: string) => {
     setOpenResolutionDialog(false)
-    setSelectedResolutionValue(value)
+    setResolutionResponse(value)
   }
 
-  function SetTestResolution(props: ResolutionProps, testHistoryId) {
-    const { onClose, selectedValue, open } = props
+  function SetTestResolution(props: ResolutionProps) {
+    const { onClose, selectedValue, open, testHistoryId } = props
 
     const handleClose = () => {
       onClose(selectedValue)
     }
 
     const handleListItemClick = async (resolution: string) => {
-      // POST request using fetch with async/await
+      // PUT request using fetch with async/await
       const requestOptions = {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           test_history_id: testHistoryId,
           test_resolution: resolution,
         }),
       }
+      console.log(requestOptions)
+
       const response = await fetch(
         `${process.env.deltaCore}/api/v1/test_history_resolution`,
         requestOptions
       )
       const data = await response.json()
-      onClose(data)
+      onClose(data.message)
     }
 
     return (
@@ -248,8 +244,8 @@ export const TestInfoSection = function(props: TestProps) {
               variant="fullWidth"
               aria-label="full width tabs example"
             >
-              <Tab label="Error" {...a11yProps(0)} />
-              <Tab label="Test History" {...a11yProps(1)} />
+              <Tab label="Error" id="tab-0" />
+              <Tab label="Test History" id="tab-1" />
             </Tabs>
           </AppBar>
           <TabPanel value={historyTabValue} index={0}>
@@ -259,10 +255,7 @@ export const TestInfoSection = function(props: TestProps) {
               onChange={expandCollapseErrorMessage(children.message)}
               TransitionProps={{ unmountOnExit: true }}
             >
-              <ErrorMessageCollapsedLineSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel3bh-content"
-              >
+              <ErrorMessageCollapsedLineSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography color="textPrimary">{children.message}</Typography>
               </ErrorMessageCollapsedLineSummary>
               <ErrorMessagePanelDetails>
@@ -279,7 +272,6 @@ export const TestInfoSection = function(props: TestProps) {
             <div>
               <Typography className={classes.bigMargin}>
                 <Button
-                  disabled
                   variant="outlined"
                   color="primary"
                   onClick={handleResolutionDialogOpen}
@@ -287,16 +279,16 @@ export const TestInfoSection = function(props: TestProps) {
                 >
                   Set test resolution
                 </Button>{" "}
-                <span style={{ marginLeft: "15px" }}>Selected: </span>
                 <span style={{ color: "grey", fontStyle: "italic" }}>
-                  {selectedResolutionValue}
+                  {resolutionResponse}
                 </span>
+                {/* <span style={{ marginLeft: "15px" }}>Selected: </span> */}
               </Typography>
               <SetTestResolution
                 open={openResolutionDialog}
-                selectedValue={selectedResolutionValue}
+                selectedValue={resolutionResponse}
                 onClose={handleResolutionDialogClose}
-                {...children.test_history_id}
+                testHistoryId={children.test_history_id}
               />
             </div>
           </TabPanel>

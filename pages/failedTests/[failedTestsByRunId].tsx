@@ -49,9 +49,6 @@ function Tests(props: Props) {
         <Link color="inherit" href={`/launches/1`}>
           Launches
         </Link>
-        <Link color="inherit" href={`/testruns/1`}>
-          Test Runs
-        </Link>
         <Typography color="textPrimary">Tests</Typography>
       </Breadcrumbs>
       <Container maxWidth="lg" className={classes.container}>
@@ -80,6 +77,10 @@ function Tests(props: Props) {
     </BasePage>
   )
 }
+
+// It runs  on the server-side, making a request before page is loaded.
+// The data required to render the page is available at build time ahead of a user’s request
+// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
 
 Tests.getInitialProps = async (context): Promise<Props> => {
   const { failedTestsByRunId } = context.query

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { BasePage } from "../../components/templates/BasePage"
-import LaunchesPagination from "../../components/templates/Pagination"
+import { BasePage, showStatusIcon } from "../../components/templates"
 import { TestLaunch } from "../index"
 import {
   Container,
@@ -18,9 +17,7 @@ import {
   Breadcrumbs,
   Button,
 } from "@material-ui/core"
-import CheckIcon from "@material-ui/icons/Check"
-import CloseIcon from "@material-ui/icons/Close"
-import UseAnimations from "react-useanimations"
+import Pagination from "../../components/templates/Pagination"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -35,47 +32,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
 }))
-
-function setStatusColor(status) {
-  let statusIcon
-  if (status === "Successful") {
-    statusIcon = (
-      <CheckIcon
-        style={{
-          color: "green",
-        }}
-      ></CheckIcon>
-    )
-  } else if (status === "Failed") {
-    statusIcon = (
-      <CloseIcon
-        style={{
-          color: "red",
-        }}
-      ></CloseIcon>
-    )
-  } else if (status === "In Process") {
-    statusIcon = (
-      <UseAnimations
-        animationKey="loading"
-        style={{
-          color: "orange",
-        }}
-      />
-    )
-  } else {
-    statusIcon = (
-      <Typography
-        style={{
-          color: "grey",
-        }}
-      >
-        {status}
-      </Typography>
-    )
-  }
-  return statusIcon
-}
 
 type Props = {
   launches: TestLaunch[]
@@ -141,7 +97,7 @@ function Launches(props: Props) {
                         <TableRow key={launch.launch_id} hover>
                           <TableCell>
                             {" "}
-                            {setStatusColor(launch.launch_status)}
+                            {showStatusIcon(launch.launch_status)}
                           </TableCell>
                           <TableCell>{launch.name}</TableCell>
                           <TableCell>
@@ -161,9 +117,9 @@ function Launches(props: Props) {
                                 {testRun.test_type}{" "}
                                 {testRun.tests_total ===
                                 testRun.tests_passed + testRun.tests_skipped ? (
-                                  <div> {setStatusColor("Successful")} </div>
+                                  <div> {showStatusIcon("Successful")} </div>
                                 ) : (
-                                  <div>{setStatusColor("Failed")} </div>
+                                  <div>{showStatusIcon("Failed")} </div>
                                 )}{" "}
                               </Button>
                             ))}
@@ -172,7 +128,7 @@ function Launches(props: Props) {
                       ))}
                     </TableBody>{" "}
                   </Table>
-                  <LaunchesPagination
+                  <Pagination
                     itemsPerPage={launchesPerPage}
                     totalNumber={launchesList.length}
                     paginate={paginate}
@@ -189,6 +145,10 @@ function Launches(props: Props) {
     </BasePage>
   )
 }
+
+// It runs  on the server-side, making a request before page is loaded.
+// The data required to render the page is available at build time ahead of a user’s request
+// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
 
 Launches.getInitialProps = async (context): Promise<Props> => {
   const { launchesByProjectId } = context.query

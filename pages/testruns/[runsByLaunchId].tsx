@@ -1,7 +1,7 @@
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { TestRun } from "../index"
-import { BasePage } from "../../components/templates/BasePage"
+import { BasePage, showStatusIcon } from "../../components/templates"
 import {
   Container,
   Grid,
@@ -15,9 +15,6 @@ import {
   Link,
   Breadcrumbs,
 } from "@material-ui/core"
-import UseAnimations from "react-useanimations"
-import CheckIcon from "@material-ui/icons/Check"
-import CloseIcon from "@material-ui/icons/Close"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -32,47 +29,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
 }))
-
-function setStatusColor(status) {
-  let statusIcon
-  if (status === "Passed") {
-    statusIcon = (
-      <CheckIcon
-        style={{
-          color: "green",
-        }}
-      ></CheckIcon>
-    )
-  } else if (status === "Failed") {
-    statusIcon = (
-      <CloseIcon
-        style={{
-          color: "red",
-        }}
-      ></CloseIcon>
-    )
-  } else if (status === "Running") {
-    statusIcon = (
-      <UseAnimations
-        animationKey="loading"
-        style={{
-          color: "orange",
-        }}
-      />
-    )
-  } else {
-    statusIcon = (
-      <Typography
-        style={{
-          color: "grey",
-        }}
-      >
-        {status}
-      </Typography>
-    )
-  }
-  return statusIcon
-}
 
 function setTestTypeBadge(testType) {
   let badge
@@ -149,7 +105,7 @@ function Testruns(props: Props) {
                       {props.test_runs.map(testRun => (
                         <TableRow key={testRun.test_run_id} hover>
                           <TableCell>
-                            {setStatusColor(testRun.test_run_status)}
+                            {showStatusIcon(testRun.test_run_status)}
                           </TableCell>
                           <TableCell>
                             {setTestTypeBadge(testRun.test_type)}
