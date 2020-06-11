@@ -1,17 +1,17 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../../pages/index"
-import { TestInfoSection, showStatusIcon, showTestStats } from "../templates"
+import { showStatusIcon, showTestStats } from "../templates"
 
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
   List,
-  ListItem,
   ExpansionPanelDetails,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import { TestsList } from "./TestsList"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,36 +90,7 @@ export const SuitesAndTestsList = function(props: Props) {
                   className={classes.root}
                   dense
                 >
-                  {suite.tests.map(test => (
-                    <ListItem
-                      key={test.test_history_id}
-                      className={classes.root}
-                    >
-                      <ExpansionPanel
-                        className={classes.root}
-                        key={test.test_history_id}
-                        expanded={expandedTest === test.name}
-                        onChange={expandCollapseTest(test.name)}
-                        TransitionProps={{ unmountOnExit: true }}
-                      >
-                        <ExpansionPanelSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls="panel2bh-content"
-                        >
-                          {showStatusIcon(test.status)}
-                          <Typography
-                            className={classes.suiteStatus}
-                            color="textPrimary"
-                          >
-                            {getTestName(test.name)}
-                          </Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                          <TestInfoSection>{test}</TestInfoSection>
-                        </ExpansionPanelDetails>
-                      </ExpansionPanel>
-                    </ListItem>
-                  ))}
+                  <TestsList>{suite.tests}</TestsList>
                 </List>
               </ExpansionPanelDetails>
             </ExpansionPanel>

@@ -1,8 +1,12 @@
 import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { Test } from "../index"
-import { BasePage, TestsList } from "../../components/templates"
+import { Test, SuiteAndTest } from "../index"
+import {
+  BasePage,
+  TestsList,
+  SuitesAndTestsList,
+} from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -10,6 +14,7 @@ import {
   Typography,
   Link,
   Breadcrumbs,
+  List,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -30,10 +35,14 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
     flexDirection: "column",
   },
+  padding: {
+    paddingBottom: theme.spacing(1),
+    paddingLeft: "80%",
+  },
 }))
 
 type Props = {
-  tests: Test[]
+  test_history: SuiteAndTest[]
 }
 
 function Tests(props: Props) {
@@ -41,19 +50,28 @@ function Tests(props: Props) {
 
   return (
     <BasePage className={classes.root}>
-      <title>Δ | Tests</title>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href={`/`}>
-          Projects
-        </Link>
-        <Link color="inherit" href={`/launches/1`}>
-          Launches
-        </Link>
-        <Typography color="textPrimary">Tests</Typography>
-      </Breadcrumbs>
-      <Container maxWidth="lg" className={classes.container}>
-        {props.tests[0] ? ( // checking if props exist (if there are tests for this run)
-          <div>
+      <title>Δ | Failed Tests</title>
+      {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
+        <div>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="inherit" href={`/`}>
+              Projects
+            </Link>
+            <Link
+              color="inherit"
+              href={`/launches/${props.test_history[0].project_id}`}
+            >
+              Launches
+            </Link>
+            <Link
+              color="inherit"
+              href={`/tests/${props.test_history[0].test_run_id}`}
+            >
+              All Tests
+            </Link>
+            <Typography color="textPrimary">Failed Tests</Typography>
+          </Breadcrumbs>
+          <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
@@ -63,17 +81,41 @@ function Tests(props: Props) {
                     color="primary"
                     gutterBottom
                   >
-                    Failed Tests
+                    Failed tests for
+                    <Link underline="always">
+                      {" "}
+                      {props.test_history[0].test_type}
+                    </Link>{" "}
+                    run
                   </Typography>
-                  <TestsList>{props.tests}</TestsList>
+                  <Link
+                    underline="always"
+                    className={classes.padding}
+                    href={`/tests/${props.test_history[0].test_run_id}`}
+                  >
+                    Show All Tests
+                  </Link>
+                  {props.test_history.map(testRun => (
+                    <div key={testRun.test_run_id}>
+                      {testRun.test_suites.map(suite => (
+                        <List
+                          key={suite.test_suite_history_id}
+                          className={classes.root}
+                          dense
+                        >
+                          <TestsList>{suite.tests}</TestsList>
+                        </List>
+                      ))}
+                    </div>
+                  ))}
                 </Paper>
               </Grid>
-            </Grid>{" "}
-          </div>
-        ) : (
-          <h1>No failed tests here! </h1>
-        )}
-      </Container>
+            </Grid>
+          </Container>
+        </div>
+      ) : (
+        <h1>No suites were found for this run! </h1>
+      )}
     </BasePage>
   )
 }
@@ -95,7 +137,7 @@ Tests.getInitialProps = async (context): Promise<Props> => {
   const failedTests = await testsByTestRunIdReq.json()
 
   return {
-    tests: failedTests,
+    test_history: failedTests,
   }
 }
 

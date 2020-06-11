@@ -83,7 +83,7 @@ interface TestProps {
   children: any
 }
 
-export const TestInfoSection = function(props: TestProps) {
+export const TestExpanded = function(props: TestProps) {
   const { children } = props
   const classes = useStyles(props)
 
