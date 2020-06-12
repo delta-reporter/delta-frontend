@@ -1,12 +1,8 @@
 import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { Test, SuiteAndTest } from "../index"
-import {
-  BasePage,
-  TestsList,
-  SuitesAndTestsList,
-} from "../../components/templates"
+import { SuiteAndTest } from "../index"
+import { BasePage, TestsList } from "../../components/templates"
 import {
   Grid,
   Paper,
