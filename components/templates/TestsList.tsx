@@ -1,7 +1,6 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Test } from "../../pages/index"
-import { TestExpanded, showStatusIcon, showTestStats } from "../templates"
+import { TestExpanded, showStatusIcon } from "../templates"
 
 import {
   ExpansionPanel,

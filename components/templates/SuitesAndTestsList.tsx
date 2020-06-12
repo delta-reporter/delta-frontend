@@ -43,20 +43,6 @@ export const SuitesAndTestsList = function(props: Props) {
     setExpandedSuite(isExpanded ? suitePanel : false)
   }
 
-  const [expandedTest, setExpandedTest] = React.useState<string | false>(false)
-  const expandCollapseTest = (testPanel: string) => (
-    _event: React.ChangeEvent<{}>,
-    isExpanded: boolean
-  ) => {
-    setExpandedTest(isExpanded ? testPanel : false)
-  }
-
-  function getTestName(testName) {
-    if (testName.includes(":")) {
-      return testName.split(":")[1]
-    } else return testName
-  }
-
   return (
     <div>
       {children.map(testRun => (
