@@ -172,13 +172,19 @@ function Launches(props: Props) {
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Typography
-                component="h2"
                 variant="h6"
-                color="primary"
-                gutterBottom
+                color="secondary"
+                style={{ fontWeight: 400, margin: "5px" }}
               >
                 Launches for{" "}
-                <Link underline="always"> {props.launches[0].project}</Link>{" "}
+                <Link
+                  style={{ color: "#605959" }}
+                  underline="none"
+                  color="secondary"
+                >
+                  {" "}
+                  {props.launches[0].project}
+                </Link>{" "}
                 project
               </Typography>
               {props.launches[0] ? ( // checking if props exist

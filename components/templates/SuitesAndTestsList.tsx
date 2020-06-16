@@ -20,8 +20,6 @@ const useStyles = makeStyles(theme => ({
   },
   suiteStatus: {
     paddingLeft: theme.spacing(4),
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
   },
 }))
 
@@ -54,12 +52,17 @@ export const SuitesAndTestsList = function(props: Props) {
               onChange={expandCollapseSuite(suite.name)}
               TransitionProps={{ unmountOnExit: true }}
             >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-              >
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 {showStatusIcon(suite.test_suite_status)}
-                <Typography className={classes.suiteStatus} color="textPrimary">
+                <Typography
+                  className={classes.suiteStatus}
+                  style={{
+                    fontSize: "0.875rem",
+                    textAlign: "left",
+                    fontFamily: "Roboto",
+                    fontWeight: 400,
+                  }}
+                >
                   {suite.name}
                 </Typography>
                 {showTestStats(

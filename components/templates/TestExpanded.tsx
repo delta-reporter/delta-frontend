@@ -256,11 +256,19 @@ export const TestExpanded = function(props: TestProps) {
               TransitionProps={{ unmountOnExit: true }}
             >
               <ErrorMessageCollapsedLineSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography color="textPrimary">{children.message}</Typography>
+                <Typography
+                  color="textPrimary"
+                  style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
+                >
+                  {children.message}
+                </Typography>
               </ErrorMessageCollapsedLineSummary>
               <ErrorMessagePanelDetails>
                 <List>
-                  <ListItem button>
+                  <ListItem
+                    style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
+                    button
+                  >
                     {" "}
                     {children.error_type}
                     {children.trace}
