@@ -4,6 +4,5 @@ module.exports = withCSS({
     target: 'serverless',
     env: {
       deltaCore: process.env.DELTA_CORE_URL, // getting these env vars from docker-compose
-      deltaCorePublic: process.env.PUBLIC_DELTA_CORE_URL,
     },
   })

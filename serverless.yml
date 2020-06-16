@@ -4,4 +4,3 @@ deltaFrontend:
     build:
         env:
             DELTA_CORE_URL: ${env.DELTA_CORE_URL}
-            PUBLIC_DELTA_CORE_URL: ${env.PUBLIC_DELTA_CORE_URL}

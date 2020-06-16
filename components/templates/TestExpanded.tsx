@@ -188,7 +188,7 @@ export const TestExpanded = function(props: TestProps) {
       console.log(requestOptions)
 
       const response = await fetch(
-        `${process.env.deltaCorePublic}/api/v1/test_history_resolution`,
+        `${process.env.deltaCore}/api/v1/test_history_resolution`,
         requestOptions
       )
       const data = await response.json()
