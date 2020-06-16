@@ -16,8 +16,13 @@ import {
   Link,
   Breadcrumbs,
   Button,
+  Tooltip,
+  Snackbar,
+  IconButton,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
+import StopIcon from "@material-ui/icons/Stop"
+import CloseIcon from "@material-ui/icons/Close"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -59,6 +64,84 @@ function Launches(props: Props) {
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber)
 
+  const [openPopUp, setOpenPopUp] = React.useState(false)
+
+  const handleStopButtonClick = async (launchId: string | number) => {
+    // PUT request using fetch with async/await
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        launch_id: launchId,
+      }),
+    }
+    console.log(requestOptions)
+
+    const response = await fetch(
+      `${process.env.deltaCore}/api/v1/finish_launch`,
+      requestOptions
+    )
+    await response.json()
+    setOpenPopUp(true)
+  }
+
+  const handlePopUpClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return
+    }
+
+    setOpenPopUp(false)
+  }
+
+  function addStopLaunchButton(status, launchId) {
+    let stopButton = <div></div>
+    if (status === "Running" || status === "In Process") {
+      stopButton = (
+        <Tooltip title="Stop this launch">
+          <div>
+            <IconButton
+            size="small"
+              style={{
+                blockSize: "1px",
+                paddingLeft: "0px",
+                paddingRight: "0px",
+              }}
+              onClick={() => handleStopButtonClick(launchId)}
+            >
+              <StopIcon
+                style={{
+                  color: "grey",
+                }}
+              />
+            </IconButton>
+            <Snackbar
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              open={openPopUp}
+              autoHideDuration={6000}
+              message="Launch is marked as finished. Changes will be visible after page reload"
+              onClose={handlePopUpClose}
+              action={
+                <React.Fragment>
+                  <IconButton
+                    size="small"
+                    color="inherit"
+                    onClick={handlePopUpClose}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </React.Fragment>
+              }
+            />
+          </div>
+        </Tooltip>
+      )
+    }
+    return stopButton
+  }
+
   return (
     <BasePage className={classes.root}>
       <title>Δ | Launches</title>
@@ -90,19 +173,26 @@ function Launches(props: Props) {
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {currentLaunches.map(launch => (
                         <TableRow key={launch.launch_id} hover>
                           <TableCell>
-                            {" "}
                             {showStatusIcon(launch.launch_status)}
+                          </TableCell>
+                          <TableCell>
+                            {addStopLaunchButton(
+                              launch.launch_status,
+                              launch.launch_id
+                            )}
                           </TableCell>
                           <TableCell>{launch.name}</TableCell>
                           <TableCell>
                             {launch.test_run_stats.map(testRun => (
                               <Button
+                                key={testRun.test_run_id}
                                 variant="contained"
                                 href={`/tests/${testRun.test_run_id}`}
                                 style={{
