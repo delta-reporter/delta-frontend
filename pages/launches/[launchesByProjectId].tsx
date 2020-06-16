@@ -93,26 +93,42 @@ function Launches(props: Props) {
     setOpenPopUp(false)
   }
 
-  function addStopLaunchButton(status, launchId) {
-    let stopButton = <div></div>
+  const [isHovered, setIsHovered] = React.useState(false)
+
+  const hoverOn = () => {
+    setIsHovered(true)
+  }
+
+  const hoverOff = () => {
+    setIsHovered(false)
+  }
+
+  function showStatusAndEnableToStopRunningLaunch(status, launchId) {
+    let statusIcon = <div></div>
     if (status === "Running" || status === "In Process") {
-      stopButton = (
+      statusIcon = (
         <Tooltip title="Stop this launch">
           <div>
             <IconButton
-            size="small"
+              size="small"
               style={{
                 blockSize: "1px",
                 paddingLeft: "0px",
                 paddingRight: "0px",
               }}
               onClick={() => handleStopButtonClick(launchId)}
+              onMouseEnter={hoverOn}
+              onMouseLeave={hoverOff}
             >
-              <StopIcon
-                style={{
-                  color: "grey",
-                }}
-              />
+              {isHovered ? (
+                <StopIcon
+                  style={{
+                    color: "grey",
+                  }}
+                />
+              ) : (
+                showStatusIcon(status)
+              )}
             </IconButton>
             <Snackbar
               anchorOrigin={{
@@ -120,7 +136,7 @@ function Launches(props: Props) {
                 horizontal: "left",
               }}
               open={openPopUp}
-              autoHideDuration={6000}
+              autoHideDuration={4000}
               message="Launch is marked as finished. Changes will be visible after page reload"
               onClose={handlePopUpClose}
               action={
@@ -138,8 +154,8 @@ function Launches(props: Props) {
           </div>
         </Tooltip>
       )
-    }
-    return stopButton
+    } else statusIcon = showStatusIcon(status)
+    return statusIcon
   }
 
   return (
@@ -173,17 +189,13 @@ function Launches(props: Props) {
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
-                        <TableCell></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {currentLaunches.map(launch => (
                         <TableRow key={launch.launch_id} hover>
                           <TableCell>
-                            {showStatusIcon(launch.launch_status)}
-                          </TableCell>
-                          <TableCell>
-                            {addStopLaunchButton(
+                            {showStatusAndEnableToStopRunningLaunch(
                               launch.launch_status,
                               launch.launch_id
                             )}
