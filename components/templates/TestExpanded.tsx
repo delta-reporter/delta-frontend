@@ -87,7 +87,7 @@ export const TestExpanded = function(props: TestProps) {
   const { children } = props
   const classes = useStyles(props)
 
-  const [expandedErrorMessage, setExpandedErrorMessage] = React.useState<
+  const [expandedErrorMessage] = React.useState<
     string | false
   >(false)
   const expandCollapseErrorMessage = (errorMessagePanel: string) => (
