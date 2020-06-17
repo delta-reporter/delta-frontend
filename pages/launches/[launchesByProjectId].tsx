@@ -16,8 +16,13 @@ import {
   Link,
   Breadcrumbs,
   Button,
+  Tooltip,
+  Snackbar,
+  IconButton,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
+import StopIcon from "@material-ui/icons/Stop"
+import CloseIcon from "@material-ui/icons/Close"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -59,6 +64,100 @@ function Launches(props: Props) {
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber)
 
+  const [openPopUp, setOpenPopUp] = React.useState(false)
+
+  const handleStopButtonClick = async (launchId: string | number) => {
+    // PUT request using fetch with async/await
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        launch_id: launchId,
+      }),
+    }
+    console.log(requestOptions)
+
+    const response = await fetch(
+      `${process.env.deltaCore}/api/v1/finish_launch`,
+      requestOptions
+    )
+    await response.json()
+    setOpenPopUp(true)
+  }
+
+  const handlePopUpClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return
+    }
+
+    setOpenPopUp(false)
+  }
+
+  const [isHovered, setIsHovered] = React.useState(false)
+
+  const hoverOn = () => {
+    setIsHovered(true)
+  }
+
+  const hoverOff = () => {
+    setIsHovered(false)
+  }
+
+  function showStatusAndEnableToStopRunningLaunch(status, launchId) {
+    let statusIcon = <div></div>
+    if (status === "Running" || status === "In Process") {
+      statusIcon = (
+        <Tooltip title="Stop this launch">
+          <div>
+            <IconButton
+              size="small"
+              style={{
+                blockSize: "1px",
+                paddingLeft: "0px",
+                paddingRight: "0px",
+              }}
+              onClick={() => handleStopButtonClick(launchId)}
+              onMouseEnter={hoverOn}
+              onMouseLeave={hoverOff}
+            >
+              {isHovered ? (
+                <StopIcon
+                  style={{
+                    color: "grey",
+                  }}
+                />
+              ) : (
+                showStatusIcon(status)
+              )}
+            </IconButton>
+            <Snackbar
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              open={openPopUp}
+              autoHideDuration={4000}
+              message="Launch is marked as finished. Changes will be visible after page reload"
+              onClose={handlePopUpClose}
+              action={
+                <React.Fragment>
+                  <IconButton
+                    size="small"
+                    color="inherit"
+                    onClick={handlePopUpClose}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </React.Fragment>
+              }
+            />
+          </div>
+        </Tooltip>
+      )
+    } else statusIcon = showStatusIcon(status)
+    return statusIcon
+  }
+
   return (
     <BasePage className={classes.root}>
       <title>Δ | Launches</title>
@@ -73,13 +172,19 @@ function Launches(props: Props) {
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Typography
-                component="h2"
                 variant="h6"
-                color="primary"
-                gutterBottom
+                color="secondary"
+                style={{ fontWeight: 400, margin: "5px" }}
               >
                 Launches for{" "}
-                <Link underline="always"> {props.launches[0].project}</Link>{" "}
+                <Link
+                  style={{ color: "#605959" }}
+                  underline="none"
+                  color="secondary"
+                >
+                  {" "}
+                  {props.launches[0].project}
+                </Link>{" "}
                 project
               </Typography>
               {props.launches[0] ? ( // checking if props exist
@@ -96,13 +201,16 @@ function Launches(props: Props) {
                       {currentLaunches.map(launch => (
                         <TableRow key={launch.launch_id} hover>
                           <TableCell>
-                            {" "}
-                            {showStatusIcon(launch.launch_status)}
+                            {showStatusAndEnableToStopRunningLaunch(
+                              launch.launch_status,
+                              launch.launch_id
+                            )}
                           </TableCell>
                           <TableCell>{launch.name}</TableCell>
                           <TableCell>
                             {launch.test_run_stats.map(testRun => (
                               <Button
+                                key={testRun.test_run_id}
                                 variant="contained"
                                 href={`/tests/${testRun.test_run_id}`}
                                 style={{
