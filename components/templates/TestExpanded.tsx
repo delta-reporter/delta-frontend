@@ -1,5 +1,5 @@
 import React from "react"
-import { makeStyles, useTheme } from "@material-ui/core/styles"
+import { makeStyles } from "@material-ui/core/styles"
 import {
   Paper,
   Typography,
@@ -303,47 +303,33 @@ export const TestExpanded = function(props: TestProps) {
           <TabPanel value={historyTabValue} index={2}>
             Media files received for this test
             <Card className={classes.root}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  alt="Screenshot One"
-                  height="1024"
-                  src="http://localhost:5000/api/v1/get_file/325"
-                  title="Screenshot One"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Screenshot One
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    Taken on June16
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActionArea>
-                <CardMedia
-                  component="video"
-                  height="1024"
-                  src="http://localhost:5000/api/v1/get_file/356"
-                  title="Screenshot One"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Video One
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    Taken on June16
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
+              {children.media.map(media => (
+                <CardActionArea>
+                  <CardMedia
+                    component={media.type}
+                    alt={media.filename}
+                    height="1080"
+                    src={
+                      process.env.publicDeltaCore +
+                      "/api/v1/get_file/" +
+                      media.file_id
+                    }
+                    title={media.filename}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {media.filename}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {media.filename}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              ))}
             </Card>
           </TabPanel>
         </Paper>
