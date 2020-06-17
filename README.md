@@ -9,7 +9,7 @@ The frontend for Delta Reporter is designed with the intention to provide enough
 Install it and run:
 
 ```bash
-npm install
+npm instal
 npm run dev
 # or
 yarn
