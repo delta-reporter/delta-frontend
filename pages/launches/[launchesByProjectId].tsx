@@ -85,7 +85,7 @@ function Launches(props: Props) {
     setOpenPopUp(true)
   }
 
-  const handlePopUpClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handlePopUpClose = (_event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return
     }
