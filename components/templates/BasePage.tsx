@@ -98,13 +98,13 @@ type Props = {
 export const BasePage = function(props: Props) {
   const { children, className } = props
   const classes = useStyles(props)
-  const [open, setOpen] = React.useState(true)
+  const [openSideBar, setOpenSideBar] = React.useState(false)
 
   const handleDrawerOpen = () => {
-    setOpen(true)
+    setOpenSideBar(true)
   }
   const handleDrawerClose = () => {
-    setOpen(false)
+    setOpenSideBar(false)
   }
 
   return (
@@ -112,7 +112,7 @@ export const BasePage = function(props: Props) {
       <CssBaseline />
       <AppBar
         position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        className={clsx(classes.appBar, openSideBar && classes.appBarShift)}
       >
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -122,7 +122,7 @@ export const BasePage = function(props: Props) {
             onClick={handleDrawerOpen}
             className={clsx(
               classes.menuButton,
-              open && classes.menuButtonHidden
+              openSideBar && classes.menuButtonHidden
             )}
           >
             <MenuIcon />
@@ -152,9 +152,9 @@ export const BasePage = function(props: Props) {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          paper: clsx(classes.drawerPaper, !openSideBar && classes.drawerPaperClose),
         }}
-        open={open}
+        open={openSideBar}
       >
         <div className={classes.toolbarIcon}>
           <IconButton onClick={handleDrawerClose}>

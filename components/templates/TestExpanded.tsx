@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
   tabs: {
     marginTop: theme.spacing(1),
-    width: "40%",
+    width: "100%",
   },
   backgroundColor: {
     maxWidth: "50",
@@ -227,8 +227,10 @@ export const TestExpanded = function(props: TestProps) {
   }
 
   return (
-    <div key={children.test_history_id} className={classes.root}>
-      <Typography className={classes.bigMargin}>
+    <div key={children.test_history_id} className={classes.root} style={{paddingLeft:"50px"}}>
+       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
+       <div> 
+      <Typography style={{paddingTop:"50px"}}>
         Full path:
         <span style={{ color: "grey" }}> {children.name}</span>
       </Typography>
@@ -343,6 +345,10 @@ export const TestExpanded = function(props: TestProps) {
         </Paper>
       ) : (
         <div></div>
+      )}
+     </div>
+       ) : (
+      <Paper></Paper>
       )}
     </div>
   )
