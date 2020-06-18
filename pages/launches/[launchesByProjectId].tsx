@@ -78,7 +78,7 @@ function Launches(props: Props) {
     console.log(requestOptions)
 
     const response = await fetch(
-      `${process.env.deltaCore}/api/v1/finish_launch`,
+      `${process.env.publicDeltaCore}/api/v1/finish_launch`,
       requestOptions
     )
     await response.json()
