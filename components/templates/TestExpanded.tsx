@@ -224,6 +224,8 @@ export const TestExpanded = function(props: TestProps) {
 
   return (
     <div key={children.test_history_id} className={classes.root}>
+       {children.name ? ( // if there is any error message - show the info, else - test passed
+       <div> 
       <Typography className={classes.bigMargin}>
         Full path:
         <span style={{ color: "grey" }}> {children.name}</span>
@@ -306,6 +308,10 @@ export const TestExpanded = function(props: TestProps) {
         </Paper>
       ) : (
         <div></div>
+      )}
+     </div>
+       ) : (
+        <div>Please select a test</div>
       )}
     </div>
   )

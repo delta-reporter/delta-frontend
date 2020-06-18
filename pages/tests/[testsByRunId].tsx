@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
-import { BasePage, SuitesAndTestsList } from "../../components/templates"
+import { BasePage, showStatusIcon, showTestStats, TestExpanded} from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -10,7 +10,13 @@ import {
   Typography,
   Link,
   Breadcrumbs,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  List,
+  ListItem,
 } from "@material-ui/core"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,20 +40,59 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: "80%",
   },
+  suiteStatus: {
+    paddingLeft: theme.spacing(4),
+  },
 }))
 
 type Props = {
   test_history: SuiteAndTest[]
 }
 
+function SplitPanel() {
+  const [rightSide, setRightSide] = useState([]);
+
+  function changeRightSide(value) {
+    setRightSide(value);
+  }
+
+  return (
+    <div> 
+    <div style={{float:"left", width:"75%"}}>
+      <button  onClick={() => changeRightSide(1)}>1</button>
+      <button onClick={() => changeRightSide(2)}>2</button>
+      ttr;a;aa
+    </div>
+    <div style={{float:"left", width:"25%"}}>
+    <p>{rightSide}</p>
+  </div>
+  </div>
+  );
+}
+
 function Tests(props: Props) {
   const classes = useStyles(props)
+  const [rightSide, setRightSide] = useState(["No test selected"]);
+
+  function changeRightSide(value) {
+    setRightSide(value);
+  }
+
+  const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
+    false
+  )
+  const expandCollapseSuite = (suitePanel: string) => (
+    _event: React.ChangeEvent<{}>,
+    isExpanded: boolean
+  ) => {
+    setExpandedSuite(isExpanded ? suitePanel : false)
+  }
 
   return (
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
-      {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
-        <div>
+       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
+        <div> 
           <Breadcrumbs aria-label="breadcrumb">
             <Link color="inherit" href={`/`}>
               Projects
@@ -59,47 +104,114 @@ function Tests(props: Props) {
               Launches
             </Link>
             <Typography color="textPrimary">Tests</Typography>
-          </Breadcrumbs>
-          <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                  <Typography
-                    variant="h6"
-                    color="secondary"
-                    style={{ fontWeight: 400, margin: "5px" }}
-                  >
-                    Test suites for{" "}
-                    <Link
-                      style={{ color: "#605959" }}
-                      underline="none"
+          </Breadcrumbs>          
+            <Container maxWidth="lg" className={classes.container}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Typography
+                      variant="h6"
                       color="secondary"
+                      style={{ fontWeight: 400, margin: "5px" }}
                     >
-                      {" "}
-                      {props.test_history[0].test_type}
-                    </Link>{" "}
-                    run
-                  </Typography>
-                  <Link
-                    underline="always"
-                    className={classes.padding}
-                    variant="subtitle1"
-                    href={`/failedTests/${props.test_history[0].test_run_id}`}
-                    style={{ color: "#353690" }}
-                  >
-                    Show only Failed Tests
-                  </Link>
-                  <SuitesAndTestsList>{props.test_history}</SuitesAndTestsList>
-                </Paper>
+                      Test suites for{" "}
+                      <Link
+                        style={{ color: "#605959" }}
+                        underline="none"
+                        color="secondary"
+                      >
+                        {" "}
+                        {props.test_history[0].test_type}
+                      </Link>{" "}
+                      run
+                    </Typography>
+                    <Link
+                      underline="always"
+                      className={classes.padding}
+                      variant="subtitle1"
+                      href={`/failedTests/${props.test_history[0].test_run_id}`}
+                      style={{ color: "#353690" }}
+                    >
+                      Show only Failed Tests
+                    </Link>
+                    <div>
+                    <div style={{float:"left", width:"50%", overflow:"hidden"}}>
+
+                      {props.test_history.map(testRun => (
+                       <div key={testRun.test_run_id}>
+                            {testRun.test_suites.map(suite => (
+                              <ExpansionPanel
+                                key={suite.test_suite_history_id}
+                                expanded={expandedSuite === suite.name}
+                                onChange={expandCollapseSuite(suite.name)}
+                                TransitionProps={{ unmountOnExit: true }}
+                              >
+                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                  {showStatusIcon(suite.test_suite_status)}
+                                  <Typography
+                                    className={classes.suiteStatus}
+                                    style={{
+                                      fontSize: "0.875rem",
+                                      textAlign: "left",
+                                      fontFamily: "Roboto",
+                                      fontWeight: 400,
+                                    }}
+                                  >
+                                    {suite.name}
+                                  </Typography>
+                                  {showTestStats(
+                                    suite.tests_passed,
+                                    suite.tests_failed,
+                                    suite.tests_incomplete,
+                                    suite.tests_skipped
+                                  )}
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                  {/* Expanded tests list for each suite */}
+                                  <List
+                                    key={suite.test_suite_history_id}
+                                    className={classes.root}
+                                    dense
+                                  >
+
+                                  {suite.tests.map(test => (
+                                    <ListItem button key={test.test_history_id} className={classes.root} onClick={() => changeRightSide(test)}>
+                                      {showStatusIcon(test.status)}
+                                      <Typography
+                                        className={classes.suiteStatus}
+                                        style={{
+                                          fontSize: "0.875rem",
+                                          textAlign: "left",
+                                          fontFamily: "Roboto",
+                                          fontWeight: 400,
+                                        }}
+                                      >
+                                        {test.name}
+                                      </Typography>
+                                    </ListItem>
+                                  ))}
+                                  </List>
+                                </ExpansionPanelDetails>
+                              </ExpansionPanel>
+                            ))}
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{float:"left", width:"50%", overflow:"hidden"}}>
+                      <TestExpanded>{rightSide}</TestExpanded>
+                    </div>
+                    </div>
+
+                  </Paper>
+                </Grid>
               </Grid>
-            </Grid>
-          </Container>
-        </div>
-      ) : (
+             </Container>  
+      </div> 
+        ) : (
         <h1>No suites were found for this run! </h1>
-      )}
+     )} 
     </BasePage>
-  )
+   )
 }
 
 // It runs  on the server-side, making a request before page is loaded.
@@ -111,7 +223,7 @@ Tests.getInitialProps = async (context): Promise<Props> => {
 
   // Suites and tests (inside suites)
   const testsByTestRunIdReq = await fetch(
-    `${process.env.deltaCore}/api/v1/tests_history/test_run/${testsByRunId}`,
+    `https://delta-core.dsch.dev/api/v1/tests_history/test_run/${testsByRunId}`,
     {
       method: "GET",
     }
