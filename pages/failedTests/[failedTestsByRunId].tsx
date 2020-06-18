@@ -1,8 +1,12 @@
-import React from "react"
+import React, { useState } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
-import { BasePage, TestsList } from "../../components/templates"
+import {
+  BasePage,
+  showStatusIcon,
+  TestExpanded,
+} from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -11,6 +15,8 @@ import {
   Link,
   Breadcrumbs,
   List,
+  Button,
+  ListItem,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +41,13 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: "80%",
   },
+  nameOfTestOrSuite: {
+    paddingLeft: theme.spacing(4),
+    fontSize: "0.875rem",
+    textAlign: "left",
+    fontFamily: "Roboto",
+    fontWeight: 400,
+  },
 }))
 
 type Props = {
@@ -43,6 +56,12 @@ type Props = {
 
 function Tests(props: Props) {
   const classes = useStyles(props)
+
+  const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
+
+  function changeRightSide(value) {
+    setTestInfoSection(value)
+  }
 
   return (
     <BasePage className={classes.root}>
@@ -87,28 +106,61 @@ function Tests(props: Props) {
                     </Link>{" "}
                     run
                   </Typography>
-                  <Link
-                    underline="always"
+                  <Button
+                    variant="text"
                     className={classes.padding}
-                    variant="subtitle1"
                     href={`/tests/${props.test_history[0].test_run_id}`}
-                    style={{ color: "#353690" }}
                   >
                     Show All Tests
-                  </Link>
-                  {props.test_history.map(testRun => (
-                    <div key={testRun.test_run_id}>
-                      {testRun.test_suites.map(suite => (
-                        <List
-                          key={suite.test_suite_history_id}
-                          className={classes.root}
-                          dense
-                        >
-                          <TestsList>{suite.tests}</TestsList>
-                        </List>
+                  </Button>
+                  <div>
+                    <div
+                      style={{
+                        float: "left",
+                        width: "50%",
+                        overflow: "hidden",
+                        height: "max-content",
+                        paddingRight: "20px",
+                      }}
+                    >
+                      {props.test_history.map(testRun => (
+                        <div key={testRun.test_run_id}>
+                          {testRun.test_suites.map(suite => (
+                            <List
+                              key={suite.test_suite_history_id}
+                              className={classes.root}
+                              dense
+                            >
+                              {suite.tests.map(test => (
+                                <ListItem
+                                  button
+                                  key={test.test_history_id}
+                                  className={classes.root}
+                                  onClick={() => changeRightSide(test)}
+                                >
+                                  {showStatusIcon(test.status)}
+                                  <Typography
+                                    className={classes.nameOfTestOrSuite}
+                                  >
+                                    {test.name}
+                                  </Typography>
+                                </ListItem>
+                              ))}
+                            </List>
+                          ))}
+                        </div>
                       ))}
                     </div>
-                  ))}
+                    <div
+                      style={{
+                        float: "left",
+                        width: "45%",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <TestExpanded>{testInfoSection}</TestExpanded>
+                    </div>
+                  </div>
                 </Paper>
               </Grid>
             </Grid>
