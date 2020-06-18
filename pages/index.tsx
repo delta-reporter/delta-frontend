@@ -131,6 +131,13 @@ export interface SuiteAndTest {
           trace: string
           file: string
           retries: string
+          media: [
+            {
+              type: string
+              filename: string
+              file_id: string
+            }
+          ]
         }
       ]
     }
@@ -156,6 +163,13 @@ export interface Test {
   file: string
   retries: string
   test_suite_id: number
+  media: [
+    {
+      type: string
+      filename: string
+      file_id: string
+    }
+  ]
 }
 
 type Props = {

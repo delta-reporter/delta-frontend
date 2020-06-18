@@ -29,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     paddingTop: theme.spacing(4),
+    maxWidth: 3400,
     paddingBottom: theme.spacing(4),
   },
   paper: {
@@ -38,8 +39,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
   padding: {
-    paddingBottom: theme.spacing(1),
-    paddingLeft: "80%",
+    marginBottom: "5px",
+    marginLeft: "80%",
+    color: "#353690",
   },
   nameOfTestOrSuite: {
     paddingLeft: theme.spacing(4),
@@ -124,7 +126,7 @@ function Tests(props: Props) {
                       }}
                     >
                       {props.test_history.map(testRun => (
-                        <div key={testRun.test_run_id}>
+                        <Paper key={testRun.test_run_id}>
                           {testRun.test_suites.map(suite => (
                             <List
                               key={suite.test_suite_history_id}
@@ -148,7 +150,7 @@ function Tests(props: Props) {
                               ))}
                             </List>
                           ))}
-                        </div>
+                        </Paper>
                       ))}
                     </div>
                     <div
