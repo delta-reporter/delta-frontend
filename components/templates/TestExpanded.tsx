@@ -227,128 +227,135 @@ export const TestExpanded = function(props: TestProps) {
   }
 
   return (
-    <div key={children.test_history_id} className={classes.root} style={{paddingLeft:"50px"}}>
-       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
-       <div> 
-      <Typography style={{paddingTop:"50px"}}>
-        Full path:
-        <span style={{ color: "grey" }}> {children.name}</span>
-      </Typography>
-      {children.message ? ( // if there is any error message - show the info, else - test passed
-        <Paper className={classes.paperNoPadding} elevation={0}>
-          <AppBar
-            style={{ backgroundColor: "white", border: "none" }}
-            variant="outlined"
-            position="relative"
-            className={classes.tabs}
-          >
-            <Tabs
-              value={historyTabValue}
-              onChange={handleTabChange}
-              indicatorColor="primary"
-              textColor="secondary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <Tab label="Error" id="tab-0" />
-              <Tab label="Test History" id="tab-1" />
-              <Tab label="Media" id="tab-2" />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={historyTabValue} index={0}>
-            <ErrorMessagePanel
-              key={children.test_history_id}
-              expanded={expandedErrorMessage === children.message}
-              onChange={expandCollapseErrorMessage(children.message)}
-              TransitionProps={{ unmountOnExit: true }}
-            >
-              <ErrorMessageCollapsedLineSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography
-                  color="textPrimary"
-                  style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
+    <div
+      key={children.test_history_id}
+      className={classes.root}
+      style={{ paddingLeft: "50px" }}
+    >
+      {children.name ? ( // when page is just loaded and no test selected - half page to be blank
+        <div>
+          <Typography style={{ paddingTop: "50px" }}>
+            Full path:
+            <span style={{ color: "grey" }}> {children.name}</span>
+          </Typography>
+          {children.message ? ( // if there is any error message - show the info, else - test passed
+            <Paper className={classes.paperNoPadding} elevation={0}>
+              <AppBar
+                style={{ backgroundColor: "white", border: "none" }}
+                variant="outlined"
+                position="relative"
+                className={classes.tabs}
+              >
+                <Tabs
+                  value={historyTabValue}
+                  onChange={handleTabChange}
+                  indicatorColor="primary"
+                  textColor="secondary"
+                  variant="fullWidth"
+                  aria-label="full width tabs example"
                 >
-                  {children.message}
-                </Typography>
-              </ErrorMessageCollapsedLineSummary>
-              <ErrorMessagePanelDetails>
-                <List>
-                  <ListItem
-                    style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
-                    button
+                  <Tab label="Error" id="tab-0" />
+                  <Tab label="Test History" id="tab-1" />
+                  <Tab label="Media" id="tab-2" />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={historyTabValue} index={0}>
+                <ErrorMessagePanel
+                  key={children.test_history_id}
+                  expanded={expandedErrorMessage === children.message}
+                  onChange={expandCollapseErrorMessage(children.message)}
+                  TransitionProps={{ unmountOnExit: true }}
+                >
+                  <ErrorMessageCollapsedLineSummary
+                    expandIcon={<ExpandMoreIcon />}
                   >
-                    {" "}
-                    {children.error_type}
-                    {children.trace}
-                    {children.retries}
-                  </ListItem>
-                </List>
-              </ErrorMessagePanelDetails>
-            </ErrorMessagePanel>
-            <div>
-              <Typography className={classes.bigMargin}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleResolutionDialogOpen}
-                  className={classes.bigMargin}
-                >
-                  Set test resolution
-                </Button>{" "}
-                <span style={{ color: "grey", fontStyle: "italic" }}>
-                  {resolutionResponse}
-                </span>
-                {/* <span style={{ marginLeft: "15px" }}>Selected: </span> */}
-              </Typography>
-              <SetTestResolution
-                open={openResolutionDialog}
-                selectedValue={resolutionResponse}
-                onClose={handleResolutionDialogClose}
-                testHistoryId={children.test_history_id}
-              />
-            </div>
-          </TabPanel>
-          <TabPanel value={historyTabValue} index={1}>
-            TODO: Historical info for this test {children.test_id}
-          </TabPanel>
-          <TabPanel value={historyTabValue} index={2}>
-            Media files received for this test
-            <Card className={classes.root}>
-              {children.media.map(media => (
-                <CardActionArea>
-                  <CardMedia
-                    component={media.type}
-                    alt={media.filename}
-                    height="1080"
-                    src={
-                      process.env.publicDeltaCore +
-                      "/api/v1/get_file/" +
-                      media.file_id
-                    }
-                    title={media.filename}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {media.filename}
-                    </Typography>
                     <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
+                      color="textPrimary"
+                      style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
                     >
-                      {media.filename}
+                      {children.message}
                     </Typography>
-                  </CardContent>
-                </CardActionArea>
-              ))}
-            </Card>
-          </TabPanel>
-        </Paper>
+                  </ErrorMessageCollapsedLineSummary>
+                  <ErrorMessagePanelDetails>
+                    <List>
+                      <ListItem
+                        style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
+                        button
+                      >
+                        {" "}
+                        {children.error_type}
+                        {children.trace}
+                        {children.retries}
+                      </ListItem>
+                    </List>
+                  </ErrorMessagePanelDetails>
+                </ErrorMessagePanel>
+                <div>
+                  <Typography className={classes.bigMargin}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleResolutionDialogOpen}
+                      className={classes.bigMargin}
+                    >
+                      Set test resolution
+                    </Button>{" "}
+                    <span style={{ color: "grey", fontStyle: "italic" }}>
+                      {resolutionResponse}
+                    </span>
+                    {/* <span style={{ marginLeft: "15px" }}>Selected: </span> */}
+                  </Typography>
+                  <SetTestResolution
+                    open={openResolutionDialog}
+                    selectedValue={resolutionResponse}
+                    onClose={handleResolutionDialogClose}
+                    testHistoryId={children.test_history_id}
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel value={historyTabValue} index={1}>
+                TODO: Historical info for this test {children.test_id}
+              </TabPanel>
+              <TabPanel value={historyTabValue} index={2}>
+                Media files received for this test
+                <Card className={classes.root}>
+                  {children.media.map(media => (
+                    <CardActionArea>
+                      <CardMedia
+                        component={media.type}
+                        alt={media.filename}
+                        height="1080"
+                        src={
+                          "${process.env.publicDeltaCore}/api/v1/get_file/" +
+                          media.file_id
+                        }
+                        title={media.filename}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {media.filename}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {media.filename}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  ))}
+                </Card>
+              </TabPanel>
+            </Paper>
+          ) : (
+            <div></div>
+          )}
+        </div>
       ) : (
-        <div></div>
-      )}
-     </div>
-       ) : (
-      <Paper></Paper>
+        <Paper style={{ textAlign: "center", marginTop: "30%" }}>
+          Please select a test to view
+        </Paper>
       )}
     </div>
   )
