@@ -7,7 +7,7 @@ export function showTestStats(passed, failed, incomplete, skipped) {
         {passed !== 0 ? (
           <Tooltip title="Tests Passed"> 
             <Chip size="small" variant="outlined" style={{
-                backgroundColor: "#c6e1d4",  marginLeft:"3px", 
+                backgroundColor: "#c6e1d4",  marginLeft:"3px" 
               }} label={passed} />
           </Tooltip>
         ) : (

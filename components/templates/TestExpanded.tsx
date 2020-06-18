@@ -228,7 +228,7 @@ export const TestExpanded = function(props: TestProps) {
 
   return (
     <div key={children.test_history_id} className={classes.root} style={{paddingLeft:"50px"}}>
-       {children.name ? ( // if there is any error message - show the info, else - test passed
+       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
        <div> 
       <Typography style={{paddingTop:"50px"}}>
         Full path:
@@ -261,7 +261,6 @@ export const TestExpanded = function(props: TestProps) {
               expanded={expandedErrorMessage === children.message}
               onChange={expandCollapseErrorMessage(children.message)}
               TransitionProps={{ unmountOnExit: true }}
-              style={{ width: "100%" }}
             >
               <ErrorMessageCollapsedLineSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
