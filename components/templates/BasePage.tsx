@@ -128,9 +128,9 @@ export const BasePage = function(props: Props) {
             <MenuIcon />
           </IconButton>
           <Typography
-            component="h1"
             variant="h5"
-            color="inherit"
+            color="secondary"
+            style={{ fontWeight: 400, margin: "5px" }}
             className={classes.title}
           >
             <Link underline="none" color="secondary" href="/">

@@ -1,5 +1,5 @@
 import React from "react"
-import {Typography} from "@material-ui/core"
+import {Typography, Tooltip} from "@material-ui/core"
 import CheckIcon from "@material-ui/icons/Check"
 import CloseIcon from "@material-ui/icons/Close"
 import UseAnimations from "react-useanimations"
@@ -9,44 +9,34 @@ export function showStatusIcon(status) {
   let statusIcon
   if (status === "Passed" || status === "Successful") {
     statusIcon = (
-    <CheckIcon
-          style={{
-            color: "green",
-          }}
-    ></CheckIcon>
+      <Tooltip title="Passed">
+        <CheckIcon style={{ color: "green" }}></CheckIcon>
+      </Tooltip>
     )
   } else if (status === "Failed" || status === "Incomplete") {
       statusIcon = (
-      <CloseIcon
-            style={{
-              color: "red",
-            }}
-        ></CloseIcon>
+        <Tooltip title="Failed">
+          <CloseIcon style={{ color: "red" }}></CloseIcon>
+        </Tooltip>
       )
     } else if (status === "Skipped") {
       statusIcon = (
-        <SnoozeIcon
-          style={{
-            color: "grey",
-          }}
-        ></SnoozeIcon>
+        <Tooltip title="Skipped">
+          <SnoozeIcon style={{ color: "grey" }}></SnoozeIcon>
+        </Tooltip>
       )
     } else if (status === "Running" || status === "In Process") {
       statusIcon = (
-        <UseAnimations
-          animationKey="loading"
-          style={{
-            color: "orange",
-          }}
-        />
+        <Tooltip title="Running">
+          <UseAnimations
+            animationKey="loading"
+            style={{ color: "orange" }}/>
+        </Tooltip>
       )
     } else {
       statusIcon = (
         <Typography
-          style={{
-            color: "grey",
-          }}
-        >
+          style={{ color: "grey" }}>
           {status}
         </Typography>
       )

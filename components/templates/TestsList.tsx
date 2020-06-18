@@ -18,8 +18,6 @@ const useStyles = makeStyles(theme => ({
   },
   suiteStatus: {
     paddingLeft: theme.spacing(4),
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
   },
 }))
 
@@ -51,7 +49,15 @@ export const TestsList = function(props) {
               aria-controls="panel2bh-content"
             >
               {showStatusIcon(test.status)}
-              <Typography className={classes.suiteStatus} color="textPrimary">
+              <Typography
+                className={classes.suiteStatus}
+                style={{
+                  fontSize: "0.875rem",
+                  textAlign: "left",
+                  fontFamily: "Roboto",
+                  fontWeight: 400,
+                }}
+              >
                 {test.name}
               </Typography>
             </ExpansionPanelSummary>

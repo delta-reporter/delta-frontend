@@ -72,13 +72,16 @@ function Tests(props: Props) {
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Typography
-                    component="h2"
                     variant="h6"
-                    color="primary"
-                    gutterBottom
+                    color="secondary"
+                    style={{ fontWeight: 400, margin: "5px" }}
                   >
-                    Failed tests for
-                    <Link underline="always">
+                    Failed tests for{" "}
+                    <Link
+                      style={{ color: "#605959" }}
+                      underline="none"
+                      color="secondary"
+                    >
                       {" "}
                       {props.test_history[0].test_type}
                     </Link>{" "}
@@ -87,7 +90,9 @@ function Tests(props: Props) {
                   <Link
                     underline="always"
                     className={classes.padding}
+                    variant="subtitle1"
                     href={`/tests/${props.test_history[0].test_run_id}`}
+                    style={{ color: "#353690" }}
                   >
                     Show All Tests
                   </Link>
@@ -110,7 +115,7 @@ function Tests(props: Props) {
           </Container>
         </div>
       ) : (
-        <h1>No suites were found for this run! </h1>
+        <h1>No failed tests for this run, relax! :) </h1>
       )}
     </BasePage>
   )

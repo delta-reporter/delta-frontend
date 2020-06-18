@@ -6,7 +6,7 @@
 trigger:
 - master
 
-pr: none
+# pr: none
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -17,3 +17,11 @@ steps:
     git remote add heroku https://heroku:$(heroku_token)@git.heroku.com/delta-frontend.git
     git push heroku $(Build.SourceBranchName)
   displayName: 'Delta Frontend Heroku Deployment'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+- script: |
+    npm install
+    npm run lint
+    npm run build
+  displayName: 'Delta Frontend PR Check'
+  condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
