@@ -19,6 +19,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
+import Card from "@material-ui/core/Card"
+import CardActionArea from "@material-ui/core/CardActionArea"
+import CardContent from "@material-ui/core/CardContent"
+import CardMedia from "@material-ui/core/CardMedia"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -246,6 +250,7 @@ export const TestExpanded = function(props: TestProps) {
             >
               <Tab label="Error" id="tab-0" />
               <Tab label="Test History" id="tab-1" />
+              <Tab label="Media" id="tab-2" />
             </Tabs>
           </AppBar>
           <TabPanel value={historyTabValue} index={0}>
@@ -302,6 +307,38 @@ export const TestExpanded = function(props: TestProps) {
           </TabPanel>
           <TabPanel value={historyTabValue} index={1}>
             TODO: Historical info for this test {children.test_id}
+          </TabPanel>
+          <TabPanel value={historyTabValue} index={2}>
+            Media files received for this test
+            <Card className={classes.root}>
+              {children.media.map(media => (
+                <CardActionArea>
+                  <CardMedia
+                    component={media.type}
+                    alt={media.filename}
+                    height="1080"
+                    src={
+                      process.env.publicDeltaCore +
+                      "/api/v1/get_file/" +
+                      media.file_id
+                    }
+                    title={media.filename}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {media.filename}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {media.filename}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              ))}
+            </Card>
           </TabPanel>
         </Paper>
       ) : (
