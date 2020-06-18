@@ -15,6 +15,8 @@ import {
   ExpansionPanelDetails,
   List,
   ListItem,
+  Divider,
+  Button,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
@@ -28,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     paddingTop: theme.spacing(4),
+    maxWidth: 3400,
     paddingBottom: theme.spacing(4),
   },
   paper: {
@@ -37,8 +40,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
   padding: {
-    paddingBottom: theme.spacing(1),
-    paddingLeft: "80%",
+    marginBottom: "5px",
+    marginLeft: "80%",
+    color: "#353690",
   },
   suiteStatus: {
     paddingLeft: theme.spacing(4),
@@ -47,27 +51,6 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   test_history: SuiteAndTest[]
-}
-
-function SplitPanel() {
-  const [rightSide, setRightSide] = useState([]);
-
-  function changeRightSide(value) {
-    setRightSide(value);
-  }
-
-  return (
-    <div> 
-    <div style={{float:"left", width:"75%"}}>
-      <button  onClick={() => changeRightSide(1)}>1</button>
-      <button onClick={() => changeRightSide(2)}>2</button>
-      ttr;a;aa
-    </div>
-    <div style={{float:"left", width:"25%"}}>
-    <p>{rightSide}</p>
-  </div>
-  </div>
-  );
 }
 
 function Tests(props: Props) {
@@ -93,7 +76,7 @@ function Tests(props: Props) {
       <title>Δ | Tests</title>
        {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         <div> 
-          <Breadcrumbs aria-label="breadcrumb">
+          <Breadcrumbs>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
@@ -125,17 +108,11 @@ function Tests(props: Props) {
                       </Link>{" "}
                       run
                     </Typography>
-                    <Link
-                      underline="always"
-                      className={classes.padding}
-                      variant="subtitle1"
-                      href={`/failedTests/${props.test_history[0].test_run_id}`}
-                      style={{ color: "#353690" }}
-                    >
+                    <Button variant="text" className={classes.padding} href={`/failedTests/${props.test_history[0].test_run_id}`}>
                       Show only Failed Tests
-                    </Link>
+                    </Button>
                     <div>
-                    <div style={{float:"left", width:"50%", overflow:"hidden"}}>
+                    <div style={{float:"left", width:"50%", overflow:"hidden", height: "max-content", paddingRight:"20px"}}>
 
                       {props.test_history.map(testRun => (
                        <div key={testRun.test_run_id}>
@@ -197,7 +174,7 @@ function Tests(props: Props) {
                         </div>
                       ))}
                     </div>
-                    <div style={{float:"left", width:"50%", overflow:"hidden"}}>
+                    <div style={{float:"left", width:"45%", overflow:"hidden"}}>
                       <TestExpanded>{rightSide}</TestExpanded>
                     </div>
                     </div>
@@ -223,7 +200,7 @@ Tests.getInitialProps = async (context): Promise<Props> => {
 
   // Suites and tests (inside suites)
   const testsByTestRunIdReq = await fetch(
-    `https://delta-core.dsch.dev/api/v1/tests_history/test_run/${testsByRunId}`,
+    `${process.env.deltaCore}/api/v1/tests_history/test_run/${testsByRunId}`,
     {
       method: "GET",
     }

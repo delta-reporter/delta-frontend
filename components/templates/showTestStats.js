@@ -6,8 +6,8 @@ export function showTestStats(passed, failed, incomplete, skipped) {
       <div style={{ position: "absolute", right: "120px" }}>
         {passed !== 0 ? (
           <Tooltip title="Tests Passed"> 
-            <Chip style={{
-                backgroundColor: "#c6e1d4",  marginLeft:"3px"
+            <Chip size="small" variant="outlined" style={{
+                backgroundColor: "#c6e1d4",  marginLeft:"3px", 
               }} label={passed} />
           </Tooltip>
         ) : (
@@ -15,7 +15,7 @@ export function showTestStats(passed, failed, incomplete, skipped) {
         )}
         {failed !== 0 ? (
           <Tooltip title="Tests Failed">
-            <Chip style={{
+            <Chip size="small" variant="outlined" style={{
                 backgroundColor: "#e1c6c6",  marginLeft:"3px"
               }} label={failed} />
           </Tooltip>
@@ -24,7 +24,7 @@ export function showTestStats(passed, failed, incomplete, skipped) {
         )}
         {incomplete !== 0 ? (
           <Tooltip title="Tests Incomplete">
-            <Chip style={{
+            <Chip size="small" variant="outlined" style={{
                 backgroundColor: "#e1d4c6", marginLeft:"3px"
               }} label={incomplete} />
           </Tooltip>
@@ -33,7 +33,7 @@ export function showTestStats(passed, failed, incomplete, skipped) {
         )}
         {skipped !== 0 ? (
           <Tooltip title="Tests Skipped">
-            <Chip 
+            <Chip size="small" variant="outlined"
             style={{ marginLeft:"3px" }}
             label={skipped} />
           </Tooltip>

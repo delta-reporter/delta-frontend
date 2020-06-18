@@ -98,7 +98,7 @@ type Props = {
 export const BasePage = function(props: Props) {
   const { children, className } = props
   const classes = useStyles(props)
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true)

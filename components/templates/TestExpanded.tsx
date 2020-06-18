@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
   tabs: {
     marginTop: theme.spacing(1),
-    width: "40%",
+    width: "100%",
   },
   backgroundColor: {
     maxWidth: "50",
@@ -227,10 +227,10 @@ export const TestExpanded = function(props: TestProps) {
   }
 
   return (
-    <div key={children.test_history_id} className={classes.root}>
+    <div key={children.test_history_id} className={classes.root} style={{paddingLeft:"50px"}}>
        {children.name ? ( // if there is any error message - show the info, else - test passed
        <div> 
-      <Typography className={classes.bigMargin}>
+      <Typography style={{paddingTop:"50px"}}>
         Full path:
         <span style={{ color: "grey" }}> {children.name}</span>
       </Typography>
@@ -261,6 +261,7 @@ export const TestExpanded = function(props: TestProps) {
               expanded={expandedErrorMessage === children.message}
               onChange={expandCollapseErrorMessage(children.message)}
               TransitionProps={{ unmountOnExit: true }}
+              style={{ width: "100%" }}
             >
               <ErrorMessageCollapsedLineSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
@@ -348,7 +349,7 @@ export const TestExpanded = function(props: TestProps) {
       )}
      </div>
        ) : (
-        <div>Please select a test</div>
+      <Paper></Paper>
       )}
     </div>
   )
