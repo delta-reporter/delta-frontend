@@ -324,7 +324,7 @@ export const TestExpanded = function(props: TestProps) {
                       <CardMedia
                         component={media.type}
                         alt={media.filename}
-                        height="1080"
+                        height="600"
                         src={
                           `${process.env.publicDeltaCore}/api/v1/get_file/` +
                           media.file_id
