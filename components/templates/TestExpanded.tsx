@@ -9,7 +9,10 @@ import {
   Tab,
   Button,
 } from "@material-ui/core"
-import { TestErrorMessageExpansionPanel, TestMediaExpansionPanel } from "./TestExpansionPanel"
+import {
+  TestErrorMessageExpansionPanel,
+  TestMediaExpansionPanel,
+} from "./TestExpansionPanel"
 import { TestResolution } from "./TestResolution"
 
 const useStyles = makeStyles(theme => ({
@@ -94,12 +97,12 @@ export const TestExpanded = function(props: TestProps) {
 
   const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
   const [resolutionResponse, setResolutionResponse] = React.useState(
-  testResolutions[0]
+    testResolutions[0]
   )
   const handleResolutionDialogOpen = () => {
     setOpenResolutionDialog(true)
   }
-  
+
   const handleResolutionDialogClose = (value: string) => {
     setOpenResolutionDialog(false)
     setResolutionResponse(value)
@@ -112,44 +115,53 @@ export const TestExpanded = function(props: TestProps) {
       style={{ paddingLeft: "50px" }}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
-            <Paper className={classes.paperNoPadding} elevation={0}>
-              <AppBar
-                style={{ backgroundColor: "white", border: "none",  paddingTop: "45px" }}
-                variant="outlined"
-                position="relative"
-                className={classes.tabs}
-              >
-                <Tabs
-                  value={historyTabValue}
-                  onChange={handleTabChange}
-                  indicatorColor="primary"
-                  textColor="secondary"
-                  variant="fullWidth"
-                  aria-label="full width tabs example"
-                >
-                  <Tab label="Info" id="tab-0" />
-                  <Tab label="Test History" id="tab-1" />
-                </Tabs>
-              </AppBar>
-              <TabPanel value={historyTabValue} index={0}>
-              <Typography style= {{padding: "10px"}}>
-            Full path:
-            <span style={{ color: "grey" }}> {children.file}</span>
-          </Typography>
-              <Typography style= {{padding: "10px"}}>
-           Duration:
-           <span style={{ color: "grey" }}> {children.duration.minutes} min {children.duration.seconds} sec </span>
-         </Typography>
-              {children.message ? ( // if there is any error message - show the info, else - test passed
-              <div >
-                 <Typography style= {{paddingTop: "10px", paddingLeft:"10px"}}>
-           Error type:
-           <span style={{ color: "grey" }}> {children.error_type} </span>
-         </Typography>
-        
-                <TestErrorMessageExpansionPanel>{children}</TestErrorMessageExpansionPanel>
-     
-                <div style= {{padding: "10px"}}>
+        <Paper className={classes.paperNoPadding} elevation={0}>
+          <AppBar
+            style={{
+              backgroundColor: "white",
+              border: "none",
+              paddingTop: "45px",
+            }}
+            variant="outlined"
+            position="relative"
+            className={classes.tabs}
+          >
+            <Tabs
+              value={historyTabValue}
+              onChange={handleTabChange}
+              indicatorColor="primary"
+              textColor="secondary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+            >
+              <Tab label="Info" id="tab-0" />
+              <Tab label="Test History" id="tab-1" />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={historyTabValue} index={0}>
+            <Typography style={{ padding: "10px" }}>
+              Full path:
+              <span style={{ color: "grey" }}> {children.file}</span>
+            </Typography>
+            <Typography style={{ padding: "10px" }}>
+              Duration:
+              <span style={{ color: "grey" }}>
+                {" "}
+                {children.duration.minutes} min {children.duration.seconds} sec{" "}
+              </span>
+            </Typography>
+            {children.message ? ( // if there is any error message - show the info, else - test passed
+              <div>
+                <Typography style={{ paddingTop: "10px", paddingLeft: "10px" }}>
+                  Error type:
+                  <span style={{ color: "grey" }}> {children.error_type} </span>
+                </Typography>
+
+                <TestErrorMessageExpansionPanel>
+                  {children}
+                </TestErrorMessageExpansionPanel>
+
+                <div style={{ padding: "10px" }}>
                   <Typography className={classes.bigMargin}>
                     <Button
                       variant="outlined"
@@ -159,7 +171,13 @@ export const TestExpanded = function(props: TestProps) {
                     >
                       Set test resolution
                     </Button>{" "}
-                    <span style={{ color: "grey", fontStyle: "italic", padding: "10px"}}>
+                    <span
+                      style={{
+                        color: "grey",
+                        fontStyle: "italic",
+                        padding: "10px",
+                      }}
+                    >
                       {resolutionResponse}
                     </span>
                   </Typography>
@@ -170,27 +188,42 @@ export const TestExpanded = function(props: TestProps) {
                     testHistoryId={children.test_history_id}
                   />
                 </div>
-                </div>
-                 ) : (
-                  <div></div>
-                )}
-                {children.media ? ( // check if there is any media for this test
-<                 TestMediaExpansionPanel>{children}</TestMediaExpansionPanel>
-                ) : (
-                  <div></div>
-                )}
-              </TabPanel>             
-              <TabPanel value={historyTabValue} index={1}>
-                <Typography style= {{padding: "10px"}}> COMING: 
-              <span style={{ color: "grey", fontStyle: "italic", padding: "10px"}}>
-              Historical info for this test 
-                    </span>{children.test_id}</Typography>
-              </TabPanel>
-            </Paper>
+              </div>
+            ) : (
+              <div></div>
+            )}
+            {children.media ? ( // check if there is any media for this test
+              <TestMediaExpansionPanel>{children}</TestMediaExpansionPanel>
+            ) : (
+              <div></div>
+            )}
+          </TabPanel>
+          <TabPanel value={historyTabValue} index={1}>
+            <Typography style={{ padding: "10px" }}>
+              {" "}
+              COMING:
+              <span
+                style={{ color: "grey", fontStyle: "italic", padding: "10px" }}
+              >
+                Historical info for this test
+              </span>
+              {children.test_id}
+            </Typography>
+          </TabPanel>
+        </Paper>
       ) : (
-          <Typography
-                    style={{ fontWeight: 300, margin: "50px", textAlign: "center", fontSize:"20px", fontStyle: "italic", color: "#605959" }}
-                  >Please select a test to view</Typography>
+        <Typography
+          style={{
+            fontWeight: 300,
+            margin: "50px",
+            textAlign: "center",
+            fontSize: "20px",
+            fontStyle: "italic",
+            color: "#605959",
+          }}
+        >
+          Please select a test to view
+        </Typography>
       )}
     </div>
   )

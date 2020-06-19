@@ -115,13 +115,13 @@ function Tests(props: Props) {
                       {props.test_history[0].test_type}
                     </Link>{" "}
                     run
-                                      <Button
-                    variant="text"
-                    className={classes.padding}
-                    href={`/failedTests/${props.test_history[0].test_run_id}`}
-                  >
-                    Show only Failed Tests
-                  </Button>
+                    <Button
+                      variant="text"
+                      className={classes.padding}
+                      href={`/failedTests/${props.test_history[0].test_run_id}`}
+                    >
+                      Show only Failed Tests
+                    </Button>
                   </Typography>
 
                   <div>
@@ -132,7 +132,7 @@ function Tests(props: Props) {
                         overflow: "hidden",
                         height: "max-content",
                         paddingRight: "20px",
-                        marginTop: "30px"
+                        marginTop: "30px",
                       }}
                     >
                       {props.test_history.map(testRun => (
