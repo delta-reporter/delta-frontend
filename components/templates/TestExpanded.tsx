@@ -14,15 +14,14 @@ import {
   DialogTitle,
   ListItemText,
   Button,
+  CardMedia,
+  CardActionArea,
+  Card,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
-import Card from "@material-ui/core/Card"
-import CardActionArea from "@material-ui/core/CardActionArea"
-import CardContent from "@material-ui/core/CardContent"
-import CardMedia from "@material-ui/core/CardMedia"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -103,6 +102,7 @@ export const TestExpanded = function(props: TestProps) {
 
   const ErrorMessagePanel = withStyles({
     root: {
+      width: "100%",
       backgroundColor: "#f9dbdb", // error message expanded color
       borderBottom: "1px solid #ffa7a7",
       boxShadow: "none",
@@ -128,6 +128,7 @@ export const TestExpanded = function(props: TestProps) {
       "&$expanded": {
         minHeight: 56,
       },
+      width: "100%",
     },
     content: {
       "&$expanded": {
@@ -140,6 +141,7 @@ export const TestExpanded = function(props: TestProps) {
   const ErrorMessagePanelDetails = withStyles(theme => ({
     root: {
       padding: theme.spacing(2),
+      width: "100%",
     },
   }))(MuiExpansionPanelDetails)
 
@@ -192,7 +194,7 @@ export const TestExpanded = function(props: TestProps) {
       console.log(requestOptions)
 
       const response = await fetch(
-        `${process.env.publicDeltaCore}/api/v1/test_history_resolution`,
+        `${process.env.deltaCore}/api/v1/test_history_resolution`,
         requestOptions
       )
       const data = await response.json()
@@ -226,6 +228,61 @@ export const TestExpanded = function(props: TestProps) {
     setHistoryTabValue(newValue)
   }
 
+  const [expandedMedia, setExpandedMedia] = React.useState<
+  string | false
+>(false)
+const expandCollapseMedia = (mediaPanel: string) => (
+  _event: React.ChangeEvent<{}>,
+  isExpanded: boolean
+) => {
+  setExpandedMedia(isExpanded ? mediaPanel : false)
+}
+
+const MediaPanel = withStyles({
+  root: {
+    width: "100%",
+    backgroundColor: "#F3EFEE", // screenshot expandable panel color
+    borderBottom: "1px solid #F3EFEE",
+    boxShadow: "none",
+    "&:not(:last-child)": {
+      borderBottom: 0,
+    },
+    "&:before": {
+      display: "none",
+    },
+    "&$expanded": {
+      margin: "auto",
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanel)
+
+const MediaPanelCollapsedSummary = withStyles({
+  root: {
+    width: "100%",
+    backgroundColor: "#F3EFEE", // screenshot collapsed panel color
+    borderBottom: "1px solid #F3EFEE",
+    marginBottom: -1,
+    minHeight: 56,
+    "&$expanded": {
+      minHeight: 56,
+    },
+  },
+  content: {
+    "&$expanded": {
+      margin: "12px 0",
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanelSummary)
+
+const MediaPanelDetails = withStyles(theme => ({
+  root: {
+    padding: theme.spacing(2),
+    width: "100%",
+  },
+}))(MuiExpansionPanelDetails)
+
   return (
     <div
       key={children.test_history_id}
@@ -233,15 +290,9 @@ export const TestExpanded = function(props: TestProps) {
       style={{ paddingLeft: "50px" }}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
-        <div>
-          <Typography style={{ paddingTop: "50px" }}>
-            Full path:
-            <span style={{ color: "grey" }}> {children.name}</span>
-          </Typography>
-          {children.message ? ( // if there is any error message - show the info, else - test passed
             <Paper className={classes.paperNoPadding} elevation={0}>
               <AppBar
-                style={{ backgroundColor: "white", border: "none" }}
+                style={{ backgroundColor: "white", border: "none",  paddingTop: "45px" }}
                 variant="outlined"
                 position="relative"
                 className={classes.tabs}
@@ -254,12 +305,25 @@ export const TestExpanded = function(props: TestProps) {
                   variant="fullWidth"
                   aria-label="full width tabs example"
                 >
-                  <Tab label="Error" id="tab-0" />
+                  <Tab label="Info" id="tab-0" />
                   <Tab label="Test History" id="tab-1" />
-                  <Tab label="Media" id="tab-2" />
                 </Tabs>
               </AppBar>
               <TabPanel value={historyTabValue} index={0}>
+              <Typography style= {{padding: "10px"}}>
+            Full path:
+            <span style={{ color: "grey" }}> {children.file}</span>
+          </Typography>
+              <Typography style= {{padding: "10px"}}>
+           Duration:
+           <span style={{ color: "grey" }}> {children.duration.minutes} min {children.duration.seconds} sec </span>
+         </Typography>
+         <Typography style= {{padding: "10px"}}>
+           Error type:
+           <span style={{ color: "grey" }}> {children.error_type} </span>
+         </Typography>
+              {children.message ? ( // if there is any error message - show the info, else - test passed
+              <div style= {{paddingTop: "10px"}}>
                 <ErrorMessagePanel
                   key={children.test_history_id}
                   expanded={expandedErrorMessage === children.message}
@@ -283,14 +347,12 @@ export const TestExpanded = function(props: TestProps) {
                         button
                       >
                         {" "}
-                        {children.error_type}
                         {children.trace}
-                        {children.retries}
                       </ListItem>
                     </List>
                   </ErrorMessagePanelDetails>
                 </ErrorMessagePanel>
-                <div>
+                <div style= {{padding: "10px"}}>
                   <Typography className={classes.bigMargin}>
                     <Button
                       variant="outlined"
@@ -300,10 +362,9 @@ export const TestExpanded = function(props: TestProps) {
                     >
                       Set test resolution
                     </Button>{" "}
-                    <span style={{ color: "grey", fontStyle: "italic" }}>
+                    <span style={{ color: "grey", fontStyle: "italic", padding: "10px"}}>
                       {resolutionResponse}
                     </span>
-                    {/* <span style={{ marginLeft: "15px" }}>Selected: </span> */}
                   </Typography>
                   <SetTestResolution
                     open={openResolutionDialog}
@@ -312,50 +373,74 @@ export const TestExpanded = function(props: TestProps) {
                     testHistoryId={children.test_history_id}
                   />
                 </div>
-              </TabPanel>
+                </div>
+                 ) : (
+                  <div></div>
+                )}
+                {children.media ? ( // check if there is any media for this test
+                <div                   style= {{padding: "10px"}}
+                >
+              <Card className={classes.root} >
+                {children.media.map(media => (
+                  <MediaPanel
+                  key={media.file_id}
+                  expanded={expandedMedia ===  media.file_id}
+                  onChange={expandCollapseMedia( media.file_id)}
+                  TransitionProps={{ unmountOnExit: true }}
+                  >
+                  <MediaPanelCollapsedSummary
+                    expandIcon={<ExpandMoreIcon />}
+                  >
+                    {media.type === "img" ? (
+                    <Typography
+                      color="textPrimary"
+                    >
+                      Screenshot
+                    </Typography>
+                    ) : (
+                      <Typography
+                      color="textPrimary"
+                    >
+                      Video
+                    </Typography>
+                    )}
+                  </MediaPanelCollapsedSummary>
+                  <MediaPanelDetails>
+                  <CardActionArea>
+                    <CardMedia
+                      component={media.type}
+                      alt={media.filename}
+                      style={{ height: 360,
+                        maxWidth: 640,
+                      }}
+                      src={
+                        `${process.env.deltaCore}/api/v1/get_file/` +
+                        media.file_id
+                      }
+                      title={media.filename}
+                    />
+                  </CardActionArea>
+                  </MediaPanelDetails>
+                  </MediaPanel>
+                ))}
+              </Card>
+              </div>
+                ) : (
+                  <Typography style= {{padding: "10px"}}> 
+                  There is no media recorded for this test</Typography>
+                )}
+              </TabPanel>             
               <TabPanel value={historyTabValue} index={1}>
-                TODO: Historical info for this test {children.test_id}
-              </TabPanel>
-              <TabPanel value={historyTabValue} index={2}>
-                Media files received for this test
-                <Card className={classes.root}>
-                  {children.media.map(media => (
-                    <CardActionArea>
-                      <CardMedia
-                        component={media.type}
-                        alt={media.filename}
-                        height="600"
-                        src={
-                          `${process.env.publicDeltaCore}/api/v1/get_file/` +
-                          media.file_id
-                        }
-                        title={media.filename}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {media.filename}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          {media.filename}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  ))}
-                </Card>
+                <Typography style= {{padding: "10px"}}> COMING: 
+              <span style={{ color: "grey", fontStyle: "italic", padding: "10px"}}>
+              Historical info for this test 
+                    </span>{children.test_id}</Typography>
               </TabPanel>
             </Paper>
-          ) : (
-            <div></div>
-          )}
-        </div>
       ) : (
-        <Paper style={{ textAlign: "center", marginTop: "30%" }}>
-          Please select a test to view
-        </Paper>
+          <Typography
+                    style={{ fontWeight: 300, margin: "50px", textAlign: "center", fontSize:"20px", fontStyle: "italic", color: "#605959" }}
+                  >Please select a test to view</Typography>
       )}
     </div>
   )
