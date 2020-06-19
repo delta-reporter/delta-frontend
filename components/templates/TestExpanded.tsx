@@ -326,7 +326,7 @@ export const TestExpanded = function(props: TestProps) {
                         alt={media.filename}
                         height="1080"
                         src={
-                          "${process.env.publicDeltaCore}/api/v1/get_file/" +
+                          `${process.env.publicDeltaCore}/api/v1/get_file/` +
                           media.file_id
                         }
                         title={media.filename}
