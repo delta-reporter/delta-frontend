@@ -12,6 +12,7 @@ import {
   CardActionArea,
   CardMedia,
 } from "@material-ui/core"
+import ReactPlayer from "react-player"
 
 const ExpandablePanel = withStyles({
   root: {
@@ -128,47 +129,61 @@ export const TestMediaExpansionPanel = function(props: TestProps) {
 
   return (
     <div style={{ padding: "10px" }}>
-      <Card>
-        {children.media.map(media => (
-          <ExpandablePanel
-            key={media.file_id}
-            expanded={mediaExpandedPanel === media.file_id}
-            onChange={expandCollapsePanel(media.file_id)}
-            TransitionProps={{ unmountOnExit: true }}
-            style={{
-              backgroundColor: "#F3EFEE", // media block  expandable color
-              borderBottom: "1px solid #F3EFEE",
-            }}
-          >
-            <CollapsedLineSummary
-              expandIcon={<ExpandMoreIcon />}
+      {children.media.map(media => (
+        <div style={{ padding: "10px" }}>
+          <Card>
+            <ExpandablePanel
+              key={media.file_id}
+              expanded={mediaExpandedPanel === media.file_id}
+              onChange={expandCollapsePanel(media.file_id)}
+              TransitionProps={{ unmountOnExit: true }}
               style={{
-                backgroundColor: "#F3EFEE", // media block collapsed color
+                backgroundColor: "#F3EFEE", // media block  expandable color
                 borderBottom: "1px solid #F3EFEE",
               }}
             >
-              {media.type === "img" ? (
-                <Typography color="textPrimary">Screenshot</Typography>
-              ) : (
-                <Typography color="textPrimary">Video</Typography>
-              )}
-            </CollapsedLineSummary>
-            <PanelDetails>
-              <CardActionArea>
-                <CardMedia
-                  component={media.type}
-                  alt={media.filename}
-                  style={{ height: 360, maxWidth: 640 }}
-                  src={
-                    `${process.env.deltaCore}/api/v1/get_file/` + media.file_id
-                  }
-                  title={media.filename}
-                />
-              </CardActionArea>
-            </PanelDetails>
-          </ExpandablePanel>
-        ))}
-      </Card>
+              <CollapsedLineSummary
+                expandIcon={<ExpandMoreIcon />}
+                style={{
+                  backgroundColor: "#F3EFEE", // media block collapsed color
+                  borderBottom: "1px solid #F3EFEE",
+                }}
+              >
+                {media.type === "img" ? (
+                  <Typography color="textPrimary">Screenshot</Typography>
+                ) : (
+                  <Typography color="textPrimary">Video</Typography>
+                )}
+              </CollapsedLineSummary>
+              <PanelDetails>
+                <CardActionArea>
+                  {media.type === "img" ? (
+                    <CardMedia
+                      component="img"
+                      alt={media.filename}
+                      style={{ height: 360, maxWidth: 640 }}
+                      src={
+                        `${process.env.publicDeltaCore}/api/v1/get_file/` +
+                        media.file_id
+                      }
+                      title={media.filename}
+                    />
+                  ) : (
+                    <ReactPlayer
+                      url={`${process.env.publicDeltaCore}/api/v1/get_file/${media.file_id}`}
+                      autosize
+                      controls={true}
+                      key="file"
+                      height="360"
+                      width="640"
+                    />
+                  )}
+                </CardActionArea>
+              </PanelDetails>
+            </ExpandablePanel>
+          </Card>
+        </div>
+      ))}
     </div>
   )
 }
