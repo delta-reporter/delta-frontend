@@ -1,4 +1,5 @@
 [![Build Status](https://dev.azure.com/DeltaReporter/Delta%20Reporter/_apis/build/status/delta-reporter.delta-frontend?branchName=master)](https://dev.azure.com/DeltaReporter/Delta%20Reporter/_build/latest?definitionId=3&branchName=master)
+![Publish Docker](https://github.com/delta-reporter/delta-frontend/workflows/Publish%20Docker/badge.svg)
 
 # Delta Reporter - Frontend
 
