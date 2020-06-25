@@ -1,25 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const getLogger = require("@wdio/logger").default
 const log = getLogger("hooks")
-let path = require("path")
-let VisualRegressionCompare = require("wdio-novus-visual-regression-service/compare")
-
-function getScreenshotName(basePath) {
-  return function(context) {
-    let type = context.type
-    let testName = context.test.title
-    let browserVersion = parseInt(context.browser.version, 10)
-    let browserName = context.browser.name
-    let browserViewport = context.meta.viewport
-    let browserWidth = browserViewport.width
-    let browserHeight = browserViewport.height
-
-    return path.join(
-      basePath,
-      `${testName}_${type}_${browserName}_v${browserVersion}_${browserWidth}x${browserHeight}.png`
-    )
-  }
-}
 
 const baseConfig: WebdriverIO.Config = {
   //
@@ -128,32 +109,7 @@ const baseConfig: WebdriverIO.Config = {
   // Services take over a specific job you don't want to take care of. They enhance
   // your test setup with almost no effort. Unlike plugins, they don't add new
   // commands. Instead, they hook themselves up into the test process.
-  services: [
-    [
-      "novus-visual-regression",
-      {
-        compare: new VisualRegressionCompare.LocalCompare({
-          referenceName: getScreenshotName(
-            path.join(process.cwd(), "screenshots/reference")
-          ),
-          screenshotName: getScreenshotName(
-            path.join(process.cwd(), "screenshots/screen")
-          ),
-          diffName: getScreenshotName(
-            path.join(process.cwd(), "screenshots/diff")
-          ),
-          misMatchTolerance: 0.01,
-        }),
-        viewportChangePause: 300,
-        viewports: [
-          { width: 320, height: 480 },
-          { width: 480, height: 320 },
-          { width: 1024, height: 768 },
-        ],
-        orientations: ["landscape", "portrait"],
-      },
-    ],
-  ],
+  services: [],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
