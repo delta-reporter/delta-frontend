@@ -31,6 +31,7 @@
     "wdio-novus-visual-regression-service": "^1.2.1"
   },
   "dependencies": {
-    "@delta-reporter/wdio-delta-reporter-service": "^1.0.1"
+    "@delta-reporter/wdio-delta-reporter-service": "^1.0.1",
+    "argos-cli": "^0.3.0"
   }
 }
