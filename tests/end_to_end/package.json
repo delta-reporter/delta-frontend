@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test:local": "BASE_URL=http://localhost:3000 CORE_URL=http://localhost:5000 npx wdio config/chromedriver.conf.js",
-    "test:preview": "BASE_URL=http://localhost:3000 npx wdio config/chromedriver.conf.js",
+    "test:preview": "BASE_URL=http://localhost:3000 CORE_URL=https://delta-core.herokuapp.com npx wdio config/chromedriver.conf.js",
     "test:staging": "BASE_URL=https://delta-frontend.herokuapp.com CORE_URL=https://delta-core.herokuapp.com npx wdio config/chromedriver.conf.js",
     "eslint": "npx eslint ."
   },
