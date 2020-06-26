@@ -1,0 +1,4 @@
+node_modules/
+logs/
+screenshots/
+.delta_service
