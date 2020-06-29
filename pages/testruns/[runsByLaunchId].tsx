@@ -112,12 +112,12 @@ function Testruns(props: Props) {
                           </TableCell>
                           {testRun.duration.minutes === 0 ? (
                             <TableCell>
-                              {testRun.duration.seconds} sec
+                              {testRun.duration.seconds} seconds
                             </TableCell>
                           ) : (
                             <TableCell>
-                              {testRun.duration.minutes} min{" "}
-                              {testRun.duration.seconds} sec
+                              {testRun.duration.minutes} minutes{" "}
+                              {testRun.duration.seconds} seconds
                             </TableCell>
                           )}
                           <TableCell>
