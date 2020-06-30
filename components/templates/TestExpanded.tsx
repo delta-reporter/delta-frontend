@@ -14,6 +14,7 @@ import {
   TestMediaExpansionPanel,
 } from "./TestExpansionPanel"
 import { TestResolution } from "./TestResolution"
+import { showStatusIcon, showStatusText } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -108,6 +109,9 @@ export const TestExpanded = function(props: TestProps) {
     setResolutionResponse(value)
   }
 
+  function convertToSeconds(microseconds:number) {
+    return (microseconds/1000).toString()[0]
+  }
   return (
     <div
       key={children.test_history_id}
@@ -116,6 +120,10 @@ export const TestExpanded = function(props: TestProps) {
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
         <Paper className={classes.paperNoPadding} elevation={0}>
+           <Typography style={{ padding: "10px", fontWeight: 500, marginTop:"20px" , }}>
+           {showStatusText(children.status)}{children.name}
+            </Typography> 
+            {/* <hr style ={{ width:"100%"}} /> */}
           <AppBar
             style={{
               backgroundColor: "white",
@@ -145,10 +153,20 @@ export const TestExpanded = function(props: TestProps) {
             </Typography>
             <Typography style={{ padding: "10px" }}>
               Duration:
-              <span style={{ color: "grey" }}>
-                {" "}
-                {children.duration.minutes} min {children.duration.seconds} sec{" "}
-              </span>
+            
+
+                {children.duration.minutes === 0 ? (
+  <span style={{ color: "grey" }}>
+  {" "} </span>
+                ) : ( 
+                  <span style={{ color: "grey" }}>
+                  {" "}   {children.duration.minutes}m </span>
+               
+                )} 
+                 <span style={{ color: "grey" }}>
+                  {" "} {children.duration.seconds}.{convertToSeconds(children.duration.microseconds)}s{" "} </span>
+              
+             
             </Typography>
             {children.message ? ( // if there is any error message - show the info, else - test passed
               <div>

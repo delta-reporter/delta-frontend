@@ -148,6 +148,7 @@ export interface Test {
     days: number
     hours: number
     minutes: number
+    microseconds: number
     months: number
     seconds: number
     years: number

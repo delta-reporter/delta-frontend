@@ -1,21 +1,21 @@
 import React from "react"
 import { ListItem, ListItemText, ListItemIcon, Link } from "@material-ui/core/"
-import DashboardIcon from "@material-ui/icons/Dashboard"
-import BarChartIcon from "@material-ui/icons/Assignment" // AssignmentIcon, LayersIcon, BarChartIcon
+import HomeIcon from "@material-ui/icons/Home"
+import InsertChartIcon from '@material-ui/icons/InsertChart';
 
 export const SideBarMainItems = (
   <div>
     <Link color="inherit" href="/">
       <ListItem button href="/">
         <ListItemIcon>
-          <DashboardIcon />
+          <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="Projects" />
       </ListItem>
     </Link>
-    <ListItem button disabled>
+    <ListItem button href="/charts">
       <ListItemIcon>
-        <BarChartIcon />
+        <InsertChartIcon />
       </ListItemIcon>
       <ListItemText primary="Charts" />
     </ListItem>
