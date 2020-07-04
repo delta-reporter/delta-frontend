@@ -23,6 +23,7 @@ import {
 import Pagination from "../../components/templates/Pagination"
 import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
+import ReactEcharts from "echarts-for-react"
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -44,6 +45,75 @@ type Props = {
 
 function Launches(props: Props) {
   const classes = useStyles(props)
+
+  const perfectDist = [
+    { value: 20, name: "Apps Tests" },
+    { value: 40, name: "Visual Regression Tests" },
+    { value: 60, name: "End2End Tests" },
+    { value: 80, name: "Integration Tests" },
+    { value: 100, name: "Unit Tests" },
+  ]
+
+  const pyramidStyle = {height: "250px", width: "280px"}
+
+  const option = data => ({
+    title: {
+      text: "Release Zero",
+      subtext: "DoneDeal Search",
+    },
+    tooltip: {
+      trigger: "item",
+      formatter: "{a} <br/>{b} : {c} Tests executed",
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        saveAsImage: {
+          title: "Save as image"
+        }
+      }
+    },
+
+    series: [
+      {
+        name: "Test Run",
+        type: "funnel",
+        left: "10%",
+        // top: 40,
+        // x2: 80,
+        // bottom: 50,
+        width: "80%",
+        // height: {totalHeight} - y - y2,
+        min: 0,
+        max: 100,
+        minSize: "0%",
+        maxSize: "80%",
+        sort: "ascending",
+        gap: 2,
+        label: {
+          show: true,
+          position: "inside",
+        },
+        labelLine: {
+          length: 2,
+          lineStyle: {
+            width: 1,
+            type: "solid",
+          },
+        },
+        itemStyle: {
+          borderColor: "#fff",
+          borderWidth: 1,
+        },
+        emphasis: {
+          label: {
+            fontSize: 20,
+          },
+        },
+        data: data,
+      },
+    ],
+  })
 
   const [launchesList, setLaunchesList] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -231,6 +301,7 @@ function Launches(props: Props) {
                                 )}{" "}
                               </Button>
                             ))}
+                            <ReactEcharts option={option(perfectDist)} style={pyramidStyle} />
                           </TableCell>
                         </TableRow>
                       ))}
