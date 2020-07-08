@@ -23,6 +23,8 @@ import {
 import Pagination from "../../components/templates/Pagination"
 import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import ReactEcharts from "echarts-for-react"
 
 const useStyles = makeStyles(theme => ({
@@ -46,46 +48,31 @@ type Props = {
 function Launches(props: Props) {
   const classes = useStyles(props)
 
-  const perfectDist = [
-    { value: 20, name: "Apps Tests" },
-    { value: 40, name: "Visual Regression Tests" },
-    { value: 60, name: "End2End Tests" },
-    { value: 80, name: "Integration Tests" },
-    { value: 100, name: "Unit Tests" },
-  ]
+  let pyramidData = []
 
-  const pyramidStyle = {height: "250px", width: "280px"}
+  let roseData = []
 
-  const option = data => ({
+  const pyramidStyle = {height: "400px", width: "800px"}
+
+  const option = (pyramid, rose) => ({
     title: {
-      text: "Release Zero",
-      subtext: "DoneDeal Search",
+      // text: "Release X",
+      // subtext: "Component Name",
     },
     tooltip: {
       trigger: "item",
-      formatter: "{a} <br/>{b} : {c} Tests executed",
+      formatter: "{a} <br/>{b} : {c}",
     },
     toolbox: {
-      show: true,
-      feature: {
-        saveAsImage: {
-          title: "Save as image"
-        }
-      }
+      show: false
     },
 
     series: [
       {
-        name: "Test Run",
+        name: "Total tests",
         type: "funnel",
         left: "10%",
-        // top: 40,
-        // x2: 80,
-        // bottom: 50,
-        width: "80%",
-        // height: {totalHeight} - y - y2,
-        min: 0,
-        max: 100,
+        width: "50%",
         minSize: "0%",
         maxSize: "80%",
         sort: "ascending",
@@ -110,8 +97,16 @@ function Launches(props: Props) {
             fontSize: 20,
           },
         },
-        data: data,
+        data: pyramid,
       },
+      {
+        name: 'Tests by status',
+        type: 'pie',
+        radius: [10, 80],
+        center: ['80%', '50%'],
+        roseType: 'area',
+        data: rose
+    }
     ],
   })
 
@@ -120,6 +115,7 @@ function Launches(props: Props) {
   const [launchesPerPage] = useState(20)
   const indexOfLastItem = currentPage * launchesPerPage
   const indexOfFirstItem = indexOfLastItem - launchesPerPage
+  // pagination (first 20)
   const currentLaunches = props.launches.slice(
     indexOfFirstItem,
     indexOfLastItem
@@ -228,7 +224,80 @@ function Launches(props: Props) {
     return statusIcon
   }
 
+  function insertChartData(key, value, name) {
+    if (key == 'pyramid'){
+      pyramidData.push({value: value, name: name})
+    } else if (key == 'rose'){
+      let testTypeIndex = roseData.findIndex(arr => arr.name === name)
+
+      console.log(testTypeIndex)
+      if (testTypeIndex >= 0) {
+        let newValue = roseData[testTypeIndex].value + value;
+        roseData[testTypeIndex] = {value: newValue, name: name}
+      } else {
+        roseData.push({value: value, name: name})
+      }
+    }
+    return ""
+  }
+
+  function clearChartData() {
+    pyramidData = []
+    roseData = []
+    return ""
+  }
+
+  function testRunButtons(test_run_stats: any) {
+    return test_run_stats.map(testRun => (
+      <Button
+        key={testRun.test_run_id}
+        variant="contained"
+        href={`/tests/${testRun.test_run_id}`}
+        style={{
+          fontSize: "12px",
+          paddingLeft: "8px",
+          paddingRight: "3px",
+          paddingBottom: "0px",
+          paddingTop: "0px",
+          marginLeft: "5px",
+        }}
+      >
+        {testRun.test_type}{" "}
+        {testRun.tests_total ===
+        testRun.tests_passed + testRun.tests_skipped ? (
+          <div> {showStatusIcon("Successful")} </div>
+        ) : (
+          <div>{showStatusIcon("Failed")} </div>
+        )}{" "}
+      </Button>
+    ))
+  }
+
+  function testRunDelta(test_run_stats: any) {
+    test_run_stats.map(
+      tr_data => (
+        insertChartData("pyramid", tr_data.tests_total, tr_data.test_type),
+        insertChartData("rose", tr_data.tests_failed, "Failed"),
+        insertChartData("rose", tr_data.tests_passed, "Passed"),
+        insertChartData("rose", tr_data.tests_running, "Running"),
+        insertChartData("rose", tr_data.tests_incomplete, "Incomplete"),
+        insertChartData("rose", tr_data.tests_skipped, "Skipped")
+      )
+    )
+    return <ReactEcharts option={option(pyramidData, roseData)} style={pyramidStyle} />
+
+  }
+
+  const [switchState, setSwitchState] = React.useState({
+    deltaView: false
+  });
+
+  const handleSwitchChange = (event) => {
+    setSwitchState({ ...switchState, [event.target.name]: event.target.checked });
+  };
+
   return (
+
     <BasePage className={classes.root}>
       <title>Δ | Launches</title>
       <Breadcrumbs aria-label="breadcrumb">
@@ -241,22 +310,39 @@ function Launches(props: Props) {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <Typography
-                variant="h6"
-                color="secondary"
-                style={{ fontWeight: 400, margin: "5px" }}
-              >
-                Launches for{" "}
-                <Link
-                  style={{ color: "#605959" }}
-                  underline="none"
+            <Grid container>
+              <Grid item xs={10}>
+                <Typography
+                  variant="h6"
                   color="secondary"
+                  style={{ fontWeight: 400, margin: "5px" }}
                 >
-                  {" "}
-                  {props.launches[0].project}
-                </Link>{" "}
-                project
-              </Typography>
+                  Launches for{" "}
+                  <Link
+                    style={{ color: "#605959" }}
+                    underline="none"
+                    color="secondary"
+                  >
+                    {" "}
+                    {props.launches[0].project}
+                  </Link>{" "}
+                  project
+                </Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={switchState.deltaView}
+                      onChange={handleSwitchChange}
+                      name="deltaView"
+                      color="primary"
+                    />
+                  }
+                  label="Δ View"
+                />
+              </Grid>
+              </Grid>
               {props.launches[0] ? ( // checking if props exist
                 <div>
                   <Table size="small">
@@ -278,31 +364,13 @@ function Launches(props: Props) {
                           </TableCell>
                           <TableCell>{launch.name}</TableCell>
                           <TableCell>
-                            {launch.test_run_stats.map(testRun => (
-                              <Button
-                                key={testRun.test_run_id}
-                                variant="contained"
-                                href={`/tests/${testRun.test_run_id}`}
-                                style={{
-                                  fontSize: "12px",
-                                  paddingLeft: "8px",
-                                  paddingRight: "3px",
-                                  paddingBottom: "0px",
-                                  paddingTop: "0px",
-                                  marginLeft: "5px",
-                                }}
-                              >
-                                {testRun.test_type}{" "}
-                                {testRun.tests_total ===
-                                testRun.tests_passed + testRun.tests_skipped ? (
-                                  <div> {showStatusIcon("Successful")} </div>
-                                ) : (
-                                  <div>{showStatusIcon("Failed")} </div>
-                                )}{" "}
-                              </Button>
-                            ))}
-                            <ReactEcharts option={option(perfectDist)} style={pyramidStyle} />
+                            {!switchState.deltaView? (
+                              testRunButtons(launch.test_run_stats)
+                            ) : (
+                              testRunDelta(launch.test_run_stats)
+                            )}
                           </TableCell>
+                              {clearChartData()}
                         </TableRow>
                       ))}
                     </TableBody>{" "}
