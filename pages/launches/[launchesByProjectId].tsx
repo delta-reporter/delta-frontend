@@ -53,7 +53,7 @@ function Launches(props: Props) {
 
   let roseData = []
 
-  const pyramidStyle = {height: "400px", width: "800px"}
+  const deltaViewStyle = {height: "190px", width: "800px"}
 
   let onChartClick = (param, echarts) => {
     if(param.seriesType === "funnel"){
@@ -79,12 +79,13 @@ function Launches(props: Props) {
       {
         name: "Total tests",
         type: "funnel",
-        left: "10%",
-        width: "50%",
+        top: "10%",
+        width: "40%",
+        height: "85%",
         minSize: "0%",
         maxSize: "80%",
         sort: "ascending",
-        gap: 2,
+        gap: 1,
         label: {
           show: true,
           position: "inside",
@@ -290,7 +291,7 @@ function Launches(props: Props) {
         insertChartData("rose", tr_data.tests_skipped, "Skipped", launch_id)
       )
     )
-    return <ReactEcharts option={option(pyramidData, roseData)} style={pyramidStyle} onEvents={onChartEvents}/>
+    return <ReactEcharts option={option(pyramidData, roseData)} style={deltaViewStyle} onEvents={onChartEvents}/>
 
   }
 
