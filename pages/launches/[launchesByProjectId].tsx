@@ -55,7 +55,8 @@ function Launches(props: Props) {
 
   const deltaViewStyle = {height: "190px", width: "800px"}
 
-  let onChartClick = (param, echarts) => {
+  // The param echarts could be pass into this function as well
+  let onChartClick = (param) => {
     if(param.seriesType === "funnel"){
       Router.push('/tests/' + param.data.test_run_id)
     } else if (param.seriesType === "pie") {
