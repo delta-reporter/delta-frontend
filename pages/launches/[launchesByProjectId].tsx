@@ -25,6 +25,7 @@ import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Router from 'next/router'
 import ReactEcharts from "echarts-for-react"
 
 const useStyles = makeStyles(theme => ({
@@ -54,11 +55,19 @@ function Launches(props: Props) {
 
   const pyramidStyle = {height: "400px", width: "800px"}
 
+  let onChartClick = (param, echarts) => {
+    if(param.seriesType === "funnel"){
+      Router.push('/tests/' + param.data.test_run_id)
+    } else if (param.seriesType === "pie") {
+      Router.push('/testruns/' + param.data.launch_id)
+    }
+ }
+
+  let onChartEvents = {
+    'click': onChartClick
+  }
+
   const option = (pyramid, rose) => ({
-    title: {
-      // text: "Release X",
-      // subtext: "Component Name",
-    },
     tooltip: {
       trigger: "item",
       formatter: "{a} <br/>{b} : {c}",
@@ -66,7 +75,6 @@ function Launches(props: Props) {
     toolbox: {
       show: false
     },
-
     series: [
       {
         name: "Total tests",
@@ -224,18 +232,16 @@ function Launches(props: Props) {
     return statusIcon
   }
 
-  function insertChartData(key, value, name) {
+  function insertChartData(key, value, name, item_id) {
     if (key == 'pyramid'){
-      pyramidData.push({value: value, name: name})
+      pyramidData.push({value: value, name: name, test_run_id: item_id})
     } else if (key == 'rose'){
       let testTypeIndex = roseData.findIndex(arr => arr.name === name)
-
-      console.log(testTypeIndex)
       if (testTypeIndex >= 0) {
         let newValue = roseData[testTypeIndex].value + value;
-        roseData[testTypeIndex] = {value: newValue, name: name}
+        roseData[testTypeIndex] = {value: newValue, name: name, launch_id: item_id}
       } else {
-        roseData.push({value: value, name: name})
+        roseData.push({value: value, name: name, launch_id: item_id})
       }
     }
     return ""
@@ -273,18 +279,18 @@ function Launches(props: Props) {
     ))
   }
 
-  function testRunDelta(test_run_stats: any) {
+  function testRunDelta(test_run_stats: any, launch_id: number) {
     test_run_stats.map(
       tr_data => (
-        insertChartData("pyramid", tr_data.tests_total, tr_data.test_type),
-        insertChartData("rose", tr_data.tests_failed, "Failed"),
-        insertChartData("rose", tr_data.tests_passed, "Passed"),
-        insertChartData("rose", tr_data.tests_running, "Running"),
-        insertChartData("rose", tr_data.tests_incomplete, "Incomplete"),
-        insertChartData("rose", tr_data.tests_skipped, "Skipped")
+        insertChartData("pyramid", tr_data.tests_total, tr_data.test_type, tr_data.test_run_id),
+        insertChartData("rose", tr_data.tests_failed, "Failed", launch_id),
+        insertChartData("rose", tr_data.tests_passed, "Passed", launch_id),
+        insertChartData("rose", tr_data.tests_running, "Running", launch_id),
+        insertChartData("rose", tr_data.tests_incomplete, "Incomplete", launch_id),
+        insertChartData("rose", tr_data.tests_skipped, "Skipped", launch_id)
       )
     )
-    return <ReactEcharts option={option(pyramidData, roseData)} style={pyramidStyle} />
+    return <ReactEcharts option={option(pyramidData, roseData)} style={pyramidStyle} onEvents={onChartEvents}/>
 
   }
 
@@ -367,7 +373,7 @@ function Launches(props: Props) {
                             {!switchState.deltaView? (
                               testRunButtons(launch.test_run_stats)
                             ) : (
-                              testRunDelta(launch.test_run_stats)
+                              testRunDelta(launch.test_run_stats, launch.launch_id)
                             )}
                           </TableCell>
                               {clearChartData()}
