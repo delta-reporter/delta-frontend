@@ -1,7 +1,12 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+name: $[ variables['branchName'] ]
+
+# Using conditions to set the variable value. 
+# I guess if both conditions return true the last will be used.
+variables:
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/') }}:
+    branchName: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}:
+    branchName: $[ replace(variables['System.PullRequest.SourceBranch'], 'refs/heads/', '') ]
 
 trigger:
 - master
@@ -43,6 +48,6 @@ steps:
 
 - script: |
     cd tests/end_to_end
-    ARGOS_COMMIT=$(Build.SourceVersion) ARGOS_BRANCH=$(Build.SourceBranchName) \
+    ARGOS_COMMIT=$(Build.SourceVersion) ARGOS_BRANCH=$(branchName) \
     ./node_modules/.bin/argos upload screenshots/reference --token $(ARGOS_TOKEN) || true
   displayName: 'Delta Frontend - Screenshots upload to Argos'
