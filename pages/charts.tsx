@@ -1,7 +1,6 @@
 import { Container, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React from "react"
-import { AppContext } from "../components/AppContext"
 import { BasePage } from "../components/templates"
 import fetch from "isomorphic-unfetch"
 import {
@@ -119,8 +118,7 @@ function Charts(props: Props) {
 // The data required to render the page is available at build time ahead of a user’s request
 // https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
 
-Charts.getInitialProps = async (ctx: AppContext): Promise<Props> => {
-  const { store } = ctx
+Charts.getInitialProps = async (): Promise<Props> => {
   const projectReq = await fetch(`http://delta-core.dsch.dev/api/v1/projects`, {
     method: "GET",
   })
