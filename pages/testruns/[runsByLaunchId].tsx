@@ -63,7 +63,7 @@ function Testruns(props: Props) {
       <title>Δ | Test Runs</title>
       {props.test_runs[0] ? ( // checking if props exist
         <div>
-          <Breadcrumbs aria-label="breadcrumb">
+          <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>

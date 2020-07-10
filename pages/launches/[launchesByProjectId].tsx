@@ -308,7 +308,7 @@ function Launches(props: Props) {
 
     <BasePage className={classes.root}>
       <title>Δ | Launches</title>
-      <Breadcrumbs aria-label="breadcrumb">
+      <Breadcrumbs style={{ paddingLeft: "30px" }}>
         <Link color="inherit" href={`/`}>
           Projects
         </Link>

@@ -100,10 +100,7 @@ export const TestErrorMessageExpansionPanel = function(props: TestProps) {
         </CollapsedLineSummary>
         <PanelDetails>
           <List>
-            <ListItem
-              style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
-              button
-            >
+            <ListItem style={{ wordBreak: "break-all" }}>
               {" "}
               {children.trace}
             </ListItem>
@@ -128,9 +125,9 @@ export const TestMediaExpansionPanel = function(props: TestProps) {
   }
 
   return (
-    <div style={{ padding: "10px" }}>
+    <div style={{ paddingTop: "10px" }}>
       {children.media.map(media => (
-        <div style={{ padding: "10px" }}>
+        <div style={{ paddingTop: "10px" }} key={media.file_id}>
           <Card>
             <ExpandablePanel
               key={media.file_id}

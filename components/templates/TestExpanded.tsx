@@ -14,6 +14,7 @@ import {
   TestMediaExpansionPanel,
 } from "./TestExpansionPanel"
 import { TestResolution } from "./TestResolution"
+import { showStatusText } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -109,6 +110,9 @@ export const TestExpanded = function(props: TestProps) {
     setResolutionResponse(value)
   }
 
+  function convertToSeconds(microseconds: number) {
+    return (microseconds / 1000).toString()[0]
+  }
   return (
     <div
       key={children.test_history_id}
@@ -117,11 +121,22 @@ export const TestExpanded = function(props: TestProps) {
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
         <Paper className={classes.paperNoPadding} elevation={0}>
+          <Typography
+            style={{
+              padding: "10px",
+              fontWeight: 580,
+              fontSize: "18px",
+              marginTop: "20px",
+            }}
+          >
+            {showStatusText(children.status)}
+            {children.name}
+          </Typography>
           <AppBar
             style={{
               backgroundColor: "white",
               border: "none",
-              paddingTop: "45px",
+              paddingTop: "25px",
             }}
             variant="outlined"
             position="relative"
@@ -139,21 +154,32 @@ export const TestExpanded = function(props: TestProps) {
               <Tab label="Test History" id="tab-1" />
             </Tabs>
           </AppBar>
-          <TabPanel value={historyTabValue} index={0}>
-            <Typography style={{ padding: "10px" }}>
+          <TabPanel value={historyTabValue} index={0} >
+            <Typography style={{ paddingTop: "20px"}}>
               Full path:
-              <span style={{ color: "grey" }}> {children.file}</span>
+              <span style={{ color: "grey"}}> {children.file}</span>
             </Typography>
-            <Typography style={{ padding: "10px" }}>
+            <Typography style={{ paddingTop: "20px" }}>
               Duration:
+              {children.duration.minutes === 0 ? (
+                <span style={{ color: "grey" }}> </span>
+              ) : (
+                <span style={{ color: "grey" }}>
+                  {" "}
+                  {children.duration.minutes}m{" "}
+                </span>
+              )}
               <span style={{ color: "grey" }}>
                 {" "}
-                {children.duration.minutes} min {children.duration.seconds} sec{" "}
+                {children.duration.seconds}.
+                {convertToSeconds(children.duration.microseconds)}s{" "}
               </span>
             </Typography>
             {children.message ? ( // if there is any error message - show the info, else - test passed
               <div>
-                <Typography style={{ paddingTop: "10px", paddingLeft: "10px" }}>
+                <Typography
+                  style={{ paddingTop: "20px", paddingBottom: "20px" }}
+                >
                   Error type:
                   <span style={{ color: "grey" }}> {children.error_type} </span>
                 </Typography>
@@ -161,40 +187,52 @@ export const TestExpanded = function(props: TestProps) {
                 <TestErrorMessageExpansionPanel>
                   {children}
                 </TestErrorMessageExpansionPanel>
+                {children.media ? ( // check if there is any media for this test
+                  <TestMediaExpansionPanel key={children.file_id}>
+                    {children}
+                  </TestMediaExpansionPanel>
+                ) : (
+                  <div></div>
+                )}
+                <div style={{ paddingTop: "20px" }}>
+                  {children.resolution === "Not set" ? ( // when resolution is not set - show button
+                    <Typography className={classes.bigMargin}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleResolutionDialogOpen}
+                        className={classes.bigMargin}
+                      >
+                        Set test resolution
+                      </Button>{" "}
+                      <span
+                        style={{
+                          color: "grey",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        {resolutionResponse}
+                      </span>
+                    </Typography>
+                  ) : (
+                    <Typography style={{ paddingTop: "10px" }}>
+                      Test Resolution:
+                      <span style={{ color: "grey" }}>
+                        {" "}
+                        {children.resolution}{" "}
+                      </span>
+                    </Typography>
+                  )}
 
-                <div style={{ padding: "10px" }}>
-                  <Typography className={classes.bigMargin}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={handleResolutionDialogOpen}
-                      className={classes.bigMargin}
-                    >
-                      Set test resolution
-                    </Button>{" "}
-                    <span
-                      style={{
-                        color: "grey",
-                        fontStyle: "italic",
-                        padding: "10px",
-                      }}
-                    >
-                      {resolutionResponse}
-                    </span>
-                  </Typography>
                   <TestResolution
                     open={openResolutionDialog}
                     selectedValue={resolutionResponse}
                     onClose={handleResolutionDialogClose}
                     testHistoryId={children.test_history_id}
+                    testResolutions={testResolutions}
                   />
                 </div>
               </div>
-            ) : (
-              <div></div>
-            )}
-            {children.media ? ( // check if there is any media for this test
-              <TestMediaExpansionPanel>{children}</TestMediaExpansionPanel>
             ) : (
               <div></div>
             )}

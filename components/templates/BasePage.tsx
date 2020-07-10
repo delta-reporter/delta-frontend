@@ -2,22 +2,16 @@ import React from "react"
 import clsx from "clsx"
 import { makeStyles } from "@material-ui/core/styles"
 import {
-  Drawer,
   CssBaseline,
   Badge,
   AppBar,
-  List,
   Typography,
-  Divider,
   IconButton,
   Link,
   Toolbar,
 } from "@material-ui/core"
 import { Search, AccountBox } from "@material-ui/icons"
-import { SideBarMainItems, SideBarSecondaryItems } from "./Sidebar"
-import { PageHeader } from "./PageHeader"
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
-import MenuIcon from "@material-ui/icons/Menu"
+import { PageHeader } from "."
 
 const drawerWidth = 240
 
@@ -98,14 +92,7 @@ type Props = {
 export const BasePage = function(props: Props) {
   const { children, className } = props
   const classes = useStyles(props)
-  const [openSideBar, setOpenSideBar] = React.useState(false)
-
-  const handleDrawerOpen = () => {
-    setOpenSideBar(true)
-  }
-  const handleDrawerClose = () => {
-    setOpenSideBar(false)
-  }
+  const [openSideBar] = React.useState(false)
 
   return (
     <div className={`${classes.root} ${className}`}>
@@ -114,26 +101,20 @@ export const BasePage = function(props: Props) {
         position="absolute"
         className={clsx(classes.appBar, openSideBar && classes.appBarShift)}
       >
+        {/* top navigation bar with Delta name */}
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              openSideBar && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h5"
             color="secondary"
             style={{ fontWeight: 400, margin: "5px" }}
             className={classes.title}
           >
-            <Link underline="none" color="secondary" href="/">
+            <Link
+              underline="none"
+              color="secondary"
+              href="/"
+              style={{ paddingLeft: "20px" }}
+            >
               Δ Delta Reporter
             </Link>
           </Typography>
@@ -149,23 +130,6 @@ export const BasePage = function(props: Props) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !openSideBar && classes.drawerPaperClose),
-        }}
-        open={openSideBar}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{SideBarMainItems}</List>
-        <Divider />
-        <List>{SideBarSecondaryItems}</List>
-      </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <PageHeader />

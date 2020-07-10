@@ -70,7 +70,7 @@ function Tests(props: Props) {
       <title>Δ | Failed Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         <div>
-          <Breadcrumbs aria-label="breadcrumb">
+          <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
