@@ -153,10 +153,10 @@ export const TestExpanded = function(props: TestProps) {
               <Tab label="Test History" id="tab-1" />
             </Tabs>
           </AppBar>
-          <TabPanel value={historyTabValue} index={0}>
-            <Typography style={{ paddingTop: "20px" }}>
+          <TabPanel value={historyTabValue} index={0} >
+            <Typography style={{ paddingTop: "20px"}}>
               Full path:
-              <span style={{ color: "grey" }}> {children.file}</span>
+              <span style={{ color: "grey"}}> {children.file}</span>
             </Typography>
             <Typography style={{ paddingTop: "20px" }}>
               Duration:

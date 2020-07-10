@@ -55,6 +55,12 @@ const useStyles = makeStyles(theme => ({
     fontFamily: "Roboto",
     fontWeight: 400,
   },
+  backgroundGrey: {
+    backgroundColor: "#d6d6d6",
+  },
+  backgroundWhite: {
+    backgroundColor: "white",
+  },
 }))
 
 type Props = {
@@ -64,9 +70,11 @@ type Props = {
 function Tests(props: Props) {
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
+  const [highlightedTest, setHighlightedTest] = useState(0)
 
-  function changeRightSide(value) {
+  function changeRightSide(value, testId) {
     setTestInfoSection(value)
+    setHighlightedTest(testId)
   }
 
   const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
@@ -84,7 +92,7 @@ function Tests(props: Props) {
       <title>Δ | Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         <div>
-          <Breadcrumbs>
+          <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
@@ -128,7 +136,7 @@ function Tests(props: Props) {
                     <div
                       style={{
                         float: "left",
-                        width: "50%",
+                        width: "55%",
                         overflow: "hidden",
                         height: "max-content",
                         paddingRight: "20px",
@@ -162,17 +170,19 @@ function Tests(props: Props) {
                               </ExpansionPanelSummary>
                               <ExpansionPanelDetails>
                                 {/* Expanded tests list for each suite */}
-                                <List
-                                  key={suite.test_suite_history_id}
-                                  className={classes.root}
-                                  dense
-                                >
+                                <List key={suite.test_suite_history_id} dense>
                                   {suite.tests.map(test => (
                                     <ListItem
                                       button
                                       key={test.test_history_id}
-                                      className={classes.root}
-                                      onClick={() => changeRightSide(test)}
+                                      onClick={() =>
+                                        changeRightSide(test, test.test_id)
+                                      }
+                                      className={
+                                        test.test_id === highlightedTest
+                                          ? classes.backgroundGrey
+                                          : classes.backgroundWhite
+                                      }
                                     >
                                       {showStatusIcon(test.status)}
                                       <Typography

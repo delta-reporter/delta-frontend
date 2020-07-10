@@ -114,26 +114,15 @@ export const BasePage = function(props: Props) {
         position="absolute"
         className={clsx(classes.appBar, openSideBar && classes.appBarShift)}
       >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              openSideBar && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
+        {/* top navigation bar with Delta name */}
+        <Toolbar className={classes.toolbar}> 
           <Typography
             variant="h5"
             color="secondary"
             style={{ fontWeight: 400, margin: "5px" }}
             className={classes.title}
           >
-            <Link underline="none" color="secondary" href="/">
+            <Link underline="none" color="secondary" href="/" style={{paddingLeft:"20px"}}>
               Δ Delta Reporter
             </Link>
           </Typography>
@@ -149,23 +138,6 @@ export const BasePage = function(props: Props) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !openSideBar && classes.drawerPaperClose),
-        }}
-        open={openSideBar}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{SideBarMainItems}</List>
-        <Divider />
-        <List>{SideBarSecondaryItems}</List>
-      </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <PageHeader />
