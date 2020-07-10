@@ -81,6 +81,7 @@ const testResolutions = [
   "Product defect",
   "Test needs to be updated",
   "To investigate",
+  "Environment issue",
 ]
 
 interface TestProps {
