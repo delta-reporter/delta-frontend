@@ -12,18 +12,11 @@ interface ResolutionProps {
   selectedValue: string
   onClose: (value: string) => void
   testHistoryId: string | number
+  testResolutions: string[]
 }
 
 export const TestResolution = function(props: ResolutionProps) {
-  const { onClose, selectedValue, open, testHistoryId } = props
-
-  const testResolutions = [
-    "Not set",
-    "Test is flaky",
-    "Product defect",
-    "Test needs to be updated",
-    "To investigate",
-  ]
+  const { onClose, selectedValue, open, testHistoryId, testResolutions } = props
 
   const handleClose = () => {
     onClose(selectedValue)
