@@ -134,7 +134,7 @@ function Testruns(props: Props) {
                             <TableCell>
                               <Link
                                 underline="none"
-                                href={`/failedTests/${testRun.test_run_id}`}
+                                href={`/tests/failedTests/${testRun.test_run_id}`}
                               >
                                 View Failed tests
                               </Link>

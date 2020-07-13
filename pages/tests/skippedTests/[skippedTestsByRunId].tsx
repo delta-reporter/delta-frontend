@@ -1,8 +1,8 @@
 import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { SuiteAndTest } from "../index"
-import { BasePage, ListOfSuites } from "../../components/templates"
+import { SuiteAndTest } from "../../index"
+import { BasePage, ListOfSuites } from "../../../components/templates"
 import {
   Grid,
   Paper,
@@ -48,7 +48,7 @@ function Tests(props: Props) {
 
   return (
     <BasePage className={classes.root}>
-      <title>Δ | Tests</title>
+      <title>Δ | Skipped Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         <div>
           <Breadcrumbs style={{ paddingLeft: "30px" }}>
@@ -61,7 +61,13 @@ function Tests(props: Props) {
             >
               Launches
             </Link>
-            <Typography color="textPrimary">Tests</Typography>
+            <Link
+              color="inherit"
+              href={`/tests/${props.test_history[0].test_run_id}`}
+            >
+              All Tests
+            </Link>
+            <Typography color="textPrimary">Skipped Tests</Typography>
           </Breadcrumbs>
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
@@ -72,7 +78,7 @@ function Tests(props: Props) {
                     color="secondary"
                     style={{ fontWeight: 400, margin: "5px" }}
                   >
-                    Test suites for{" "}
+                    Skipped tests for{" "}
                     <Link
                       style={{ color: "#605959" }}
                       underline="none"
@@ -85,9 +91,9 @@ function Tests(props: Props) {
                     <Button
                       variant="text"
                       className={classes.padding}
-                      href={`/tests/failedTests/${props.test_history[0].test_run_id}`}
+                      href={`/tests/${props.test_history[0].test_run_id}`}
                     >
-                      Show only Failed Tests
+                      Show All Tests
                     </Button>
                   </Typography>
                   <ListOfSuites>{props.test_history}</ListOfSuites>
@@ -97,7 +103,7 @@ function Tests(props: Props) {
           </Container>
         </div>
       ) : (
-        <h1>No suites were found for this run! </h1>
+        <h1>No skipped tests for this run, well done! :) </h1>
       )}
     </BasePage>
   )
@@ -108,19 +114,19 @@ function Tests(props: Props) {
 // https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
 
 Tests.getInitialProps = async (context): Promise<Props> => {
-  const { testsByRunId } = context.query
+  const { skippedTestsByRunId } = context.query
 
   // Suites and tests (inside suites)
   const testsByTestRunIdReq = await fetch(
-    `${process.env.deltaCore}/api/v1/tests_history/test_run/${testsByRunId}`,
+    `${process.env.deltaCore}/api/v1/tests_history/test_status/5/test_run/${skippedTestsByRunId}`,
     {
       method: "GET",
     }
   )
-  const tests = await testsByTestRunIdReq.json()
+  const skippedTests = await testsByTestRunIdReq.json()
 
   return {
-    test_history: tests,
+    test_history: skippedTests,
   }
 }
 

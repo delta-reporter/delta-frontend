@@ -1,12 +1,8 @@
-import React, { useState } from "react"
+import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { SuiteAndTest } from "../index"
-import {
-  BasePage,
-  showStatusIcon,
-  TestExpanded,
-} from "../../components/templates"
+import { SuiteAndTest } from "../../index"
+import { BasePage, ListOfSuites } from "../../../components/templates"
 import {
   Grid,
   Paper,
@@ -14,9 +10,7 @@ import {
   Typography,
   Link,
   Breadcrumbs,
-  List,
   Button,
-  ListItem,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -43,13 +37,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "80%",
     color: "#353690",
   },
-  nameOfTestOrSuite: {
-    paddingLeft: theme.spacing(4),
-    fontSize: "0.875rem",
-    textAlign: "left",
-    fontFamily: "Roboto",
-    fontWeight: 400,
-  },
 }))
 
 type Props = {
@@ -58,12 +45,6 @@ type Props = {
 
 function Tests(props: Props) {
   const classes = useStyles(props)
-
-  const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
-
-  function changeRightSide(value) {
-    setTestInfoSection(value)
-  }
 
   return (
     <BasePage className={classes.root}>
@@ -107,62 +88,15 @@ function Tests(props: Props) {
                       {props.test_history[0].test_type}
                     </Link>{" "}
                     run
+                    <Button
+                      variant="text"
+                      className={classes.padding}
+                      href={`/tests/${props.test_history[0].test_run_id}`}
+                    >
+                      Show All Tests
+                    </Button>
                   </Typography>
-                  <Button
-                    variant="text"
-                    className={classes.padding}
-                    href={`/tests/${props.test_history[0].test_run_id}`}
-                  >
-                    Show All Tests
-                  </Button>
-                  <div>
-                    <div
-                      style={{
-                        float: "left",
-                        width: "50%",
-                        overflow: "hidden",
-                        height: "max-content",
-                        paddingRight: "20px",
-                      }}
-                    >
-                      {props.test_history.map(testRun => (
-                        <Paper key={testRun.test_run_id}>
-                          {testRun.test_suites.map(suite => (
-                            <List
-                              key={suite.test_suite_history_id}
-                              className={classes.root}
-                              dense
-                            >
-                              {suite.tests.map(test => (
-                                <ListItem
-                                  button
-                                  key={test.test_history_id}
-                                  className={classes.root}
-                                  onClick={() => changeRightSide(test)}
-                                >
-                                  {showStatusIcon(test.status)}
-                                  <Typography
-                                    className={classes.nameOfTestOrSuite}
-                                  >
-                                    {test.name}
-                                  </Typography>
-                                </ListItem>
-                              ))}
-                            </List>
-                          ))}
-                        </Paper>
-                      ))}
-                    </div>
-                    <div
-                      style={{
-                        float: "left",
-                        width: "45%",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <TestExpanded>{testInfoSection}</TestExpanded>
-                    </div>
-                  </div>
+                  <ListOfSuites>{props.test_history}</ListOfSuites>
                 </Paper>
               </Grid>
             </Grid>
