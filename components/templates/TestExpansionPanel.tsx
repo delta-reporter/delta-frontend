@@ -93,14 +93,14 @@ export const TestErrorMessageExpansionPanel = function(props: TestProps) {
         >
           <Typography
             color="textPrimary"
-            style={{ wordBreak: "break-all" }} // this is if the message is to long to make it fit the container
+            style={{ wordBreak: "break-all", whiteSpace: "pre-wrap" }} // this is if the message is to long to make it fit the container
           >
             {children.message}
           </Typography>
         </CollapsedLineSummary>
         <PanelDetails>
           <List>
-            <ListItem style={{ wordBreak: "break-all" }}>
+            <ListItem style={{ wordBreak: "break-all", whiteSpace: "pre-wrap" }}>
               {" "}
               {children.trace}
             </ListItem>
