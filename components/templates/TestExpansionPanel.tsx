@@ -1,4 +1,5 @@
 import React from "react"
+import useSWR  from "swr"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
@@ -13,6 +14,8 @@ import {
   CardMedia,
 } from "@material-ui/core"
 import ReactPlayer from "react-player"
+
+const fetcher = url => fetch(url).then(res => res.json());
 
 const ExpandablePanel = withStyles({
   root: {
@@ -181,6 +184,32 @@ export const TestMediaExpansionPanel = function(props: TestProps) {
           </Card>
         </div>
       ))}
+    </div>
+  )
+}
+
+export const HistoricalTests = function(test_id) {
+
+  const { data, mutate, error } = useSWR(`${process.env.publicDeltaCore}/api/v1/test_history/test_id/${test_id.children}`, fetcher);
+
+  const loading = !data && !error;
+  const no_data = error && error.status === 204;
+
+  return (
+    <div style={{ paddingTop: "10px" }}>
+      {loading ? (
+          "Loading historical tests..."
+        ) : (
+          data.map(test => (
+            test.media ? (
+              <TestMediaExpansionPanel key={test.file_id}>
+                {test}
+              </TestMediaExpansionPanel>
+            ) : (
+              <div></div>
+            )
+          ))
+        )}
     </div>
   )
 }

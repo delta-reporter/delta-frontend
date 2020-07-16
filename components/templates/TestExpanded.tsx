@@ -12,6 +12,7 @@ import {
 import {
   TestErrorMessageExpansionPanel,
   TestMediaExpansionPanel,
+  HistoricalTests,
 } from "./TestExpansionPanel"
 import { TestResolution } from "./TestResolution"
 import { showStatusText } from "."
@@ -113,6 +114,7 @@ export const TestExpanded = function(props: TestProps) {
   function convertToSeconds(microseconds: number) {
     return (microseconds / 1000).toString()[0]
   }
+
   return (
     <div
       key={children.test_history_id}
@@ -238,16 +240,9 @@ export const TestExpanded = function(props: TestProps) {
             )}
           </TabPanel>
           <TabPanel value={historyTabValue} index={1}>
-            <Typography style={{ padding: "10px" }}>
-              {" "}
-              COMING:
-              <span
-                style={{ color: "grey", fontStyle: "italic", padding: "10px" }}
-              >
-                Historical info for this test
-              </span>
+            <HistoricalTests>
               {children.test_id}
-            </Typography>
+            </HistoricalTests>
           </TabPanel>
         </Paper>
       ) : (
