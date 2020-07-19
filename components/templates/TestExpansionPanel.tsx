@@ -195,19 +195,62 @@ export const HistoricalTests = function(test_id) {
   const loading = !data && !error;
   const no_data = error && error.status === 204;
 
+  const [historicalTestsExpandedPanel, setHistoricalTestsExpandedPanel] = React.useState<
+    string | false
+  >(false)
+  const expandCollapsePanel = (historicalTestsPanel: string) => (
+    _event: React.ChangeEvent<{}>,
+    isExpanded: boolean
+  ) => {
+    setHistoricalTestsExpandedPanel(isExpanded ? historicalTestsPanel : false)
+  }
+
   return (
     <div style={{ paddingTop: "10px" }}>
       {loading ? (
           "Loading historical tests..."
         ) : (
           data.map(test => (
-            test.media ? (
-              <TestMediaExpansionPanel key={test.file_id}>
-                {test}
-              </TestMediaExpansionPanel>
-            ) : (
-              <div></div>
-            )
+          <ExpandablePanel
+              key={test.test_history_id}
+              expanded={historicalTestsExpandedPanel === test.test_history_id}
+              onChange={expandCollapsePanel(test.test_history_id)}
+              TransitionProps={{ unmountOnExit: true }}
+              style={{
+                backgroundColor: "#F3EFEE", // media block  expandable color
+                borderBottom: "1px solid #F3EFEE",
+              }}
+            >
+              <CollapsedLineSummary
+                expandIcon={<ExpandMoreIcon />}
+                style={{
+                  backgroundColor: "#F3EFEE", // media block collapsed color
+                  borderBottom: "1px solid #F3EFEE",
+                }}
+              >
+                <Typography color="textPrimary">{test.status} - Resolution: {test.resolution} Date: {test.end_datetime}</Typography>
+              </CollapsedLineSummary>
+              <PanelDetails>
+                <div>
+                  <Typography
+                    style={{ paddingTop: "20px", paddingBottom: "20px" }}
+                  >
+                    Error type:
+                    <span style={{ color: "grey" }}> {test.error_type} </span>
+                  </Typography>
+                  <TestErrorMessageExpansionPanel>
+                    {test}
+                  </TestErrorMessageExpansionPanel>
+                  {test.media ? (
+                  <TestMediaExpansionPanel key={test.file_id}>
+                    {test}
+                    </TestMediaExpansionPanel>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+              </PanelDetails>
+            </ExpandablePanel>
           ))
         )}
     </div>
