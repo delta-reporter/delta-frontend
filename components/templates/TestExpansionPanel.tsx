@@ -213,7 +213,18 @@ export const HistoricalTests = function(test_id) {
   }
 
   if(no_data){
-    return ("No Historical data was found")
+    return (
+      <Typography
+        align="center"
+        variant="subtitle2"
+        style={{paddingTop: "1em", paddingBottom: "1em",color: "#48D1CC",
+        margin: "5px",
+        border: "1px #48D1CC solid",
+        backgroundColor: "white"  }}
+        >
+          No historical data was found
+      </Typography>
+    )
   } else return (
     <div style={{ paddingTop: "10px" }}>
       {loading ? (
