@@ -4,6 +4,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
+import Divider from '@material-ui/core/Divider';
+import Container from '@material-ui/core/Container';
 import {
   Typography,
   List,
@@ -13,6 +15,11 @@ import {
   CardActionArea,
   CardMedia,
 } from "@material-ui/core"
+import {
+  showStatusText,
+  showResolutionText,
+  showDateText
+} from "."
 import ReactPlayer from "react-player"
 
 const fetcher = url => fetch(url).then(res => res.json());
@@ -190,7 +197,7 @@ export const TestMediaExpansionPanel = function(props: TestProps) {
 
 export const HistoricalTests = function(test_id) {
 
-  const { data, mutate, error } = useSWR(`${process.env.publicDeltaCore}/api/v1/test_history/test_id/${test_id.children}`, fetcher);
+  const { data, error } = useSWR(`${process.env.publicDeltaCore}/api/v1/test_history/test_id/${test_id.children}`, fetcher);
 
   const loading = !data && !error;
   const no_data = error && error.status === 204;
@@ -205,7 +212,9 @@ export const HistoricalTests = function(test_id) {
     setHistoricalTestsExpandedPanel(isExpanded ? historicalTestsPanel : false)
   }
 
-  return (
+  if(no_data){
+    return ("No Historical data was found")
+  } else return (
     <div style={{ paddingTop: "10px" }}>
       {loading ? (
           "Loading historical tests..."
@@ -228,19 +237,32 @@ export const HistoricalTests = function(test_id) {
                   borderBottom: "1px solid #F3EFEE",
                 }}
               >
-                <Typography color="textPrimary">{test.status} - Resolution: {test.resolution} Date: {test.end_datetime}</Typography>
+                <Typography color="textPrimary">{showStatusText(test.status)} {showResolutionText(test.resolution)} {showDateText(test.end_datetime)}</Typography>
               </CollapsedLineSummary>
               <PanelDetails>
-                <div>
-                  <Typography
-                    style={{ paddingTop: "20px", paddingBottom: "20px" }}
-                  >
-                    Error type:
-                    <span style={{ color: "grey" }}> {test.error_type} </span>
-                  </Typography>
-                  <TestErrorMessageExpansionPanel>
-                    {test}
-                  </TestErrorMessageExpansionPanel>
+                <Container maxWidth="sm">
+                  {test.error_type? (
+                      <Typography
+                        align="center"
+                        variant="subtitle2"
+                        style={{paddingTop: "1em", paddingBottom: "1em",color: "#C71585",
+                        margin: "5px",
+                        border: "1px #C71585 solid",
+                        backgroundColor: "white"  }}
+                      >
+                          {test.error_type}
+                      </Typography>
+                    ) : (
+                      <div></div>
+                    )
+                  }
+                  {test.trace? (
+                    <TestErrorMessageExpansionPanel>
+                      {test}
+                    </TestErrorMessageExpansionPanel>
+                  ) : (
+                    <div></div>
+                  )}
                   {test.media ? (
                   <TestMediaExpansionPanel key={test.file_id}>
                     {test}
@@ -248,7 +270,7 @@ export const HistoricalTests = function(test_id) {
                   ) : (
                     <div></div>
                   )}
-                </div>
+                </Container>
               </PanelDetails>
             </ExpandablePanel>
           ))
