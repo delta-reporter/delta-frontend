@@ -100,7 +100,9 @@ export const TestErrorMessageExpansionPanel = function(props: TestProps) {
         </CollapsedLineSummary>
         <PanelDetails>
           <List>
-            <ListItem style={{ wordBreak: "break-all", whiteSpace: "pre-wrap" }}>
+            <ListItem
+              style={{ wordBreak: "break-all", whiteSpace: "pre-wrap" }}
+            >
               {" "}
               {children.trace}
             </ListItem>

@@ -58,7 +58,6 @@ export function showStatusIcon(status) {
       } else if (status === "Skipped") {
         statusIcon = (
           <button style={{color:"grey", margin: "5px" , border: "1px grey solid", backgroundColor: "white"}}>SKIPPED</button>
-
         )
       } else if (status === "Running" || status === "In Process") {
         statusIcon = (

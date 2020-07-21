@@ -12,9 +12,9 @@ import {
 import {
   TestErrorMessageExpansionPanel,
   TestMediaExpansionPanel,
-} from "./TestExpansionPanel"
+} from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
-import { showStatusText } from "."
+import { showStatusText, HistoricalTests } from "."
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -113,6 +113,7 @@ export const TestExpanded = function(props: TestProps) {
   function convertToSeconds(microseconds: number) {
     return (microseconds / 1000).toString()[0]
   }
+
   return (
     <div
       key={children.test_history_id}
@@ -154,10 +155,10 @@ export const TestExpanded = function(props: TestProps) {
               <Tab label="Test History" id="tab-1" />
             </Tabs>
           </AppBar>
-          <TabPanel value={historyTabValue} index={0} >
-            <Typography style={{ paddingTop: "20px"}}>
+          <TabPanel value={historyTabValue} index={0}>
+            <Typography style={{ paddingTop: "20px" }}>
               Full path:
-              <span style={{ color: "grey"}}> {children.file}</span>
+              <span style={{ color: "grey" }}> {children.file}</span>
             </Typography>
             <Typography style={{ paddingTop: "20px" }}>
               Duration:
@@ -238,16 +239,7 @@ export const TestExpanded = function(props: TestProps) {
             )}
           </TabPanel>
           <TabPanel value={historyTabValue} index={1}>
-            <Typography style={{ padding: "10px" }}>
-              {" "}
-              COMING:
-              <span
-                style={{ color: "grey", fontStyle: "italic", padding: "10px" }}
-              >
-                Historical info for this test
-              </span>
-              {children.test_id}
-            </Typography>
+            <HistoricalTests>{children.test_id}</HistoricalTests>
           </TabPanel>
         </Paper>
       ) : (
