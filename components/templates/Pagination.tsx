@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, ButtonGroup, Paper } from "@material-ui/core"
+import { Button, ButtonGroup } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(theme => ({
@@ -9,9 +9,20 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
   },
+  backgroundGrey: {
+    backgroundColor: "#d6d6d6",
+  },
+  backgroundWhite: {
+    backgroundColor: "white",
+  },
 }))
 
-const Pagination = ({ itemsPerPage, totalNumber, paginate }) => {
+const Pagination = ({
+  itemsPerPage,
+  totalNumber,
+  paginate,
+  highlightedTest,
+}) => {
   const pageNumbers = []
   const classes = useStyles(itemsPerPage)
 
@@ -20,19 +31,23 @@ const Pagination = ({ itemsPerPage, totalNumber, paginate }) => {
   }
 
   return (
-    <Paper>
-      <ButtonGroup
-        className={classes.paper}
-        color="primary"
-        aria-label="outlined primary button group"
-      >
+    <div style={{ marginTop: "15px", width: "max-content" }}>
+      <ButtonGroup className={classes.paper}>
         {pageNumbers.map(num => (
-          <Button key={num} onClick={() => paginate(num)} className="page-link">
+          <Button
+            key={num}
+            onClick={() => paginate(num)}
+            className={
+              highlightedTest === num
+                ? classes.backgroundGrey
+                : classes.backgroundWhite
+            }
+          >
             {num}
           </Button>
         ))}
       </ButtonGroup>
-    </Paper>
+    </div>
   )
 }
 export default Pagination

@@ -4,18 +4,7 @@ import {Typography, Tooltip} from "@material-ui/core"
 export function showResolutionText(resolution) {
     let resolutionBadge
     if (resolution === "Not set") {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <button style={
-                    {
-                        color: "#008B8B",
-                        margin: "5px",
-                        border: "1px #008B8B solid",
-                        backgroundColor: "white"
-                    }
-                }>Not set</button>
-            </Tooltip>
-        )
+        resolutionBadge = ""
     } else if (resolution === "Test is flaky") {
         resolutionBadge = (
             <Tooltip title="Resolution">

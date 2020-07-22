@@ -1,20 +1,14 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import {
-  Paper,
-  Typography,
-  Box,
-  AppBar,
-  Tabs,
-  Tab,
-  Button,
-} from "@material-ui/core"
+import { Paper, Typography, Button } from "@material-ui/core"
 import {
   TestErrorMessageExpansionPanel,
   TestMediaExpansionPanel,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests } from "."
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
+import "react-tabs/style/react-tabs.css"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,46 +28,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     marginButtom: theme.spacing(3),
   },
-  marginBottom: {
-    marginButtom: theme.spacing(3),
-  },
   paperNoPadding: {
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
   },
-  tabs: {
-    marginTop: theme.spacing(1),
-    width: "100%",
-  },
-  backgroundColor: {
-    maxWidth: "50",
-  },
 }))
-
-interface TabPanelProps {
-  children?: React.ReactNode
-  dir?: string
-  index: any
-  value: any
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={3}>{children}</Box>}
-    </Typography>
-  )
-}
 
 const testResolutions = [
   "Not set",
@@ -91,11 +51,6 @@ interface TestProps {
 export const TestExpanded = function(props: TestProps) {
   const { children } = props
   const classes = useStyles(props)
-
-  const [historyTabValue, setHistoryTabValue] = React.useState(0)
-  const handleTabChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
-    setHistoryTabValue(newValue)
-  }
 
   const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
   const [resolutionResponse, setResolutionResponse] = React.useState(
@@ -118,7 +73,7 @@ export const TestExpanded = function(props: TestProps) {
     <div
       key={children.test_history_id}
       className={classes.root}
-      style={{ paddingLeft: "50px" }}
+      style={{ paddingLeft: "50px", paddingRight: "50px" }}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
         <Paper className={classes.paperNoPadding} elevation={0}>
@@ -128,119 +83,122 @@ export const TestExpanded = function(props: TestProps) {
               fontWeight: 580,
               fontSize: "18px",
               marginTop: "20px",
+              wordBreak: "break-all",
+              whiteSpace: "pre-wrap",
             }}
           >
             {showStatusText(children.status)}
             {children.name}
           </Typography>
-          <AppBar
-            style={{
-              backgroundColor: "white",
-              border: "none",
-              paddingTop: "25px",
-            }}
-            variant="outlined"
-            position="relative"
-            className={classes.tabs}
-          >
-            <Tabs
-              value={historyTabValue}
-              onChange={handleTabChange}
-              indicatorColor="primary"
-              textColor="secondary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <Tab label="Info" id="tab-0" />
-              <Tab label="Test History" id="tab-1" />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={historyTabValue} index={0}>
-            <Typography style={{ paddingTop: "20px" }}>
-              Full path:
-              <span style={{ color: "grey" }}> {children.file}</span>
-            </Typography>
-            <Typography style={{ paddingTop: "20px" }}>
-              Duration:
-              {children.duration.minutes === 0 ? (
-                <span style={{ color: "grey" }}> </span>
-              ) : (
+          <Tabs style={{ marginTop: "20px" }}>
+            <TabList>
+              <Tab style={{ fontSize: "16px" }}>Info</Tab>
+              <Tab style={{ fontSize: "16px" }}>Resolution</Tab>
+              <Tab style={{ fontSize: "16px" }}>Test History</Tab>
+            </TabList>
+            {/* info tab */}
+            <TabPanel>
+              <Typography style={{ paddingTop: "20px" }}>
+                Full path:
+                <span style={{ color: "grey" }}> {children.file}</span>
+              </Typography>
+              <Typography style={{ paddingTop: "20px" }}>
+                Duration:
+                {children.duration.minutes === 0 ? (
+                  <span style={{ color: "grey" }}> </span>
+                ) : (
+                  <span style={{ color: "grey" }}>
+                    {" "}
+                    {children.duration.minutes}m{" "}
+                  </span>
+                )}
                 <span style={{ color: "grey" }}>
                   {" "}
-                  {children.duration.minutes}m{" "}
+                  {children.duration.seconds}.
+                  {convertToSeconds(children.duration.microseconds)}s{" "}
                 </span>
-              )}
-              <span style={{ color: "grey" }}>
-                {" "}
-                {children.duration.seconds}.
-                {convertToSeconds(children.duration.microseconds)}s{" "}
-              </span>
-            </Typography>
-            {children.message ? ( // if there is any error message - show the info, else - test passed
-              <div>
-                <Typography
-                  style={{ paddingTop: "20px", paddingBottom: "20px" }}
-                >
-                  Error type:
-                  <span style={{ color: "grey" }}> {children.error_type} </span>
+              </Typography>
+              {children.retries ? ( // if there is any retries - show
+                <Typography style={{ paddingTop: "20px" }}>
+                  Retries:
+                  <span style={{ color: "grey" }}> {children.retries}</span>
                 </Typography>
+              ) : (
+                <div></div>
+              )}
+              {children.message ? ( // if there is any error message - show the info, else - test passed
+                <div>
+                  <Typography
+                    style={{ paddingTop: "20px", paddingBottom: "20px" }}
+                  >
+                    Error type:
+                    <span style={{ color: "grey" }}>
+                      {" "}
+                      {children.error_type}{" "}
+                    </span>
+                  </Typography>
 
-                <TestErrorMessageExpansionPanel>
-                  {children}
-                </TestErrorMessageExpansionPanel>
-                {children.media ? ( // check if there is any media for this test
-                  <TestMediaExpansionPanel key={children.file_id}>
+                  <TestErrorMessageExpansionPanel>
                     {children}
-                  </TestMediaExpansionPanel>
-                ) : (
-                  <div></div>
-                )}
-                <div style={{ paddingTop: "20px" }}>
-                  {children.resolution === "Not set" ? ( // when resolution is not set - show button
-                    <Typography className={classes.bigMargin}>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleResolutionDialogOpen}
-                        className={classes.bigMargin}
-                      >
-                        Set test resolution
-                      </Button>{" "}
-                      <span
-                        style={{
-                          color: "grey",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        {resolutionResponse}
-                      </span>
-                    </Typography>
+                  </TestErrorMessageExpansionPanel>
+                  {children.media ? ( // check if there is any media for this test
+                    <TestMediaExpansionPanel key={children.file_id}>
+                      {children}
+                    </TestMediaExpansionPanel>
                   ) : (
-                    <Typography style={{ paddingTop: "10px" }}>
-                      Test Resolution:
-                      <span style={{ color: "grey" }}>
-                        {" "}
-                        {children.resolution}{" "}
-                      </span>
-                    </Typography>
+                    <div></div>
                   )}
-
-                  <TestResolution
-                    open={openResolutionDialog}
-                    selectedValue={resolutionResponse}
-                    onClose={handleResolutionDialogClose}
-                    testHistoryId={children.test_history_id}
-                    testResolutions={testResolutions}
-                  />
                 </div>
+              ) : (
+                <div></div>
+              )}
+            </TabPanel>
+            <TabPanel>
+              {/* set resolution tab */}
+              <div style={{ paddingTop: "20px" }}>
+                {children.resolution === "Not set" ? ( // when resolution is not set - show button
+                  <Typography className={classes.bigMargin}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleResolutionDialogOpen}
+                      className={classes.bigMargin}
+                    >
+                      Set test resolution
+                    </Button>{" "}
+                    <span
+                      style={{
+                        color: "grey",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      {resolutionResponse}
+                    </span>
+                  </Typography>
+                ) : (
+                  <Typography style={{ paddingTop: "10px" }}>
+                    Test Resolution:
+                    <span style={{ color: "grey" }}>
+                      {" "}
+                      {children.resolution}{" "}
+                    </span>
+                  </Typography>
+                )}
+
+                <TestResolution
+                  open={openResolutionDialog}
+                  selectedValue={resolutionResponse}
+                  onClose={handleResolutionDialogClose}
+                  testHistoryId={children.test_history_id}
+                  testResolutions={testResolutions}
+                />
               </div>
-            ) : (
-              <div></div>
-            )}
-          </TabPanel>
-          <TabPanel value={historyTabValue} index={1}>
-            <HistoricalTests>{children.test_id}</HistoricalTests>
-          </TabPanel>
+            </TabPanel>
+            <TabPanel>
+              {/* historical info tab */}
+              <HistoricalTests>{children}</HistoricalTests>
+            </TabPanel>
+          </Tabs>
         </Paper>
       ) : (
         <Typography
