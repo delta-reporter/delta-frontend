@@ -56,7 +56,7 @@ describe("Main Delta Reporter", () => {
     $("p=Main Delta Reporter").click()
     $("p=Should open the main page").waitForClickable({ timeout: 1000 })
     $("p=Should open the main page").click()
-    $("=Test History").click()
+    $("li=Test History").click()
     browser.checkDocument()
   })
 })
