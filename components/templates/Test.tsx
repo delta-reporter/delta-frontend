@@ -128,6 +128,8 @@ export const TestExpanded = function(props: TestProps) {
               fontWeight: 580,
               fontSize: "18px",
               marginTop: "20px",
+              wordBreak: "break-all",
+              whiteSpace: "pre-wrap",
             }}
           >
             {showStatusText(children.status)}
@@ -176,6 +178,14 @@ export const TestExpanded = function(props: TestProps) {
                 {convertToSeconds(children.duration.microseconds)}s{" "}
               </span>
             </Typography>
+            {children.retries ? ( // if there is any retries - show
+              <Typography style={{ paddingTop: "20px" }}>
+                Retries:
+                {children.retries}
+              </Typography>
+            ) : (
+              <div></div>
+            )}
             {children.message ? ( // if there is any error message - show the info, else - test passed
               <div>
                 <Typography
@@ -239,7 +249,7 @@ export const TestExpanded = function(props: TestProps) {
             )}
           </TabPanel>
           <TabPanel value={historyTabValue} index={1}>
-            <HistoricalTests>{children.test_id}</HistoricalTests>
+            <HistoricalTests>{children}</HistoricalTests>
           </TabPanel>
         </Paper>
       ) : (

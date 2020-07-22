@@ -46,6 +46,8 @@ const useStyles = makeStyles(theme => ({
     textAlign: "left",
     fontFamily: "Roboto",
     fontWeight: 400,
+    wordBreak: "break-all",
+    whiteSpace: "pre-wrap",
   },
   backgroundGrey: {
     backgroundColor: "#d6d6d6",
@@ -56,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-    children: SuiteAndTest[]
+  children: SuiteAndTest[]
 }
 
 export const ListOfSuites = function(props: Props) {
@@ -82,6 +84,7 @@ export const ListOfSuites = function(props: Props) {
 
   return (
     <div>
+      {/* left-hand side for suites list */}
       <div
         style={{
           float: "left",
@@ -95,7 +98,7 @@ export const ListOfSuites = function(props: Props) {
         {children.map(testRun => (
           <div key={testRun.test_run_id}>
             {testRun.test_suites.map(suite => (
-              <ExpansionPanel
+              <ExpansionPanel // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}
                 onChange={expandCollapseSuite(suite.name)}
@@ -114,7 +117,7 @@ export const ListOfSuites = function(props: Props) {
                   )}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                  {/* Expanded tests list for each suite */}
+                  {/* Expandable tests list for each suite */}
                   <List key={suite.test_suite_history_id} dense>
                     {suite.tests.map(test => (
                       <ListItem
@@ -147,6 +150,7 @@ export const ListOfSuites = function(props: Props) {
           overflow: "hidden",
         }}
       >
+        {/* right-hand side for test info */}
         <TestExpanded>{testInfoSection}</TestExpanded>
       </div>
     </div>

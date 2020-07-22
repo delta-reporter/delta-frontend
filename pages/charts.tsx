@@ -119,7 +119,7 @@ function Charts(props: Props) {
 // https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
 
 Charts.getInitialProps = async (): Promise<Props> => {
-  const projectReq = await fetch(`http://delta-core.dsch.dev/api/v1/projects`, {
+  const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
     method: "GET",
   })
   const projects = await projectReq.json()
