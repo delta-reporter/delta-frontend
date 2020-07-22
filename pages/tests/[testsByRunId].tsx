@@ -50,7 +50,8 @@ function Tests(props: Props) {
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
-        <div>
+        //  id needed here for scrolling to the top when needed
+        <div id="page-top">
           <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects

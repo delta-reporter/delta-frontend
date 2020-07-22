@@ -120,21 +120,27 @@ export const ListOfSuites = function(props: Props) {
                   {/* Expandable tests list for each suite */}
                   <List key={suite.test_suite_history_id} dense>
                     {suite.tests.map(test => (
-                      <ListItem
-                        button
+                      <a
                         key={test.test_history_id}
-                        onClick={() => changeRightSide(test, test.test_id)}
-                        className={
-                          test.test_id === highlightedTest
-                            ? classes.backgroundGrey
-                            : classes.backgroundWhite
-                        }
+                        href="#page-top"
+                        style={{ textDecoration: "none", color: "black" }}
                       >
-                        {showStatusIcon(test.status)}
-                        <Typography className={classes.nameOfTestOrSuite}>
-                          {test.name}
-                        </Typography>
-                      </ListItem>
+                        <ListItem
+                          button
+                          key={test.test_history_id}
+                          onClick={() => changeRightSide(test, test.test_id)}
+                          className={
+                            test.test_id === highlightedTest
+                              ? classes.backgroundGrey
+                              : classes.backgroundWhite
+                          }
+                        >
+                          {showStatusIcon(test.status)}
+                          <Typography className={classes.nameOfTestOrSuite}>
+                            {test.name}
+                          </Typography>
+                        </ListItem>
+                      </a>
                     ))}
                   </List>
                 </ExpansionPanelDetails>
