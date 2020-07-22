@@ -24,6 +24,7 @@ describe("Main Delta Reporter", () => {
     Home.open()
     log.debug("check tests from a test run") // just to demonstrate logging in spec file
     $("p=Delta Reporter").click()
+    $("span=End to End").waitForClickable({ timeout: 3000 });
     $("span=End to End").click()
     browser.checkDocument()
   })
@@ -32,7 +33,9 @@ describe("Main Delta Reporter", () => {
     Home.open()
     log.debug("check tests from a test run") // just to demonstrate logging in spec file
     $("p=Delta Reporter").click()
+    $("span=End to End").waitForClickable({ timeout: 3000 });
     $("span=End to End").click()
+    $("span=Show only Failed Tests").waitForClickable({ timeout: 3000 });
     $("span=Show only Failed Tests").click()
     browser.checkDocument()
   })
@@ -41,7 +44,9 @@ describe("Main Delta Reporter", () => {
     Home.open()
     log.debug("check tests from a test run") // just to demonstrate logging in spec file
     $("p=Delta Reporter").click()
+    $("span=End to End").waitForClickable({ timeout: 3000 });
     $("span=End to End").click()
+    $("p=Main Delta Reporter").waitForClickable({ timeout: 1000 })
     $("p=Main Delta Reporter").click()
     $("p=Should open the main page").waitForClickable({ timeout: 1000 })
     $("p=Should open the main page").click()
@@ -52,10 +57,13 @@ describe("Main Delta Reporter", () => {
     Home.open()
     log.debug("check tests from a test run") // just to demonstrate logging in spec file
     $("p=Delta Reporter").click()
+    $("span=End to End").waitForClickable({ timeout: 3000 });
     $("span=End to End").click()
+    $("p=Main Delta Reporter").waitForClickable({ timeout: 1000 })
     $("p=Main Delta Reporter").click()
     $("p=Should open the main page").waitForClickable({ timeout: 1000 })
     $("p=Should open the main page").click()
+    $("li=Test History").waitForClickable({ timeout: 1000 })
     $("li=Test History").click()
     browser.checkDocument()
   })
