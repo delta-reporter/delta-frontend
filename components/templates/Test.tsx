@@ -73,7 +73,7 @@ export const TestExpanded = function(props: TestProps) {
     <div
       key={children.test_history_id}
       className={classes.root}
-      style={{ paddingLeft: "50px", paddingRight: "50px", paddingBottom: "50px"}}
+      style={{ paddingLeft: "50px", paddingRight: "50px" }}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
         <Paper className={classes.paperNoPadding} elevation={0}>

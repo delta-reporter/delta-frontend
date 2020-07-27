@@ -1,10 +1,9 @@
 import React from "react"
-import {Typography, Tooltip, Chip, Link} from "@material-ui/core"
+import {Typography, Tooltip} from "@material-ui/core"
 import CheckIcon from "@material-ui/icons/Check"
 import CloseIcon from "@material-ui/icons/Close"
 import UseAnimations from "react-useanimations"
 import SnoozeIcon from "@material-ui/icons/Snooze"
-
 
 export function showStatusIcon(status) {
   let statusIcon
@@ -46,7 +45,7 @@ export function showStatusIcon(status) {
   }
 
 
-export function showStatusText(status) {
+  export function showStatusText(status) {
     let statusIcon
     if (status === "Passed" || status === "Successful") {
       statusIcon = (
@@ -72,38 +71,5 @@ export function showStatusText(status) {
           </Typography>
         )
       }
-    return statusIcon
-}
-
-
-export function showAllStatusesLinks(testRunId) {
-
-      let statusesLinks = (
-        <div style={{display:"flex", marginTop: "20px", marginLeft: "350px" }}>
-          <p> Filter by Status:  </p> 
-          <div style={{margin: "10px" }}>
-            <Tooltip title="Tests Passed"> 
-              <Link color="inherit" href={`/tests/passedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#c6e1d4",  marginLeft:"10px"}} label="passed"/>
-                </Link> 
-            </Tooltip>
-            <Tooltip title="Tests Failed">
-              <Link color="inherit" href={`/tests/failedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#e1c6c6",  marginLeft:"10px"}} label="failed"/>
-              </Link> 
-            </Tooltip>
-            <Tooltip title="Tests Incomplete">
-              <Link color="inherit" href={`/tests/failedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#e1d4c6",  marginLeft:"10px"}} label="incomplete"/>
-              </Link> 
-            </Tooltip>
-            <Tooltip title="Tests Skipped">
-              <Link color="inherit" href={`/tests/skippedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#e3e1e1",  marginLeft:"10px"}} label="skipped"/>
-              </Link> 
-            </Tooltip>
-          </div>
-        </div>
-      )
-    return statusesLinks
-}
+      return statusIcon
+    }
