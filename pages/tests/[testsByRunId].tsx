@@ -2,7 +2,7 @@ import React from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
-import { BasePage, ListOfSuites } from "../../components/templates"
+import { BasePage, ListOfSuites, showAllStatusesLinks } from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -10,7 +10,6 @@ import {
   Typography,
   Link,
   Breadcrumbs,
-  Button,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -83,14 +82,9 @@ function Tests(props: Props) {
                       {props.test_history[0].test_type}
                     </Link>{" "}
                     run
-                    <Button
-                      variant="text"
-                      className={classes.padding}
-                      href={`/tests/failedTests/${props.test_history[0].test_run_id}`}
-                    >
-                      Show only Failed Tests
-                    </Button>
                   </Typography>
+                {showAllStatusesLinks(props.test_history[0].test_run_id)}
+                  {/* https://stackoverflow.com/questions/41181513/remove-items-from-a-dynamic-array */}
                   <ListOfSuites>{props.test_history}</ListOfSuites>
                 </Paper>
               </Grid>
