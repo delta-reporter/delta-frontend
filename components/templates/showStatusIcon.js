@@ -74,36 +74,3 @@ export function showStatusText(status) {
       }
     return statusIcon
 }
-
-
-export function showAllStatusesLinks(testRunId) {
-
-      let statusesLinks = (
-        <div style={{display:"flex", marginTop: "20px", marginLeft: "350px" }}>
-          <p> Filter by Status:  </p> 
-          <div style={{margin: "10px" }}>
-            <Tooltip title="Tests Passed"> 
-              <Link color="inherit" href={`/tests/passedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#c6e1d4",  marginLeft:"10px"}} label="passed"/>
-                </Link> 
-            </Tooltip>
-            <Tooltip title="Tests Failed">
-              <Link color="inherit" href={`/tests/failedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#e1c6c6",  marginLeft:"10px"}} label="failed"/>
-              </Link> 
-            </Tooltip>
-            <Tooltip title="Tests Incomplete">
-              <Link color="inherit" href={`/tests/failedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#e1d4c6",  marginLeft:"10px"}} label="incomplete"/>
-              </Link> 
-            </Tooltip>
-            <Tooltip title="Tests Skipped">
-              <Link color="inherit" href={`/tests/skippedTests/${testRunId}`}> 
-                <Chip size="small" variant="outlined" style={{backgroundColor: "#e3e1e1",  marginLeft:"10px"}} label="skipped"/>
-              </Link> 
-            </Tooltip>
-          </div>
-        </div>
-      )
-    return statusesLinks
-}

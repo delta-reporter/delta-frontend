@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
-import { BasePage, ListOfSuites, showAllStatusesLinks } from "../../components/templates"
+import { BasePage, ListOfSuites } from "../../components/templates"
 import {
   Grid,
   Paper,
@@ -10,6 +10,7 @@ import {
   Typography,
   Link,
   Breadcrumbs,
+  Button,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -36,6 +37,42 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "80%",
     color: "#353690",
   },
+  passedSelected: {
+   backgroundColor: "#c6e1d4",  
+   marginLeft:"10px",
+  },
+  failedSelected: {
+    backgroundColor: "#e1c6c6",  
+    marginLeft:"10px",
+  },
+  incompleteSelected: {
+    backgroundColor: "#e1d4c6",  
+    marginLeft:"10px",
+  },
+  skippedSelected: {
+    backgroundColor: "#e3e1e1",  
+    marginLeft:"10px",
+  },
+  passedNotSelected: {
+    color: "#c6e1d4",
+    border: "#c6e1d4",  
+    marginLeft:"10px",
+   },
+   failedNotSelected: {
+     color: "#e1c6c6",  
+     border: "#e1c6c6",  
+     marginLeft:"10px",
+   },
+   incompleteNotSelected: {
+     color: "#e1d4c6",  
+     border: "#e1d4c6",  
+     marginLeft:"10px",
+   },
+   skippedNotSelected: {
+     color: "#e3e1e1",  
+     border: "#e3e1e1",  
+     marginLeft:"10px",
+   },
 }))
 
 type Props = {
@@ -44,6 +81,36 @@ type Props = {
 
 function Tests(props: Props) {
   const classes = useStyles(props)
+
+  let statusArrayForEndpoint
+  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
+
+  async function handleStatusFilter(status, testRunId) {
+    if(selectedStatus.includes(status)) { // to remove the item, if it was selected already and user clicks again
+      setSelectedStatus(selectedStatus.filter(item => item !== status))
+      // we need to set the value for endpoint separately, 
+      // cause selectedStatus state doesn't update immediately and it will have a wrong value at this stage
+      statusArrayForEndpoint = (selectedStatus.filter(item => item !== status)).toString() 
+    }
+    else {
+      setSelectedStatus(selectedStatus.concat(status)) // to add status to array
+      statusArrayForEndpoint = (selectedStatus.concat(status)).toString() 
+    }
+   
+    // GET request using fetch with async/await
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+    console.log(requestOptions)
+
+    const response = await fetch(
+      `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${statusArrayForEndpoint}/test_run/${testRunId}`,
+      requestOptions
+    )
+    const data = await response.json()
+
+  }
 
   return (
     <BasePage className={classes.root}>
@@ -83,8 +150,34 @@ function Tests(props: Props) {
                     </Link>{" "}
                     run
                   </Typography>
-                {showAllStatusesLinks(props.test_history[0].test_run_id)}
-                  {/* https://stackoverflow.com/questions/41181513/remove-items-from-a-dynamic-array */}
+        <div style={{display:"flex", marginTop: "20px", marginLeft: "300px" }}>
+          <p> Filter by Status:  </p> 
+              <Button onClick={() => handleStatusFilter("1", props.test_history[0].test_run_id)} className={
+                            selectedStatus.includes("1")
+                              ? classes.passedSelected
+                              : classes.passedNotSelected
+                          }> passed
+                </Button> 
+                <Button onClick={() => handleStatusFilter("2", props.test_history[0].test_run_id)} className={
+                            selectedStatus.includes("2")
+                            ? classes.failedSelected
+                              : classes.failedNotSelected
+                          }> failed
+              </Button> 
+              <Button onClick={() => handleStatusFilter("3", props.test_history[0].test_run_id)} 
+              className={
+                selectedStatus.includes("3")
+                ? classes.incompleteSelected
+                  : classes.incompleteNotSelected
+              }> incomplete
+              </Button> 
+              <Button onClick={() => handleStatusFilter("5", props.test_history[0].test_run_id)} className={
+                            selectedStatus.includes("5")
+                            ? classes.skippedSelected
+                  : classes.skippedNotSelected
+              } >  skipped
+              </Button> 
+        </div>
                   <ListOfSuites>{props.test_history}</ListOfSuites>
                 </Paper>
               </Grid>
