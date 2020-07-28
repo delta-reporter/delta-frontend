@@ -35,8 +35,8 @@ describe("Main Delta Reporter", () => {
     $("p=Delta Reporter").click()
     $("span=End to End").waitForClickable({ timeout: 3000 });
     $("span=End to End").click()
-    $("span=Show only Failed Tests").waitForClickable({ timeout: 3000 });
-    $("span=Show only Failed Tests").click()
+    $("span=failed").waitForClickable({ timeout: 3000 });
+    $("span=failed").click()
     browser.checkDocument()
   })
 

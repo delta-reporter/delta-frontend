@@ -55,22 +55,22 @@ const useStyles = makeStyles(theme => ({
   },
   passedNotSelected: {
     color: "#c6e1d4",
-    border: "#c6e1d4",  
+    border: "1px #c6e1d4 solid",  
     marginLeft:"10px",
    },
    failedNotSelected: {
      color: "#e1c6c6",  
-     border: "#e1c6c6",  
+     border: "1px #e1c6c6 solid",  
      marginLeft:"10px",
    },
    incompleteNotSelected: {
      color: "#e1d4c6",  
-     border: "#e1d4c6",  
+     border: "1px #e1d4c6 solid",  
      marginLeft:"10px",
    },
    skippedNotSelected: {
      color: "#e3e1e1",  
-     border: "#e3e1e1",  
+     border: "1px #e3e1e1 solid",  
      marginLeft:"10px",
    },
 }))
@@ -86,15 +86,19 @@ function Tests(props: Props) {
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
 
   async function handleStatusFilter(status, testRunId) {
-    if(selectedStatus.includes(status)) { // to remove the item, if it was selected already and user clicks again
+    let previousArray = selectedStatus
+    if(selectedStatus.includes(status) && selectedStatus.length!=1) { // to remove the item, if it was selected already and user clicks again
       setSelectedStatus(selectedStatus.filter(item => item !== status))
       // we need to set the value for endpoint separately, 
       // cause selectedStatus state doesn't update immediately and it will have a wrong value at this stage
       statusArrayForEndpoint = (selectedStatus.filter(item => item !== status)).toString() 
     }
-    else {
-      setSelectedStatus(selectedStatus.concat(status)) // to add status to array
+    else if (!selectedStatus.includes(status)) { // to add status to array
+      setSelectedStatus(selectedStatus.concat(status)) 
       statusArrayForEndpoint = (selectedStatus.concat(status)).toString() 
+    }
+    else { // if user tries to deselect all filters - don't allow and show previous result
+      statusArrayForEndpoint = previousArray.toString() 
     }
    
     // GET request using fetch with async/await
@@ -156,26 +160,26 @@ function Tests(props: Props) {
                             selectedStatus.includes("1")
                               ? classes.passedSelected
                               : classes.passedNotSelected
-                          }> passed
+                          }>passed
                 </Button> 
                 <Button onClick={() => handleStatusFilter("2", props.test_history[0].test_run_id)} className={
                             selectedStatus.includes("2")
                             ? classes.failedSelected
                               : classes.failedNotSelected
-                          }> failed
+                          }>failed
               </Button> 
               <Button onClick={() => handleStatusFilter("3", props.test_history[0].test_run_id)} 
               className={
                 selectedStatus.includes("3")
                 ? classes.incompleteSelected
                   : classes.incompleteNotSelected
-              }> incomplete
+              }>incomplete
               </Button> 
               <Button onClick={() => handleStatusFilter("5", props.test_history[0].test_run_id)} className={
                             selectedStatus.includes("5")
                             ? classes.skippedSelected
                   : classes.skippedNotSelected
-              } >  skipped
+              } >skipped
               </Button> 
         </div>
                   <ListOfSuites>{props.test_history}</ListOfSuites>
