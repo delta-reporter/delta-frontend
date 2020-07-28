@@ -2,8 +2,8 @@ import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { Paper, Typography, Button } from "@material-ui/core"
 import {
-  TestErrorMessageExpansionPanel,
-  TestMediaExpansionPanel,
+  TestErrorMessageAccordion,
+  TestMediaAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests } from "."
@@ -138,13 +138,13 @@ export const TestExpanded = function(props: TestProps) {
                     </span>
                   </Typography>
 
-                  <TestErrorMessageExpansionPanel>
+                  <TestErrorMessageAccordion>
                     {children}
-                  </TestErrorMessageExpansionPanel>
+                  </TestErrorMessageAccordion>
                   {children.media ? ( // check if there is any media for this test
-                    <TestMediaExpansionPanel key={children.file_id}>
+                    <TestMediaAccordion key={children.file_id}>
                       {children}
-                    </TestMediaExpansionPanel>
+                    </TestMediaAccordion>
                   ) : (
                     <div></div>
                   )}

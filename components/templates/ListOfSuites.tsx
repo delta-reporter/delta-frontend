@@ -7,9 +7,9 @@ import {
 } from "../../components/templates"
 import {
   Typography,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   List,
   ListItem,
 } from "@material-ui/core"
@@ -98,13 +98,13 @@ export const ListOfSuites = function(props: Props) {
         {children.map(testRun => (
           <div key={testRun.test_run_id}>
             {testRun.test_suites.map(suite => (
-              <ExpansionPanel // list of expandable suites
+              <Accordion // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}
                 onChange={expandCollapseSuite(suite.name)}
                 TransitionProps={{ unmountOnExit: true }}
               >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   {showStatusIcon(suite.test_suite_status)}
                   <Typography className={classes.nameOfTestOrSuite}>
                     {suite.name}
@@ -115,8 +115,8 @@ export const ListOfSuites = function(props: Props) {
                     suite.tests_incomplete,
                     suite.tests_skipped
                   )}
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                   {/* Expandable tests list for each suite */}
                   <List key={suite.test_suite_history_id} dense>
                     {suite.tests.map(test => (
@@ -143,8 +143,8 @@ export const ListOfSuites = function(props: Props) {
                       </a>
                     ))}
                   </List>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
+                </AccordionDetails>
+              </Accordion>
             ))}
           </div>
         ))}

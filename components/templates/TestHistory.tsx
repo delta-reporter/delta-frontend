@@ -4,17 +4,17 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import Container from "@material-ui/core/Container"
 import {
   Typography,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Tooltip,
 } from "@material-ui/core"
 import {
   showStatusText,
   showResolutionText,
   showDateText,
-  TestErrorMessageExpansionPanel,
-  TestMediaExpansionPanel,
+  TestErrorMessageAccordion,
+  TestMediaAccordion,
 } from "."
 
 const fetcher = url => fetch(url).then(res => res.json())
@@ -67,13 +67,13 @@ export const HistoricalTests = function(props: TestProps) {
         {loading
           ? "Loading historical tests..."
           : data.map(test => (
-              <ExpansionPanel
+              <Accordion
                 key={test.test_history_id}
                 expanded={historicalTestsExpandedPanel === test.test_history_id}
                 onChange={expandCollapsePanel(test.test_history_id)}
                 TransitionProps={{ unmountOnExit: true }}
               >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography color="textPrimary">
                     {showStatusText(test.status)}{" "}
                     {showDateText(test.end_datetime)}
@@ -94,8 +94,8 @@ export const HistoricalTests = function(props: TestProps) {
                       <div></div>
                     )}
                   </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                   <Container maxWidth="sm">
                     {test.error_type ? (
                       <Typography
@@ -116,22 +116,22 @@ export const HistoricalTests = function(props: TestProps) {
                       <div></div>
                     )}
                     {test.trace ? (
-                      <TestErrorMessageExpansionPanel>
+                      <TestErrorMessageAccordion>
                         {test}
-                      </TestErrorMessageExpansionPanel>
+                      </TestErrorMessageAccordion>
                     ) : (
                       <div>Happy days :)</div>
                     )}
                     {test.media ? (
-                      <TestMediaExpansionPanel key={test.file_id}>
+                      <TestMediaAccordion key={test.file_id}>
                         {test}
-                      </TestMediaExpansionPanel>
+                      </TestMediaAccordion>
                     ) : (
                       <div></div>
                     )}
                   </Container>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
+                </AccordionDetails>
+              </Accordion>
             ))}
       </div>
     )

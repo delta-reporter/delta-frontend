@@ -1,8 +1,8 @@
 import React from "react"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel"
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
-import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails"
+import MuiAccordion from "@material-ui/core/Accordion"
+import MuiAccordionSummary from "@material-ui/core/AccordionSummary"
+import MuiAccordionDetails from "@material-ui/core/AccordionDetails"
 import {
   Typography,
   List,
@@ -29,7 +29,7 @@ const ExpandablePanel = withStyles({
     },
   },
   expanded: {},
-})(MuiExpansionPanel)
+})(MuiAccordion)
 
 const CollapsedLineSummary = withStyles({
   root: {
@@ -46,20 +46,20 @@ const CollapsedLineSummary = withStyles({
     },
   },
   expanded: {},
-})(MuiExpansionPanelSummary)
+})(MuiAccordionSummary)
 
 const PanelDetails = withStyles(theme => ({
   root: {
     padding: theme.spacing(2),
     width: "100%",
   },
-}))(MuiExpansionPanelDetails)
+}))(MuiAccordionDetails)
 
 interface TestProps {
   children: any
 }
 
-export const TestErrorMessageExpansionPanel = function(props: TestProps) {
+export const TestErrorMessageAccordion = function(props: TestProps) {
   const { children } = props
 
   const [expandedErrorPanel, setExpandedErrorPanel] = React.useState<
@@ -113,7 +113,7 @@ export const TestErrorMessageExpansionPanel = function(props: TestProps) {
   )
 }
 
-export const TestMediaExpansionPanel = function(props: TestProps) {
+export const TestMediaAccordion = function(props: TestProps) {
   const { children } = props
 
   const [mediaExpandedPanel, setMediaExpandedPanel] = React.useState<
