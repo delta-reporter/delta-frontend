@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
