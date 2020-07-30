@@ -70,9 +70,9 @@ type Props = {
 function Tests(props: Props) {
   const classes = useStyles(props)
 
-      // We are using two things here. State and var, they will hold the same value but used for different purposes
-      // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
-      // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for enpoint
+  // We are using two things here. State and var, they will hold the same value but used for different purposes
+  // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
+  // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for enpoint
   let statusArrayForEndpoint = "1+2+3+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
 
@@ -110,18 +110,17 @@ function Tests(props: Props) {
     setData(await response.json())
   }
 
-  
   return (
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
-      {data[0] ? ( // checking if props exist (if there are tests for this run)
+      {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
           <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
-            <Link color="inherit" href={`/launches/${data[0].project_id}`}>
+            <Link color="inherit" href={`/launches/${props.test_history[0].project_id}`}>
               Launches
             </Link>
             <Typography color="textPrimary">Tests</Typography>
@@ -142,7 +141,7 @@ function Tests(props: Props) {
                       color="secondary"
                     >
                       {" "}
-                      {data[0].test_type}
+                      {props.test_history[0].test_type}
                     </Link>{" "}
                     run
                   </Typography>
@@ -163,7 +162,7 @@ function Tests(props: Props) {
                     </p>
                     <Button
                       onClick={() =>
-                        handleStatusFilter("2", data[0].test_run_id)
+                        handleStatusFilter("2", props.test_history[0].test_run_id)
                       }
                       className={
                         selectedStatus.includes("2")
@@ -182,7 +181,7 @@ function Tests(props: Props) {
                     </Button>
                     <Button
                       onClick={() =>
-                        handleStatusFilter("1", data[0].test_run_id)
+                        handleStatusFilter("1", props.test_history[0].test_run_id)
                       }
                       className={
                         selectedStatus.includes("1")
@@ -201,7 +200,7 @@ function Tests(props: Props) {
                     </Button>
                     <Button
                       onClick={() =>
-                        handleStatusFilter("3", data[0].test_run_id)
+                        handleStatusFilter("3", props.test_history[0].test_run_id)
                       }
                       className={
                         selectedStatus.includes("3")
@@ -220,7 +219,7 @@ function Tests(props: Props) {
                     </Button>
                     <Button
                       onClick={() =>
-                        handleStatusFilter("5", data[0].test_run_id)
+                        handleStatusFilter("5", props.test_history[0].test_run_id)
                       }
                       className={
                         selectedStatus.includes("5")
@@ -238,7 +237,20 @@ function Tests(props: Props) {
                       skipped
                     </Button>
                   </div>
-                  <ListOfSuites children = {data} stats = {selectedStatus}></ListOfSuites>
+                  {data[0] ? ( // if there is no data returned from filtering - use initial props
+                    <ListOfSuites
+                      children={data}
+                      stats={selectedStatus}
+                    ></ListOfSuites>
+                  ) : (
+                    <div>
+                      <Typography style ={{fontStyle:'italic', margin:"10px", color: "red"}}>Sorry, there was no matching tests for this filter, showing full list of tests</Typography>
+                    <ListOfSuites
+                      children={props.test_history}
+                      stats={["1", "2", "3", "5"]}
+                    ></ListOfSuites>
+                    </div>
+                  )}
                 </Paper>
               </Grid>
             </Grid>
