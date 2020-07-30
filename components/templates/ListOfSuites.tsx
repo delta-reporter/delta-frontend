@@ -59,10 +59,11 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   children: SuiteAndTest[]
+  stats
 }
 
 export const ListOfSuites = function(props: Props) {
-  const { children } = props
+  const { children, stats } = props
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
   const [highlightedTest, setHighlightedTest] = useState(0)
@@ -72,6 +73,16 @@ export const ListOfSuites = function(props: Props) {
     setHighlightedTest(testId)
   }
 
+  function setStats() {
+    let settingStats = []
+    if(stats.includes("2")) settingStats.push("passed")
+    if(stats.includes("1")) settingStats.push("failed")
+    if(stats.includes("3")) settingStats.push("incomplete")
+    if(stats.includes("5")) settingStats.push("skipped")
+    return settingStats
+  }
+  let statsArray = setStats()
+  
   const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
     false
   )
@@ -113,7 +124,8 @@ export const ListOfSuites = function(props: Props) {
                     suite.tests_passed,
                     suite.tests_failed,
                     suite.tests_incomplete,
-                    suite.tests_skipped
+                    suite.tests_skipped,
+                    statsArray
                   )}
                 </AccordionSummary>
                 <AccordionDetails>

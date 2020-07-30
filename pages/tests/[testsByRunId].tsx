@@ -70,7 +70,10 @@ type Props = {
 function Tests(props: Props) {
   const classes = useStyles(props)
 
-  let statusArrayForEndpoint
+      // We are using two things here. State and var, they will hold the same value but used for different purposes
+      // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
+      // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for enpoint
+  let statusArrayForEndpoint = "1+2+3+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
 
   const [data, setData] = useState(props.test_history)
@@ -80,8 +83,6 @@ function Tests(props: Props) {
     if (selectedStatus.includes(status) && selectedStatus.length != 1) {
       // to remove the item, if it was selected already and user clicks again
       setSelectedStatus(selectedStatus.filter(item => item !== status))
-      // we need to set the value for endpoint separately,
-      // cause selectedStatus state doesn't update immediately and it will have a wrong value at this stage
       statusArrayForEndpoint = selectedStatus
         .filter(item => item !== status)
         .toString()
@@ -109,6 +110,7 @@ function Tests(props: Props) {
     setData(await response.json())
   }
 
+  
   return (
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
@@ -236,7 +238,7 @@ function Tests(props: Props) {
                       skipped
                     </Button>
                   </div>
-                  <ListOfSuites>{data}</ListOfSuites>
+                  <ListOfSuites children = {data} stats = {selectedStatus}></ListOfSuites>
                 </Paper>
               </Grid>
             </Grid>

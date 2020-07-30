@@ -1,7 +1,13 @@
 import React from "react"
 import { Tooltip, Chip } from "@material-ui/core"
 
-export function showTestStats(passed, failed, incomplete, skipped) {
+export function showTestStats(passed, failed, incomplete, skipped, statsArray) {
+
+  if(!statsArray.includes("passed")) passed = 0
+  if(!statsArray.includes("failed")) failed = 0
+  if(!statsArray.includes("incomplete")) incomplete = 0
+  if(!statsArray.includes("skipped")) skipped = 0
+
     return (
       <div style={{ position: "absolute", right: "120px" }}>
         {passed !== 0 ? (
