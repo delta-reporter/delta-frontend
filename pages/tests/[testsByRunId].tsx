@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
@@ -37,6 +37,30 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "80%",
     color: "#353690",
   },
+  passedSelected: {
+    backgroundColor: "#c6e1d4",
+  },
+  failedSelected: {
+    backgroundColor: "#e1c6c6",
+  },
+  incompleteSelected: {
+    backgroundColor: "#e1d4c6",
+  },
+  skippedSelected: {
+    backgroundColor: "#e3e1e1",
+  },
+  passedNotSelected: {
+    color: "#c6e1d4",
+  },
+  failedNotSelected: {
+    color: "#e1c6c6",
+  },
+  incompleteNotSelected: {
+    color: "#e1d4c6",
+  },
+  skippedNotSelected: {
+    color: "#e3e1e1",
+  },
 }))
 
 type Props = {
@@ -45,6 +69,46 @@ type Props = {
 
 function Tests(props: Props) {
   const classes = useStyles(props)
+
+  // We are using two things here. State and var, they will hold the same value but used for different purposes
+  // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
+  // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for enpoint
+  let statusArrayForEndpoint = "1+2+3+5"
+  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
+
+  const [data, setData] = useState(props.test_history)
+
+  async function handleStatusFilter(status, testRunId) {
+    let previousArray = selectedStatus
+    if (selectedStatus.includes(status) && selectedStatus.length != 1) {
+      // to remove the item, if it was selected already and user clicks again
+      setSelectedStatus(selectedStatus.filter(item => item !== status))
+      statusArrayForEndpoint = selectedStatus
+        .filter(item => item !== status)
+        .toString()
+    } else if (!selectedStatus.includes(status)) {
+      // to add status to array
+      setSelectedStatus(selectedStatus.concat(status))
+      statusArrayForEndpoint = selectedStatus.concat(status).toString()
+    } else {
+      // if user tries to deselect all filters - don't allow and show previous result
+      statusArrayForEndpoint = previousArray.toString()
+    }
+
+    // GET request using fetch with async/await
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+    console.log(requestOptions)
+
+    const response = await fetch(
+      `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${statusArrayForEndpoint}/test_run/${testRunId}`,
+      requestOptions
+    )
+    // we refresh the props here
+    setData(await response.json())
+  }
 
   return (
     <BasePage className={classes.root}>
@@ -56,10 +120,7 @@ function Tests(props: Props) {
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
-            <Link
-              color="inherit"
-              href={`/launches/${props.test_history[0].project_id}`}
-            >
+            <Link color="inherit" href={`/launches/${props.test_history[0].project_id}`}>
               Launches
             </Link>
             <Typography color="textPrimary">Tests</Typography>
@@ -83,15 +144,109 @@ function Tests(props: Props) {
                       {props.test_history[0].test_type}
                     </Link>{" "}
                     run
-                    <Button
-                      variant="text"
-                      className={classes.padding}
-                      href={`/tests/failedTests/${props.test_history[0].test_run_id}`}
-                    >
-                      Show only Failed Tests
-                    </Button>
                   </Typography>
-                  <ListOfSuites>{props.test_history}</ListOfSuites>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "20px",
+                      marginLeft: "300px",
+                    }}
+                  >
+                    <p
+                      style={{
+                        marginTop: "-0.5px",
+                      }}
+                    >
+                      {" "}
+                      Filter by Status:{" "}
+                    </p>
+                    <Button
+                      onClick={() =>
+                        handleStatusFilter("2", props.test_history[0].test_run_id)
+                      }
+                      className={
+                        selectedStatus.includes("2")
+                          ? classes.passedSelected
+                          : classes.passedNotSelected
+                      }
+                      style={{
+                        width: "90px",
+                        height: "30px",
+                        marginLeft: "10px",
+                        border: "1px #a7bab1 solid",
+                        fontSize: "12px",
+                      }}
+                    >
+                      passed
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleStatusFilter("1", props.test_history[0].test_run_id)
+                      }
+                      className={
+                        selectedStatus.includes("1")
+                          ? classes.failedSelected
+                          : classes.failedNotSelected
+                      }
+                      style={{
+                        width: "90px",
+                        height: "30px",
+                        marginLeft: "10px",
+                        border: "1px #c3acac solid",
+                        fontSize: "12px",
+                      }}
+                    >
+                      failed
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleStatusFilter("3", props.test_history[0].test_run_id)
+                      }
+                      className={
+                        selectedStatus.includes("3")
+                          ? classes.incompleteSelected
+                          : classes.incompleteNotSelected
+                      }
+                      style={{
+                        width: "90px",
+                        height: "30px",
+                        marginLeft: "10px",
+                        border: "1px #c5baae solid",
+                        fontSize: "12px",
+                      }}
+                    >
+                      incomplete
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleStatusFilter("5", props.test_history[0].test_run_id)
+                      }
+                      className={
+                        selectedStatus.includes("5")
+                          ? classes.skippedSelected
+                          : classes.skippedNotSelected
+                      }
+                      style={{
+                        width: "90px",
+                        height: "30px",
+                        marginLeft: "10px",
+                        border: "1px #c7c5c5 solid",
+                        fontSize: "12px",
+                      }}
+                    >
+                      skipped
+                    </Button>
+                  </div>
+                  {data[0] ? ( // if there is no data returned from filtering - use initial props
+                    <ListOfSuites
+                      children={data}
+                      stats={selectedStatus}
+                    ></ListOfSuites>
+                  ) : (
+                    <div>
+                      <Typography style ={{fontStyle:'italic', margin:"20px", color: "red"}}>Sorry, there are no matching tests for this filter</Typography>
+                    </div>
+                  )}
                 </Paper>
               </Grid>
             </Grid>

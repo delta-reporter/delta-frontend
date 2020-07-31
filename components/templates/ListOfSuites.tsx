@@ -7,9 +7,9 @@ import {
 } from "../../components/templates"
 import {
   Typography,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   List,
   ListItem,
 } from "@material-ui/core"
@@ -59,10 +59,11 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   children: SuiteAndTest[]
+  stats
 }
 
 export const ListOfSuites = function(props: Props) {
-  const { children } = props
+  const { children, stats } = props
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
   const [highlightedTest, setHighlightedTest] = useState(0)
@@ -72,6 +73,16 @@ export const ListOfSuites = function(props: Props) {
     setHighlightedTest(testId)
   }
 
+  function setStats() {
+    let settingStats = []
+    if(stats.includes("2")) settingStats.push("passed")
+    if(stats.includes("1")) settingStats.push("failed")
+    if(stats.includes("3")) settingStats.push("incomplete")
+    if(stats.includes("5")) settingStats.push("skipped")
+    return settingStats
+  }
+  let statsArray = setStats()
+  
   const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
     false
   )
@@ -98,13 +109,13 @@ export const ListOfSuites = function(props: Props) {
         {children.map(testRun => (
           <div key={testRun.test_run_id}>
             {testRun.test_suites.map(suite => (
-              <ExpansionPanel // list of expandable suites
+              <Accordion // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}
                 onChange={expandCollapseSuite(suite.name)}
                 TransitionProps={{ unmountOnExit: true }}
               >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   {showStatusIcon(suite.test_suite_status)}
                   <Typography className={classes.nameOfTestOrSuite}>
                     {suite.name}
@@ -113,10 +124,11 @@ export const ListOfSuites = function(props: Props) {
                     suite.tests_passed,
                     suite.tests_failed,
                     suite.tests_incomplete,
-                    suite.tests_skipped
+                    suite.tests_skipped,
+                    statsArray
                   )}
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                </AccordionSummary>
+                <AccordionDetails>
                   {/* Expandable tests list for each suite */}
                   <List key={suite.test_suite_history_id} dense>
                     {suite.tests.map(test => (
@@ -143,8 +155,8 @@ export const ListOfSuites = function(props: Props) {
                       </a>
                     ))}
                   </List>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
+                </AccordionDetails>
+              </Accordion>
             ))}
           </div>
         ))}
