@@ -6,7 +6,7 @@ import Router from "next/router"
 let pyramidData = []
 let roseData = []
 
-export function testRunButtonsDeltaView(testRunStats: any) {
+export function testRunButtonsDefaultView(testRunStats: any) {
   return testRunStats.map(testRun => (
     <Button
       key={testRun.test_run_id}
@@ -31,7 +31,7 @@ export function testRunButtonsDeltaView(testRunStats: any) {
   ))
 }
 
-export function testRunPyramidDeltaView(testRunStats: any, launchId: number) {
+export function testRunButtonsDeltaPyramidView(testRunStats: any, launchId: number) {
   const deltaViewStyle = { height: "190px", width: "800px" }
 
   // The param echarts could be pass into this function as well

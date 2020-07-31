@@ -2,8 +2,8 @@ import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { Paper, Typography, Button } from "@material-ui/core"
 import {
-  TestErrorMessageExpansionPanel,
-  TestMediaExpansionPanel,
+  TestErrorMessageAccordion,
+  TestMediaAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests } from "."
@@ -73,7 +73,7 @@ export const TestExpanded = function(props: TestProps) {
     <div
       key={children.test_history_id}
       className={classes.root}
-      style={{ paddingLeft: "50px", paddingRight: "50px" }}
+      style={{ paddingLeft: "50px", paddingRight: "50px", paddingBottom: "50px"}}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
         <Paper className={classes.paperNoPadding} elevation={0}>
@@ -138,13 +138,13 @@ export const TestExpanded = function(props: TestProps) {
                     </span>
                   </Typography>
 
-                  <TestErrorMessageExpansionPanel>
+                  <TestErrorMessageAccordion>
                     {children}
-                  </TestErrorMessageExpansionPanel>
+                  </TestErrorMessageAccordion>
                   {children.media ? ( // check if there is any media for this test
-                    <TestMediaExpansionPanel key={children.file_id}>
+                    <TestMediaAccordion key={children.file_id}>
                       {children}
-                    </TestMediaExpansionPanel>
+                    </TestMediaAccordion>
                   ) : (
                     <div></div>
                   )}

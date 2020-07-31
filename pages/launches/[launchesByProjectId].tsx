@@ -23,8 +23,8 @@ import {
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
 import {
-  testRunButtonsDeltaView,
-  testRunPyramidDeltaView,
+  testRunButtonsDefaultView,
+  testRunButtonsDeltaPyramidView,
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
 
@@ -160,8 +160,8 @@ function Launches(props: Props) {
                           <TableCell>
                             {/* Switch option for Delta View (pyramid style) */}
                             {!switchViews.deltaView
-                              ? testRunButtonsDeltaView(launch.test_run_stats)
-                              : testRunPyramidDeltaView(
+                              ? testRunButtonsDefaultView(launch.test_run_stats)
+                              : testRunButtonsDeltaPyramidView(
                                   launch.test_run_stats,
                                   launch.launch_id
                                 )}
