@@ -39,9 +39,9 @@ export function showTestStats(passed, failed, incomplete, skipped, statsArray) {
         )}
         {skipped !== 0 ? (
           <Tooltip title="Tests Skipped">
-            <Chip size="small" variant="outlined"
-            style={{ marginLeft:"3px" }}
-            label={skipped} />
+             <Chip size="small" variant="outlined" style={{ 
+              backgroundColor: "#e3e1e1", marginLeft:"3px"
+            }} label={skipped} />
           </Tooltip>
         ) : (
           <span></span>
