@@ -244,11 +244,7 @@ function Tests(props: Props) {
                     ></ListOfSuites>
                   ) : (
                     <div>
-                      <Typography style ={{fontStyle:'italic', margin:"10px", color: "red"}}>Sorry, there was no matching tests for this filter, showing full list of tests</Typography>
-                    <ListOfSuites
-                      children={props.test_history}
-                      stats={["1", "2", "3", "5"]}
-                    ></ListOfSuites>
+                      <Typography style ={{fontStyle:'italic', margin:"20px", color: "red"}}>Sorry, there are no matching tests for this filter</Typography>
                     </div>
                   )}
                 </Paper>
