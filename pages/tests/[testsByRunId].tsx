@@ -73,7 +73,7 @@ function Tests({ test_history }) {
     project_id,
     test_type,
     test_run_id,
-    test_run_data: { spectre_test_run_url },
+    test_run_data,
   } = history
   const classes = useStyles(test_history)
 
@@ -160,10 +160,10 @@ function Tests({ test_history }) {
                       width: "50%",
                     }}
                   >
-                    {spectre_test_run_url ? (
+                    {test_run_data && test_run_data.spectre_test_run_url ? (
                       <div>
                         <Button
-                          href={spectre_test_run_url}
+                          href={test_run_data.spectre_test_run_url}
                           style={{
                             backgroundColor: "#90caf9",
                             color: "white",
