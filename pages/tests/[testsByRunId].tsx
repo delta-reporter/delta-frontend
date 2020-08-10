@@ -68,7 +68,7 @@ type Props = {
 }
 
 function Tests(props: Props) {
-  const classes = useStyles(props)
+  const classes = useStyles(props.test_history)
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
@@ -80,7 +80,7 @@ function Tests(props: Props) {
 
   async function handleStatusFilter(status, testRunId) {
     let previousArray = selectedStatus
-    if (selectedStatus.includes(status) && selectedStatus.length != 1) {
+    if (selectedStatus.includes(status) && selectedStatus.length !== 1) {
       // to remove the item, if it was selected already and user clicks again
       setSelectedStatus(selectedStatus.filter(item => item !== status))
       statusArrayForEndpoint = selectedStatus
@@ -120,7 +120,10 @@ function Tests(props: Props) {
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
-            <Link color="inherit" href={`/launches/${props.test_history[0].project_id}`}>
+            <Link
+              color="inherit"
+              href={`/launches/${props.test_history[0].project_id}`}
+            >
               Launches
             </Link>
             <Typography color="textPrimary">Tests</Typography>
@@ -149,93 +152,129 @@ function Tests(props: Props) {
                     style={{
                       display: "flex",
                       marginTop: "20px",
-                      marginLeft: "300px",
+                      alignItems: "baseline",
+                      width: "50%",
                     }}
                   >
-                    <p
+                    {props.test_history[0].test_run_data &&
+                    props.test_history[0].test_run_data.spectre_test_run_url ? (
+                      <div>
+                        <Button
+                          href={
+                            props.test_history[0].test_run_data
+                              .spectre_test_run_url
+                          }
+                          style={{
+                            backgroundColor: "#90caf9",
+                            color: "white",
+                            width: "90px",
+                            height: "30px",
+                            marginLeft: "10px",
+                            border: "1px #a7bab1 solid",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Spectre
+                        </Button>
+                      </div>
+                    ) : null}
+                    <div
                       style={{
-                        marginTop: "-0.5px",
+                        display: "flex",
+                        marginLeft: "50px",
+                        alignItems: "baseline",
                       }}
                     >
-                      {" "}
-                      Filter by Status:{" "}
-                    </p>
-                    <Button
-                      onClick={() =>
-                        handleStatusFilter("2", props.test_history[0].test_run_id)
-                      }
-                      className={
-                        selectedStatus.includes("2")
-                          ? classes.passedSelected
-                          : classes.passedNotSelected
-                      }
-                      style={{
-                        width: "90px",
-                        height: "30px",
-                        marginLeft: "10px",
-                        border: "1px #a7bab1 solid",
-                        fontSize: "12px",
-                      }}
-                    >
-                      passed
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        handleStatusFilter("1", props.test_history[0].test_run_id)
-                      }
-                      className={
-                        selectedStatus.includes("1")
-                          ? classes.failedSelected
-                          : classes.failedNotSelected
-                      }
-                      style={{
-                        width: "90px",
-                        height: "30px",
-                        marginLeft: "10px",
-                        border: "1px #c3acac solid",
-                        fontSize: "12px",
-                      }}
-                    >
-                      failed
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        handleStatusFilter("3", props.test_history[0].test_run_id)
-                      }
-                      className={
-                        selectedStatus.includes("3")
-                          ? classes.incompleteSelected
-                          : classes.incompleteNotSelected
-                      }
-                      style={{
-                        width: "90px",
-                        height: "30px",
-                        marginLeft: "10px",
-                        border: "1px #c5baae solid",
-                        fontSize: "12px",
-                      }}
-                    >
-                      incomplete
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        handleStatusFilter("5", props.test_history[0].test_run_id)
-                      }
-                      className={
-                        selectedStatus.includes("5")
-                          ? classes.skippedSelected
-                          : classes.skippedNotSelected
-                      }
-                      style={{
-                        width: "90px",
-                        height: "30px",
-                        marginLeft: "10px",
-                        border: "1px #c7c5c5 solid",
-                        fontSize: "12px",
-                      }}
-                    >
-                      skipped
-                    </Button>
+                      <p> Filter by Status: </p>
+                      <Button
+                        onClick={() =>
+                          handleStatusFilter(
+                            "2",
+                            props.test_history[0].test_run_id
+                          )
+                        }
+                        className={
+                          selectedStatus.includes("2")
+                            ? classes.passedSelected
+                            : classes.passedNotSelected
+                        }
+                        style={{
+                          width: "90px",
+                          height: "30px",
+                          marginLeft: "10px",
+                          border: "1px #a7bab1 solid",
+                          fontSize: "12px",
+                        }}
+                      >
+                        passed
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleStatusFilter(
+                            "1",
+                            props.test_history[0].test_run_id
+                          )
+                        }
+                        className={
+                          selectedStatus.includes("1")
+                            ? classes.failedSelected
+                            : classes.failedNotSelected
+                        }
+                        style={{
+                          width: "90px",
+                          height: "30px",
+                          marginLeft: "10px",
+                          border: "1px #c3acac solid",
+                          fontSize: "12px",
+                        }}
+                      >
+                        failed
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleStatusFilter(
+                            "3",
+                            props.test_history[0].test_run_id
+                          )
+                        }
+                        className={
+                          selectedStatus.includes("3")
+                            ? classes.incompleteSelected
+                            : classes.incompleteNotSelected
+                        }
+                        style={{
+                          width: "90px",
+                          height: "30px",
+                          marginLeft: "10px",
+                          border: "1px #c5baae solid",
+                          fontSize: "12px",
+                        }}
+                      >
+                        incomplete
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleStatusFilter(
+                            "5",
+                            props.test_history[0].test_run_id
+                          )
+                        }
+                        className={
+                          selectedStatus.includes("5")
+                            ? classes.skippedSelected
+                            : classes.skippedNotSelected
+                        }
+                        style={{
+                          width: "90px",
+                          height: "30px",
+                          marginLeft: "10px",
+                          border: "1px #c7c5c5 solid",
+                          fontSize: "12px",
+                        }}
+                      >
+                        skipped
+                      </Button>
+                    </div>
                   </div>
                   {data[0] ? ( // if there is no data returned from filtering - use initial props
                     <ListOfSuites
@@ -244,7 +283,15 @@ function Tests(props: Props) {
                     ></ListOfSuites>
                   ) : (
                     <div>
-                      <Typography style ={{fontStyle:'italic', margin:"20px", color: "red"}}>Sorry, there are no matching tests for this filter</Typography>
+                      <Typography
+                        style={{
+                          fontStyle: "italic",
+                          margin: "20px",
+                          color: "red",
+                        }}
+                      >
+                        Sorry, there are no matching tests for this filter
+                      </Typography>
                     </div>
                   )}
                 </Paper>
