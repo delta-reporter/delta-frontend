@@ -67,12 +67,8 @@ type Props = {
   test_history: SuiteAndTest[]
 }
 
-function Tests({ test_history }) {
-  // Here, we destructure test_history as history from props as well as other properties from the API,
-  // so we can avoid repeating ourselves and having long paths like props.test_history[0].test_run_data.data.url
-  const [history] = test_history
-  const { project_id, test_type, test_run_id, test_run_data } = history
-  const classes = useStyles(test_history)
+function Tests(props: Props) {
+  const classes = useStyles(props.test_history)
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
@@ -80,7 +76,7 @@ function Tests({ test_history }) {
   let statusArrayForEndpoint = "1+2+3+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
 
-  const [data, setData] = useState(test_history)
+  const [data, setData] = useState(props.test_history)
 
   async function handleStatusFilter(status, testRunId) {
     let previousArray = selectedStatus
@@ -117,14 +113,17 @@ function Tests({ test_history }) {
   return (
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
-      {history ? ( // checking if props exist (if there are tests for this run)
+      {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
           <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
-            <Link color="inherit" href={`/launches/${project_id}`}>
+            <Link
+              color="inherit"
+              href={`/launches/${props.test_history[0].project_id}`}
+            >
               Launches
             </Link>
             <Typography color="textPrimary">Tests</Typography>
@@ -145,7 +144,7 @@ function Tests({ test_history }) {
                       color="secondary"
                     >
                       {" "}
-                      {test_type}
+                      {props.test_history[0].test_type}
                     </Link>{" "}
                     run
                   </Typography>
@@ -157,10 +156,14 @@ function Tests({ test_history }) {
                       width: "50%",
                     }}
                   >
-                    {test_run_data && test_run_data.spectre_test_run_url ? (
+                    {props.test_history[0].test_run_data &&
+                    props.test_history[0].test_run_data.spectre_test_run_url ? (
                       <div>
                         <Button
-                          href={test_run_data.spectre_test_run_url}
+                          href={
+                            props.test_history[0].test_run_data
+                              .spectre_test_run_url
+                          }
                           style={{
                             backgroundColor: "#90caf9",
                             color: "white",
@@ -184,7 +187,12 @@ function Tests({ test_history }) {
                     >
                       <p> Filter by Status: </p>
                       <Button
-                        onClick={() => handleStatusFilter("2", test_run_id)}
+                        onClick={() =>
+                          handleStatusFilter(
+                            "2",
+                            props.test_history[0].test_run_id
+                          )
+                        }
                         className={
                           selectedStatus.includes("2")
                             ? classes.passedSelected
@@ -201,7 +209,12 @@ function Tests({ test_history }) {
                         passed
                       </Button>
                       <Button
-                        onClick={() => handleStatusFilter("1", test_run_id)}
+                        onClick={() =>
+                          handleStatusFilter(
+                            "1",
+                            props.test_history[0].test_run_id
+                          )
+                        }
                         className={
                           selectedStatus.includes("1")
                             ? classes.failedSelected
@@ -218,7 +231,12 @@ function Tests({ test_history }) {
                         failed
                       </Button>
                       <Button
-                        onClick={() => handleStatusFilter("3", test_run_id)}
+                        onClick={() =>
+                          handleStatusFilter(
+                            "3",
+                            props.test_history[0].test_run_id
+                          )
+                        }
                         className={
                           selectedStatus.includes("3")
                             ? classes.incompleteSelected
@@ -235,7 +253,12 @@ function Tests({ test_history }) {
                         incomplete
                       </Button>
                       <Button
-                        onClick={() => handleStatusFilter("5", test_run_id)}
+                        onClick={() =>
+                          handleStatusFilter(
+                            "5",
+                            props.test_history[0].test_run_id
+                          )
+                        }
                         className={
                           selectedStatus.includes("5")
                             ? classes.skippedSelected

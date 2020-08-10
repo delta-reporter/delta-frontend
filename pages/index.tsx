@@ -91,6 +91,7 @@ export interface SuiteAndTest {
   launch_id: number
   project_id: number
   test_type: string
+  test_run_data?: {spectre_test_run_url: string}
   test_suites: [
     {
       test_suite_history_id: number
