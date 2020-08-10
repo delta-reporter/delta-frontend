@@ -68,13 +68,10 @@ type Props = {
 }
 
 function Tests({ test_history }) {
+  // Here, we destructure test_history as history from props as well as other properties from the API,
+  // so we can avoid repeating ourselves and having long paths like props.test_history[0].test_run_data.data.url
   const [history] = test_history
-  const {
-    project_id,
-    test_type,
-    test_run_id,
-    test_run_data,
-  } = history
+  const { project_id, test_type, test_run_id, test_run_data } = history
   const classes = useStyles(test_history)
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
