@@ -65,10 +65,16 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   test_history: SuiteAndTest[]
-  test_run_data: any
 }
 
-function Tests({ test_history, test_run_data }) {
+function Tests({ test_history }) {
+  const [history] = test_history
+  const {
+    project_id,
+    test_type,
+    test_run_id,
+    test_run_data: { spectre_test_run_url },
+  } = history
   const classes = useStyles(test_history)
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
@@ -114,17 +120,14 @@ function Tests({ test_history, test_run_data }) {
   return (
     <BasePage className={classes.root}>
       <title>Δ | Tests</title>
-      {test_history[0] ? ( // checking if props exist (if there are tests for this run)
+      {history ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
           <Breadcrumbs style={{ paddingLeft: "30px" }}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
-            <Link
-              color="inherit"
-              href={`/launches/${test_history[0].project_id}`}
-            >
+            <Link color="inherit" href={`/launches/${project_id}`}>
               Launches
             </Link>
             <Typography color="textPrimary">Tests</Typography>
@@ -145,7 +148,7 @@ function Tests({ test_history, test_run_data }) {
                       color="secondary"
                     >
                       {" "}
-                      {test_history[0].test_type}
+                      {test_type}
                     </Link>{" "}
                     run
                   </Typography>
@@ -154,13 +157,13 @@ function Tests({ test_history, test_run_data }) {
                       display: "flex",
                       marginTop: "20px",
                       alignItems: "baseline",
-                      width: "50%"
+                      width: "50%",
                     }}
                   >
-                    {test_run_data.data.spectre_test_run_url ? (
+                    {spectre_test_run_url ? (
                       <div>
                         <Button
-                          href={test_run_data.data.spectre_test_run_url}
+                          href={spectre_test_run_url}
                           style={{
                             backgroundColor: "#90caf9",
                             color: "white",
@@ -184,9 +187,7 @@ function Tests({ test_history, test_run_data }) {
                     >
                       <p> Filter by Status: </p>
                       <Button
-                        onClick={() =>
-                          handleStatusFilter("2", test_history[0].test_run_id)
-                        }
+                        onClick={() => handleStatusFilter("2", test_run_id)}
                         className={
                           selectedStatus.includes("2")
                             ? classes.passedSelected
@@ -203,9 +204,7 @@ function Tests({ test_history, test_run_data }) {
                         passed
                       </Button>
                       <Button
-                        onClick={() =>
-                          handleStatusFilter("1", test_history[0].test_run_id)
-                        }
+                        onClick={() => handleStatusFilter("1", test_run_id)}
                         className={
                           selectedStatus.includes("1")
                             ? classes.failedSelected
@@ -222,9 +221,7 @@ function Tests({ test_history, test_run_data }) {
                         failed
                       </Button>
                       <Button
-                        onClick={() =>
-                          handleStatusFilter("3", test_history[0].test_run_id)
-                        }
+                        onClick={() => handleStatusFilter("3", test_run_id)}
                         className={
                           selectedStatus.includes("3")
                             ? classes.incompleteSelected
@@ -241,9 +238,7 @@ function Tests({ test_history, test_run_data }) {
                         incomplete
                       </Button>
                       <Button
-                        onClick={() =>
-                          handleStatusFilter("5", test_history[0].test_run_id)
-                        }
+                        onClick={() => handleStatusFilter("5", test_run_id)}
                         className={
                           selectedStatus.includes("5")
                             ? classes.skippedSelected
@@ -307,17 +302,8 @@ Tests.getInitialProps = async (context): Promise<Props> => {
   )
   const tests = await testsByTestRunIdReq.json()
 
-  const getTestRunById = await fetch(
-    `${process.env.deltaCore}/api/v1/test_run/${testsByRunId}`,
-    {
-      method: "GET",
-    }
-  )
-  const data = await getTestRunById.json()
-
   return {
     test_history: tests,
-    test_run_data: data,
   }
 }
 
