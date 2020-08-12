@@ -1,5 +1,4 @@
 export * from "./BasePage"
-export * from "./PageHeader"
 export * from "./Test"
 export * from "./Pagination"
 export * from "./showDate"

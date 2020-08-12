@@ -5,32 +5,45 @@ import {
   Typography,
   ListItem,
   List,
+  Button,
 } from "@material-ui/core"
-import clsx from "clsx"
 import { makeStyles } from "@material-ui/core/styles"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { AppContext } from "../components/AppContext"
 import { BasePage } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 import Router from "next/router"
+import "./styles.css"
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  rootLight: {
     flexGrow: 1,
+  },
+  rootDark:{
+    flexGrow: 1,
+    backgroundColor: "#3d5365",
+    color: "white",
   },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  paper: {
+  paperLight: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
+    height: 240,
+    width: 300,
   },
-  fixedHeightAndWidth: {
+  paperDark: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+    backgroundColor: "#3d5365",
     height: 240,
     width: 300,
   },
@@ -180,12 +193,32 @@ type Props = {
 
 function Index(props: Props) {
   const classes = useStyles(props)
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeightAndWidth)
+
+     const [darkMode, setDarkMode] = useState(false)
+
+  // const [darkMode, setDarkMode] = useState(getInitialColorMode())
+
+//   useEffect(() => {
+//     localStorage.setItem('dark', JSON.stringify(darkMode)) //setting a variable in the browser storage
+//     console.log("setting to storage here: " + darkMode)
+//   }, [darkMode])
+
+//   function getInitialColorMode() :boolean {
+//     if (typeof window !== 'undefined') {
+//      const savedColorMode = JSON.parse(localStorage.getItem('dark')) //checking the 'dark' var from browser storage
+//      console.log("getting from storage here: " + savedColorMode)
+//      return savedColorMode || false
+//     }
+//     else {
+//       return false
+//     }
+//  }
 
   return (
-    <BasePage className={classes.root}>
+    <BasePage className={darkMode ? classes.rootDark : classes.rootLight}>
       <title>Δ | Projects</title>
       <Container maxWidth="lg" className={classes.container}>
+      <Button onClick={() => setDarkMode(prevMode => !prevMode)}>Toggle Mode</Button>
         {props.test_projects[0] ? ( // checking if props exist (if there are projects)
           <Grid container spacing={3}>
             {props.test_projects.map(project => (
@@ -197,7 +230,7 @@ function Index(props: Props) {
                       Router.push(`/launches/${project.project_id}`)
                     }
                   >
-                    <Paper className={fixedHeightPaper}>
+                    <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
                       <Typography
                         component="p"
                         variant="h4"
