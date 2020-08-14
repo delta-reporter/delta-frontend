@@ -19,6 +19,8 @@ import {
   Link,
   Breadcrumbs,
   FormControlLabel,
+  Button,
+  NoSsr,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
@@ -29,22 +31,47 @@ import {
 } from "../../components/templates/DeltaViewForLaunches"
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  rootLight: {
+    flexGrow: 1,
+    color: "#aaadb0",
+  },
+  rootDark:{
+    flexGrow: 1,
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+  }, 
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  paper: {
+  paperLight: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
   },
-  backgroundGrey: {
-    backgroundColor: "#d6d6d6",
+  paperDark: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+    backgroundColor: "black",
+    border: "1px grey solid",
   },
-  backgroundWhite: {
-    backgroundColor: "white",
+  toggleModeDark: {
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+    border: "1px grey solid",
+    marginBottom: "15px",
+  }, 
+  toggleModeLight: {
+    border: "1px grey solid",
+    marginBottom: "15px",
+  }, 
+  textColorDarkMode: {
+    color: "#aaadb0",
+  },
+  textColorLightMode: {
   },
 }))
 
@@ -91,103 +118,121 @@ function Launches(props: Props) {
     })
   }
 
-  return (
-    <BasePage className={classes.root}>
-      <title>Δ | Launches</title>
-      <Breadcrumbs style={{ paddingLeft: "30px" }}>
-        <Link color="inherit" href={`/`}>
-          Projects
-        </Link>
-        <Typography color="textPrimary">Launches</Typography>
-      </Breadcrumbs>
-      <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Grid container>
-                <Grid item xs={10}>
-                  <Typography
-                    variant="h6"
-                    color="secondary"
-                    style={{ fontWeight: 400, margin: "5px" }}
-                  >
-                    Launches for{" "}
-                    <Link
-                      style={{ color: "#605959" }}
-                      underline="none"
-                      color="secondary"
-                    >
-                      {" "}
-                      {props.launches[0].project}
-                    </Link>{" "}
-                    project
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={switchViews.deltaView}
-                        onChange={handleSwitchViewsChange}
-                        name="deltaView"
-                        color="primary"
-                      />
-                    }
-                    label="Δ View"
-                  />
-                </Grid>
-              </Grid>
-              {props.launches[0] ? ( // checking if props exist
-                <div>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {currentLaunches.map(launch => (
-                        <TableRow key={launch.launch_id} hover>
-                          <TableCell>
-                            {showStatusAndEnableToStopRunningLaunch(
-                              launch.launch_status,
-                              launch.launch_id
-                            )}
-                          </TableCell>
-                          <TableCell>{launch.name}</TableCell>
-                          <TableCell>
-                            {/* Switch option for Delta View (pyramid style) */}
-                            {!switchViews.deltaView
-                              ? testRunButtonsDefaultView(launch.test_run_stats)
-                              : testRunButtonsDeltaPyramidView(
-                                  launch.test_run_stats,
-                                  launch.launch_id
-                                )}
-                          </TableCell>
-                          {clearChartDataOnDeltaView()}
-                        </TableRow>
-                      ))}
-                    </TableBody>{" "}
-                  </Table>
+  const [darkMode, setDarkMode] = useState(getInitialColorMode())
 
-                  <Pagination
-                    itemsPerPage={launchesPerPage}
-                    totalNumber={launchesList.length}
-                    paginate={paginate}
-                    highlightedTest={highlightedTest}
-                  />
-                </div>
-              ) : (
-                // if props don't exist
-                <h1>No runs were found for this launch! </h1>
-              )}
-            </Paper>
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
+  }, [darkMode])
+
+  function getInitialColorMode() :boolean {
+    if (typeof window !== 'undefined') {
+     const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
+     return savedColorMode || false
+    }
+    else {
+      return false
+    }
+ }
+
+  return (
+    <NoSsr>
+      <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
+      <title>Δ | Launches</title>
+        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+          <Link color="inherit" href={`/`}>
+            Projects
+          </Link>
+          <Typography color="textPrimary" className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
+        </Breadcrumbs>
+        <Container maxWidth="lg" className={classes.container}>
+        <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
+          <Grid container spacing={3} >
+            <Grid item xs={12} >
+              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
+                <Grid container>
+                  <Grid item xs={10}>
+                    <Typography
+                      variant="h6"
+                      style={{ fontWeight: 400, margin: "5px" }}
+                      className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                    >
+                      Launches for{" "}
+                      <Link
+                        style={{ color: "#605959" }}
+                        underline="none"
+                      >
+                        {" "}
+                        {props.launches[0].project}
+                      </Link>{" "}
+                      project
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={2} style={{color:"grey"}}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={switchViews.deltaView}
+                          onChange={handleSwitchViewsChange}
+                          name="deltaView"
+                          color="primary"
+                        />
+                      }
+                      label="Δ View"
+                    />
+                  </Grid>
+                </Grid>
+                {props.launches[0] ? ( // checking if props exist
+                  <div>
+                    <Table size="small" >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody >
+                        {currentLaunches.map(launch => (
+                          <TableRow key={launch.launch_id} hover >
+                            <TableCell>
+                              {showStatusAndEnableToStopRunningLaunch(
+                                launch.launch_status,
+                                launch.launch_id
+                              )}
+                            </TableCell>
+                            <TableCell className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>{launch.name}</TableCell>
+                            <TableCell>
+                              {/* Switch option for Delta View (pyramid style) */}
+                              {!switchViews.deltaView
+                                ? testRunButtonsDefaultView(launch.test_run_stats)
+                                : testRunButtonsDeltaPyramidView(
+                                    launch.test_run_stats,
+                                    launch.launch_id
+                                  )}
+                            </TableCell>
+                            {clearChartDataOnDeltaView()}
+                          </TableRow>
+                        ))}
+                      </TableBody>{" "}
+                    </Table>
+
+                    <Pagination
+                      itemsPerPage={launchesPerPage}
+                      totalNumber={launchesList.length}
+                      paginate={paginate}
+                      highlightedTest={highlightedTest}
+                    />
+                  </div>
+                ) : (
+                  // if props don't exist
+                  <h1>No runs were found for this launch! </h1>
+                )}
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
-    </BasePage>
+        </Container>
+      </BasePage>
+    </NoSsr>
   )
 }
 

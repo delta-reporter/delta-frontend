@@ -37,65 +37,126 @@ export function showStatusIcon(status) {
   return statusIcon
 }
 
-export function showStatusText(status) {
+export function showStatusText(status, darkMode) {
   let statusIcon
   if (status === "Passed" || status === "Successful") {
-    statusIcon = (
-      <button
-        style={{
-          color: "green",
-          margin: "5px",
-          border: "1px green solid",
-          backgroundColor: "white",
-          fontSize: "13px",
-        }}
-      >
-        PASSED
-      </button>
-    )
+    if(darkMode) 
+      statusIcon = (
+        <button
+          style={{
+            color: "green",
+            margin: "5px",
+            border: "1px green solid",
+            backgroundColor: "black",
+            fontSize: "13px",
+          }}
+        >
+          PASSED
+        </button>
+      )
+    else 
+      statusIcon = (
+        <button
+          style={{
+            color: "green",
+            margin: "5px",
+            border: "1px green solid",
+            backgroundColor: "white",
+            fontSize: "13px",
+          }}
+        >
+          PASSED
+        </button>
+      )
   } else if (status === "Failed" || status === "Incomplete") {
-    statusIcon = (
-      <button
-        style={{
-          color: "red",
-          margin: "5px",
-          border: "1px red solid",
-          backgroundColor: "white",
-          fontSize: "13px",
-          paddingRight: "14px",
-        }}
-      >
-        FAILED
-      </button>
-    )
+    if(darkMode) 
+      statusIcon = (
+        <button
+          style={{
+            color: "red",
+            margin: "5px",
+            border: "1px red solid",
+            backgroundColor: "black",
+            fontSize: "13px",
+            paddingRight: "14px",
+          }}
+        >
+          FAILED
+        </button>
+      )
+    else 
+      statusIcon = (
+        <button
+          style={{
+            color: "red",
+            margin: "5px",
+            border: "1px red solid",
+            backgroundColor: "white",
+            fontSize: "13px",
+            paddingRight: "14px",
+          }}
+        >
+          FAILED
+        </button>
+      )
   } else if (status === "Skipped") {
-    statusIcon = (
-      <button
-        style={{
-          color: "grey",
-          margin: "5px",
-          border: "1px grey solid",
-          backgroundColor: "white",
-          fontSize: "13px",
-        }}
-      >
-        SKIPPED
-      </button>
-    )
+    if(darkMode)
+      statusIcon = (
+        <button
+          style={{
+            color: "grey",
+            margin: "5px",
+            border: "1px grey solid",
+            backgroundColor: "black",
+            fontSize: "13px",
+          }}
+        >
+          SKIPPED
+        </button>
+      )
+    else
+      statusIcon = (
+        <button
+          style={{
+            color: "grey",
+            margin: "5px",
+            border: "1px grey solid",
+            backgroundColor: "white",
+            fontSize: "13px",
+          }}
+        >
+          SKIPPED
+        </button>
+      )
   } else if (status === "Running" || status === "In Process") {
-    statusIcon = (
-      <button
-        style={{
-          color: "orange",
-          margin: "5px",
-          border: "1px orange solid",
-          backgroundColor: "white",
-          fontSize: "13px",
-        }}
-      >
-        RUNNING
-      </button>
-    )
+    if(darkMode)
+      statusIcon = (
+        <button
+          style={{
+            color: "orange",
+            margin: "5px",
+            border: "1px orange solid",
+            backgroundColor: "black",
+            fontSize: "13px",
+          }}
+        >
+          RUNNING
+        </button>
+      )
+    else
+      statusIcon = (
+        <button
+          style={{
+            color: "orange",
+            margin: "5px",
+            border: "1px orange solid",
+            backgroundColor: "white",
+            fontSize: "13px",
+          }}
+        >
+          RUNNING
+        </button>
+      )
   } else {
     statusIcon = <Typography style={{ color: "grey" }}>{status}</Typography>
   }

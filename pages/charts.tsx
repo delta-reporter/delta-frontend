@@ -65,7 +65,7 @@ function Charts(props: Props) {
   //   const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } = Recharts;
 
   return (
-    <BasePage className={classes.root}>
+    <BasePage className={classes.root} darkMode={false}>
       <title>Δ | Charts</title>
       <Container maxWidth="lg" className={classes.container}>
         <Typography style={{ fontWeight: "bold" }}>
