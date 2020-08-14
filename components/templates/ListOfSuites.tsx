@@ -84,11 +84,13 @@ export const ListOfSuites = function(props: Props) {
   const { children, stats, darkMode } = props
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
-  const [highlightedTest, setHighlightedTest] = useState(0)
+  // TODO: figure out later how to use again
+  // const [highlightedTest, setHighlightedTest] = useState(0)
 
   function changeRightSide(value, testId) {
     setTestInfoSection(value)
-    setHighlightedTest(testId)
+    console.log(testId)
+ //   setHighlightedTest(testId)
   }
 
   function setStats() {
