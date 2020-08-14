@@ -28,10 +28,21 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     marginButtom: theme.spacing(3),
   },
-  paperNoPadding: {
+  paperNoPaddingDark: {
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
+    backgroundColor:"black",
+  },
+  paperNoPaddingLight: {
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+  textColorDarkMode: {
+    color: "#aaadb0",
+  },
+  textColorLightMode: {
   },
 }))
 
@@ -46,10 +57,11 @@ const testResolutions = [
 
 interface TestProps {
   children: any
+  darkMode: boolean
 }
 
 export const TestExpanded = function(props: TestProps) {
-  const { children } = props
+  const { children, darkMode } = props
   const classes = useStyles(props)
 
   const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
@@ -73,10 +85,10 @@ export const TestExpanded = function(props: TestProps) {
     <div
       key={children.test_history_id}
       className={classes.root}
-      style={{ paddingLeft: "50px", paddingRight: "50px", paddingBottom: "50px"}}
+      style={{ paddingLeft: "50px", paddingRight: "50px", paddingBottom: "50px", marginTop: "-20px"}}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
-        <Paper className={classes.paperNoPadding} elevation={0}>
+        <Paper className={darkMode ? classes.paperNoPaddingDark : classes.paperNoPaddingLight} elevation={0}>
           <Typography
             style={{
               padding: "10px",
@@ -86,11 +98,12 @@ export const TestExpanded = function(props: TestProps) {
               wordBreak: "break-all",
               whiteSpace: "pre-wrap",
             }}
+            className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
-            {showStatusText(children.status)}
+            {showStatusText(children.status, darkMode)}
             {children.name}
           </Typography>
-          <Tabs style={{ marginTop: "20px" }}>
+          <Tabs style={{ marginTop: "20px" }} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <TabList>
               <Tab style={{ fontSize: "16px" }}>Info</Tab>
               <Tab style={{ fontSize: "16px" }}>Resolution</Tab>

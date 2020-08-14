@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
@@ -11,13 +11,21 @@ import {
   Link,
   Breadcrumbs,
   Button,
+  NoSsr,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  rootLight: {
     width: "100%",
     maxWidth: 3500,
+    color: "#aaadb0",
   },
+  rootDark:{
+    width: "100%",
+    maxWidth: 3500,
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+  }, 
   title: {
     fontSize: "2em",
   },
@@ -26,7 +34,15 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 3400,
     paddingBottom: theme.spacing(4),
   },
-  paper: {
+  paperDark: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+    backgroundColor: "black",
+    border: "1px grey solid",
+  },
+  paperLight: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
@@ -61,6 +77,21 @@ const useStyles = makeStyles(theme => ({
   skippedNotSelected: {
     color: "#e3e1e1",
   },
+  textColorDarkMode: {
+    color: "#aaadb0",
+  },
+  textColorLightMode: {
+  },
+  toggleModeDark: {
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+    border: "1px grey solid",
+    marginBottom: "15px",
+  }, 
+  toggleModeLight: {
+    border: "1px grey solid",
+    marginBottom: "15px",
+  }, 
 }))
 
 type Props = {
@@ -72,7 +103,7 @@ function Tests(props: Props) {
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
-  // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for enpoint
+  // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for endpoint
   let statusArrayForEndpoint = "1+2+3+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
 
@@ -110,13 +141,30 @@ function Tests(props: Props) {
     setData(await response.json())
   }
 
+  const [darkMode, setDarkMode] = useState(getInitialColorMode())
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
+  }, [darkMode])
+
+  function getInitialColorMode() :boolean {
+    if (typeof window !== 'undefined') {
+     const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
+     return savedColorMode || false
+    }
+    else {
+      return false
+    }
+ }
+ 
   return (
-    <BasePage className={classes.root}>
-      <title>Δ | Tests</title>
+    <NoSsr>
+    <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
+    <title>Δ | Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
-          <Breadcrumbs style={{ paddingLeft: "30px" }}>
+        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
@@ -126,16 +174,17 @@ function Tests(props: Props) {
             >
               Launches
             </Link>
-            <Typography color="textPrimary">Tests</Typography>
+            <Typography color="textPrimary" className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
           </Breadcrumbs>
           <Container maxWidth="lg" className={classes.container}>
+          <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <Paper className={classes.paper}>
+              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
                   <Typography
                     variant="h6"
-                    color="secondary"
                     style={{ fontWeight: 400, margin: "5px" }}
+                    className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
                   >
                     Test suites for{" "}
                     <Link
@@ -166,7 +215,6 @@ function Tests(props: Props) {
                           }
                           style={{
                             backgroundColor: "#90caf9",
-                            color: "white",
                             width: "90px",
                             height: "30px",
                             marginLeft: "10px",
@@ -185,7 +233,7 @@ function Tests(props: Props) {
                         alignItems: "baseline",
                       }}
                     >
-                      <p> Filter by Status: </p>
+                      <p className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> Filter by Status: </p>
                       <Button
                         onClick={() =>
                           handleStatusFilter(
@@ -280,6 +328,7 @@ function Tests(props: Props) {
                     <ListOfSuites
                       children={data}
                       stats={selectedStatus}
+                      darkMode={darkMode}
                     ></ListOfSuites>
                   ) : (
                     <div>
@@ -303,6 +352,7 @@ function Tests(props: Props) {
         <h1>No suites were found for this run! </h1>
       )}
     </BasePage>
+    </NoSsr>
   )
 }
 

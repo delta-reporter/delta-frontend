@@ -6,6 +6,7 @@ import {
   ListItem,
   List,
   Button,
+  NoSsr,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
@@ -15,7 +16,6 @@ import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 import Router from "next/router"
-import NoSsr from '@material-ui/core/NoSsr'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {

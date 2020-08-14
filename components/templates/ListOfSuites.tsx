@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { SuiteAndTest } from "../../pages"
+import { classNames } from "classnames"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,7 +41,17 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "80%",
     color: "#353690",
   },
-  nameOfTestOrSuite: {
+  nameOfTestOrSuiteDark: {
+    paddingLeft: theme.spacing(4),
+    fontSize: "0.875rem",
+    textAlign: "left",
+    fontFamily: "Roboto",
+    fontWeight: 400,
+    wordBreak: "break-all",
+    whiteSpace: "pre-wrap",
+    color: "#aaadb0",
+  },
+  nameOfTestOrSuiteLight: {
     paddingLeft: theme.spacing(4),
     fontSize: "0.875rem",
     textAlign: "left",
@@ -55,15 +66,23 @@ const useStyles = makeStyles(theme => ({
   backgroundWhite: {
     backgroundColor: "white",
   },
+  backgroundDark: {
+    backgroundColor: "#000000",
+    border: "1px grey solid",
+  },
+  testBackgroundDark: {
+    backgroundColor: "#000000",
+  },
 }))
 
 type Props = {
   children: SuiteAndTest[]
   stats
+  darkMode: boolean
 }
 
 export const ListOfSuites = function(props: Props) {
-  const { children, stats } = props
+  const { children, stats, darkMode } = props
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
   const [highlightedTest, setHighlightedTest] = useState(0)
@@ -107,17 +126,18 @@ export const ListOfSuites = function(props: Props) {
         }}
       >
         {children.map(testRun => (
-          <div key={testRun.test_run_id}>
+          <div key={testRun.test_run_id} >
             {testRun.test_suites.map(suite => (
               <Accordion // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}
                 onChange={expandCollapseSuite(suite.name)}
                 TransitionProps={{ unmountOnExit: true }}
+                className={darkMode ? classes.backgroundDark : classes.backgroundWhite}
               >
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} >
                   {showStatusIcon(suite.test_suite_status)}
-                  <Typography className={classes.nameOfTestOrSuite}>
+                  <Typography className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
                     {suite.name}
                   </Typography>
                   {showTestStats(
@@ -141,16 +161,19 @@ export const ListOfSuites = function(props: Props) {
                           button
                           key={test.test_history_id}
                           onClick={() => changeRightSide(test, test.test_id)}
-                          className={
-                            test.test_id === highlightedTest
+                          className={darkMode ? classes.testBackgroundDark : classes.backgroundWhite}
+                          >
+                          {/* TODO: check how to combine classes, so that highlighting stays as well as dark mode */}
+                          {/* < className={
+                             (test.test_id === highlightedTest && !darkMode)
                               ? classes.backgroundGrey
-                              : classes.backgroundWhite
-                          }
-                        >
+                               : classes.backgroundWhite
+                           }> */}
                           {showStatusIcon(test.status)}
-                          <Typography className={classes.nameOfTestOrSuite}>
+                          <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
                             {test.name}
                           </Typography>
+                          {/* </> */}
                         </ListItem>
                       </a>
                     ))}
@@ -169,7 +192,7 @@ export const ListOfSuites = function(props: Props) {
         }}
       >
         {/* right-hand side for test info */}
-        <TestExpanded>{testInfoSection}</TestExpanded>
+        <TestExpanded darkMode={darkMode}>{testInfoSection}</TestExpanded>
       </div>
     </div>
   )
