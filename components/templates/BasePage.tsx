@@ -5,71 +5,67 @@ import {
   AppBar,
   Typography,
   Link,
-  Toolbar,
-  Paper } from "@material-ui/core"
-
-import { useSelector } from "react-redux"
-import { selectedPageSelector } from "../../store/page"
-import { Page } from "../../constants"
+  Toolbar } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
   },
-  toolbar: {
-    paddingRight: 24, 
+  toolbarDark: {
+    paddingLeft: "40px",
+    backgroundColor: "#395265",
+  },
+  toolbarLight: {
+    paddingLeft: "40px",
   },
   spaceAfterNavBar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
-
   },
-  pageDescription: {
-    padding: theme.spacing(2),
-  },
-  headerContainer: {
-    backgroundColor: theme.palette.primary.light,
-    padding: theme.spacing(5),
-    textAlign: "center",
-  },
-  title: {
+  deltaTitleDark: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: "3em",
+    fontSize: "1em",
     padding: theme.spacing(1),
+    color: "#aaadb0",
+  },
+  deltaTitleLight: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "1em",
+    padding: theme.spacing(1),
+    color: "black",
   },
 }))
 
 type Props = {
   children: React.ReactNode
   className?: string
+  darkMode: boolean
 }
 
 export const BasePage = function(props: Props) {
-  const { children, className } = props
+  const { children, className, darkMode } = props
   const classes = useStyles(props)
-  const selectedPage = useSelector(selectedPageSelector)
   
   return (
     <div className={`${classes.root} ${className}`}>
+        {/* top nav bar with Delta name */}
       <CssBaseline />
       <AppBar position="absolute">
-        {/* top nav bar with Delta name */}
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={darkMode ? classes.toolbarDark : classes.toolbarLight}>
           <Typography
             variant="h5"
-            color="secondary"
-            style={{ fontWeight: 400, margin: "5px", fontSize: "25px" }}
-            className={classes.title}
+            style={{ fontWeight: 400, margin: "5px", fontSize: "25px"}}
           >
             <Link
               underline="none"
-              color="secondary"
               href="/"
-              style={{ paddingLeft: "20px" }}
+              className={darkMode ? classes.deltaTitleDark : classes.deltaTitleLight}
             >
               Δ Delta Reporter
             </Link>
@@ -78,27 +74,8 @@ export const BasePage = function(props: Props) {
       </AppBar>
       <main className={classes.content}>
         <div className={classes.spaceAfterNavBar} />
-          {/* show blue wide header on projects page */}
-          <div>
-          {selectedPage === Page.TOP ? (
-            <div className={classes.root}>
-              <h1> </h1>{" "}
-            </div>
-          ) : (
-            <Paper square={true} className={classes.headerContainer}>
-              <Typography variant="h1" color="inherit" className={classes.title}>
-                {selectedPage.pageTitle}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="inherit"
-              >
-                {selectedPage.pageDescription}
-              </Typography>
-            </Paper>
-          )}
-        </div>
-        <section className={classes.pageDescription}>{children}</section>
+          {/* all the main body */}
+        <section>{children}</section>
       </main>
     </div>
   )

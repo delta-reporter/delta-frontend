@@ -15,16 +15,17 @@ import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 import Router from "next/router"
-import "./styles.css"
+import NoSsr from '@material-ui/core/NoSsr'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
+    color: "#aaadb0",
   },
   rootDark:{
     flexGrow: 1,
-    backgroundColor: "#3d5365",
-    color: "white",
+    backgroundColor: "#000000",
+    color: "#aaadb0",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -43,19 +44,53 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "#3d5365",
+    backgroundColor: "#000000",
     height: 240,
     width: 300,
+    border: "1px grey solid",
+    color: "#aaadb0",
   },
-  projectStatus: {
+  projectStatusLight: {
     flex: 1,
     paddingTop: theme.spacing(1),
     textAlign: "center",
+  },
+  projectStatusDark: {
+    flex: 1,
+    paddingTop: theme.spacing(1),
+    textAlign: "center",
+    color: "#aaadb0",
   },
   projectTitle: {
     paddingTop: theme.spacing(7),
     textAlign: "center",
   },
+  pageTitleSectionDark: {
+    backgroundColor: "#395265",
+    padding: theme.spacing(5),
+    textAlign: "center",
+    color: "#aaadb0",
+  },
+  pageTitleSectionLight: {
+    backgroundColor: theme.palette.primary.light,
+    padding: theme.spacing(5),
+    textAlign: "center",
+  },
+  pageTitle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "3em",
+    padding: theme.spacing(1),
+  },
+  toggleModeDark: {
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+    border: "1px grey solid",
+  }, 
+  toggleModeLight: {
+    border: "1px grey solid",
+  }, 
 }))
 export interface TestProject {
   project_id: number
@@ -157,35 +192,6 @@ export interface SuiteAndTest {
     }
   ]
 }
-export interface Test {
-  duration: {
-    days: number
-    hours: number
-    minutes: number
-    microseconds: number
-    months: number
-    seconds: number
-    years: number
-  }
-  test_history_id: number
-  test_id: number
-  name: string
-  resolution: string
-  message: string
-  status: string
-  error_type: string
-  trace: string
-  file: string
-  retries: string
-  test_suite_id: number
-  media: [
-    {
-      type: string
-      filename: string
-      file_id: string
-    }
-  ]
-}
 
 type Props = {
   test_projects: TestProject[]
@@ -194,68 +200,79 @@ type Props = {
 function Index(props: Props) {
   const classes = useStyles(props)
 
-     const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(getInitialColorMode())
 
-  // const [darkMode, setDarkMode] = useState(getInitialColorMode())
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
+  }, [darkMode])
 
-//   useEffect(() => {
-//     localStorage.setItem('dark', JSON.stringify(darkMode)) //setting a variable in the browser storage
-//     console.log("setting to storage here: " + darkMode)
-//   }, [darkMode])
+  function getInitialColorMode() :boolean {
+    if (typeof window !== 'undefined') {
+     const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
+     return savedColorMode || false
+    }
+    else {
+      return false
+    }
+ }
 
-//   function getInitialColorMode() :boolean {
-//     if (typeof window !== 'undefined') {
-//      const savedColorMode = JSON.parse(localStorage.getItem('dark')) //checking the 'dark' var from browser storage
-//      console.log("getting from storage here: " + savedColorMode)
-//      return savedColorMode || false
-//     }
-//     else {
-//       return false
-//     }
-//  }
+// https://www.npmjs.com/package/universal-cookie - cookie way
 
   return (
-    <BasePage className={darkMode ? classes.rootDark : classes.rootLight}>
-      <title>Δ | Projects</title>
-      <Container maxWidth="lg" className={classes.container}>
-      <Button onClick={() => setDarkMode(prevMode => !prevMode)}>Toggle Mode</Button>
-        {props.test_projects[0] ? ( // checking if props exist (if there are projects)
-          <Grid container spacing={3}>
-            {props.test_projects.map(project => (
-              <Grid item xs={12} sm={3} key={project.project_id}>
-                <List>
-                  <ListItem
-                    button
-                    onClick={() =>
-                      Router.push(`/launches/${project.project_id}`)
-                    }
-                  >
-                    <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
-                      <Typography
-                        component="p"
-                        variant="h4"
-                        className={classes.projectTitle}
+      <NoSsr>
+        <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
+        <title>Δ | Projects</title>
+        <Paper square={true} className={darkMode ? classes.pageTitleSectionDark : classes.pageTitleSectionLight}>
+              <Typography variant="h1" color="inherit" className={classes.pageTitle}>
+              Projects
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                color="inherit"
+              >
+                Select a project to view latest test runs
+              </Typography>
+            </Paper>
+          <Container maxWidth="lg" className={classes.container}>
+          <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
+            {props.test_projects[0] ? ( // checking if props exist (if there are projects)
+              <Grid container spacing={3}>
+                {props.test_projects.map(project => (
+                  <Grid item xs={12} sm={3} key={project.project_id}>
+                    <List>
+                      <ListItem
+                        button
+                        onClick={() =>
+                          Router.push(`/launches/${project.project_id}`)
+                        }
                       >
-                        {project.name}
-                      </Typography>
-                      <Typography
-                        color="textSecondary"
-                        className={classes.projectStatus}
-                        component="p"
-                      >
-                        {project.project_status}
-                      </Typography>
-                    </Paper>{" "}
-                  </ListItem>
-                </List>
+                        <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
+                          <Typography
+                            component="p"
+                            variant="h4"
+                            className={classes.projectTitle}
+                          >
+                            {project.name}
+                          </Typography>
+                          <Typography
+                            color="textSecondary"
+                            className={darkMode ? classes.projectStatusDark : classes.projectStatusLight}
+                            component="p"
+                          >
+                            {project.project_status}
+                          </Typography>
+                        </Paper>{" "}
+                      </ListItem>
+                    </List>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <h1>No projects were found! </h1>
-        )}
-      </Container>
-    </BasePage>
+            ) : (
+              <h1>No projects were found! </h1>
+            )}
+          </Container>
+        </BasePage>
+      </NoSsr>
   )
 }
 
