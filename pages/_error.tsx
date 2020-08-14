@@ -22,7 +22,7 @@ function Error(props: Props) {
   const { httpStatusCode } = props
   const classes = useStyles(props)
   return (
-    <BasePage className={classes.root}>
+    <BasePage className={classes.root} darkMode={false}>
       <Container className={classes.container}>
         <Typography component="h3" variant="h6" color="error" gutterBottom>
           {" "}
