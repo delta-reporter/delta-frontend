@@ -15,7 +15,6 @@ import {
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { SuiteAndTest } from "../../pages"
-import { classNames } from "classnames"
 
 const useStyles = makeStyles(theme => ({
   root: {

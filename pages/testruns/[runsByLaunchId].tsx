@@ -14,19 +14,52 @@ import {
   Typography,
   Link,
   Breadcrumbs,
+  Button,
 } from "@material-ui/core"
+import { useState, useEffect } from "react"
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  rootLight: {
+    flexGrow: 1,
+    color: "#aaadb0",
+  },
+  rootDark:{
+    flexGrow: 1,
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+  }, 
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  paper: {
+  toggleModeDark: {
+    backgroundColor: "#000000",
+    color: "#aaadb0",
+    border: "1px grey solid",
+    marginBottom: "15px",
+  }, 
+  toggleModeLight: {
+    border: "1px grey solid",
+    marginBottom: "15px",
+  }, 
+  textColorDarkMode: {
+    color: "#aaadb0",
+  },
+  textColorLightMode: {
+  },
+  paperLight: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
+  },
+  paperDark: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+    backgroundColor: "black",
+    border: "1px grey solid",
   },
 }))
 
@@ -58,12 +91,29 @@ type Props = {
 
 function Testruns(props: Props) {
   const classes = useStyles(props)
+
+  const [darkMode, setDarkMode] = useState(getInitialColorMode())
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
+  }, [darkMode])
+
+  function getInitialColorMode() :boolean {
+    if (typeof window !== 'undefined') {
+     const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
+     return savedColorMode || false
+    }
+    else {
+      return false
+    }
+ }
+
   return (
-    <BasePage className={classes.root}>
+    <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
       <title>Δ | Test Runs</title>
       {props.test_runs[0] ? ( // checking if props exist
         <div>
-          <Breadcrumbs style={{ paddingLeft: "30px" }}>
+        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
@@ -73,24 +123,28 @@ function Testruns(props: Props) {
             >
               Launches
             </Link>
-            <Typography color="textPrimary">Test Runs</Typography>
+            <Typography color="textPrimary"  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Test Runs</Typography>
           </Breadcrumbs>
           <Container maxWidth="lg" className={classes.container}>
+          <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                  <Typography
-                    component="h2"
-                    variant="h6"
-                    color="primary"
-                    gutterBottom
-                  >
-                    Test runs for{" "}
-                    <Link underline="always">
-                      {" "}
-                      {props.test_runs[0].launch_name}
-                    </Link>
-                  </Typography>
+              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
+              <Typography
+                      variant="h6"
+                      style={{ fontWeight: 400, margin: "5px" }}
+                      className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                    >
+                     Test runs for{" "}
+                      <Link
+                        style={{ color: "#605959" }}
+                        underline="none"
+                      >
+                        {" "}
+                        {props.test_runs[0].launch_name}
+                      </Link>{" "}
+                      launch
+                    </Typography>
                   <Table size="small">
                     <TableHead>
                       <TableRow>
@@ -111,16 +165,16 @@ function Testruns(props: Props) {
                             {setTestTypeBadge(testRun.test_type)}
                           </TableCell>
                           {testRun.duration.minutes === 0 ? (
-                            <TableCell>
+                            <TableCell className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
                               {testRun.duration.seconds} sec
                             </TableCell>
                           ) : (
-                            <TableCell>
+                            <TableCell  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
                               {testRun.duration.minutes} min{" "}
                               {testRun.duration.seconds} sec
                             </TableCell>
                           )}
-                          <TableCell>
+                          <TableCell  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
                             <Link
                               underline="none"
                               href={`/tests/${testRun.test_run_id}`}
@@ -131,7 +185,7 @@ function Testruns(props: Props) {
                           {testRun.test_run_status === "Passed" ? (
                             <TableCell></TableCell>
                           ) : (
-                            <TableCell>
+                            <TableCell  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
                               <Link
                                 underline="none"
                                 href={`/tests/failedTests/${testRun.test_run_id}`}
