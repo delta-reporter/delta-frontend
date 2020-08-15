@@ -21,12 +21,12 @@ import { useState, useEffect } from "react"
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   rootDark:{
     flexGrow: 1,
     backgroundColor: "#000000",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   }, 
   container: {
     paddingTop: theme.spacing(4),
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
   toggleModeDark: {
     backgroundColor: "#000000",
-    color: "#aaadb0",
+    color: "#8c8d8d",
     border: "1px grey solid",
     marginBottom: "15px",
   }, 
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: "15px",
   }, 
   textColorDarkMode: {
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   textColorLightMode: {
   },

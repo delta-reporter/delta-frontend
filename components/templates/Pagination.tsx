@@ -10,10 +10,10 @@ const useStyles = makeStyles(theme => ({
     overflow: "auto",
   },
   backgroundGrey: {
-    backgroundColor: "#d6d6d6",
+    backgroundColor: "#adb1b6",
   },
   backgroundWhite: {
-    backgroundColor: "white",
+    backgroundColor: "#d4dbe3",
   },
 }))
 

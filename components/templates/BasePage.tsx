@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     fontSize: "1em",
     padding: theme.spacing(1),
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   deltaTitleLight: {
     display: "flex",

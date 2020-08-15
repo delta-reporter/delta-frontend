@@ -20,12 +20,12 @@ import Router from "next/router"
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   rootDark:{
     flexGrow: 1,
     backgroundColor: "#000000",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     height: 240,
     width: 300,
     border: "1px grey solid",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   projectStatusLight: {
     flex: 1,
@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     paddingTop: theme.spacing(1),
     textAlign: "center",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   projectTitle: {
     paddingTop: theme.spacing(7),
@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#395265",
     padding: theme.spacing(5),
     textAlign: "center",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   pageTitleSectionLight: {
     backgroundColor: theme.palette.primary.light,
@@ -85,7 +85,7 @@ const useStyles = makeStyles(theme => ({
   },
   toggleModeDark: {
     backgroundColor: "#000000",
-    color: "#aaadb0",
+    color: "#8c8d8d",
     border: "1px grey solid",
   }, 
   toggleModeLight: {

@@ -18,13 +18,13 @@ const useStyles = makeStyles(theme => ({
   rootLight: {
     width: "100%",
     maxWidth: 3500,
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   rootDark:{
     width: "100%",
     maxWidth: 3500,
     backgroundColor: "#000000",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   }, 
   title: {
     fontSize: "2em",
@@ -62,6 +62,9 @@ const useStyles = makeStyles(theme => ({
   incompleteSelected: {
     backgroundColor: "#e1d4c6",
   },
+  runningSelected: {
+    backgroundColor: "#eabc89",
+  },
   skippedSelected: {
     backgroundColor: "#e3e1e1",
   },
@@ -74,17 +77,20 @@ const useStyles = makeStyles(theme => ({
   incompleteNotSelected: {
     color: "#e1d4c6",
   },
+  runningNotSelected: {
+    color: "#e1c5a6",
+  },
   skippedNotSelected: {
     color: "#e3e1e1",
   },
   textColorDarkMode: {
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   textColorLightMode: {
   },
   toggleModeDark: {
     backgroundColor: "#000000",
-    color: "#aaadb0",
+    color: "#8c8d8d",
     border: "1px grey solid",
     marginBottom: "15px",
   }, 
@@ -104,8 +110,8 @@ function Tests(props: Props) {
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
   // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for endpoint
-  let statusArrayForEndpoint = "1+2+3+5"
-  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
+  let statusArrayForEndpoint = "1+2+3+4+5"
+  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
   const [data, setData] = useState(props.test_history)
 
@@ -287,6 +293,28 @@ function Tests(props: Props) {
                         }
                         className={
                           selectedStatus.includes("3")
+                            ? classes.runningSelected
+                            : classes.runningNotSelected
+                        }
+                        style={{
+                          width: "90px",
+                          height: "30px",
+                          marginLeft: "10px",
+                          border: "1px #c5baae solid",
+                          fontSize: "12px",
+                        }}
+                      >
+                        running
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleStatusFilter(
+                            "4",
+                            props.test_history[0].test_run_id
+                          )
+                        }
+                        className={
+                          selectedStatus.includes("4")
                             ? classes.incompleteSelected
                             : classes.incompleteNotSelected
                         }

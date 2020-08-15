@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
   textColorDarkMode: {
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   textColorLightMode: {
   },

@@ -8,7 +8,7 @@ export function showTestStats(passed, failed, incomplete, skipped, statsArray) {
   if(!statsArray.includes("incomplete")) incomplete = 0
   if(!statsArray.includes("skipped")) skipped = 0
 
-    return (
+  return (
       <div style={{ position: "absolute", right: "120px" }}>
         {passed !== 0 ? (
           <Tooltip title="Tests Passed"> 
@@ -47,5 +47,5 @@ export function showTestStats(passed, failed, incomplete, skipped, statsArray) {
           <span></span>
         )}
       </div>
-    )
-  }
+  )
+}

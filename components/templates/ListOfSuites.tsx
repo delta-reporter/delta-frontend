@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     wordBreak: "break-all",
     whiteSpace: "pre-wrap",
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   nameOfTestOrSuiteLight: {
     paddingLeft: theme.spacing(4),
@@ -61,6 +61,9 @@ const useStyles = makeStyles(theme => ({
   },
   backgroundGrey: {
     backgroundColor: "#d6d6d6",
+  },
+  backgroundDarkGrey: {
+    backgroundColor: "#474747",
   },
   backgroundWhite: {
     backgroundColor: "white",
@@ -84,20 +87,20 @@ export const ListOfSuites = function(props: Props) {
   const { children, stats, darkMode } = props
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
-  // TODO: figure out later how to use again
-  // const [highlightedTest, setHighlightedTest] = useState(0)
+  const [highlightedTest, setHighlightedTest] = useState(0)
 
   function changeRightSide(value, testId) {
     setTestInfoSection(value)
     console.log(testId)
- //   setHighlightedTest(testId)
+    setHighlightedTest(testId)
   }
 
   function setStats() {
     let settingStats = []
     if(stats.includes("2")) settingStats.push("passed")
     if(stats.includes("1")) settingStats.push("failed")
-    if(stats.includes("3")) settingStats.push("incomplete")
+    if(stats.includes("4")) settingStats.push("incomplete")
+    if(stats.includes("3")) settingStats.push("running")
     if(stats.includes("5")) settingStats.push("skipped")
     return settingStats
   }
@@ -111,6 +114,17 @@ export const ListOfSuites = function(props: Props) {
     isExpanded: boolean
   ) => {
     setExpandedSuite(isExpanded ? suitePanel : false)
+  }
+
+  function setTextLineStyle(isHighlighted, darkMode) {
+    if(isHighlighted && !darkMode) //light mode - highlighted
+     return classes.backgroundGrey
+    else if(isHighlighted && darkMode) //dark mode - highlighted
+      return classes.backgroundDarkGrey
+    else if (isHighlighted && !darkMode) //light mode - not highlighted
+    return classes.backgroundWhite
+    else if (!isHighlighted && darkMode) //dark mode - not highlighted
+    return classes.testBackgroundDark
   }
 
   return (
@@ -162,14 +176,8 @@ export const ListOfSuites = function(props: Props) {
                           button
                           key={test.test_history_id}
                           onClick={() => changeRightSide(test, test.test_id)}
-                          className={darkMode ? classes.testBackgroundDark : classes.backgroundWhite}
+                          className={setTextLineStyle(test.test_id === highlightedTest, darkMode)}
                           >
-                          {/* TODO: check how to combine classes, so that highlighting stays as well as dark mode */}
-                          {/* < className={
-                             (test.test_id === highlightedTest && !darkMode)
-                              ? classes.backgroundGrey
-                               : classes.backgroundWhite
-                           }> */}
                           {showStatusIcon(test.status)}
                           <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
                             {test.name}
