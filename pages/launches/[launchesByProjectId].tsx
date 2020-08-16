@@ -109,7 +109,7 @@ function Launches(props: Props) {
   }
 
   // delta view switch
-  const [switchViews, setSwitchViews] = React.useState({
+  const [switchViews, setSwitchViews] = useState({
     deltaView: getInitialDeltaViewState(),
   })
 

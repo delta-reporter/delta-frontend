@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { Paper, Typography, Button } from "@material-ui/core"
 import {
@@ -64,8 +64,8 @@ export const TestExpanded = function(props: TestProps) {
   const { children, darkMode } = props
   const classes = useStyles(props)
 
-  const [openResolutionDialog, setOpenResolutionDialog] = React.useState(false)
-  const [resolutionResponse, setResolutionResponse] = React.useState(
+  const [openResolutionDialog, setOpenResolutionDialog] = useState(false)
+  const [resolutionResponse, setResolutionResponse] = useState(
     testResolutions[0]
   )
   const handleResolutionDialogOpen = () => {
@@ -101,7 +101,7 @@ export const TestExpanded = function(props: TestProps) {
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
             {showStatusText(children.status, darkMode)}
-            {children.name}
+           <span style={{paddingLeft:"8px"}}> {children.name}</span>
           </Typography>
           <Tabs style={{ marginTop: "20px" }} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <TabList>

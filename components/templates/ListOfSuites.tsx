@@ -106,7 +106,7 @@ export const ListOfSuites = function(props: Props) {
   }
   let statsArray = setStats()
   
-  const [expandedSuite, setExpandedSuite] = React.useState<string | false>(
+  const [expandedSuite, setExpandedSuite] = useState<string | false>(
     false
   )
   const expandCollapseSuite = (suitePanel: string) => (

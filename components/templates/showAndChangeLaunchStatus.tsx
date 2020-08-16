@@ -1,11 +1,11 @@
-import React from "react"
+import React, { useState } from "react"
 import { Tooltip, IconButton, Snackbar } from "@material-ui/core"
 import { showStatusIcon } from "."
 import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
 
 export function showStatusAndEnableToStopRunningLaunch(status, launchId) {
-  const [openPopUp, setOpenPopUp] = React.useState(false)
+  const [openPopUp, setOpenPopUp] = useState(false)
 
   const handleStopButtonClick = async (launchId: string | number) => {
     // PUT request using fetch with async/await
@@ -34,7 +34,7 @@ export function showStatusAndEnableToStopRunningLaunch(status, launchId) {
     setOpenPopUp(false)
   }
 
-  const [isHovered, setIsHovered] = React.useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   const hoverOn = () => {
     setIsHovered(true)
