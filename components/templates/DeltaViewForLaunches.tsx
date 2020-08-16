@@ -1,12 +1,26 @@
-import { Button } from "@material-ui/core"
+import { Button, makeStyles } from "@material-ui/core"
 import { showStatusIcon } from "."
 import ReactEcharts from "echarts-for-react"
 import Router from "next/router"
 
+
+const useStyles = makeStyles(() => ({
+  rootLight: {
+  },
+  rootDark:{
+    backgroundColor: "#2a2a2a",
+    color: "#8c8d8d", 
+    border: "1px grey solid",
+  }, 
+}))
+
+
 let pyramidData = []
 let roseData = []
 
-export function testRunButtonsDefaultView(testRunStats: any) {
+export function testRunButtonsDefaultView(testRunStats: any, darkMode: boolean) {
+  const classes = useStyles(testRunStats)
+
   return testRunStats.map(testRun => (
     <Button
       key={testRun.test_run_id}
@@ -20,6 +34,7 @@ export function testRunButtonsDefaultView(testRunStats: any) {
         paddingTop: "0px",
         marginLeft: "5px",
       }}
+      className={darkMode ? classes.rootDark : classes.rootLight}
     >
       {testRun.test_type}{" "}
       {testRun.tests_total === testRun.tests_passed + testRun.tests_skipped ? (
@@ -60,7 +75,7 @@ export function testRunButtonsDeltaPyramidView(testRunStats: any, launchId: numb
         name: "Total tests",
         type: "funnel",
         top: "10%",
-        width: "40%",
+        width: "30%",
         height: "85%",
         minSize: "0%",
         maxSize: "80%",
@@ -91,8 +106,8 @@ export function testRunButtonsDeltaPyramidView(testRunStats: any, launchId: numb
       {
         name: "Tests by status",
         type: "pie",
-        radius: [10, 80],
-        center: ["80%", "50%"],
+        radius: [10, 60],
+        center: ["70%", "50%"],
         roseType: "area",
         data: rose,
       },

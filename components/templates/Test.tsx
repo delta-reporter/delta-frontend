@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor:"black",
+    backgroundColor:"#2a2a2a",
   },
   paperNoPaddingLight: {
     display: "flex",
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
   },
   textColorDarkMode: {
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   textColorLightMode: {
   },

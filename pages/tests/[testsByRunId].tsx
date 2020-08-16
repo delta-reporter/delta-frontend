@@ -12,19 +12,22 @@ import {
   Breadcrumbs,
   Button,
   NoSsr,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
     width: "100%",
     maxWidth: 3500,
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   rootDark:{
     width: "100%",
     maxWidth: 3500,
-    backgroundColor: "#000000",
-    color: "#aaadb0",
+    backgroundColor: "#2a2a2a",
+    color: "#8c8d8d",
   }, 
   title: {
     fontSize: "2em",
@@ -39,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "black",
+    backgroundColor: "#2a2a2a",
     border: "1px grey solid",
   },
   paperLight: {
@@ -62,6 +65,9 @@ const useStyles = makeStyles(theme => ({
   incompleteSelected: {
     backgroundColor: "#e1d4c6",
   },
+  runningSelected: {
+    backgroundColor: "#eabc89",
+  },
   skippedSelected: {
     backgroundColor: "#e3e1e1",
   },
@@ -74,17 +80,20 @@ const useStyles = makeStyles(theme => ({
   incompleteNotSelected: {
     color: "#e1d4c6",
   },
+  runningNotSelected: {
+    color: "#e1c5a6",
+  },
   skippedNotSelected: {
     color: "#e3e1e1",
   },
   textColorDarkMode: {
-    color: "#aaadb0",
+    color: "#8c8d8d",
   },
   textColorLightMode: {
   },
   toggleModeDark: {
-    backgroundColor: "#000000",
-    color: "#aaadb0",
+    backgroundColor: "#2a2a2a",
+    color: "#8c8d8d",
     border: "1px grey solid",
     marginBottom: "15px",
   }, 
@@ -104,8 +113,8 @@ function Tests(props: Props) {
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
   // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for endpoint
-  let statusArrayForEndpoint = "1+2+3+5"
-  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "5"])
+  let statusArrayForEndpoint = "1+2+3+4+5"
+  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
   const [data, setData] = useState(props.test_history)
 
@@ -141,13 +150,20 @@ function Tests(props: Props) {
     setData(await response.json())
   }
 
-  const [darkMode, setDarkMode] = useState(getInitialColorMode())
-
+  // dark mode switch
+  const [state, setState] = useState({
+    darkMode: getInitialDarkModeState(),
+  });
+  
+  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+  
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
-  }, [darkMode])
+    localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+  }, [state.darkMode])
 
-  function getInitialColorMode() :boolean {
+  function getInitialDarkModeState() :boolean {
     if (typeof window !== 'undefined') {
      const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
      return savedColorMode || false
@@ -155,16 +171,16 @@ function Tests(props: Props) {
     else {
       return false
     }
- }
- 
+  }
+
   return (
     <NoSsr>
-    <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
+    <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
     <title>Δ | Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
-        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
@@ -174,17 +190,21 @@ function Tests(props: Props) {
             >
               Launches
             </Link>
-            <Typography color="textPrimary" className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
+            <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
           </Breadcrumbs>
           <Container maxWidth="lg" className={classes.container}>
-          <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
-            <Grid container spacing={3}>
+            <FormGroup row style={{paddingBottom: "10px"}}>
+              <FormControlLabel
+                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
+                label="Dark Mode"
+              />
+            </FormGroup>            <Grid container spacing={3}>
               <Grid item xs={12}>
-              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
                   <Typography
                     variant="h6"
                     style={{ fontWeight: 400, margin: "5px" }}
-                    className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                    className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
                   >
                     Test suites for{" "}
                     <Link
@@ -202,7 +222,6 @@ function Tests(props: Props) {
                       display: "flex",
                       marginTop: "20px",
                       alignItems: "baseline",
-                      width: "50%",
                     }}
                   >
                     {props.test_history[0].test_run_data &&
@@ -229,11 +248,11 @@ function Tests(props: Props) {
                     <div
                       style={{
                         display: "flex",
-                        marginLeft: "50px",
+                        paddingLeft: "100px",
                         alignItems: "baseline",
                       }}
                     >
-                      <p className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> Filter by Status: </p>
+                      <p className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> Filter by Status: </p>
                       <Button
                         onClick={() =>
                           handleStatusFilter(
@@ -287,6 +306,28 @@ function Tests(props: Props) {
                         }
                         className={
                           selectedStatus.includes("3")
+                            ? classes.runningSelected
+                            : classes.runningNotSelected
+                        }
+                        style={{
+                          width: "90px",
+                          height: "30px",
+                          marginLeft: "10px",
+                          border: "1px #c5baae solid",
+                          fontSize: "12px",
+                        }}
+                      >
+                        running
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          handleStatusFilter(
+                            "4",
+                            props.test_history[0].test_run_id
+                          )
+                        }
+                        className={
+                          selectedStatus.includes("4")
                             ? classes.incompleteSelected
                             : classes.incompleteNotSelected
                         }
@@ -328,7 +369,7 @@ function Tests(props: Props) {
                     <ListOfSuites
                       children={data}
                       stats={selectedStatus}
-                      darkMode={darkMode}
+                      darkMode={state.darkMode}
                     ></ListOfSuites>
                   ) : (
                     <div>
