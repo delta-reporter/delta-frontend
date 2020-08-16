@@ -12,6 +12,9 @@ import {
   Breadcrumbs,
   Button,
   NoSsr,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core"
 
 const useStyles = makeStyles(theme => ({
@@ -23,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   rootDark:{
     width: "100%",
     maxWidth: 3500,
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d",
   }, 
   title: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "black",
+    backgroundColor: "#2a2a2a",
     border: "1px grey solid",
   },
   paperLight: {
@@ -89,7 +92,7 @@ const useStyles = makeStyles(theme => ({
   textColorLightMode: {
   },
   toggleModeDark: {
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d",
     border: "1px grey solid",
     marginBottom: "15px",
@@ -147,13 +150,19 @@ function Tests(props: Props) {
     setData(await response.json())
   }
 
-  const [darkMode, setDarkMode] = useState(getInitialColorMode())
-
+  const [state, setState] = useState({
+    darkMode: getInitialDarkModeState(),
+  });
+  
+  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+  
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
-  }, [darkMode])
+    localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+  }, [state.darkMode])
 
-  function getInitialColorMode() :boolean {
+  function getInitialDarkModeState() :boolean {
     if (typeof window !== 'undefined') {
      const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
      return savedColorMode || false
@@ -162,15 +171,14 @@ function Tests(props: Props) {
       return false
     }
  }
- 
   return (
     <NoSsr>
-    <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
+    <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
     <title>Δ | Tests</title>
       {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
-        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <Link color="inherit" href={`/`}>
               Projects
             </Link>
@@ -180,17 +188,21 @@ function Tests(props: Props) {
             >
               Launches
             </Link>
-            <Typography color="textPrimary" className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
+            <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
           </Breadcrumbs>
           <Container maxWidth="lg" className={classes.container}>
-          <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
-            <Grid container spacing={3}>
+            <FormGroup row style={{paddingBottom: "10px"}}>
+              <FormControlLabel
+                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
+                label="Dark Mode"
+              />
+            </FormGroup>            <Grid container spacing={3}>
               <Grid item xs={12}>
-              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
                   <Typography
                     variant="h6"
                     style={{ fontWeight: 400, margin: "5px" }}
-                    className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                    className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
                   >
                     Test suites for{" "}
                     <Link
@@ -239,7 +251,7 @@ function Tests(props: Props) {
                         alignItems: "baseline",
                       }}
                     >
-                      <p className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> Filter by Status: </p>
+                      <p className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> Filter by Status: </p>
                       <Button
                         onClick={() =>
                           handleStatusFilter(
@@ -356,7 +368,7 @@ function Tests(props: Props) {
                     <ListOfSuites
                       children={data}
                       stats={selectedStatus}
-                      darkMode={darkMode}
+                      darkMode={state.darkMode}
                     ></ListOfSuites>
                   ) : (
                     <div>

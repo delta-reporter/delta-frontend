@@ -14,7 +14,10 @@ import {
   Typography,
   Link,
   Breadcrumbs,
-  Button,
+  NoSsr,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core"
 import { useState, useEffect } from "react"
 
@@ -25,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   rootDark:{
     flexGrow: 1,
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d",
   }, 
   container: {
@@ -33,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(4),
   },
   toggleModeDark: {
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d",
     border: "1px grey solid",
     marginBottom: "15px",
@@ -58,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "black",
+    backgroundColor: "#2a2a2a",
     border: "1px grey solid",
   },
 }))
@@ -92,13 +95,19 @@ type Props = {
 function Testruns(props: Props) {
   const classes = useStyles(props)
 
-  const [darkMode, setDarkMode] = useState(getInitialColorMode())
-
+  const [state, setState] = useState({
+    darkMode: getInitialDarkModeState(),
+  });
+  
+  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+  
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
-  }, [darkMode])
+    localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+  }, [state.darkMode])
 
-  function getInitialColorMode() :boolean {
+  function getInitialDarkModeState() :boolean {
     if (typeof window !== 'undefined') {
      const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
      return savedColorMode || false
@@ -109,105 +118,111 @@ function Testruns(props: Props) {
  }
 
   return (
-    <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
-      <title>Δ | Test Runs</title>
-      {props.test_runs[0] ? ( // checking if props exist
-        <div>
-        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-            <Link color="inherit" href={`/`}>
-              Projects
-            </Link>
-            <Link
-              color="inherit"
-              href={`/launches/${props.test_runs[0].project_id}`}
-            >
-              Launches
-            </Link>
-            <Typography color="textPrimary"  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Test Runs</Typography>
-          </Breadcrumbs>
-          <Container maxWidth="lg" className={classes.container}>
-          <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
-              <Typography
-                      variant="h6"
-                      style={{ fontWeight: 400, margin: "5px" }}
-                      className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
-                    >
-                     Test runs for{" "}
-                      <Link
-                        style={{ color: "#605959" }}
-                        underline="none"
+    <NoSsr>
+      <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
+        <title>Δ | Test Runs</title>
+        {props.test_runs[0] ? ( // checking if props exist
+          <div>
+          <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+              <Link color="inherit" href={`/`}>
+                Projects
+              </Link>
+              <Link
+                color="inherit"
+                href={`/launches/${props.test_runs[0].project_id}`}
+              >
+                Launches
+              </Link>
+              <Typography color="textPrimary"  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Test Runs</Typography>
+            </Breadcrumbs>
+            <Container maxWidth="lg" className={classes.container}>
+            <FormGroup row>
+              <FormControlLabel
+                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
+                label="Dark Mode"
+              />
+            </FormGroup>              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
+                <Typography
+                        variant="h6"
+                        style={{ fontWeight: 400, margin: "5px" }}
+                        className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
                       >
-                        {" "}
-                        {props.test_runs[0].launch_name}
-                      </Link>{" "}
-                      launch
-                    </Typography>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {props.test_runs.map(testRun => (
-                        <TableRow key={testRun.test_run_id} hover>
-                          <TableCell>
-                            {showStatusIcon(testRun.test_run_status)}
-                          </TableCell>
-                          <TableCell>
-                            {setTestTypeBadge(testRun.test_type)}
-                          </TableCell>
-                          {testRun.duration.minutes === 0 ? (
-                            <TableCell className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-                              {testRun.duration.seconds} sec
+                      Test runs for{" "}
+                        <Link
+                          style={{ color: "#605959" }}
+                          underline="none"
+                        >
+                          {" "}
+                          {props.test_runs[0].launch_name}
+                        </Link>{" "}
+                        launch
+                      </Typography>
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {props.test_runs.map(testRun => (
+                          <TableRow key={testRun.test_run_id} hover>
+                            <TableCell>
+                              {showStatusIcon(testRun.test_run_status)}
                             </TableCell>
-                          ) : (
-                            <TableCell  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-                              {testRun.duration.minutes} min{" "}
-                              {testRun.duration.seconds} sec
+                            <TableCell>
+                              {setTestTypeBadge(testRun.test_type)}
                             </TableCell>
-                          )}
-                          <TableCell  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-                            <Link
-                              underline="none"
-                              href={`/tests/${testRun.test_run_id}`}
-                            >
-                              View All tests
-                            </Link>
-                          </TableCell>
-                          {testRun.test_run_status === "Passed" ? (
-                            <TableCell></TableCell>
-                          ) : (
-                            <TableCell  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+                            {testRun.duration.minutes === 0 ? (
+                              <TableCell className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+                                {testRun.duration.seconds} sec
+                              </TableCell>
+                            ) : (
+                              <TableCell  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+                                {testRun.duration.minutes} min{" "}
+                                {testRun.duration.seconds} sec
+                              </TableCell>
+                            )}
+                            <TableCell  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
                               <Link
                                 underline="none"
-                                href={`/tests/failedTests/${testRun.test_run_id}`}
+                                href={`/tests/${testRun.test_run_id}`}
                               >
-                                View Failed tests
+                                View All tests
                               </Link>
                             </TableCell>
-                          )}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
+                            {testRun.test_run_status === "Passed" ? (
+                              <TableCell></TableCell>
+                            ) : (
+                              <TableCell  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+                                <Link
+                                  underline="none"
+                                  href={`/tests/failedTests/${testRun.test_run_id}`}
+                                >
+                                  View Failed tests
+                                </Link>
+                              </TableCell>
+                            )}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                </Grid>
               </Grid>
-            </Grid>
-          </Container>
-        </div>
-      ) : (
-        // if props don't exist
-        <h1>No runs were found for this launch! </h1>
-      )}
-    </BasePage>
+            </Container>
+          </div>
+        ) : (
+          // if props don't exist
+          <h1>No runs were found for this launch! </h1>
+        )}
+      </BasePage>
+    </NoSsr>
   )
 }
 

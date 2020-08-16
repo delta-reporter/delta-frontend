@@ -47,7 +47,7 @@ export function showStatusText(status, darkMode) {
             color: "green",
             margin: "5px",
             border: "1px green solid",
-            backgroundColor: "black",
+            backgroundColor: "#2a2a2a",
             fontSize: "13px",
           }}
         >
@@ -76,7 +76,7 @@ export function showStatusText(status, darkMode) {
             color: "red",
             margin: "5px",
             border: "1px red solid",
-            backgroundColor: "black",
+            backgroundColor: "#2a2a2a",
             fontSize: "13px",
             paddingRight: "14px",
           }}
@@ -107,7 +107,7 @@ export function showStatusText(status, darkMode) {
             color: "grey",
             margin: "5px",
             border: "1px grey solid",
-            backgroundColor: "black",
+            backgroundColor: "#2a2a2a",
             fontSize: "13px",
           }}
         >
@@ -136,7 +136,7 @@ export function showStatusText(status, darkMode) {
             color: "orange",
             margin: "5px",
             border: "1px orange solid",
-            backgroundColor: "black",
+            backgroundColor: "#2a2a2a",
             fontSize: "13px",
           }}
         >

@@ -19,8 +19,8 @@ import {
   Link,
   Breadcrumbs,
   FormControlLabel,
-  Button,
   NoSsr,
+  FormGroup,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
@@ -30,6 +30,7 @@ import {
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
 
+
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
@@ -37,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   },
   rootDark:{
     flexGrow: 1,
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d",
   }, 
   container: {
@@ -55,11 +56,11 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "black",
+    backgroundColor: "#2a2a2a",
     border: "1px grey solid",
   },
   toggleModeDark: {
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d",
     border: "1px grey solid",
     marginBottom: "15px",
@@ -108,7 +109,7 @@ function Launches(props: Props) {
   }
 
   const [switchViews, setSwitchViews] = React.useState({
-    deltaView: true,
+    deltaView: false,
   })
 
   const handleSwitchViewsChange = event => {
@@ -118,13 +119,19 @@ function Launches(props: Props) {
     })
   }
 
-  const [darkMode, setDarkMode] = useState(getInitialColorMode())
-
+  const [state, setState] = useState({
+    darkMode: getInitialDarkModeState(),
+  });
+  
+  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+  
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode)) //setting a variable in the browser storage
-  }, [darkMode])
+    localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+  }, [state.darkMode])
 
-  function getInitialColorMode() :boolean {
+  function getInitialDarkModeState() :boolean {
     if (typeof window !== 'undefined') {
      const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
      return savedColorMode || false
@@ -136,25 +143,29 @@ function Launches(props: Props) {
 
   return (
     <NoSsr>
-      <BasePage className={darkMode ? classes.rootDark : classes.rootLight} darkMode={darkMode}>
+      <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
       <title>Δ | Launches</title>
-        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
           <Link color="inherit" href={`/`}>
             Projects
           </Link>
-          <Typography color="textPrimary" className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
+          <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
         <Container maxWidth="lg" className={classes.container}>
-        <Button onClick={() => setDarkMode(prevMode => !prevMode)} className = {darkMode ? classes.toggleModeDark : classes.toggleModeLight}>Change color Mode</Button>
-          <Grid container spacing={3} >
+            <FormGroup row>
+              <FormControlLabel
+                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
+                label="Dark Mode"
+              />
+            </FormGroup>          <Grid container spacing={3} >
             <Grid item xs={12} >
-              <Paper className={darkMode ? classes.paperDark : classes.paperLight}>
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
                 <Grid container>
                   <Grid item xs={10}>
                     <Typography
                       variant="h6"
                       style={{ fontWeight: 400, margin: "5px" }}
-                      className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                      className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
                     >
                       Launches for{" "}
                       <Link
@@ -200,11 +211,11 @@ function Launches(props: Props) {
                                 launch.launch_id
                               )}
                             </TableCell>
-                            <TableCell className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>{launch.name}</TableCell>
+                            <TableCell className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>{launch.name}</TableCell>
                             <TableCell>
                               {/* Switch option for Delta View (pyramid style) */}
                               {!switchViews.deltaView
-                                ? testRunButtonsDefaultView(launch.test_run_stats, darkMode)
+                                ? testRunButtonsDefaultView(launch.test_run_stats, state.darkMode)
                                 : testRunButtonsDeltaPyramidView(
                                     launch.test_run_stats,
                                     launch.launch_id

@@ -27,11 +27,12 @@ const Pagination = ({
   const classes = useStyles(itemsPerPage)
 
   for (let i = 1; i <= Math.ceil(totalNumber / itemsPerPage); i++) {
+    if(i>29) break;
     pageNumbers.push(i)
   }
 
   return (
-    <div style={{ marginTop: "15px", width: "max-content" }}>
+    <div style={{ marginTop: "15px"}}>
       <ButtonGroup className={classes.paper}>
         {pageNumbers.map(num => (
           <Button

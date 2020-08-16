@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
   rootLight: {
   },
   rootDark:{
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     color: "#8c8d8d", 
     border: "1px grey solid",
   }, 

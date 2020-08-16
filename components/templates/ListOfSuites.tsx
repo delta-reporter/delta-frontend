@@ -69,11 +69,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "white",
   },
   backgroundDark: {
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
     border: "1px grey solid",
   },
   testBackgroundDark: {
-    backgroundColor: "#000000",
+    backgroundColor: "#2a2a2a",
   },
 }))
 
