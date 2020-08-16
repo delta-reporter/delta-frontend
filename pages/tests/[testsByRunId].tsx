@@ -220,7 +220,6 @@ function Tests(props: Props) {
                       display: "flex",
                       marginTop: "20px",
                       alignItems: "baseline",
-                      width: "50%",
                     }}
                   >
                     {props.test_history[0].test_run_data &&
@@ -247,7 +246,7 @@ function Tests(props: Props) {
                     <div
                       style={{
                         display: "flex",
-                        marginLeft: "50px",
+                        paddingLeft: "100px",
                         alignItems: "baseline",
                       }}
                     >
