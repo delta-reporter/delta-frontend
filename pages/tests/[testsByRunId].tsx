@@ -150,6 +150,7 @@ function Tests(props: Props) {
     setData(await response.json())
   }
 
+  // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
@@ -170,7 +171,8 @@ function Tests(props: Props) {
     else {
       return false
     }
- }
+  }
+
   return (
     <NoSsr>
     <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>

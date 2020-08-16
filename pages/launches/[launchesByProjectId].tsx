@@ -108,8 +108,9 @@ function Launches(props: Props) {
     setHighlightedTest(pageNumber)
   }
 
+  // delta view switch
   const [switchViews, setSwitchViews] = React.useState({
-    deltaView: false,
+    deltaView: getInitialDeltaViewState(),
   })
 
   const handleSwitchViewsChange = event => {
@@ -119,6 +120,21 @@ function Launches(props: Props) {
     })
   }
 
+  useEffect(() => {
+    localStorage.setItem('deltaView', JSON.stringify(switchViews.deltaView)) //setting a variable in the browser storage
+  }, [switchViews.deltaView])
+
+  function getInitialDeltaViewState() :boolean {
+    if (typeof window !== 'undefined') {
+     const savedDeltaView = JSON.parse(localStorage.getItem('deltaView')) //checking the 'dark' var from browser storage
+     return savedDeltaView || false
+    }
+    else {
+      return false
+    }
+  }
+
+  // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
@@ -139,7 +155,7 @@ function Launches(props: Props) {
     else {
       return false
     }
- }
+  }
 
   return (
     <NoSsr>

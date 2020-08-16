@@ -95,6 +95,7 @@ type Props = {
 function Testruns(props: Props) {
   const classes = useStyles(props)
 
+  // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
@@ -115,7 +116,7 @@ function Testruns(props: Props) {
     else {
       return false
     }
- }
+  }
 
   return (
     <NoSsr>

@@ -202,6 +202,7 @@ type Props = {
 function Index(props: Props) {
   const classes = useStyles(props)
 
+  // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
@@ -222,7 +223,7 @@ function Index(props: Props) {
     else {
       return false
     }
- }
+  }
 
   return (
       <NoSsr>
