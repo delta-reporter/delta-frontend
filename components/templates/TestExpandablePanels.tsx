@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import MuiAccordion from "@material-ui/core/Accordion"
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary"
@@ -62,7 +62,7 @@ interface TestProps {
 export const TestErrorMessageAccordion = function(props: TestProps) {
   const { children } = props
 
-  const [expandedErrorPanel, setExpandedErrorPanel] = React.useState<
+  const [expandedErrorPanel, setExpandedErrorPanel] = useState<
     string | false
   >(false)
   const expandCollapsePanel = (errorPanel: string) => (
@@ -116,7 +116,7 @@ export const TestErrorMessageAccordion = function(props: TestProps) {
 export const TestMediaAccordion = function(props: TestProps) {
   const { children } = props
 
-  const [mediaExpandedPanel, setMediaExpandedPanel] = React.useState<
+  const [mediaExpandedPanel, setMediaExpandedPanel] = useState<
     string | false
   >(false)
   const expandCollapsePanel = (mediaPanel: string) => (

@@ -1,25 +1,24 @@
-import { Button, makeStyles } from "@material-ui/core"
+import { Button } from "@material-ui/core"
 import { showStatusIcon } from "."
 import ReactEcharts from "echarts-for-react"
 import Router from "next/router"
 
-
-const useStyles = makeStyles(() => ({
-  rootLight: {
-  },
-  rootDark:{
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d", 
-    border: "1px grey solid",
-  }, 
-}))
-
-
 let pyramidData = []
 let roseData = []
 
+function setButtonsBackgroundColor(darkMode) {
+  if(darkMode) //light mode - highlighted
+   return "#2a2a2a"
+  else return "#e0e0e0"
+}
+
+function setButtonsTextColor(darkMode) {
+  if(darkMode) //light mode - highlighted
+   return "#8c8d8d"
+  else return "black"
+}
+
 export function testRunButtonsDefaultView(testRunStats: any, darkMode: boolean) {
-  const classes = useStyles(testRunStats)
 
   return testRunStats.map(testRun => (
     <Button
@@ -33,8 +32,10 @@ export function testRunButtonsDefaultView(testRunStats: any, darkMode: boolean) 
         paddingBottom: "0px",
         paddingTop: "0px",
         marginLeft: "5px",
+        backgroundColor: setButtonsBackgroundColor(darkMode),
+        border: "1px grey solid",
+        color: setButtonsTextColor(darkMode)
       }}
-      className={darkMode ? classes.rootDark : classes.rootLight}
     >
       {testRun.test_type}{" "}
       {testRun.tests_total === testRun.tests_passed + testRun.tests_skipped ? (
