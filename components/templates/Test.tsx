@@ -81,6 +81,16 @@ export const TestExpanded = function(props: TestProps) {
     return (microseconds / 1000).toString()[0]
   }
 
+  function getBackgroundColorForTheTab(darkMode) {
+    if(darkMode) return "#2a2a2a"
+    else return "white"
+  }
+
+  function getTextColorForTheTab(darkMode) {
+    if(darkMode) return "#8c8d8d"
+    else return "black"
+  }
+
   return (
     <div
       key={children.test_history_id}
@@ -105,9 +115,9 @@ export const TestExpanded = function(props: TestProps) {
           </Typography>
           <Tabs style={{ marginTop: "20px" }} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <TabList>
-              <Tab style={{ fontSize: "16px" }}>Info</Tab>
-              <Tab style={{ fontSize: "16px" }}>Resolution</Tab>
-              <Tab style={{ fontSize: "16px" }}>Test History</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode) }} >Info</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Resolution</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Test History</Tab>
             </TabList>
             {/* info tab */}
             <TabPanel>
@@ -209,7 +219,7 @@ export const TestExpanded = function(props: TestProps) {
             </TabPanel>
             <TabPanel>
               {/* historical info tab */}
-              <HistoricalTests>{children}</HistoricalTests>
+              <HistoricalTests darkMode={darkMode}>{children}</HistoricalTests>
             </TabPanel>
           </Tabs>
         </Paper>

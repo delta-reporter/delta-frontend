@@ -21,10 +21,21 @@ const fetcher = url => fetch(url).then(res => res.json())
 
 interface TestProps {
   children: any
+  darkMode: boolean
 }
 
 export const HistoricalTests = function(props: TestProps) {
-  const { children } = props
+  const { children, darkMode } = props
+
+  function getBackgroundColor(darkMode) {
+    if(darkMode) return "#2a2a2a"
+    else return "white"
+  }
+
+  function getTextColor(darkMode) {
+    if(darkMode) return "#8c8d8d"
+    else return "black"
+  }
 
   const { data, error } = useSWR(
     `${process.env.publicDeltaCore}/api/v1/test_history/test_id/${children.test_id}`,
@@ -72,12 +83,13 @@ export const HistoricalTests = function(props: TestProps) {
                 expanded={historicalTestsExpandedPanel === test.test_history_id}
                 onChange={expandCollapsePanel(test.test_history_id)}
                 TransitionProps={{ unmountOnExit: true }}
+                style={{backgroundColor: getBackgroundColor(darkMode), color: getTextColor(darkMode)}}
               >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography color="textPrimary">
-                    {showStatusText(test.status)}{" "}
-                    {showDateText(test.end_datetime)}
-                    {showResolutionText(test.resolution)}{" "}
+                  <Typography>
+                    {showStatusText(test.status, darkMode)}{" "}
+                    {showDateText(test.end_datetime, darkMode)}
+                    {showResolutionText(test.resolution, darkMode)}{" "}
                     {test.test_history_id === children.test_history_id ? ( // if it's current test - show the badge 
                       <Tooltip title="Current test">
                         <button
