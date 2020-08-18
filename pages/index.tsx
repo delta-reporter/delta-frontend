@@ -175,7 +175,8 @@ export interface SuiteAndTest {
           test_history_id: number
           test_id: number
           name: string
-          resolution: string
+          test_history_resolution: string
+          test_resolution: string
           message: string
           status: string
           error_type: string

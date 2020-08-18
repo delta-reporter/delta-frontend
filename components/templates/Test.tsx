@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography, Button } from "@material-ui/core"
+import { Paper, Typography } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
@@ -46,15 +46,6 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const testResolutions = [
-  "Not set",
-  "Test is flaky",
-  "Product defect",
-  "Test needs to be updated",
-  "To investigate",
-  "Environment issue",
-]
-
 interface TestProps {
   children: any
   darkMode: boolean
@@ -63,19 +54,6 @@ interface TestProps {
 export const TestExpanded = function(props: TestProps) {
   const { children, darkMode } = props
   const classes = useStyles(props)
-
-  const [openResolutionDialog, setOpenResolutionDialog] = useState(false)
-  const [resolutionResponse, setResolutionResponse] = useState(
-    testResolutions[0]
-  )
-  const handleResolutionDialogOpen = () => {
-    setOpenResolutionDialog(true)
-  }
-
-  const handleResolutionDialogClose = (value: string) => {
-    setOpenResolutionDialog(false)
-    setResolutionResponse(value)
-  }
 
   function convertToSeconds(microseconds: number) {
     return (microseconds / 1000).toString()[0]
@@ -179,42 +157,7 @@ export const TestExpanded = function(props: TestProps) {
             <TabPanel>
               {/* set resolution tab */}
               <div style={{ paddingTop: "20px" }}>
-                {children.resolution === "Not set" ? ( // when resolution is not set - show button
-                  <Typography className={classes.bigMargin}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={handleResolutionDialogOpen}
-                      className={classes.bigMargin}
-                    >
-                      Set test resolution
-                    </Button>{" "}
-                    <span
-                      style={{
-                        color: "grey",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      {resolutionResponse}
-                    </span>
-                  </Typography>
-                ) : (
-                  <Typography style={{ paddingTop: "10px" }}>
-                    Test Resolution:
-                    <span style={{ color: "grey" }}>
-                      {" "}
-                      {children.resolution}{" "}
-                    </span>
-                  </Typography>
-                )}
-
-                <TestResolution
-                  open={openResolutionDialog}
-                  selectedValue={resolutionResponse}
-                  onClose={handleResolutionDialogClose}
-                  testHistoryId={children.test_history_id}
-                  testResolutions={testResolutions}
-                />
+                  <TestResolution resolution = {children.test_history_resolution} testId={children.test_id} testHistoryId={children.test_history_id}></TestResolution>
               </div>
             </TabPanel>
             <TabPanel>
