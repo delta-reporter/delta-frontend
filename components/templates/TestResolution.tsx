@@ -1,35 +1,40 @@
-import React from "react"
+import React, { useState } from "react"
 import {
-  List,
-  ListItem,
-  Dialog,
-  DialogTitle,
-  ListItemText,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Typography,
 } from "@material-ui/core"
+import { getResolutionName } from "./showResolution";
 
-interface ResolutionProps {
-  open: boolean
-  selectedValue: string
-  onClose: (value: string) => void
-  testHistoryId: string | number
-  testResolutions: string[]
+interface TestProps {
+  testHistoryId: any
+  testId: any
+  resolution: any
 }
 
-export const TestResolution = function(props: ResolutionProps) {
-  const { onClose, selectedValue, open, testHistoryId, testResolutions } = props
+export const TestResolution = function(props: TestProps) {
+    const { testHistoryId, testId, resolution } = props
+    const [resolutionName, setResolutionName] = useState(resolution)
+  
+    const handleDropdownSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setResolutionName(event.target.value as string);
+    changeResolution(getResolutionName(event.target.value))
+      if (typeof window !== 'undefined') {
+      window.location.reload(false) //temporarily refreshing the page when resolution is updated, need to come up with a better solution
+      }
+    };
 
-  const handleClose = () => {
-    onClose(selectedValue)
-  }
-
-  const handleListItemClick = async (resolution: string) => {
+  const changeResolution = async (resolutionValue) => {
     // PUT request using fetch with async/await
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         test_history_id: testHistoryId,
-        test_resolution: resolution,
+        test_resolution: resolutionValue,
+        test_id: testId
       }),
     }
     console.log(requestOptions)
@@ -38,28 +43,31 @@ export const TestResolution = function(props: ResolutionProps) {
       `${process.env.publicDeltaCore}/api/v1/test_history_resolution`,
       requestOptions
     )
-    const data = await response.json()
-    onClose(data.message)
+    await response.json()
   }
 
   return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-    >
-      <DialogTitle id="simple-dialog-title">Set resolution:</DialogTitle>
-      <List>
-        {testResolutions.map(resolution => (
-          <ListItem
-            button
-            onClick={() => handleListItemClick(resolution)}
-            key={resolution}
-          >
-            <ListItemText primary={resolution} />
-          </ListItem>
-        ))}
-      </List>
-    </Dialog>
+    <div>
+      <Typography style={{fontStyle:"italic"}}>
+      Set or update the resolution for this test: 
+      </Typography>
+      <FormControl variant="outlined" style={{minWidth: 250, marginTop: "30px"}}>
+        <InputLabel>Resolution</InputLabel>
+        <Select
+          value={resolutionName}
+          onChange={handleDropdownSelect}
+          label="Resolution"
+        >
+            <MenuItem value={null}></MenuItem>
+            <MenuItem value={1}>Not set</MenuItem>
+            <MenuItem value={2}>Test is flaky</MenuItem>
+            <MenuItem value={3}>Product defect</MenuItem>
+            <MenuItem value={4}>Test needs to be updated</MenuItem>
+            <MenuItem value={5}>To investigate</MenuItem>
+            <MenuItem value={6}>Environment issue</MenuItem>
+        </Select>
+      </FormControl> 
+    
+  </div>
   )
 }

@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography, Button } from "@material-ui/core"
+import { Paper, Typography } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
@@ -46,15 +46,6 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const testResolutions = [
-  "Not set",
-  "Test is flaky",
-  "Product defect",
-  "Test needs to be updated",
-  "To investigate",
-  "Environment issue",
-]
-
 interface TestProps {
   children: any
   darkMode: boolean
@@ -64,21 +55,18 @@ export const TestExpanded = function(props: TestProps) {
   const { children, darkMode } = props
   const classes = useStyles(props)
 
-  const [openResolutionDialog, setOpenResolutionDialog] = useState(false)
-  const [resolutionResponse, setResolutionResponse] = useState(
-    testResolutions[0]
-  )
-  const handleResolutionDialogOpen = () => {
-    setOpenResolutionDialog(true)
-  }
-
-  const handleResolutionDialogClose = (value: string) => {
-    setOpenResolutionDialog(false)
-    setResolutionResponse(value)
-  }
-
   function convertToSeconds(microseconds: number) {
     return (microseconds / 1000).toString()[0]
+  }
+
+  function getBackgroundColorForTheTab(darkMode) {
+    if(darkMode) return "#2a2a2a"
+    else return "white"
+  }
+
+  function getTextColorForTheTab(darkMode) {
+    if(darkMode) return "#8c8d8d"
+    else return "black"
   }
 
   return (
@@ -105,9 +93,9 @@ export const TestExpanded = function(props: TestProps) {
           </Typography>
           <Tabs style={{ marginTop: "20px" }} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
             <TabList>
-              <Tab style={{ fontSize: "16px" }}>Info</Tab>
-              <Tab style={{ fontSize: "16px" }}>Resolution</Tab>
-              <Tab style={{ fontSize: "16px" }}>Test History</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode) }} >Info</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Resolution</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Test History</Tab>
             </TabList>
             {/* info tab */}
             <TabPanel>
@@ -169,47 +157,12 @@ export const TestExpanded = function(props: TestProps) {
             <TabPanel>
               {/* set resolution tab */}
               <div style={{ paddingTop: "20px" }}>
-                {children.resolution === "Not set" ? ( // when resolution is not set - show button
-                  <Typography className={classes.bigMargin}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={handleResolutionDialogOpen}
-                      className={classes.bigMargin}
-                    >
-                      Set test resolution
-                    </Button>{" "}
-                    <span
-                      style={{
-                        color: "grey",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      {resolutionResponse}
-                    </span>
-                  </Typography>
-                ) : (
-                  <Typography style={{ paddingTop: "10px" }}>
-                    Test Resolution:
-                    <span style={{ color: "grey" }}>
-                      {" "}
-                      {children.resolution}{" "}
-                    </span>
-                  </Typography>
-                )}
-
-                <TestResolution
-                  open={openResolutionDialog}
-                  selectedValue={resolutionResponse}
-                  onClose={handleResolutionDialogClose}
-                  testHistoryId={children.test_history_id}
-                  testResolutions={testResolutions}
-                />
+                  <TestResolution resolution = {children.test_history_resolution} testId={children.test_id} testHistoryId={children.test_history_id}></TestResolution>
               </div>
             </TabPanel>
             <TabPanel>
               {/* historical info tab */}
-              <HistoricalTests>{children}</HistoricalTests>
+              <HistoricalTests darkMode={darkMode}>{children}</HistoricalTests>
             </TabPanel>
           </Tabs>
         </Paper>

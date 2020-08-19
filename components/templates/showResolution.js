@@ -1,84 +1,59 @@
 import React from "react"
 import {Typography, Tooltip} from "@material-ui/core"
 
-export function showResolutionText(resolution) {
+export function showResolutionText(resolution, darkMode) {
+
+    if(resolution == 1) resolution =  "Not set"
+    else if(resolution == 2) resolution =  "Test is flaky"
+    else if(resolution == 3) resolution =  "Product defect"
+    else if(resolution == 4) resolution =  "Test needs to be updated"
+    else if(resolution == 5) resolution =  "To investigate"
+    else if(resolution == 6) resolution =  "Environment issue"
+
     let resolutionBadge
-    if (resolution === "Not set") {
+    if (resolution === "Not set" || resolution === null) {
         resolutionBadge = ""
-    } else if (resolution === "Test is flaky") {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <button style={
-                    {
-                        color: "#FF8C00",
-                        margin: "5px",
-                        border: "1px #FF8C00 solid",
-                        backgroundColor: "white"
-                    }
-                }>Test is flaky</button>
-            </Tooltip>
-        )
-    } else if (resolution === "Product defect") {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <button style={
-                    {
-                        color: "#800000",
-                        margin: "5px",
-                        border: "1px #800000 solid",
-                        backgroundColor: "white"
-                    }
-                }>Product defect</button>
-            </Tooltip>
-        )
-    } else if (resolution === "Test needs to be updated") {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <button style={
-                    {
-                        color: "#66CDAA",
-                        margin: "5px",
-                        border: "1px #66CDAA solid",
-                        backgroundColor: "white"
-                    }
-                }>Test needs to be updated</button>
-            </Tooltip>
-        )
-    } else if (resolution === "To investigate") {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <button style={
-                    {
-                        color: "#00FF7F",
-                        margin: "5px",
-                        border: "1px #00FF7F solid",
-                        backgroundColor: "white"
-                    }
-                }>To investigate</button>
-            </Tooltip>
-        )
-    } else if (resolution === "Environment issue") {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <button style={
-                    {
-                        color: "#EE82EE",
-                        margin: "5px",
-                        border: "1px #EE82EE solid",
-                        backgroundColor: "white"
-                    }
-                }>Environment issue</button>
-            </Tooltip>
-        )
     } else {
-        resolutionBadge = (
-            <Tooltip title="Resolution">
-                <Typography style={
-                    {color: "grey"}
-                }>
-                    {resolution} </Typography>
-            </Tooltip>
+       
+        if(darkMode) {
+            resolutionBadge = (
+                <Tooltip title="Resolution">
+                    <button style={
+                        {
+                            color: "#dda057",
+                            margin: "5px",
+                            border: "1px #dda057 solid",
+                            backgroundColor: "#2a2a2a"
+                        }
+                    }>{resolution}</button>
+                </Tooltip>
+            )
+        }
+        else 
+            resolutionBadge = (
+                <Tooltip title="Resolution">
+                    <button style={
+                        {
+                            color: "#dda057",
+                            margin: "5px",
+                            border: "1px #dda057 solid",
+                            backgroundColor: "white"
+                        }
+                    }>{resolution}</button>
+                </Tooltip>
         )
-    }
     return resolutionBadge
+    }
+}
+
+export function getResolutionName(resolution) {
+    let resolutionName
+    if(resolution == 1) resolutionName =  "Not set"
+    else if(resolution == 2) resolutionName =  "Test is flaky"
+    else if(resolution == 3) resolutionName =  "Product defect"
+    else if(resolution == 4) resolutionName =  "Test needs to be updated"
+    else if(resolution == 5) resolutionName =  "To investigate"
+    else if(resolution == 6) resolutionName =  "Environment issue"
+    else return ""
+    return resolutionName
 }
