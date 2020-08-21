@@ -272,7 +272,7 @@ function Index(props: Props) {
   }
 
   async function getNewProjectName(projectId) {
-    let projectName = (document.getElementById("newProjectName") as HTMLInputElement).value
+    let projectName = (document.getElementById("modal_" + projectId) as HTMLInputElement).value
     
     const requestOptions = {
       method: "PUT",
@@ -335,7 +335,7 @@ function Index(props: Props) {
                           <Typography style={{ marginBottom: "15px"}}> Update project name:
                           </Typography>
                           <form noValidate autoComplete="off">
-                            <TextField id="newProjectName" label={project.name} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
+                            <TextField id={`modal_${project.project_id}`} label={project.name} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
                             <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
                           </form>
 

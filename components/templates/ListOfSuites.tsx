@@ -92,7 +92,6 @@ export const ListOfSuites = function(props: Props) {
 
   function changeRightSide(value, testId) {
     setTestInfoSection(value)
-    console.log(testId)
     setHighlightedTest(testId)
   }
 
