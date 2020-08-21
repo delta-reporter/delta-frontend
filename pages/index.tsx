@@ -22,7 +22,6 @@ import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 import Router from "next/router"
 import SettingsIcon from '@material-ui/icons/Settings'
-import { mergeClasses } from "@material-ui/styles"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
