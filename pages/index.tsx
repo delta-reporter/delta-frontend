@@ -332,7 +332,7 @@ function Index(props: Props) {
                             onClose={handleModalClose}
                           >
                             <div style={modalStyle}  className={state.darkMode ? classes.modalDark : classes.modalLight}>
-                          <Typography style={{ marginBottom: "15px"}}> Update project name:{project.project_id}
+                          <Typography style={{ marginBottom: "15px"}}> Update project name:
                           </Typography>
                           <form noValidate autoComplete="off">
                             <TextField id={`modal_${project.project_id}`} label={project.name} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
