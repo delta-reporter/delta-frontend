@@ -9,6 +9,9 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
+  Button,
+  Modal,
+  TextField,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
@@ -18,11 +21,16 @@ import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 import Router from "next/router"
+import SettingsIcon from '@material-ui/icons/Settings'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
     color: "#8c8d8d",
+  },
+  rootSemiLight: {
+    flexGrow: 1,
+    backgroundColor: "#656464",
   },
   rootDark:{
     flexGrow: 1,
@@ -64,7 +72,7 @@ const useStyles = makeStyles(theme => ({
     color: "#8c8d8d",
   },
   projectTitle: {
-    paddingTop: theme.spacing(7),
+    paddingTop: theme.spacing(4),
     textAlign: "center",
   },
   pageTitleSectionDark: {
@@ -93,6 +101,25 @@ const useStyles = makeStyles(theme => ({
   toggleModeLight: {
     border: "1px grey solid",
   }, 
+  modalLight: {
+    position: 'absolute',
+    width: 400,
+    height: 300,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(10, 15, 3),
+  },
+  modalDark: {
+    position: 'absolute',
+    width: 400,
+    height: 300,
+    backgroundColor: "#2a2a2a",
+    color: "#8c8d8d",
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(10, 15, 3),
+  },
 }))
 export interface TestProject {
   project_id: number
@@ -225,6 +252,48 @@ function Index(props: Props) {
       return false
     }
   }
+  
+  function getModalStyle() {
+    return {
+      top: `50%`,
+      left: `50%`,
+      transform: `translate(-50%, -50%)`,
+    }
+  }
+  const [openModal, setOpenModal] = React.useState(false);
+  const [modalStyle] = React.useState(getModalStyle);
+
+  const handleModalOpen = () => {
+    setOpenModal(true);
+  }
+
+  const handleModalClose = () => {
+    setOpenModal(false);
+  }
+
+  async function getNewProjectName(projectId) {
+    let projectName = (document.getElementById("newProjectName") as HTMLInputElement).value
+    
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: projectId,
+        name: projectName
+      }),
+    }
+    console.log(requestOptions)
+
+    const response = await fetch(
+      `${process.env.publicDeltaCore}/api/v1/update_project_name`,
+      requestOptions
+    )
+    await response.json()
+    if (typeof window !== 'undefined') {
+      window.location.reload(false) // reloading the page whe project name is changed
+      }
+  }
+
 
   return (
       <NoSsr>
@@ -255,26 +324,41 @@ function Index(props: Props) {
                     <List>
                       <ListItem
                         button
-                        onClick={() =>
-                          Router.push(`/launches/${project.project_id}`)
-                        }
-                      >
+                      >  
                         <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
-                          <Typography
-                            component="p"
-                            variant="h4"
-                            className={classes.projectTitle}
+                          <Button  onClick={handleModalOpen } ><SettingsIcon style={{color: "grey", marginLeft:"90%"}}></SettingsIcon></Button> 
+                          <Modal
+                            open={openModal}
+                            onClose={handleModalClose}
                           >
-                            {project.name}
+                            <div style={modalStyle}  className={state.darkMode ? classes.modalDark : classes.modalLight}>
+                          <Typography style={{ marginBottom: "15px"}}> Update project name:
                           </Typography>
-                          <Typography
-                            color="textSecondary"
-                            className={state.darkMode ? classes.projectStatusDark : classes.projectStatusLight}
-                            component="p"
-                          >
-                            {project.project_status}
-                          </Typography>
+                          <form noValidate autoComplete="off">
+                            <TextField id="newProjectName" label={project.name} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
+                            <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
+                          </form>
+
+                          </div>
+                          </Modal>
+                          <div onClick={() => Router.push(`/launches/${project.project_id}`)}>
+                            <Typography
+                              component="p"
+                              variant="h4"
+                              className={classes.projectTitle}
+                            >
+                              {project.name}
+                            </Typography>
+                            <Typography
+                              color="textSecondary"
+                              className={state.darkMode ? classes.projectStatusDark : classes.projectStatusLight}
+                              component="p"
+                            >
+                              {project.project_status}
+                            </Typography>
+                          </div>
                         </Paper>{" "}
+                       
                       </ListItem>
                     </List>
                   </Grid>
