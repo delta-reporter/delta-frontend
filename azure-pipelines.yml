@@ -17,6 +17,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '11.x'
+  displayName: 'Install Node.js'
+
 - script: |
     git checkout $(Build.SourceBranchName)
     git remote add heroku https://heroku:$(heroku_token)@git.heroku.com/delta-frontend.git
