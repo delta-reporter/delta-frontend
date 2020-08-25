@@ -24,6 +24,7 @@ import {
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
+import useSocket from '../../hooks/useSocket'
 import {
   testRunButtonsDefaultView,
   testRunButtonsDeltaPyramidView,
@@ -96,10 +97,16 @@ function Launches(props: Props) {
   const indexOfLastItem = currentPage * launchesPerPage
   const indexOfFirstItem = indexOfLastItem - launchesPerPage
   // pagination (first 20)
-  const currentLaunches = props.launches.slice(
+  const [currentLaunches, setCurrentLaunches] = useState(props.launches.slice(
     indexOfFirstItem,
     indexOfLastItem
-  )
+  ) || [])
+  // const currentLaunches = 
+
+  // const currentLaunches = props.launches.slice(
+  //   indexOfFirstItem,
+  //   indexOfLastItem
+  // )
 
   const [highlightedTest, setHighlightedTest] = useState(0)
 
@@ -142,6 +149,24 @@ function Launches(props: Props) {
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  const [testLaunches, setLaunches] = useState(props.launches || [])
+
+  useSocket('delta_launch', testLaunch => {
+    console.log("TEST LAUNCH RECEIVED")
+    console.log(testLaunch)
+    console.log(currentLaunches)
+    
+    // let launches = [testLaunch].concat(currentLaunches)
+    console.log(currentLaunches)
+
+    // setLaunches(testLaunches => [testLaunch, ...testLaunches])
+    if(testLaunch.project_id == currentLaunches[0].project_id){
+      currentLaunches.pop()
+      setCurrentLaunches(currentLaunches => [testLaunch, ...currentLaunches])
+    }
+    // setCurrentLaunches(launches)
+  })
   
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
@@ -189,7 +214,7 @@ function Launches(props: Props) {
                         underline="none"
                       >
                         {" "}
-                        {props.launches[0].project}
+                        {testLaunches[0].project}
                       </Link>{" "}
                       project
                     </Typography>
@@ -208,7 +233,7 @@ function Launches(props: Props) {
                     />
                   </Grid>
                 </Grid>
-                {props.launches[0] ? ( // checking if props exist
+                {testLaunches[0] ? ( // checking if props exist
                   <div>
                     <Table size="small" >
                       <TableHead>

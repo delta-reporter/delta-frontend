@@ -106,6 +106,7 @@ export interface TestLaunch {
   name: string
   launch_status: string
   project: string
+  project_id: number
   data: { url?: string }
   test_run_stats: [
     {
