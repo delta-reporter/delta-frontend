@@ -26,7 +26,6 @@ steps:
 
 - script: |
     cd tests/end_to_end
-    sudo apt-get install g++ build-essential
     npm install
     npm run test:staging
   displayName: 'Delta Frontend - Staging End to End Tests'
@@ -40,9 +39,9 @@ steps:
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
 - script: |
-    sudo apt-get install g++ build-essential
     ./node_modules/.bin/next &
     cd tests/end_to_end
+    node -v
     npm install
     npm run test:preview
   displayName: 'Delta Frontend - PR End to End Tests Check'
