@@ -37,7 +37,15 @@ class MyApp extends App<Props> {
 
     // connect to Websockets server and listen for events
     const socket = io("http://localhost:8080")
+    // const socket = io({
+    //   transports: ['websocket']
+    // })
+
     this.setState({ socket })
+    socket.on('connected', data => {
+      console.log("WEBSOCKETS CONNECTED")
+      console.log(data)
+    })
   }
 
     // close socket connection
