@@ -3,6 +3,7 @@ import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
 import { BasePage, ListOfSuites } from "../../components/templates"
+import useSocket from '../../hooks/useSocket'
 import {
   Grid,
   Paper,
@@ -158,6 +159,12 @@ function Tests(props: Props) {
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  useSocket('delta_test_suite', test_suite => {
+    console.log("Event Received")
+    console.log(test_suite)
+    console.log(props.test_history[0])
+  })
   
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage

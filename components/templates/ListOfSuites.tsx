@@ -15,6 +15,7 @@ import {
   ListItem,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import useSocket from '../../hooks/useSocket'
 import { SuiteAndTest } from "../../pages"
 
 const useStyles = makeStyles(theme => ({
@@ -127,6 +128,36 @@ export const ListOfSuites = function(props: Props) {
     return classes.testBackgroundDark
   }
 
+  const [testSuites, setTestSuites] = useState(children[0].test_suites || [])
+
+  useSocket('delta_test_suite', test_suite => {
+    console.log("Event Test Suite Received")
+    console.log(test_suite)
+    console.log("Test Suites")
+    console.log(testSuites)
+    console.log(children)
+    // We should check if the received test suite is part of the same project, test_run
+    let filteredTestSuite = testSuites.find(
+      t_test_suite => t_test_suite.test_suite_history_id === test_suite.test_suite_history_id);
+
+    console.log("Filtered Test Suite")
+    console.log(filteredTestSuite)
+
+    if(!filteredTestSuite){
+      console.log("Adding new test suite")
+      testSuites.pop()
+      setTestSuites(testSuites => [test_suite, ...testSuites])
+    } else {
+      console.log("Updating existing test suite")
+      console.log(filteredTestSuite)
+      let launchIndex = testSuites.indexOf(filteredTestSuite);
+      console.log(launchIndex)
+      testSuites[launchIndex] = test_suite
+      setTestSuites(testSuites => testSuites)
+    }
+    // console.log(props.test_history[0])
+  })
+
   return (
     <div>
       {/* left-hand side for suites list */}
@@ -142,7 +173,7 @@ export const ListOfSuites = function(props: Props) {
       >
         {children.map(testRun => (
           <div key={testRun.test_run_id} >
-            {testRun.test_suites.map(suite => (
+            {testSuites.map(suite => (
               <Accordion // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}

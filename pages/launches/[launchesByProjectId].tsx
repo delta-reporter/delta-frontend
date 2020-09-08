@@ -155,15 +155,31 @@ function Launches(props: Props) {
   useSocket('delta_launch', testLaunch => {
     console.log("TEST LAUNCH RECEIVED")
     console.log(testLaunch)
+    console.log("TEST LAUNCH ID")
+    console.log(testLaunch.launch_id)
+    console.log("CURRENT LAUNCHES")
     console.log(currentLaunches)
+    console.log("FILTERED LAUNCH")
+    let filteredLaunch = currentLaunches.find(
+      launches => launches.launch_id === testLaunch.launch_id);
+    console.log(filteredLaunch)
+    // console.log(filteredLaunch.length)
     
     // let launches = [testLaunch].concat(currentLaunches)
-    console.log(currentLaunches)
+    // console.log(currentLaunches)
 
     // setLaunches(testLaunches => [testLaunch, ...testLaunches])
-    if(testLaunch.project_id == currentLaunches[0].project_id){
+    if(!filteredLaunch){
+      console.log("Adding new launch")
       currentLaunches.pop()
       setCurrentLaunches(currentLaunches => [testLaunch, ...currentLaunches])
+    } else {
+      console.log("Updating existing launch")
+      console.log(filteredLaunch)
+      let launchIndex = currentLaunches.indexOf(filteredLaunch);
+      console.log(launchIndex)
+      currentLaunches[launchIndex] = testLaunch
+      setCurrentLaunches(currentLaunches => currentLaunches)
     }
     // setCurrentLaunches(launches)
   })
