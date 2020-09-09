@@ -20,6 +20,7 @@ import { BasePage } from "../components/templates"
 import { Page } from "../constants"
 import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
+import useSocket from '../hooks/useSocket'
 import Router from "next/router"
 import SettingsIcon from '@material-ui/icons/Settings'
 
@@ -132,6 +133,7 @@ export interface TestLaunch {
   name: string
   launch_status: string
   project: string
+  project_id: number
   data: { url?: string }
   test_run_stats: [
     {
@@ -234,10 +236,16 @@ function Index(props: Props) {
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
+
+  const [testProjects, setTestProjects] = useState(props.test_projects || [])
   
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  useSocket('delta_project', testProject => {
+    setTestProjects(testProjects => [...testProjects, testProject])
+  })
   
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
@@ -317,9 +325,9 @@ function Index(props: Props) {
                 label="Dark Mode"
               />
             </FormGroup>
-            {props.test_projects[0] ? ( // checking if props exist (if there are projects)
+            {testProjects[0] ? ( // checking if props exist (if there are projects)
               <Grid container spacing={3}>
-                {props.test_projects.map(project => (
+                {testProjects.map(project => (
                   <Grid item xs={12} sm={3} key={project.project_id}>
                     <List>
                       <ListItem
