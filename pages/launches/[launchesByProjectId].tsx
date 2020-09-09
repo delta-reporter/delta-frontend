@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
+  EventNotification
 } from "../../components/templates"
 import { TestLaunch } from "../index"
 import {
@@ -167,6 +168,7 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
+        {EventNotification()}
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>
               <FormControlLabel
