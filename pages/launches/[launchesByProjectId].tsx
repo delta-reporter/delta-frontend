@@ -24,6 +24,12 @@ import {
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
+import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import ReplayIcon from '@material-ui/icons/Replay';
+import Tooltip from '@material-ui/core/Tooltip';
 import useSocket from '../../hooks/useSocket'
 import {
   testRunButtonsDefaultView,
@@ -79,6 +85,10 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   launches: TestLaunch[]
+}
+
+export interface State extends SnackbarOrigin {
+  open: boolean;
 }
 
 function Launches(props: Props) {
@@ -198,6 +208,41 @@ function Launches(props: Props) {
     }
   }
 
+  // const [newLaunchOpen, setNewLaunchOpen] = React.useState(false);
+
+  // const handleClick = () => {
+  //   setNewLaunchOpen(true);
+  // };
+
+  // const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+
+  //   setNewLaunchOpen(false);
+  // };
+
+  const [notificationState, setNotificationState] = React.useState<State>({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = notificationState;
+
+  const handleClick = (newState: SnackbarOrigin) => () => {
+    setNotificationState({ open: true, ...newState });
+  };
+
+  const handleClose = () => {
+    setNotificationState({ ...notificationState, open: false });
+  };
+
+  const buttons = (
+    <React.Fragment>
+      <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>Kick new launch</Button>
+    </React.Fragment>
+  );
+
   return (
     <NoSsr>
       <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
@@ -208,6 +253,48 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
+        {/* <div>
+          <Button onClick={handleClick}>Open simple snackbar</Button>
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={newLaunchOpen}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message="Note archived"
+            action={
+              <React.Fragment>
+                <Button color="secondary" size="small" onClick={handleClose}>
+                  UNDO
+                </Button>
+                <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+          />
+        </div> */}
+        <div>
+          {buttons}
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={open}
+            onClose={handleClose}
+            message="There are new launches 🚀"
+            action={
+              <React.Fragment>
+                <Tooltip title="Reload page">
+                <Button color="secondary" size="small" onClick={handleClose}>
+                <ReplayIcon fontSize="small" />
+                </Button>
+                </Tooltip>
+              </React.Fragment>
+            }
+            key={vertical + horizontal}
+          />
+        </div>
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>
               <FormControlLabel
