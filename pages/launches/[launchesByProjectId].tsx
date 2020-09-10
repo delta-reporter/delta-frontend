@@ -25,6 +25,7 @@ import {
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
+import useSocket from '../../hooks/useSocket'
 import {
   testRunButtonsDefaultView,
   testRunButtonsDeltaPyramidView,
@@ -143,6 +144,10 @@ function Launches(props: Props) {
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+
+  useSocket('delta_launch', testLaunch => {
+    EventNotification("There are new launches 🚀")
+  })
   
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
@@ -168,7 +173,6 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
-        {EventNotification()}
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>
               <FormControlLabel

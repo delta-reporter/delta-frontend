@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
+import { useRouter } from 'next/router'
 import Button from '@material-ui/core/Button';
 // import CloseIcon from '@material-ui/icons/Close';
 import ReplayIcon from '@material-ui/icons/Replay';
@@ -9,7 +10,9 @@ export interface State extends SnackbarOrigin {
     open: boolean;
   }
 
-export const EventNotification = function(props) {
+export const EventNotification = function(message: string) {
+
+    const router = useRouter()
 
     const [notificationState, setNotificationState] = React.useState<State>({
       open: false,
@@ -24,22 +27,23 @@ export const EventNotification = function(props) {
 
     const handleClose = () => {
       setNotificationState({ ...notificationState, open: false });
+      router.reload();
     };
 
-    const buttons = (
-      <React.Fragment>
-        <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>Kick new launch</Button>
-      </React.Fragment>
-    );
+    // const buttons = (
+    //   <React.Fragment>
+    //     <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>Kick new launch</Button>
+    //   </React.Fragment>
+    // );
 
   return (
     <div>
-    {buttons}
+    {/* {buttons} */}
     <Snackbar
       anchorOrigin={{ vertical, horizontal }}
       open={open}
       onClose={handleClose}
-      message="There are new launches 🚀"
+      message={message}
       action={
         <React.Fragment>
           <Tooltip title="Reload page">
