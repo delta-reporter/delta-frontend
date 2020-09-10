@@ -9,7 +9,7 @@ export interface State extends SnackbarOrigin {
     open: boolean;
   }
 
-export const EventNotification = function(props) {
+export const EventNotification = function(message: string) {
 
     const [notificationState, setNotificationState] = React.useState<State>({
       open: false,
@@ -39,7 +39,7 @@ export const EventNotification = function(props) {
       anchorOrigin={{ vertical, horizontal }}
       open={open}
       onClose={handleClose}
-      message="There are new launches 🚀"
+      message={message}
       action={
         <React.Fragment>
           <Tooltip title="Reload page">

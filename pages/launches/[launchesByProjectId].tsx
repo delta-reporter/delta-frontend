@@ -1,3 +1,4 @@
+import { NextPageWithInitialProps, InitialProps } from 'next';
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
@@ -30,6 +31,8 @@ import {
   testRunButtonsDeltaPyramidView,
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
+import { SoftReloadProps } from "../../components/wrappers";
+import withSoftReload from "../../components/wrappers/SoftReload";
 
 
 const useStyles = makeStyles(theme => ({
@@ -81,7 +84,7 @@ type Props = {
   launches: TestLaunch[]
 }
 
-function Launches(props: Props) {
+function Launches: NextPageWithInitialProps<InitialProps & SoftReloadProps, InitialProps> = ({ props, softReload }) => {
   const classes = useStyles(props)
   const [launchesList, setLaunchesList] = useState([])
 
@@ -168,7 +171,7 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
-        {EventNotification()}
+        {EventNotification("There are new launches 🚀")}
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>
               <FormControlLabel
@@ -284,4 +287,4 @@ Launches.getInitialProps = async (context): Promise<Props> => {
   }
 }
 
-export default Launches
+export default withSoftReload(Launches)
