@@ -84,6 +84,7 @@ type Props = {
   darkMode: boolean
 }
 
+
 export const ListOfSuites = function(props: Props) {
   const { children, stats, darkMode } = props
   const classes = useStyles(props)
