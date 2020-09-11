@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     wordBreak: "break-all",
     whiteSpace: "pre-wrap",
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   nameOfTestOrSuiteLight: {
     paddingLeft: theme.spacing(4),
@@ -70,11 +70,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "white",
   },
   backgroundDark: {
-    backgroundColor: "#2a2a2a",
+    backgroundColor: theme.palette.secondary.main,
     border: "1px grey solid",
   },
   testBackgroundDark: {
-    backgroundColor: "#2a2a2a",
+    backgroundColor: theme.palette.secondary.main,
   },
 }))
 

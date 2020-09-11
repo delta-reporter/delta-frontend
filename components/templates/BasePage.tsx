@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbarDark: {
     paddingLeft: "40px",
-    backgroundColor: "#395265",
+    backgroundColor: theme.palette.secondary.dark,
   },
   toolbarLight: {
     paddingLeft: "40px",
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     fontSize: "1em",
     padding: theme.spacing(1),
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   deltaTitleLight: {
     display: "flex",

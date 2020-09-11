@@ -34,12 +34,12 @@ import {
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   rootDark:{
     flexGrow: 1,
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
   }, 
   container: {
     paddingTop: theme.spacing(4),
@@ -56,12 +56,12 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "#2a2a2a",
+    backgroundColor: theme.palette.secondary.main,
     border: "1px grey solid",
   },
   toggleModeDark: {
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
     border: "1px grey solid",
     marginBottom: "15px",
   }, 
@@ -70,7 +70,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: "15px",
   }, 
   textColorDarkMode: {
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   textColorLightMode: {
   },
@@ -227,7 +227,7 @@ function Launches(props: Props) {
                                 launch.launch_id
                               )}
                             </TableCell>
-                            <TableCell className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>{launch.name}</TableCell>
+                            <TableCell style={{width: "500px"}} className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>{launch.name}</TableCell>
                             <TableCell>
                               {/* Switch option for Delta View (pyramid style) */}
                               {!switchViews.deltaView

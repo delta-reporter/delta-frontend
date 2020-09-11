@@ -10,8 +10,8 @@ import {
   FormControlLabel,
   Switch,
   Button,
-  Modal,
   TextField,
+  Modal,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
@@ -26,7 +26,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   rootSemiLight: {
     flexGrow: 1,
@@ -34,8 +34,8 @@ const useStyles = makeStyles(theme => ({
   },
   rootDark:{
     flexGrow: 1,
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -54,11 +54,11 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "#2a2a2a",
+    backgroundColor: theme.palette.secondary.main,
     height: 240,
     width: 300,
     border: "1px grey solid",
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   projectStatusLight: {
     flex: 1,
@@ -69,20 +69,20 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     paddingTop: theme.spacing(1),
     textAlign: "center",
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   projectTitle: {
     paddingTop: theme.spacing(4),
     textAlign: "center",
   },
   pageTitleSectionDark: {
-    backgroundColor: "#395265",
+    backgroundColor: theme.palette.secondary.dark,
     padding: theme.spacing(5),
     textAlign: "center",
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   pageTitleSectionLight: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
     padding: theme.spacing(5),
     textAlign: "center",
   },
@@ -94,8 +94,8 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
   },
   toggleModeDark: {
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
     border: "1px grey solid",
   }, 
   toggleModeLight: {
@@ -114,8 +114,8 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     width: 400,
     height: 300,
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(10, 15, 3),
@@ -168,6 +168,7 @@ export interface SuiteAndTest {
   launch_id: number
   project_id: number
   test_type: string
+  project_name: string
   test_run_data?: {spectre_test_run_url: string}
   test_suites: [
     {
@@ -262,8 +263,12 @@ function Index(props: Props) {
   }
   const [openModal, setOpenModal] = React.useState(false);
   const [modalStyle] = React.useState(getModalStyle);
+  const [openModalProjectId, setOOpenModalProjectId] = React.useState("");
+  const [openModalProjectName, setOpenModalProjectName] = React.useState("");
 
-  const handleModalOpen = () => {
+  const handleModalOpen = (id, name) => {
+    setOOpenModalProjectId(id)
+    setOpenModalProjectName(name)
     setOpenModal(true);
   }
 
@@ -293,7 +298,6 @@ function Index(props: Props) {
       window.location.reload(false) // reloading the page whe project name is changed
       }
   }
-
 
   return (
       <NoSsr>
@@ -325,17 +329,17 @@ function Index(props: Props) {
                       <ListItem
                         button
                       >  
-                        <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
-                          <Button  onClick={handleModalOpen } ><SettingsIcon style={{color: "grey", marginLeft:"90%"}}></SettingsIcon></Button> 
+                        <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} id={`paper_${project.project_id}`}>
+                          <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`}><SettingsIcon style={{color: "grey", marginLeft:"90%"}}></SettingsIcon></Button> 
                           <Modal
                             open={openModal}
                             onClose={handleModalClose}
                           >
                             <div style={modalStyle}  className={state.darkMode ? classes.modalDark : classes.modalLight}>
-                          <Typography style={{ marginBottom: "15px"}}> Update project name:
+                          <Typography style={{ marginBottom: "15px"}}> Update project name: 
                           </Typography>
                           <form noValidate autoComplete="off">
-                            <TextField id={`modal_${project.project_id}`} label={project.name} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
+                            <TextField id={`modal_${openModalProjectId}`} style={{width: "max-content"}} label={openModalProjectName} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
                             <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
                           </form>
 
