@@ -280,7 +280,7 @@ function Index(props: Props) {
   }
 
   async function getNewProjectName(projectId) {
-    let projectName = (document.getElementById("modal_" + projectId) as HTMLInputElement).value
+    const projectName = (document.getElementById("modal_" + projectId) as HTMLInputElement).value
     
     const requestOptions = {
       method: "PUT",

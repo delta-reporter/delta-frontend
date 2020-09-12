@@ -32,7 +32,6 @@ import {
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
 
-
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
@@ -148,8 +147,9 @@ function Launches(props: Props) {
   const [notification, setNotification] = useState(0)
 
   useSocket('delta_launch', testLaunch => {
+    console.log(testLaunch)
     setNotification(1);
-    EventNotification("There are new launches 🚀")
+    console.log("Hola")
   })
   
   useEffect(() => {
@@ -176,7 +176,8 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
-        {notification? EventNotification("There are new launches 🚀") : EventNotification("null") } 
+        
+        {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") } 
         {/* {EventNotification("There are new launches 🚀")} */}
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>

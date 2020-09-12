@@ -25,16 +25,16 @@ export const EventNotification = function(message: string) {
     //   setNotificationState({ open: true, ...newState });
     // };
 
-    const handleClose = () => {
+    const handleReload = () => {
       setNotificationState({ ...notificationState, open: false });
       router.reload();
     };
 
-    // const buttons = (
-    //   <React.Fragment>
-    //     <Button onClick={handleClick({ vertical: 'top', horizontal: 'right' })}>Kick new launch</Button>
-    //   </React.Fragment>
-    // );
+    const handleClose = () => {
+        setNotificationState({ ...notificationState, open: false });
+      };
+    console.log(open)
+    console.log("Hola DOS")
 
   return (
     <div>
@@ -44,14 +44,15 @@ export const EventNotification = function(message: string) {
       open={open}
       onClose={handleClose}
       message={message}
+      autoHideDuration={3000}
       action={
-        // <React.Fragment>
+        <React.Fragment>
           <Tooltip title="Reload page">
-          <Button color="secondary" size="small" onClick={handleClose}>
+          <Button color="secondary" size="small" onClick={handleReload}>
           <ReplayIcon fontSize="small" />
           </Button>
           </Tooltip>
-        // </React.Fragment>
+        </React.Fragment>
       }
       key={vertical + horizontal}
     />
