@@ -145,7 +145,10 @@ function Launches(props: Props) {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
+  const [notification, setNotification] = useState(0)
+
   useSocket('delta_launch', testLaunch => {
+    setNotification(1);
     EventNotification("There are new launches 🚀")
   })
   
@@ -173,6 +176,8 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
+        {notification? EventNotification("There are new launches 🚀") : EventNotification("null") } 
+        {/* {EventNotification("There are new launches 🚀")} */}
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>
               <FormControlLabel

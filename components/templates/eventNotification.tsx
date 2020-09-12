@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
 import { useRouter } from 'next/router'
 import Button from '@material-ui/core/Button';
@@ -15,15 +15,15 @@ export const EventNotification = function(message: string) {
     const router = useRouter()
 
     const [notificationState, setNotificationState] = React.useState<State>({
-      open: false,
+      open: true,
       vertical: 'top',
-      horizontal: 'center',
+      horizontal: 'right',
     });
     const { vertical, horizontal, open } = notificationState;
 
-    const handleClick = (newState: SnackbarOrigin) => () => {
-      setNotificationState({ open: true, ...newState });
-    };
+    // const handleClick = (newState: SnackbarOrigin) => () => {
+    //   setNotificationState({ open: true, ...newState });
+    // };
 
     const handleClose = () => {
       setNotificationState({ ...notificationState, open: false });
@@ -45,13 +45,13 @@ export const EventNotification = function(message: string) {
       onClose={handleClose}
       message={message}
       action={
-        <React.Fragment>
+        // <React.Fragment>
           <Tooltip title="Reload page">
           <Button color="secondary" size="small" onClick={handleClose}>
           <ReplayIcon fontSize="small" />
           </Button>
           </Tooltip>
-        </React.Fragment>
+        // </React.Fragment>
       }
       key={vertical + horizontal}
     />
