@@ -1,8 +1,8 @@
+// This file is not currently used, it is a failed attempt to create a notification component
 import React from "react"
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
 import { useRouter } from 'next/router'
 import Button from '@material-ui/core/Button';
-// import CloseIcon from '@material-ui/icons/Close';
 import ReplayIcon from '@material-ui/icons/Replay';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -21,10 +21,6 @@ export const EventNotification = function(message: string) {
     });
     const { vertical, horizontal, open } = notificationState;
 
-    // const handleClick = (newState: SnackbarOrigin) => () => {
-    //   setNotificationState({ open: true, ...newState });
-    // };
-
     const handleReload = () => {
       setNotificationState({ ...notificationState, open: false });
       router.reload();
@@ -38,7 +34,6 @@ export const EventNotification = function(message: string) {
 
   return (
     <div>
-    {/* {buttons} */}
     <Snackbar
       anchorOrigin={{ vertical, horizontal }}
       open={open}

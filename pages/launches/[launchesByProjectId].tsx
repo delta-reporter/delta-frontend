@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
+import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
+import { useRouter } from 'next/router'
 import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
-  EventNotification
+  // EventNotification
 } from "../../components/templates"
 import { TestLaunch } from "../index"
 import {
@@ -31,6 +33,9 @@ import {
   testRunButtonsDeltaPyramidView,
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
+import ReplayIcon from '@material-ui/icons/Replay';
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -81,9 +86,15 @@ type Props = {
   launches: TestLaunch[]
 }
 
+export interface SnackbarState extends SnackbarOrigin {
+  open: boolean;
+  message: string;
+}
+
 function Launches(props: Props) {
   const classes = useStyles(props)
   const [launchesList, setLaunchesList] = useState([])
+  const router = useRouter()
 
   useEffect(() => {
     const fetchLaunches = async () => {
@@ -144,12 +155,14 @@ function Launches(props: Props) {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const [notification, setNotification] = useState(0)
+  // const [notification, setNotification] = useState(0)
 
   useSocket('delta_launch', testLaunch => {
-    console.log(testLaunch)
-    setNotification(1);
-    console.log("Hola")
+    // setNotification(1);
+    if (props.launches[0].project_id == testLaunch.project_id) {
+      let msg = "🚀 There is a new launch:  " + testLaunch.name
+      setNotificationState({ ...notificationState, open: true, message: msg });
+    }
   })
   
   useEffect(() => {
@@ -166,6 +179,23 @@ function Launches(props: Props) {
     }
   }
 
+  const [notificationState, setNotificationState] = React.useState<SnackbarState>({
+    open: false,
+    vertical: 'top',
+    horizontal: 'right',
+    message: '',
+  });
+  const { vertical, horizontal, open, message } = notificationState;
+
+  const handleReloadPage = () => {
+    setNotificationState({ ...notificationState, open: false });
+    router.reload();
+  };
+
+  const handleCloseNotification = () => {
+      setNotificationState({ ...notificationState, open: false });
+    };
+
   return (
     <NoSsr>
       <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
@@ -176,9 +206,25 @@ function Launches(props: Props) {
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
-        
-        {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") } 
-        {/* {EventNotification("There are new launches 🚀")} */}
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={open}
+          onClose={handleCloseNotification}
+          message={message}
+          autoHideDuration={3000}
+          action={
+            <React.Fragment>
+              <Tooltip title="Reload page">
+              <Button color="secondary" size="small" onClick={handleReloadPage}>
+              <ReplayIcon fontSize="small" />
+              </Button>
+              </Tooltip>
+            </React.Fragment>
+          }
+          key={vertical + horizontal}
+        />
+        {/* Attempt to use notification as a component */}
+        {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
         <Container maxWidth="lg" className={classes.container}>
             <FormGroup row>
               <FormControlLabel
