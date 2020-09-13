@@ -160,7 +160,21 @@ function Launches(props: Props) {
   useSocket('delta_launch', testLaunch => {
     // setNotification(1);
     if (props.launches[0].project_id == testLaunch.project_id) {
-      let msg = "🚀 There is a new launch:  " + testLaunch.name
+      let msg: string;
+      switch(testLaunch.launch_status) {
+        case "Failed": {
+          msg = "💥 Launch Failed: " + testLaunch.name
+           break;
+        }
+        case "Successful": {
+          msg = "✨ Launch Successful: " + testLaunch.name
+           break;
+        }
+        default: {
+           msg = "🚀 There is a new launch: " + testLaunch.name
+           break;
+        }
+     }
       setNotificationState({ ...notificationState, open: true, message: msg });
     }
   })
@@ -211,7 +225,7 @@ function Launches(props: Props) {
           open={open}
           onClose={handleCloseNotification}
           message={message}
-          autoHideDuration={3000}
+          autoHideDuration={5000}
           action={
             <React.Fragment>
               <Tooltip title="Reload page">

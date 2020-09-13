@@ -35,7 +35,7 @@ class MyApp extends App<Props> {
       jssStyles.parentNode.removeChild(jssStyles)
     }
     // connect to Websockets server and listen for events
-    const socket = io("http://localhost:8080")
+    const socket = io(process.env.publicDeltaWebsockets)
     this.setState({ socket })
   }
 
