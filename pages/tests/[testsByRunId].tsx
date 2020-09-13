@@ -21,13 +21,13 @@ const useStyles = makeStyles(theme => ({
   rootLight: {
     width: "100%",
     maxWidth: 3500,
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   rootDark:{
     width: "100%",
     maxWidth: 3500,
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
   }, 
   title: {
     fontSize: "2em",
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor: "#2a2a2a",
+    backgroundColor: theme.palette.secondary.main,
     border: "1px grey solid",
   },
   paperLight: {
@@ -87,13 +87,13 @@ const useStyles = makeStyles(theme => ({
     color: "#e3e1e1",
   },
   textColorDarkMode: {
-    color: "#8c8d8d",
+    color: theme.palette.secondary.light,
   },
   textColorLightMode: {
   },
   toggleModeDark: {
-    backgroundColor: "#2a2a2a",
-    color: "#8c8d8d",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
     border: "1px grey solid",
     marginBottom: "15px",
   }, 
@@ -101,6 +101,14 @@ const useStyles = makeStyles(theme => ({
     border: "1px grey solid",
     marginBottom: "15px",
   }, 
+  spectreButton: {
+      backgroundColor: theme.palette.primary.main,
+      width: "90px",
+      height: "30px",
+      marginLeft: "10px",
+      border: "1px #a7bab1 solid",
+      fontSize: "12px",
+  }
 }))
 
 type Props = {
@@ -215,7 +223,7 @@ function Tests(props: Props) {
                       {" "}
                       {props.test_history[0].test_type}
                     </Link>{" "}
-                    run
+                    run of <span style={{ color: "#605959" }}>{props.test_history[0].project_name}</span> project
                   </Typography>
                   <div
                     style={{
@@ -232,14 +240,7 @@ function Tests(props: Props) {
                             props.test_history[0].test_run_data
                               .spectre_test_run_url
                           }
-                          style={{
-                            backgroundColor: "#90caf9",
-                            width: "90px",
-                            height: "30px",
-                            marginLeft: "10px",
-                            border: "1px #a7bab1 solid",
-                            fontSize: "12px",
-                          }}
+                          className={classes.spectreButton}
                         >
                           Spectre
                         </Button>
