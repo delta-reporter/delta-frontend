@@ -3,6 +3,8 @@ import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
 import { useRouter } from 'next/router'
+import { GetServerSideProps } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
@@ -36,6 +38,7 @@ import {
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import ReplayIcon from '@material-ui/icons/Replay';
+
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -82,23 +85,25 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-type Props = {
-  launches: TestLaunch[]
-}
+// type Props = {
+//   launches: TestLaunch[]
+// }
 
 export interface SnackbarState extends SnackbarOrigin {
   open: boolean;
   message: string;
 }
 
-function Launches(props: Props) {
-  const classes = useStyles(props)
+function Launches({launches}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log("Props info:")
+  console.log(launches)
+  const classes = useStyles(launches)
   const [launchesList, setLaunchesList] = useState([])
   const router = useRouter()
 
   useEffect(() => {
     const fetchLaunches = async () => {
-      setLaunchesList(props.launches)
+      setLaunchesList(launches)
     }
     fetchLaunches()
   }, [])
@@ -108,7 +113,7 @@ function Launches(props: Props) {
   const indexOfLastItem = currentPage * launchesPerPage
   const indexOfFirstItem = indexOfLastItem - launchesPerPage
   // pagination (first 20)
-  const currentLaunches = props.launches.slice(
+  const currentLaunches = launches.slice(
     indexOfFirstItem,
     indexOfLastItem
   )
@@ -159,7 +164,7 @@ function Launches(props: Props) {
 
   useSocket('delta_launch', testLaunch => {
     // setNotification(1);
-    if (props.launches[0].project_id == testLaunch.project_id) {
+    if (launches[0].project_id == testLaunch.project_id) {
       let msg: string;
       switch(testLaunch.launch_status) {
         case "Failed": {
@@ -261,7 +266,7 @@ function Launches(props: Props) {
                         underline="none"
                       >
                         {" "}
-                        {props.launches[0].project}
+                        {launches[0].project}
                       </Link>{" "}
                       project
                     </Typography>
@@ -280,7 +285,7 @@ function Launches(props: Props) {
                     />
                   </Grid>
                 </Grid>
-                {props.launches[0] ? ( // checking if props exist
+                {launches[0] ? ( // checking if props exist
                   <div>
                     <Table size="small" >
                       <TableHead>
@@ -339,7 +344,22 @@ function Launches(props: Props) {
 // The data required to render the page is available at build time ahead of a user’s request
 // https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
 
-Launches.getInitialProps = async (context): Promise<Props> => {
+// Launches.getInitialProps = async (context): Promise<Props> => {
+//   const { launchesByProjectId } = context.query
+//   const launchesByProjectIdReq = await fetch(
+//     `${process.env.deltaCore}/api/v1/launch/project/${launchesByProjectId}`,
+//     {
+//       method: "GET",
+//     }
+//   )
+//   const launches = await launchesByProjectIdReq.json()
+
+//   return {
+//     launches: launches,
+//   }
+// }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { launchesByProjectId } = context.query
   const launchesByProjectIdReq = await fetch(
     `${process.env.deltaCore}/api/v1/launch/project/${launchesByProjectId}`,
@@ -347,10 +367,13 @@ Launches.getInitialProps = async (context): Promise<Props> => {
       method: "GET",
     }
   )
-  const launches = await launchesByProjectIdReq.json()
+  const launches: TestLaunch[] = await launchesByProjectIdReq.json()
+
+  // console.log("Launches response")
+  // console.log(launches)
 
   return {
-    launches: launches,
+    props: { launches },
   }
 }
 

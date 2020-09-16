@@ -17,12 +17,19 @@ type Props = {
  * @see https://github.com/mui-org/material-ui/blob/master/examples/nextjs-with-typescript/pages/_app.tsx
  */
 class MyApp extends App<Props> {
-  static async getInitialProps({ Component, ctx }) {
-    const pageProps = Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {}
-    return { pageProps: pageProps }
-  }
+  // static async getInitialProps({ Component, ctx }) {
+  //   const pageProps = Component.getInitialProps
+  //     ? await Component.getInitialProps(ctx)
+  //     : {}
+  //   return { pageProps: pageProps }
+  // }
+
+  // static async getServerSideProps({ Component, ctx }) {
+  //   const pageProps = Component.getInitialProps
+  //     ? await Component.getServerSideProps(ctx)
+  //     : {}
+  //   return { pageProps: pageProps }
+  // }
 
   state = {
     socket: null,
@@ -60,3 +67,6 @@ class MyApp extends App<Props> {
 }
 
 export default withRedux(configureStore())(MyApp)
+// export default ({ Component, pageProps }) => (
+//   <Component {...pageProps} />
+// )
