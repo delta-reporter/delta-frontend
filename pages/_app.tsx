@@ -1,62 +1,32 @@
-import CssBaseline from "@material-ui/core/CssBaseline"
-import { ThemeProvider } from "@material-ui/styles"
-import withRedux from "next-redux-wrapper"
-import App from "next/app"
-import React from "react"
-import io from 'socket.io-client'
-import { Provider } from "react-redux"
+import React from 'react';
+import Head from 'next/head';
+import { AppProps } from 'next/app';
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiTheme } from "../components/MuiTheme"
-import { configureStore } from "../store/configureStore"
 
-type Props = {
-  Component: React.Component
-  store: any
-}
+export default function MyApp(props: AppProps) {
+  const { Component, pageProps } = props;
 
-/**
- * @see https://github.com/mui-org/material-ui/blob/master/examples/nextjs-with-typescript/pages/_app.tsx
- */
-class MyApp extends App<Props> {
-  static async getInitialProps({ Component, ctx }) {
-    const pageProps = Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {}
-    return { pageProps: pageProps }
-  }
-
-  state = {
-    socket: null,
-  }
-
-  componentDidMount() {
+  React.useEffect(() => {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side")
+    const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
-      jssStyles.parentNode.removeChild(jssStyles)
+      jssStyles.parentElement!.removeChild(jssStyles);
     }
-    // connect to Websockets server and listen for events
-    const socket = io(process.env.publicDeltaWebsockets)
-    this.setState({ socket })
-  }
+  }, []);
 
-  // close socket connection
-  componentWillUnmount() {
-    this.state.socket.close()
-  }
-
-  render() {
-    const { store, Component, pageProps } = this.props
-
-    return (
-      <Provider store={store}>
-        <ThemeProvider theme={MuiTheme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} socket={this.state.socket} />
-        </ThemeProvider>
-      </Provider>
-    )
-  }
+  return (
+    <React.Fragment>
+      <Head>
+        <title>Δ Delta Reporter</title>
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+      </Head>
+      <ThemeProvider theme={MuiTheme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </React.Fragment>
+  );
 }
-
-export default withRedux(configureStore())(MyApp)

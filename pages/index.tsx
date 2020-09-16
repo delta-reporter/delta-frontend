@@ -13,12 +13,11 @@ import {
   TextField,
   Modal,
 } from "@material-ui/core"
+import { GetServerSideProps } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
-import { AppContext } from "../components/AppContext"
 import { BasePage } from "../components/templates"
-import { Page } from "../constants"
-import { IPagePayload, PageActions } from "../store/page"
 import fetch from "isomorphic-unfetch"
 import useSocket from '../hooks/useSocket'
 import Router from "next/router"
@@ -226,19 +225,15 @@ export interface SuiteAndTest {
   ]
 }
 
-type Props = {
-  test_projects: TestProject[]
-}
-
-function Index(props: Props) {
-  const classes = useStyles(props)
+function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const classes = useStyles(projects)
 
   // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
 
-  const [testProjects, setTestProjects] = useState(props.test_projects || [])
+  const [testProjects, setTestProjects] = useState(projects || [])
   
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -385,26 +380,14 @@ function Index(props: Props) {
   )
 }
 
-// It runs  on the server-side, making a request before page is loaded.
-// The data required to render the page is available at build time ahead of a user’s request
-// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
-
-Index.getInitialProps = async (ctx: AppContext): Promise<Props> => {
-  const { store } = ctx
+export const getServerSideProps: GetServerSideProps = async () => {
   const projectReq = await fetch(`${process.env.deltaCore}/api/v1/projects`, {
     method: "GET",
   })
-  const projects = await projectReq.json()
+  const projects: TestProject[] = await projectReq.json()
 
-  const pagePayload: IPagePayload = {
-    selectedPage: Page.PROJECTS,
-  }
-  store.dispatch({
-    type: PageActions.changePage.toString(),
-    payload: pagePayload,
-  })
   return {
-    test_projects: projects,
+    props: { projects },
   }
 }
 
