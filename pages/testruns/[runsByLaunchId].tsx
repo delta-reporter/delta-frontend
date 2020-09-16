@@ -1,6 +1,8 @@
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { TestRun } from "../index"
+import { GetServerSideProps } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 import { BasePage, showStatusIcon } from "../../components/templates"
 import {
   Container,
@@ -88,12 +90,8 @@ function setTestTypeBadge(testType) {
   return badge
 }
 
-type Props = {
-  test_runs: TestRun[]
-}
-
-function Testruns(props: Props) {
-  const classes = useStyles(props)
+function Testruns({runs}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const classes = useStyles(runs)
 
   // dark mode switch
   const [state, setState] = useState({
@@ -122,7 +120,7 @@ function Testruns(props: Props) {
     <NoSsr>
       <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
         <title>Δ | Test Runs</title>
-        {props.test_runs[0] ? ( // checking if props exist
+        {runs[0] ? ( // checking if props exist
           <div>
           <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
               <Link color="inherit" href={`/`}>
@@ -130,7 +128,7 @@ function Testruns(props: Props) {
               </Link>
               <Link
                 color="inherit"
-                href={`/launches/${props.test_runs[0].project_id}`}
+                href={`/launches/${runs[0].project_id}`}
               >
                 Launches
               </Link>
@@ -156,7 +154,7 @@ function Testruns(props: Props) {
                           underline="none"
                         >
                           {" "}
-                          {props.test_runs[0].launch_name}
+                          {runs[0].launch_name}
                         </Link>{" "}
                         launch
                       </Typography>
@@ -167,11 +165,11 @@ function Testruns(props: Props) {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell></TableCell>
+                          {/* <TableCell></TableCell> */}
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {props.test_runs.map(testRun => (
+                        {runs.map(testRun => (
                           <TableRow key={testRun.test_run_id} hover>
                             <TableCell>
                               {showStatusIcon(testRun.test_run_status)}
@@ -197,7 +195,8 @@ function Testruns(props: Props) {
                                 View All tests
                               </Link>
                             </TableCell>
-                            {testRun.test_run_status === "Passed" ? (
+                            {/* Commenting this section out as the page doesn't exits anymore */}
+                            {/* {testRun.test_run_status === "Passed" ? (
                               <TableCell></TableCell>
                             ) : (
                               <TableCell  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
@@ -208,7 +207,7 @@ function Testruns(props: Props) {
                                   View Failed tests
                                 </Link>
                               </TableCell>
-                            )}
+                            )} */}
                           </TableRow>
                         ))}
                       </TableBody>
@@ -227,7 +226,7 @@ function Testruns(props: Props) {
   )
 }
 
-Testruns.getInitialProps = async (context): Promise<Props> => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { runsByLaunchId } = context.query
   const runsByLaunchIdReq = await fetch(
     `${process.env.deltaCore}/api/v1/test_run/launch/${runsByLaunchId}`,
@@ -235,10 +234,10 @@ Testruns.getInitialProps = async (context): Promise<Props> => {
       method: "GET",
     }
   )
-  const runs = await runsByLaunchIdReq.json()
+  const runs: TestRun[] = await runsByLaunchIdReq.json()
 
   return {
-    test_runs: runs,
+    props: { runs },
   }
 }
 
