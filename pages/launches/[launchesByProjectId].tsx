@@ -85,18 +85,12 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-// type Props = {
-//   launches: TestLaunch[]
-// }
-
 export interface SnackbarState extends SnackbarOrigin {
   open: boolean;
   message: string;
 }
 
 function Launches({launches}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log("Props info:")
-  console.log(launches)
   const classes = useStyles(launches)
   const [launchesList, setLaunchesList] = useState([])
   const router = useRouter()
@@ -340,25 +334,6 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   )
 }
 
-// It runs  on the server-side, making a request before page is loaded.
-// The data required to render the page is available at build time ahead of a user’s request
-// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
-
-// Launches.getInitialProps = async (context): Promise<Props> => {
-//   const { launchesByProjectId } = context.query
-//   const launchesByProjectIdReq = await fetch(
-//     `${process.env.deltaCore}/api/v1/launch/project/${launchesByProjectId}`,
-//     {
-//       method: "GET",
-//     }
-//   )
-//   const launches = await launchesByProjectIdReq.json()
-
-//   return {
-//     launches: launches,
-//   }
-// }
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { launchesByProjectId } = context.query
   const launchesByProjectIdReq = await fetch(
@@ -368,9 +343,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   )
   const launches: TestLaunch[] = await launchesByProjectIdReq.json()
-
-  // console.log("Launches response")
-  // console.log(launches)
 
   return {
     props: { launches },
