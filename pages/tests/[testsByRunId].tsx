@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
 import { SuiteAndTest } from "../index"
+import { GetServerSideProps } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 import { BasePage, ListOfSuites } from "../../components/templates"
 import {
   Grid,
@@ -111,12 +113,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-type Props = {
-  test_history: SuiteAndTest[]
-}
 
-function Tests(props: Props) {
-  const classes = useStyles(props.test_history)
+function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const classes = useStyles(tests)
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
@@ -124,7 +123,7 @@ function Tests(props: Props) {
   let statusArrayForEndpoint = "1+2+3+4+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
-  const [data, setData] = useState(props.test_history)
+  const [data, setData] = useState(tests)
 
   async function handleStatusFilter(status, testRunId) {
     let previousArray = selectedStatus
@@ -185,7 +184,7 @@ function Tests(props: Props) {
     <NoSsr>
     <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
     <title>Δ | Tests</title>
-      {props.test_history[0] ? ( // checking if props exist (if there are tests for this run)
+      {tests[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
         <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
@@ -194,7 +193,7 @@ function Tests(props: Props) {
             </Link>
             <Link
               color="inherit"
-              href={`/launches/${props.test_history[0].project_id}`}
+              href={`/launches/${tests[0].project_id}`}
             >
               Launches
             </Link>
@@ -221,9 +220,9 @@ function Tests(props: Props) {
                       color="secondary"
                     >
                       {" "}
-                      {props.test_history[0].test_type}
+                      {tests[0].test_type}
                     </Link>{" "}
-                    run of <span style={{ color: "#605959" }}>{props.test_history[0].project_name}</span> project
+                    run of <span style={{ color: "#605959" }}>{tests[0].project_name}</span> project
                   </Typography>
                   <div
                     style={{
@@ -232,12 +231,12 @@ function Tests(props: Props) {
                       alignItems: "baseline",
                     }}
                   >
-                    {props.test_history[0].test_run_data &&
-                    props.test_history[0].test_run_data.spectre_test_run_url ? (
+                    {tests[0].test_run_data &&
+                    tests[0].test_run_data.spectre_test_run_url ? (
                       <div>
                         <Button
                           href={
-                            props.test_history[0].test_run_data
+                            tests[0].test_run_data
                               .spectre_test_run_url
                           }
                           className={classes.spectreButton}
@@ -258,7 +257,7 @@ function Tests(props: Props) {
                         onClick={() =>
                           handleStatusFilter(
                             "2",
-                            props.test_history[0].test_run_id
+                            tests[0].test_run_id
                           )
                         }
                         className={
@@ -280,7 +279,7 @@ function Tests(props: Props) {
                         onClick={() =>
                           handleStatusFilter(
                             "1",
-                            props.test_history[0].test_run_id
+                            tests[0].test_run_id
                           )
                         }
                         className={
@@ -302,7 +301,7 @@ function Tests(props: Props) {
                         onClick={() =>
                           handleStatusFilter(
                             "3",
-                            props.test_history[0].test_run_id
+                            tests[0].test_run_id
                           )
                         }
                         className={
@@ -324,7 +323,7 @@ function Tests(props: Props) {
                         onClick={() =>
                           handleStatusFilter(
                             "4",
-                            props.test_history[0].test_run_id
+                            tests[0].test_run_id
                           )
                         }
                         className={
@@ -346,7 +345,7 @@ function Tests(props: Props) {
                         onClick={() =>
                           handleStatusFilter(
                             "5",
-                            props.test_history[0].test_run_id
+                            tests[0].test_run_id
                           )
                         }
                         className={
@@ -398,11 +397,7 @@ function Tests(props: Props) {
   )
 }
 
-// It runs  on the server-side, making a request before page is loaded.
-// The data required to render the page is available at build time ahead of a user’s request
-// https://nextjs.org/docs/api-reference/data-fetching/getInitialProps
-
-Tests.getInitialProps = async (context): Promise<Props> => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { testsByRunId } = context.query
 
   // Suites and tests (inside suites)
@@ -412,10 +407,10 @@ Tests.getInitialProps = async (context): Promise<Props> => {
       method: "GET",
     }
   )
-  const tests = await testsByTestRunIdReq.json()
+  const tests: SuiteAndTest[] = await testsByTestRunIdReq.json()
 
   return {
-    test_history: tests,
+    props: { tests },
   }
 }
 
