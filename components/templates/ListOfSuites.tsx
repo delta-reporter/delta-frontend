@@ -5,7 +5,8 @@ import {
   showTestStats,
   showResolutionText,
   TestExpanded,
-} from "../../components/templates"
+  ListOfTests
+} from "."
 import {
   Typography,
   Accordion,
@@ -123,9 +124,9 @@ export const ListOfSuites = function(props: Props) {
     else if(isHighlighted && darkMode) //dark mode - highlighted
       return classes.backgroundDarkGrey
     else if (isHighlighted && !darkMode) //light mode - not highlighted
-    return classes.backgroundWhite
+      return classes.backgroundWhite
     else if (!isHighlighted && darkMode) //dark mode - not highlighted
-    return classes.testBackgroundDark
+      return classes.testBackgroundDark
   }
 
   return (
@@ -167,7 +168,11 @@ export const ListOfSuites = function(props: Props) {
                 <AccordionDetails>
                   {/* Expandable tests list for each suite */}
                   <List key={suite.test_suite_history_id} dense>
-                    {suite.tests.map(test => (
+                    <ListOfTests
+                      children={suite.tests}
+                      darkMode={darkMode}
+                    ></ListOfTests>
+                    {/* {suite.tests.map(test => (
                       <a
                         key={test.test_history_id}
                         href="#page-top"
@@ -184,14 +189,14 @@ export const ListOfSuites = function(props: Props) {
                             {test.name}
                           </Typography>
                           {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
-                          {test.test_history_resolution ? (
+                          {/* {test.test_history_resolution ? (
                             showResolutionText(test.test_history_resolution, darkMode)
                           ) : (
                             showResolutionText(test.test_resolution, darkMode)
                           )}
                         </ListItem>
                       </a>
-                    ))}
+                    ))} */}
                   </List>
                 </AccordionDetails>
               </Accordion>

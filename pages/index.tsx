@@ -225,6 +225,35 @@ export interface SuiteAndTest {
   ]
 }
 
+export interface Test {
+  duration: {
+    days: number
+    hours: number
+    minutes: number
+    months: number
+    seconds: number
+    years: number
+  }
+  test_history_id: number
+  test_id: number
+  name: string
+  test_history_resolution: string
+  test_resolution: string
+  message: string
+  status: string
+  error_type: string
+  trace: string
+  file: string
+  retries: string
+  media: [
+    {
+      type: string
+      filename: string
+      file_id: string
+    }
+  ]
+}
+
 function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(projects)
 
