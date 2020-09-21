@@ -14,10 +14,10 @@ import {
   Breadcrumbs,
   Button,
   NoSsr,
-  FormGroup,
-  FormControlLabel,
   Switch,
 } from "@material-ui/core"
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -187,25 +187,33 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
       {tests[0] ? ( // checking if props exist (if there are tests for this run)
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
-        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-            <Link color="inherit" href={`/`}>
-              Projects
-            </Link>
-            <Link
-              color="inherit"
-              href={`/launches/${tests[0].project_id}`}
-            >
-              Launches
-            </Link>
-            <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
-          </Breadcrumbs>
+          <div>
+            <div style={{ float: "left"}}>
+              <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+                <Link color="inherit" href={`/`}>
+                  Projects
+                </Link>
+                <Link
+                  color="inherit"
+                  href={`/launches/${tests[0].project_id}`}
+                >
+                  Launches
+                </Link>
+                <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Tests</Typography>
+              </Breadcrumbs>
+            </div>          
+            <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
+              <Grid component="label" container alignItems="center" spacing={1}>
+                <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
+                <Grid item>
+                  <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary"/>
+                </Grid>
+                <Grid item><Brightness2Icon></Brightness2Icon></Grid>
+              </Grid>
+            </div>
+          </div>
           <Container maxWidth="lg" className={classes.container}>
-            <FormGroup row style={{paddingBottom: "10px"}}>
-              <FormControlLabel
-                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
-                label="Dark Mode"
-              />
-            </FormGroup>            <Grid container spacing={3}>
+            <Grid container spacing={3}>
               <Grid item xs={12}>
               <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
                   <Typography

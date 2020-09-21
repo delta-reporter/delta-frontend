@@ -183,6 +183,9 @@ export const ListOfSuites = function(props: Props) {
                           <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
                             {test.name}
                           </Typography>
+                          <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
+                            Status:{test.flaky}
+                          </Typography>
                           {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
                           {test.test_history_resolution ? (
                             showResolutionText(test.test_history_resolution, darkMode)
