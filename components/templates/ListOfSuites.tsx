@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles"
 import {
   showStatusIcon,
   showTestStats,
-  showResolutionText,
   TestExpanded,
   ListOfTests
 } from "."
@@ -13,7 +12,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   List,
-  ListItem,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { SuiteAndTest } from "../../pages"
@@ -118,17 +116,6 @@ export const ListOfSuites = function(props: Props) {
     setExpandedSuite(isExpanded ? suitePanel : false)
   }
 
-  function setTextLineStyle(isHighlighted, darkMode) {
-    if(isHighlighted && !darkMode) //light mode - highlighted
-     return classes.backgroundGrey
-    else if(isHighlighted && darkMode) //dark mode - highlighted
-      return classes.backgroundDarkGrey
-    else if (isHighlighted && !darkMode) //light mode - not highlighted
-      return classes.backgroundWhite
-    else if (!isHighlighted && darkMode) //dark mode - not highlighted
-      return classes.testBackgroundDark
-  }
-
   return (
     <div>
       {/* left-hand side for suites list */}
@@ -169,34 +156,11 @@ export const ListOfSuites = function(props: Props) {
                   {/* Expandable tests list for each suite */}
                   <List key={suite.test_suite_history_id} dense>
                     <ListOfTests
+                      showTest={changeRightSide}
+                      highlightedTest={highlightedTest}
                       children={suite.tests}
                       darkMode={darkMode}
                     ></ListOfTests>
-                    {/* {suite.tests.map(test => (
-                      <a
-                        key={test.test_history_id}
-                        href="#page-top"
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        <ListItem
-                          button
-                          key={test.test_history_id}
-                          onClick={() => changeRightSide(test, test.test_id)}
-                          className={setTextLineStyle(test.test_id === highlightedTest, darkMode)}
-                          >
-                          {showStatusIcon(test.status)}
-                          <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
-                            {test.name}
-                          </Typography>
-                          {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
-                          {/* {test.test_history_resolution ? (
-                            showResolutionText(test.test_history_resolution, darkMode)
-                          ) : (
-                            showResolutionText(test.test_resolution, darkMode)
-                          )}
-                        </ListItem>
-                      </a>
-                    ))} */}
                   </List>
                 </AccordionDetails>
               </Accordion>

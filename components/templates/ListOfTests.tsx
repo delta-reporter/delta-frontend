@@ -70,21 +70,16 @@ const useStyles = makeStyles(theme => ({
 
 
 type Props = {
+  showTest: Function
+  highlightedTest: number
   children: Test[]
   darkMode: boolean
 }
 
 export const ListOfTests = function (props : Props) {
-const {children, darkMode} = props
+const {showTest, highlightedTest, children, darkMode} = props
 const classes = useStyles(props)
-const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
-const [highlightedTest, setHighlightedTest] = useState(0)
 const [tests, setTest] = useState(children || [])
-
-function changeRightSide(value, testId) {
-    setTestInfoSection(value)
-    setHighlightedTest(testId)
-}
 
 function setTextLineStyle(isHighlighted, darkMode) {
     if (isHighlighted && ! darkMode)  // light mode - highlighted
@@ -99,7 +94,8 @@ function setTextLineStyle(isHighlighted, darkMode) {
 }
 
 return(
-    tests.map(test => (
+  <div>
+    {tests.map(test => (
       <a
       key={test.test_history_id}
       href="#page-top"
@@ -108,7 +104,7 @@ return(
       <ListItem
         button
         key={test.test_history_id}
-        onClick={() => changeRightSide(test, test.test_id)}
+        onClick={() => showTest(test, test.test_id)}
         className={setTextLineStyle(test.test_id === highlightedTest, darkMode)}
         >
         {showStatusIcon(test.status)}
@@ -123,5 +119,6 @@ return(
         )}
       </ListItem>
     </a>
-    ))
+    ))}
+    </div>
 )}
