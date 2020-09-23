@@ -5,6 +5,7 @@ import {
     Typography,
     ListItem
 } from "@material-ui/core"
+import useSocket from '../../hooks/useSocket'
 import { Test } from "../../pages"
 
 const useStyles = makeStyles(theme => ({
@@ -79,7 +80,7 @@ type Props = {
 export const ListOfTests = function (props : Props) {
 const {showTest, highlightedTest, children, darkMode} = props
 const classes = useStyles(props)
-const [tests, setTest] = useState(children || [])
+const [tests, setTests] = useState(children || [])
 
 function setTextLineStyle(isHighlighted, darkMode) {
     if (isHighlighted && ! darkMode)  // light mode - highlighted
@@ -90,8 +91,28 @@ function setTextLineStyle(isHighlighted, darkMode) {
         return classes.backgroundWhite
      else if (! isHighlighted && darkMode)  // dark mode - not highlighted
         return classes.testBackgroundDark
-    
 }
+
+const updateTest = (index, test) => {
+  const newTests = [...tests];
+  newTests[index] = test;
+  setTests(newTests);
+}
+
+useSocket('delta_resolution', testResolution => {
+  let filteredTest = tests.find(
+    test => test.test_id === testResolution.test_id);
+    if (filteredTest){
+      let testIndex = tests.indexOf(filteredTest);
+      if (filteredTest.test_history_id == testResolution.test_history_id){
+        filteredTest.test_history_resolution = testResolution.test_history_resolution
+        updateTest(testIndex, filteredTest)
+      } else if (filteredTest.test_history_resolution == 1 || !filteredTest.test_history_resolution){
+        filteredTest.test_resolution = testResolution.test_resolution
+        updateTest(testIndex, filteredTest)
+      }
+    }
+})
 
 return(
   <div>
@@ -112,7 +133,7 @@ return(
           {test.name}
         </Typography>
         {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
-        {test.test_history_resolution ? (
+        {test.test_history_resolution != 1? (
           showResolutionText(test.test_history_resolution, darkMode)
         ) : (
           showResolutionText(test.test_resolution, darkMode)

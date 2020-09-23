@@ -237,7 +237,7 @@ export interface Test {
   test_history_id: number
   test_id: number
   name: string
-  test_history_resolution: string
+  test_history_resolution: number
   test_resolution: string
   message: string
   status: string
