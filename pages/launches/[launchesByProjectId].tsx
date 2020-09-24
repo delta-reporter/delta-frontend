@@ -25,7 +25,8 @@ import {
   Breadcrumbs,
   FormControlLabel,
   NoSsr,
-  FormGroup,
+  Tooltip,
+  Button,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
@@ -35,10 +36,9 @@ import {
   testRunButtonsDeltaPyramidView,
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
-import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
-import ReplayIcon from '@material-ui/icons/Replay';
-
+import ReplayIcon from '@material-ui/icons/Replay'
+import WbSunnyIcon from '@material-ui/icons/WbSunny'
+import Brightness2Icon from '@material-ui/icons/Brightness2'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -213,12 +213,27 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
     <NoSsr>
       <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
       <title>Δ | Launches</title>
+      <div>
+        <div style={{ float: "left"}}>
         <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
           <Link color="inherit" href={`/`}>
             Projects
           </Link>
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
         </Breadcrumbs>
+        </div>
+       
+        <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
+        <Grid component="label" container alignItems="center" spacing={1}>
+          <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
+          <Grid item>
+            <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary"/>
+          </Grid>
+          <Grid item><Brightness2Icon></Brightness2Icon></Grid>
+        </Grid>
+        </div>
+      </div>
+       
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
@@ -239,12 +254,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
         {/* Attempt to use notification as a component */}
         {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
         <Container maxWidth="lg" className={classes.container}>
-            <FormGroup row>
-              <FormControlLabel
-                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
-                label="Dark Mode"
-              />
-            </FormGroup>          <Grid container spacing={3} >
+          <Grid container spacing={3} >
             <Grid item xs={12} >
               <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
                 <Grid container>
@@ -267,16 +277,16 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
                   </Grid>
                   <Grid item xs={2} style={{color:"grey"}}>
                     <FormControlLabel
-                      control={
-                        <Switch
-                          checked={switchViews.deltaView}
-                          onChange={handleSwitchViewsChange}
-                          name="deltaView"
-                          color="primary"
-                        />
-                      }
-                      label="Δ View"
-                    />
+                          control={
+                            <Switch
+                              checked={switchViews.deltaView}
+                              onChange={handleSwitchViewsChange}
+                              name="deltaView"
+                              color="primary"
+                            />
+                          }
+                          label="Δ View"    
+                    />   
                   </Grid>
                 </Grid>
                 {launches[0] ? ( // checking if props exist

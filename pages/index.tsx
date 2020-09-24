@@ -6,8 +6,6 @@ import {
   ListItem,
   List,
   NoSsr,
-  FormGroup,
-  FormControlLabel,
   Switch,
   Button,
   TextField,
@@ -22,6 +20,8 @@ import fetch from "isomorphic-unfetch"
 import useSocket from '../hooks/useSocket'
 import Router from "next/router"
 import SettingsIcon from '@material-ui/icons/Settings'
+import WbSunnyIcon from '@material-ui/icons/WbSunny'
+import Brightness2Icon from '@material-ui/icons/Brightness2'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.light,
   },
   projectTitle: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(5),
     textAlign: "center",
   },
   pageTitleSectionDark: {
@@ -219,6 +219,7 @@ export interface SuiteAndTest {
               file_id: string
             }
           ]
+          is_flaky: string
         }
       ]
     }
@@ -252,26 +253,23 @@ export interface Test {
       file_id: string
     }
   ]
+  is_flaky: string
 }
 
 function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(projects)
 
-  // dark mode switch
-  const [state, setState] = useState({
-    darkMode: getInitialDarkModeState(),
-  });
-
   const [testProjects, setTestProjects] = useState(projects || [])
-  
-  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
 
   useSocket('delta_project', testProject => {
     setTestProjects(testProjects => [...testProjects, testProject])
   })
   
+  // dark mode switch
+  const [state, setState] = useState({
+    darkMode: getInitialDarkModeState(),
+  });
+
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
   }, [state.darkMode])
@@ -285,6 +283,10 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
       return false
     }
   }
+
+  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
   
   function getModalStyle() {
     return {
@@ -347,12 +349,15 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
               </Typography>
             </Paper>
           <Container maxWidth="lg" className={classes.container}>
-            <FormGroup row>
-              <FormControlLabel
-                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
-                label="Dark Mode"
-              />
-            </FormGroup>
+            <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
+              <Grid component="label" container alignItems="center" spacing={1}>
+                <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
+                <Grid item>
+                  <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary"/>
+                </Grid>
+                <Grid item><Brightness2Icon></Brightness2Icon></Grid>
+              </Grid>
+            </div>
             {testProjects[0] ? ( // checking if props exist (if there are projects)
               <Grid container spacing={3}>
                 {testProjects.map(project => (
@@ -363,6 +368,7 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                       >  
                         <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} id={`paper_${project.project_id}`}>
                           <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`}><SettingsIcon style={{color: "grey", marginLeft:"90%"}}></SettingsIcon></Button> 
+                          {/* modal to update project name */}
                           <Modal
                             open={openModal}
                             onClose={handleModalClose}
@@ -384,13 +390,6 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                               className={classes.projectTitle}
                             >
                               {project.name}
-                            </Typography>
-                            <Typography
-                              color="textSecondary"
-                              className={state.darkMode ? classes.projectStatusDark : classes.projectStatusLight}
-                              component="p"
-                            >
-                              {project.project_status}
                             </Typography>
                           </div>
                         </Paper>{" "}

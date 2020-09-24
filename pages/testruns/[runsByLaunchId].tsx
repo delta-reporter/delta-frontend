@@ -17,11 +17,11 @@ import {
   Link,
   Breadcrumbs,
   NoSsr,
-  FormGroup,
-  FormControlLabel,
   Switch,
 } from "@material-ui/core"
 import { useState, useEffect } from "react"
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -71,21 +71,13 @@ const useStyles = makeStyles(theme => ({
 function setTestTypeBadge(testType) {
   let badge
   if (/.*(\w*nit\w*)\b/.test(testType)) {
-    badge = <img alt={testType} src="/unit.png" width="40" height="30" />
+    badge = <Typography style={{color:"#557cd0"}}> Unit Tests</Typography>
   } else if (/.*(\w*ntegration\w*)\b/.test(testType)) {
-    badge = <img alt={testType} src="/api.png" width="40" height="30" />
+    badge = <Typography style={{color:"#d09955"}}> Integration Tests</Typography>
   } else if (/.*(\w*nd\w*)\b/.test(testType)) {
-    badge = <img alt={testType} src="/ui.png" width="40" height="30" />
+    badge = <Typography style={{color:"#d05555"}}> UI Tests</Typography>
   } else {
-    badge = (
-      <Typography
-        style={{
-          color: "grey",
-        }}
-      >
-        {testType}
-      </Typography>
-    )
+    badge = <Typography style={{color:"grey"}}>{testType}</Typography>
   }
   return badge
 }
@@ -122,25 +114,33 @@ function Testruns({runs}: InferGetServerSidePropsType<typeof getServerSideProps>
         <title>Δ | Test Runs</title>
         {runs[0] ? ( // checking if props exist
           <div>
-          <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-              <Link color="inherit" href={`/`}>
-                Projects
-              </Link>
-              <Link
-                color="inherit"
-                href={`/launches/${runs[0].project_id}`}
-              >
-                Launches
-              </Link>
-              <Typography color="textPrimary"  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Test Runs</Typography>
-            </Breadcrumbs>
+            <div>
+              <div style={{ float: "left"}}>
+                <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+                  <Link color="inherit" href={`/`}>
+                    Projects
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={`/launches/${runs[0].project_id}`}
+                  >
+                    Launches
+                  </Link>
+                  <Typography color="textPrimary"  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Test Runs</Typography>
+                </Breadcrumbs>
+              </div>
+              <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
+                <Grid component="label" container alignItems="center" spacing={1}>
+                  <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
+                  <Grid item>
+                    <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary"/>
+                  </Grid>
+                  <Grid item><Brightness2Icon></Brightness2Icon></Grid>
+                </Grid>
+              </div>
+            </div>
             <Container maxWidth="lg" className={classes.container}>
-            <FormGroup row>
-              <FormControlLabel
-                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
-                label="Dark Mode"
-              />
-            </FormGroup>              <Grid container spacing={3}>
+              <Grid container spacing={3}>
                 <Grid item xs={12}>
                 <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
                 <Typography
@@ -189,8 +189,9 @@ function Testruns({runs}: InferGetServerSidePropsType<typeof getServerSideProps>
                             )}
                             <TableCell  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
                               <Link
-                                underline="none"
+                                underline="always"
                                 href={`/tests/${testRun.test_run_id}`}
+                                style={{color:"grey"}}
                               >
                                 View All tests
                               </Link>

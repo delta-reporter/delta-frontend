@@ -52,8 +52,8 @@ export const TestResolution = function(props: TestProps) {
       <Typography >
       Set or update the resolution for this test: 
       </Typography>
-      <Typography style={{fontStyle:"italic", fontSize:"10px"}}>
-      This will refresh your page (currently working on making it more user friendly)
+      <Typography style={{fontStyle:"italic", fontSize:"12px"}}>
+      (This will put a badge on the current and following tests, so next time you see this test, you will know that reason why it's failing is already identified)
       </Typography>
       <FormControl variant="outlined" style={{minWidth: 250, marginTop: "30px"}}>
         <InputLabel>Resolution</InputLabel>
