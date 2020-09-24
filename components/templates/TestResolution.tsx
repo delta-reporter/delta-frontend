@@ -20,10 +20,11 @@ export const TestResolution = function(props: TestProps) {
   
     const handleDropdownSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
     setResolutionName(event.target.value as string);
+    console.log(getResolutionName(event.target.value))
     changeResolution(getResolutionName(event.target.value))
-      if (typeof window !== 'undefined') {
-      window.location.reload(false) //temporarily refreshing the page when resolution is updated, need to come up with a better solution
-      }
+      // if (typeof window !== 'undefined') {
+      // window.location.reload(false) //temporarily refreshing the page when resolution is updated, need to come up with a better solution
+      // }
     };
 
   const changeResolution = async (resolutionValue) => {
