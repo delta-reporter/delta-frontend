@@ -204,8 +204,8 @@ export interface SuiteAndTest {
           test_history_id: number
           test_id: number
           name: string
-          test_history_resolution: string
-          test_resolution: string
+          test_history_resolution: number
+          test_resolution: number
           message: string
           status: string
           error_type: string
@@ -238,7 +238,7 @@ export interface Test {
   test_id: number
   name: string
   test_history_resolution: number
-  test_resolution: string
+  test_resolution: number
   message: string
   status: string
   error_type: string
