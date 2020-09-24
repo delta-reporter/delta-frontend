@@ -102,11 +102,18 @@ const updateTest = (index, test) => {
 useSocket('delta_resolution', testResolution => {
   let filteredTest = tests.find(
     test => test.test_id === testResolution.test_id);
+
+    // We first verify that a test with the same test_id exists
     if (filteredTest){
       let testIndex = tests.indexOf(filteredTest);
+
+      // If the test as the same test_history_is we update it right away
       if (filteredTest.test_history_id == testResolution.test_history_id){
         filteredTest.test_history_resolution = testResolution.test_history_resolution
         updateTest(testIndex, filteredTest)
+
+      // Otherwise, we just update if the matched test, doesn't have a test_history_resolution yet
+      // In the other words, we set the latest resolution regardless of the current run
       } else if (filteredTest.test_history_resolution == 1 || !filteredTest.test_history_resolution){
         filteredTest.test_resolution = testResolution.test_resolution
         updateTest(testIndex, filteredTest)
