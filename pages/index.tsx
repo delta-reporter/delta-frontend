@@ -382,7 +382,7 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                           </form>
 
                           </div>
-                          </Modal>
+                          </Modal> 
                           <div onClick={() => Router.push(`/launches/${project.project_id}`)}>
                             <Typography
                               component="p"
