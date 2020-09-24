@@ -1,6 +1,6 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography, Tooltip } from "@material-ui/core"
+import { Paper, Typography } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
@@ -9,8 +9,6 @@ import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests } from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
-import useSWR from "swr"
-import WarningIcon from '@material-ui/icons/Warning'
 
 
 const useStyles = makeStyles(theme => ({
@@ -75,21 +73,23 @@ export const TestExpanded = function(props: TestProps) {
     else return "black"
   }
 
-  const { data, error } = useSWR(
-    `${process.env.publicDeltaCore}/api/v1/check_if_more_than_five_failed_in_the_last_ten_runs/test_id/${children.test_id}`,
-    fetcher
-  )
+  //TODO: replace this with using test.is_flaky property of test
+  
+  // const { data, error } = useSWR(
+  //   `${process.env.publicDeltaCore}/api/v1/check_if_more_than_five_failed_in_the_last_ten_runs/test_id/${children.test_id}`,
+  //   fetcher
+  // )
 
-  const loading = !data && !error
+  // const loading = !data && !error
 
-  function getFlakyBadge(message) {
-    if (message == "stable") return <></>
-    else  return (
-      <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
-        <WarningIcon style={{color: "red", marginBottom:"-7px", width:"30px"}}></WarningIcon>
-      </Tooltip>
-    )  
-  }
+  // function getFlakyBadge(message) {
+  //   if (message == "stable") return <></>
+  //   else  return (
+  //     <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
+  //       <WarningIcon style={{color: "red", marginBottom:"-7px", width:"30px"}}></WarningIcon>
+  //     </Tooltip>
+  //   )  
+  // }
 
   return (
     <div
@@ -110,10 +110,6 @@ export const TestExpanded = function(props: TestProps) {
             }}
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
-            {!loading ? (
-              getFlakyBadge(data.message)
-            ) : (<></>)
-            }
             {showStatusText(children.status, darkMode)} 
            <span style={{paddingLeft:"8px"}}> {children.name}</span>
           </Typography>
