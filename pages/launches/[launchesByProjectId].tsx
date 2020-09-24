@@ -25,6 +25,8 @@ import {
   Breadcrumbs,
   FormControlLabel,
   NoSsr,
+  Tooltip,
+  Button,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
@@ -34,11 +36,9 @@ import {
   testRunButtonsDeltaPyramidView,
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
-import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
-import ReplayIcon from '@material-ui/icons/Replay';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
+import ReplayIcon from '@material-ui/icons/Replay'
+import WbSunnyIcon from '@material-ui/icons/WbSunny'
+import Brightness2Icon from '@material-ui/icons/Brightness2'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {

@@ -22,6 +22,8 @@ import fetch from "isomorphic-unfetch"
 import useSocket from '../hooks/useSocket'
 import Router from "next/router"
 import SettingsIcon from '@material-ui/icons/Settings'
+import WbSunnyIcon from '@material-ui/icons/WbSunny'
+import Brightness2Icon from '@material-ui/icons/Brightness2'
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -219,7 +221,7 @@ export interface SuiteAndTest {
               file_id: string
             }
           ]
-          flaky: string
+          is_flaky: string
         }
       ]
     }
@@ -253,6 +255,7 @@ export interface Test {
       file_id: string
     }
   ]
+  is_flaky: string
 }
 
 function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -348,12 +351,15 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
               </Typography>
             </Paper>
           <Container maxWidth="lg" className={classes.container}>
-            <FormGroup row>
-              <FormControlLabel
-                control={<Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" />}
-                label="Dark Mode"
-              />
-            </FormGroup>
+            <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
+              <Grid component="label" container alignItems="center" spacing={1}>
+                <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
+                <Grid item>
+                  <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary"/>
+                </Grid>
+                <Grid item><Brightness2Icon></Brightness2Icon></Grid>
+              </Grid>
+            </div>
             {testProjects[0] ? ( // checking if props exist (if there are projects)
               <Grid container spacing={3}>
                 {testProjects.map(project => (

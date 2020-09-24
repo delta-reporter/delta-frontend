@@ -3,10 +3,12 @@ import {makeStyles} from "@material-ui/core/styles"
 import {showStatusIcon, showResolutionText} from "."
 import {
     Typography,
-    ListItem
+    ListItem,
+    Tooltip
 } from "@material-ui/core"
 import useSocket from '../../hooks/useSocket'
 import { Test } from "../../pages"
+import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -135,16 +137,23 @@ return(
         onClick={() => showTest(test, test.test_id)}
         className={setTextLineStyle(test.test_id === highlightedTest, darkMode)}
         >
-        {showStatusIcon(test.status)}
-        <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
-          {test.name}
-        </Typography>
-        {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
-        {test.test_history_resolution != 1? (
-          showResolutionText(test.test_history_resolution, darkMode)
-        ) : (
-          showResolutionText(test.test_resolution, darkMode)
-        )}
+          {showStatusIcon(test.status)}
+          {test.is_flaky=="true" ? (
+            <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
+              <WarningIcon style={{color: "red", width:"30px"}}></WarningIcon>  
+            </Tooltip>
+          ) : (
+            <></>
+          )}
+          <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
+            {test.name}
+          </Typography>
+          {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
+          {test.test_history_resolution != 1? (
+            showResolutionText(test.test_history_resolution, darkMode)
+          ) : (
+            showResolutionText(test.test_resolution, darkMode)
+          )}
       </ListItem>
     </a>
     ))}

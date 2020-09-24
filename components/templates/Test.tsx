@@ -1,6 +1,6 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography } from "@material-ui/core"
+import { Paper, Typography, Tooltip } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
@@ -9,7 +9,7 @@ import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests } from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
-
+import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,13 +47,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-// const fetcher = url => fetch(url).then(res => res.json())
-
 interface TestProps {
   children: any
   darkMode: boolean
 }
-
 
 export const TestExpanded = function(props: TestProps) {
   const { children, darkMode } = props
@@ -72,24 +69,6 @@ export const TestExpanded = function(props: TestProps) {
     if(darkMode) return "#8c8d8d"
     else return "black"
   }
-
-  //TODO: replace this with using test.is_flaky property of test
-
-  // const { data, error } = useSWR(
-  //   `${process.env.publicDeltaCore}/api/v1/check_if_more_than_five_failed_in_the_last_ten_runs/test_id/${children.test_id}`,
-  //   fetcher
-  // )
-
-  // const loading = !data && !error
-
-  // function getFlakyBadge(message) {
-  //   if (message == "stable") return <></>
-  //   else  return (
-  //     <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
-  //       <WarningIcon style={{color: "red", marginBottom:"-7px", width:"30px"}}></WarningIcon>
-  //     </Tooltip>
-  //   )  
-  // }
 
   return (
     <div
@@ -110,6 +89,13 @@ export const TestExpanded = function(props: TestProps) {
             }}
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
+            {children.is_flaky=="true" ? (
+              <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
+                <WarningIcon style={{color: "red", marginBottom:"-7px", width:"30px"}}></WarningIcon>  
+              </Tooltip>
+            ) : (
+              <></>
+            )}
             {showStatusText(children.status, darkMode)} 
            <span style={{paddingLeft:"8px"}}> {children.name}</span>
           </Typography>
