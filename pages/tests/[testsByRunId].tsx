@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(4),
   },
   paperDark: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     border: "1px grey solid",
   },
   paperLight: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
@@ -213,9 +213,9 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </div>
           </div>
           <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
               <Grid item xs={12}>
-              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={2}>
                   <Typography
                     variant="h6"
                     style={{ fontWeight: 400, margin: "5px" }}
@@ -235,7 +235,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   <div
                     style={{
                       display: "flex",
-                      marginTop: "20px",
+                      marginTop: "30px",
                       alignItems: "baseline",
                     }}
                   >
@@ -256,7 +256,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                     <div
                       style={{
                         display: "flex",
-                        paddingLeft: "100px",
+                        paddingLeft: "195px",
                         alignItems: "baseline",
                       }}
                     >
