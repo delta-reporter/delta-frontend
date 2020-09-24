@@ -17,8 +17,6 @@ import {
   Link,
   Breadcrumbs,
   NoSsr,
-  FormGroup,
-  FormControlLabel,
   Switch,
 } from "@material-ui/core"
 import { useState, useEffect } from "react"
@@ -73,21 +71,13 @@ const useStyles = makeStyles(theme => ({
 function setTestTypeBadge(testType) {
   let badge
   if (/.*(\w*nit\w*)\b/.test(testType)) {
-    badge = <img alt={testType} src="/unit.png" width="40" height="30" style={{marginTop:"3px"}}/>
+    badge = <Typography style={{color:"#557cd0"}}> Unit Tests</Typography>
   } else if (/.*(\w*ntegration\w*)\b/.test(testType)) {
-    badge = <img alt={testType} src="/api.png" width="40" height="30" style={{marginTop:"3px"}}/>
+    badge = <Typography style={{color:"#d09955"}}> Integration Tests</Typography>
   } else if (/.*(\w*nd\w*)\b/.test(testType)) {
-    badge = <img alt={testType} src="/ui.png" width="40" height="30" style={{marginTop:"3px"}}/>
+    badge = <Typography style={{color:"#d05555"}}> UI Tests</Typography>
   } else {
-    badge = (
-      <Typography
-        style={{
-          color: "grey",
-        }}
-      >
-        {testType}
-      </Typography>
-    )
+    badge = <Typography style={{color:"grey"}}>{testType}</Typography>
   }
   return badge
 }

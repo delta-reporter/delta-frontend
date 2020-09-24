@@ -6,8 +6,6 @@ import {
   ListItem,
   List,
   NoSsr,
-  FormGroup,
-  FormControlLabel,
   Switch,
   Button,
   TextField,
