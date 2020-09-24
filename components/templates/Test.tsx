@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const fetcher = url => fetch(url).then(res => res.json())
+// const fetcher = url => fetch(url).then(res => res.json())
 
 interface TestProps {
   children: any
@@ -74,7 +74,7 @@ export const TestExpanded = function(props: TestProps) {
   }
 
   //TODO: replace this with using test.is_flaky property of test
-  
+
   // const { data, error } = useSWR(
   //   `${process.env.publicDeltaCore}/api/v1/check_if_more_than_five_failed_in_the_last_ten_runs/test_id/${children.test_id}`,
   //   fetcher
