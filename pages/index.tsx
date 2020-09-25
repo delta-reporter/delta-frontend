@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.light,
   },
   projectTitle: {
-    paddingTop: theme.spacing(5),
+    padding: "30px 0",
     textAlign: "center",
   },
   pageTitleSectionDark: {
@@ -367,21 +367,20 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                         button
                       >  
                         <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} id={`paper_${project.project_id}`}>
-                          <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`}><SettingsIcon style={{color: "grey", marginLeft:"90%"}}></SettingsIcon></Button> 
+                          <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`}><SettingsIcon style={{color: "#c7c5c5", marginLeft:"90%", width:"23px"}}></SettingsIcon></Button> 
                           {/* modal to update project name */}
                           <Modal
                             open={openModal}
                             onClose={handleModalClose}
                           >
                             <div style={modalStyle}  className={state.darkMode ? classes.modalDark : classes.modalLight}>
-                          <Typography style={{ marginBottom: "15px"}}> Update project name: 
-                          </Typography>
-                          <form noValidate autoComplete="off">
-                            <TextField id={`modal_${openModalProjectId}`} style={{width: "max-content"}} label={openModalProjectName} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
-                            <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
-                          </form>
-
-                          </div>
+                              <Typography style={{ marginBottom: "15px"}}> Update project name: 
+                              </Typography>
+                              <form noValidate autoComplete="off">
+                                <TextField type="text" id={`modal_${openModalProjectId}`} style={{width: "max-content"}} label={openModalProjectName} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
+                                <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
+                              </form>
+                            </div>
                           </Modal> 
                           <div onClick={() => Router.push(`/launches/${project.project_id}`)}>
                             <Typography
