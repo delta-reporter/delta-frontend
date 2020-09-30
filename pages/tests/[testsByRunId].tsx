@@ -245,7 +245,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                         <Button
                           href={
                             tests[0].test_run_data
-                              .spectre_test_run_url
+                              .spectre_test_run_url + "?status=fail"
                           }
                           className={classes.spectreButton}
                         >
