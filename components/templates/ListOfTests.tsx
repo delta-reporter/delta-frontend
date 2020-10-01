@@ -138,7 +138,7 @@ return(
         className={setTextLineStyle(test.test_id === highlightedTest, darkMode)}
         >
           {showStatusIcon(test.status)}
-          {test.is_flaky (
+          {test.is_flaky ? (
             <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
               <WarningIcon style={{color: "red", width:"30px"}}></WarningIcon>  
             </Tooltip>
