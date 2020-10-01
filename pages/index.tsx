@@ -219,7 +219,7 @@ export interface SuiteAndTest {
               file_id: string
             }
           ]
-          is_flaky: string
+          is_flaky: boolean
         }
       ]
     }
@@ -253,7 +253,7 @@ export interface Test {
       file_id: string
     }
   ]
-  is_flaky: string
+  is_flaky: boolean
 }
 
 function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps>) {
