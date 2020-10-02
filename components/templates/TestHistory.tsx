@@ -38,7 +38,7 @@ export const HistoricalTests = function(props: TestProps) {
   }
 
   const { data, error } = useSWR(
-    `${process.env.publicDeltaCore}/api/v1/test_history/test_id/${children.test_id}`,
+    `${process.env.publicDeltaCore}/api/v1/test_history/test_id/${children.mother_test_id}`,
     fetcher
   )
 
