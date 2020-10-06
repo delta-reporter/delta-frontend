@@ -248,6 +248,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                               .spectre_test_run_url + "?status=fail"
                           }
                           className={classes.spectreButton}
+                          target="_blank"
                         >
                           Spectre
                         </Button>
