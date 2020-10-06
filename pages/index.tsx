@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.light,
   },
   projectTitle: {
-    padding: "60px 0",
+    padding: "30px 0",
     textAlign: "center",
     
   },

@@ -257,7 +257,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                     <div
                       style={{
                         display: "flex",
-                        paddingLeft: "195px",
+                        paddingLeft: "145px",
                         alignItems: "baseline",
                       }}
                     >
