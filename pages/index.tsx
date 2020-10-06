@@ -391,6 +391,7 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                             </div>
                           </Modal>
                             <Typography
+                              component="p"
                               variant="h4"
                               className={classes.projectTitle}
                             >
