@@ -55,13 +55,13 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(4),
   },
   paperLight: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
   },
   paperDark: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
@@ -244,7 +244,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
             <React.Fragment>
               <Tooltip title="Reload page">
               <Button color="secondary" size="small" onClick={handleReloadPage}>
-              <ReplayIcon fontSize="small" />
+              <ReplayIcon fontSize="small" color="primary"/>
               </Button>
               </Tooltip>
             </React.Fragment>
@@ -254,9 +254,9 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
         {/* Attempt to use notification as a component */}
         {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3} >
+          <Grid container spacing={4} >
             <Grid item xs={12} >
-              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight}>
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
                 <Grid container>
                   <Grid item xs={10}>
                     <Typography
@@ -290,7 +290,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
                   </Grid>
                 </Grid>
                 {launches[0] ? ( // checking if props exist
-                  <div>
+                  <div style={{paddingTop:"15px"}}>
                     <Table size="small" >
                       <TableHead>
                         <TableRow>

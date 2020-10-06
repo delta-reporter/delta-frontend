@@ -89,7 +89,7 @@ export const TestExpanded = function(props: TestProps) {
             }}
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
-            {children.is_flaky=="true" ? (
+            {children.is_flaky ? (
               <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
                 <WarningIcon style={{color: "red", marginBottom:"-7px", width:"30px"}}></WarningIcon>  
               </Tooltip>

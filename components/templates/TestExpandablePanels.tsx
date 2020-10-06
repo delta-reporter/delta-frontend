@@ -157,16 +157,19 @@ export const TestMediaAccordion = function(props: TestProps) {
               <PanelDetails>
                 <CardActionArea>
                   {media.type === "img" ? (
-                    <CardMedia
-                      component="img"
-                      alt={media.filename}
-                      style={{ height: 360, maxWidth: 640 }}
-                      src={
-                        `${process.env.publicDeltaCore}/api/v1/get_file/` +
-                        media.file_id
-                      }
-                      title={media.filename}
-                    />
+                    <a href={`${process.env.publicDeltaCore}/api/v1/get_file/` +
+                    media.file_id} target="_blank">
+                      <CardMedia
+                        component="img"
+                        alt={media.filename}
+                        style={{ height: 360, maxWidth: 640 }}
+                        src={
+                          `${process.env.publicDeltaCore}/api/v1/get_file/` +
+                          media.file_id
+                        }
+                        title={media.filename}
+                      />
+                    </a>
                   ) : (
                     <ReactPlayer
                       url={`${process.env.publicDeltaCore}/api/v1/get_file/${media.file_id}`}

@@ -138,7 +138,7 @@ return(
         className={setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)}
         >
           {showStatusIcon(test.status)}
-          {test.is_flaky=="true" ? (
+          {test.is_flaky ? (
             <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
               <WarningIcon style={{color: "red", width:"30px"}}></WarningIcon>  
             </Tooltip>
@@ -148,11 +148,13 @@ return(
           <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
             {test.name}
           </Typography>
-          {/* if resolution for the current run exists - show it, otherwise - show the general resolution for this test */}
+          {/* if resolution for the current run exists - show it, otherwise - show the historical resolution inherited from previous results */}
           {test.test_history_resolution != 1? (
-            showResolutionText(test.test_history_resolution, darkMode)
+            <>
+            {showResolutionText(test.test_history_resolution, darkMode, false)}
+            </>
           ) : (
-            showResolutionText(test.test_resolution, darkMode)
+            showResolutionText(test.test_resolution, darkMode, true)
           )}
       </ListItem>
     </a>
