@@ -5,8 +5,11 @@ import {
   Select,
   MenuItem,
   Typography,
+  IconButton,
+  Tooltip,
 } from "@material-ui/core"
-import { getResolutionName } from "./showResolution";
+import { getResolutionName } from "./showResolution"
+import DeleteIcon from '@material-ui/icons/Delete'
 
 interface TestProps {
   testHistoryId: any
@@ -71,7 +74,11 @@ export const TestResolution = function(props: TestProps) {
             <MenuItem value={6}>Environment issue</MenuItem>
         </Select>
       </FormControl> 
-    
+      <Tooltip title="Clear resolution for the current test">
+        <IconButton onClick={() => changeResolution("Not set")} style={{marginTop:"32px"}}>
+          <DeleteIcon></DeleteIcon>
+        </IconButton>
+      </Tooltip>
   </div>
   )
 }
