@@ -1,7 +1,8 @@
 import React from "react"
 import {Typography, Tooltip} from "@material-ui/core"
+import HistoryIcon from '@material-ui/icons/History'
 
-export function showResolutionText(resolution, darkMode) {
+export function showResolutionText(resolution, darkMode, historicalData) {
 
     if(resolution == 1) resolution =  "Not set"
     else if(resolution == 2) resolution =  "Test is flaky"
@@ -17,21 +18,54 @@ export function showResolutionText(resolution, darkMode) {
        
         if(darkMode) {
             resolutionBadge = (
-                <Tooltip title="Resolution">
-                    <button style={
-                        {
-                            color: "#dda057",
-                            margin: "5px",
-                            border: "1px #dda057 solid",
-                            backgroundColor: "#2a2a2a"
-                        }
-                    }>{resolution}</button>
-                </Tooltip>
+                <> 
+                    { !historicalData ? (
+                        <Tooltip title="Resolution for current test" >
+                            <button style={
+                                {
+                                    color: "#dda057",
+                                    margin: "5px",
+                                    border: "1px #dda057 solid",
+                                    backgroundColor: "#2a2a2a"
+                                }
+                            }> { resolution }
+                            </button>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="Historical resolution inherited from previous tests">
+                        <button style={
+                            {
+                                color: "#dda057",
+                                margin: "5px",
+                                border: "1px #dda057 solid",
+                                backgroundColor: "#2a2a2a"
+                            }
+                        }>
+                            <HistoryIcon style={{color:"#dda057", fontSize: "small", marginTop:"3px", marginRight: "3px", marginBottom: "-2px"}}></HistoryIcon>
+                            <span>{ resolution }</span>
+                        </button>
+                    </Tooltip>
+                    )} 
+                </>
             )
         }
         else 
-            resolutionBadge = (
-                <Tooltip title="Resolution">
+        resolutionBadge = (
+            <> 
+                { !historicalData ? (
+                    <Tooltip title="Resolution for current test" >
+                        <button style={
+                            {
+                                color: "#dda057",
+                                margin: "5px",
+                                border: "1px #dda057 solid",
+                                backgroundColor: "white"
+                            }
+                        }> { resolution }
+                        </button>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title="Historical resolution inherited from previous tests">
                     <button style={
                         {
                             color: "#dda057",
@@ -39,8 +73,13 @@ export function showResolutionText(resolution, darkMode) {
                             border: "1px #dda057 solid",
                             backgroundColor: "white"
                         }
-                    }>{resolution}</button>
+                    }>
+                        <HistoryIcon style={{color:"#dda057", fontSize: "small", marginTop:"3px", marginRight: "3px", marginBottom: "-2px"}}></HistoryIcon>
+                        <span>{ resolution }</span>
+                    </button>
                 </Tooltip>
+                )} 
+            </>
         )
     return resolutionBadge
     }
