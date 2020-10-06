@@ -12,13 +12,13 @@ import { getResolutionName } from "./showResolution"
 import DeleteIcon from '@material-ui/icons/Delete'
 
 interface TestProps {
-  testHistoryId: any
   testId: any
+  motherTestId: any
   resolution: any
 }
 
 export const TestResolution = function(props: TestProps) {
-    const { testHistoryId, testId, resolution } = props
+    const { testId, motherTestId, resolution } = props
     const [resolutionName, setResolutionName] = useState(resolution)
   
     const handleDropdownSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -36,9 +36,9 @@ export const TestResolution = function(props: TestProps) {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        test_history_id: testHistoryId,
+        test_id: testId,
         test_resolution: resolutionValue,
-        test_id: testId
+        mother_test_id: motherTestId
       }),
     }
     console.log(requestOptions)

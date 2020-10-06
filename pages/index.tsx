@@ -202,8 +202,8 @@ export interface SuiteAndTest {
             seconds: number
             years: number
           }
-          test_history_id: number
           test_id: number
+          mother_test_id: number
           name: string
           test_history_resolution: number
           test_resolution: number
@@ -236,8 +236,8 @@ export interface Test {
     seconds: number
     years: number
   }
-  test_history_id: number
   test_id: number
+  mother_test_id: number
   name: string
   test_history_resolution: number
   test_resolution: number
