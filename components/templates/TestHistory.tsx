@@ -90,7 +90,7 @@ export const HistoricalTests = function(props: TestProps) {
                     {showStatusText(test.status, darkMode)}{" "}
                     {showDateText(test.end_datetime, darkMode)}
                     {showResolutionText(test.resolution, darkMode)}{" "}
-                    {test.test_history_id === children.test_history_id ? ( // if it's current test - show the badge 
+                    {test.test_history_id === children.test_id ? ( // if it's current test - show the badge 
                       <Tooltip title="Current test">
                         <button
                           style={{
