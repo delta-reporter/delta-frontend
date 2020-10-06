@@ -103,14 +103,14 @@ const updateTest = (index, test) => {
 
 useSocket('delta_resolution', testResolution => {
   let filteredTest = tests.find(
-    test => test.test_id === testResolution.test_id);
+    test => test.mother_test_id === testResolution.test_id);
 
     // We first verify that a test with the same test_id exists
     if (filteredTest){
       let testIndex = tests.indexOf(filteredTest);
 
       // If the test as the same test_history_is we update it right away
-      if (filteredTest.test_history_id == testResolution.test_history_id){
+      if (filteredTest.test_id == testResolution.test_id){
         filteredTest.test_history_resolution = testResolution.test_history_resolution
         updateTest(testIndex, filteredTest)
 
@@ -127,15 +127,15 @@ return(
   <div>
     {tests.map(test => (
       <a
-      key={test.test_history_id}
+      key={test.test_id}
       href="#page-top"
       style={{ textDecoration: "none", color: "black" }}
     >
       <ListItem
         button
-        key={test.test_history_id}
-        onClick={() => showTest(test, test.test_id)}
-        className={setTextLineStyle(test.test_id === highlightedTest, darkMode)}
+        key={test.test_id}
+        onClick={() => showTest(test, test.mother_test_id)}
+        className={setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)}
         >
           {showStatusIcon(test.status)}
           {test.is_flaky=="true" ? (

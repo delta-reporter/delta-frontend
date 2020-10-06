@@ -165,7 +165,7 @@ export const TestExpanded = function(props: TestProps) {
             <TabPanel>
               {/* set resolution tab */}
               <div style={{ paddingTop: "20px" }}>
-                  <TestResolution resolution = {children.test_history_resolution} testId={children.test_id} testHistoryId={children.test_history_id}></TestResolution>
+                  <TestResolution resolution = {children.test_history_resolution} motherTestId={children.mother_test_id} testId={children.test_id}></TestResolution>
               </div>
             </TabPanel>
             <TabPanel>
