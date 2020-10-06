@@ -72,8 +72,9 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.light,
   },
   projectTitle: {
-    padding: "30px 0",
+    padding: "60px 0",
     textAlign: "center",
+    
   },
   pageTitleSectionDark: {
     backgroundColor: theme.palette.secondary.dark,
@@ -366,8 +367,15 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                       <ListItem
                         button
                       >  
-                        <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} id={`paper_${project.project_id}`}>
-                          <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`}><SettingsIcon style={{color: "#c7c5c5", marginLeft:"90%", width:"23px"}}></SettingsIcon></Button> 
+                        <Paper 
+                          className={state.darkMode ? classes.paperDark : classes.paperLight} 
+                          id={`paper_${project.project_id}`} 
+                          onClick={() => Router.push(`/launches/${project.project_id}`)}
+                        >
+                          {/* TODO: need to rethink this approach with changing name */}
+                          <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`} disabled>
+                            <SettingsIcon style={{color: "#c7c5c5", marginLeft:"90%", width:"23px"}}></SettingsIcon>
+                          </Button> 
                           {/* modal to update project name */}
                           <Modal
                             open={openModal}
@@ -381,16 +389,14 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                                 <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
                               </form>
                             </div>
-                          </Modal> 
-                          <div onClick={() => Router.push(`/launches/${project.project_id}`)}>
+                          </Modal>
                             <Typography
-                              component="p"
                               variant="h4"
                               className={classes.projectTitle}
                             >
                               {project.name}
                             </Typography>
-                          </div>
+                       
                         </Paper>{" "}
                        
                       </ListItem>
