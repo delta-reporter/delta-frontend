@@ -124,7 +124,6 @@ useSocket('delta_resolution', testResolution => {
 })
 
 useSocket('delta_test', testDelta => {
-  console.log(testDelta)
   let filteredTest = tests.find(
     test => test.mother_test_id === testDelta.mother_test_id);
 
