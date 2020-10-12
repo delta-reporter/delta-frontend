@@ -165,6 +165,7 @@ export interface TestRun {
   test_type: string
   data: { url?: string }
 }
+
 export interface SuiteAndTest {
   test_run_id: number
   launch_id: number
@@ -225,6 +226,58 @@ export interface SuiteAndTest {
       ]
     }
   ]
+}
+
+export interface Suite {
+      test_suite_history_id: number
+      test_suite_id: number
+      name: string
+      test_suite_status: string
+      duration: {
+        days: number
+        hours: number
+        minutes: number
+        months: number
+        seconds: number
+        years: number
+      }
+      tests_total: number
+      tests_failed: number
+      tests_passed: number
+      tests_running: number
+      tests_incomplete: number
+      tests_skipped: number
+      tests: [
+        {
+          duration: {
+            days: number
+            hours: number
+            minutes: number
+            months: number
+            seconds: number
+            years: number
+          }
+          test_id: number
+          mother_test_id: number
+          name: string
+          test_history_resolution: number
+          test_resolution: number
+          message: string
+          status: string
+          error_type: string
+          trace: string
+          file: string
+          retries: string
+          media: [
+            {
+              type: string
+              filename: string
+              file_id: string
+            }
+          ]
+          is_flaky: boolean
+        }
+      ]
 }
 
 export interface Test {
