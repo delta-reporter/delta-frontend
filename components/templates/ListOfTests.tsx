@@ -123,6 +123,19 @@ useSocket('delta_resolution', testResolution => {
     }
 })
 
+useSocket('delta_test', testDelta => {
+  let filteredTest = tests.find(
+    test => test.test_id === testDelta.test_id);
+
+  // We first verify that a test with the same test_id exists
+  if (filteredTest){
+    let testIndex = tests.indexOf(filteredTest);
+
+    filteredTest.status = testDelta.status
+    updateTest(testIndex, filteredTest)
+  }
+})
+
 return(
   <div>
     {tests.map(test => (
