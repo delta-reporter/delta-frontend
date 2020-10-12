@@ -4,8 +4,9 @@ import CheckIcon from "@material-ui/icons/Check"
 import CloseIcon from "@material-ui/icons/Close"
 import UseAnimations from "react-useanimations"
 import SnoozeIcon from "@material-ui/icons/Snooze"
+import WarningIcon from '@material-ui/icons/Warning'
 
-export function showStatusIcon(status) {
+export function showStatusIcon(status, isFlaky = false) {
   let statusIcon
   if (status === "Passed" || status === "Successful") {
     statusIcon = (
@@ -33,6 +34,10 @@ export function showStatusIcon(status) {
     )
   } else {
     statusIcon = <Typography style={{ color: "grey" }}>{status}</Typography>
+  }
+
+  if (isFlaky && (status === "Passed" || status === "Failed")) {
+    statusIcon = showIsFlakyBadge(status, isFlaky)
   }
   return statusIcon
 }
@@ -159,6 +164,28 @@ export function showStatusText(status, darkMode) {
       )
   } else {
     statusIcon = <Typography style={{ color: "grey" }}>{status}</Typography>
+  }
+
+  return statusIcon
+}
+
+
+export function showIsFlakyBadge(status, isFlaky) {
+  let statusIcon
+
+  if (isFlaky && status === "Failed") {
+    statusIcon = (
+      <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
+        <WarningIcon style={{color: "red", width:"30px", height:"25px", marginBottom:"-7px"}}></WarningIcon>  
+      </Tooltip>
+    )
+  }
+  if (isFlaky && status === "Passed") {
+    statusIcon = (
+      <Tooltip title="Test passed this time. But might be flaky, was failing in past">
+        <WarningIcon style={{color: "green", width:"30px", height:"25px", marginBottom:"-7px"}}></WarningIcon>  
+      </Tooltip>
+    )
   }
   return statusIcon
 }
