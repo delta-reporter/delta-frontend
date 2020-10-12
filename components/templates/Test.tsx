@@ -1,15 +1,14 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography, Tooltip } from "@material-ui/core"
+import { Paper, Typography } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
-import { showStatusText, HistoricalTests } from "."
+import { showStatusText, HistoricalTests, showStatusIcon, showIsFlakyBadge } from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
-import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,13 +88,7 @@ export const TestExpanded = function(props: TestProps) {
             }}
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
-            {children.is_flaky ? (
-              <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
-                <WarningIcon style={{color: "red", marginBottom:"-7px", width:"30px"}}></WarningIcon>  
-              </Tooltip>
-            ) : (
-              <></>
-            )}
+            {showIsFlakyBadge(children.status, children.is_flaky)} 
             {showStatusText(children.status, darkMode)} 
            <span style={{paddingLeft:"8px"}}> {children.name}</span>
           </Typography>

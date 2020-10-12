@@ -3,12 +3,10 @@ import {makeStyles} from "@material-ui/core/styles"
 import {showStatusIcon, showResolutionText} from "."
 import {
     Typography,
-    ListItem,
-    Tooltip
+    ListItem
 } from "@material-ui/core"
 import useSocket from '../../hooks/useSocket'
 import { Test } from "../../pages"
-import WarningIcon from '@material-ui/icons/Warning'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -137,14 +135,7 @@ return(
         onClick={() => showTest(test, test.mother_test_id)}
         className={setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)}
         >
-          {showStatusIcon(test.status)}
-          {test.is_flaky ? (
-            <Tooltip title="Flaky test. Failed more than 5 out of 10 times.">
-              <WarningIcon style={{color: "red", width:"30px"}}></WarningIcon>  
-            </Tooltip>
-          ) : (
-            <></>
-          )}
+          {showStatusIcon(test.status, test.is_flaky)}
           <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
             {test.name}
           </Typography>
