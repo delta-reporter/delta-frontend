@@ -125,7 +125,7 @@ useSocket('delta_resolution', testResolution => {
 
 useSocket('delta_test', testDelta => {
   let filteredTest = tests.find(
-    test => test.mother_test_id === testDelta.mother_test_id);
+    test => test.test_id === testDelta.test_id);
 
   // We first verify that a test with the same test_id exists
   if (filteredTest){
