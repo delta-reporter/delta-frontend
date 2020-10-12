@@ -6,7 +6,7 @@ import {
   TestMediaAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
-import { showStatusText, HistoricalTests, showStatusIcon, showIsFlakyBadge } from "."
+import { showStatusText, HistoricalTests, showIsFlakyBadge } from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
 

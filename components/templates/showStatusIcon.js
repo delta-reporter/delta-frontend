@@ -36,19 +36,8 @@ export function showStatusIcon(status, isFlaky = false) {
     statusIcon = <Typography style={{ color: "grey" }}>{status}</Typography>
   }
 
-  if (isFlaky && status === "Failed") {
-    statusIcon = (
-      <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
-        <WarningIcon style={{color: "red", width:"30px"}}></WarningIcon>  
-      </Tooltip>
-    )
-  }
-  if (isFlaky && status === "Passed") {
-    statusIcon = (
-      <Tooltip title="Test passed this time. But might be flaky, was failing in past">
-        <WarningIcon style={{color: "green", width:"30px"}}></WarningIcon>  
-      </Tooltip>
-    )
+  if (isFlaky && (status === "Passed" || status === "Failed")) {
+    statusIcon = showIsFlakyBadge(status, isFlaky)
   }
   return statusIcon
 }
