@@ -14,8 +14,7 @@ import {
   List,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import { Suite } from "../../pages"
-import useSocket from "../../hooks/useSocket"
+import { SuiteAndTest } from "../../pages"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -79,7 +78,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  children: Suite[]
+  children: SuiteAndTest[]
   stats
   darkMode: boolean
 }
@@ -117,27 +116,6 @@ export const ListOfSuites = function(props: Props) {
     setExpandedSuite(isExpanded ? suitePanel : false)
   }
 
-  const [suites, setSuites] = useState(children || [])
-  
-  const updateSuite = (index, suite) => {
-    const newSuites = [...suites];
-    newSuites[index] = suite;
-    setSuites(newSuites);
-  }
-
-  useSocket('delta_suite', suiteDelta => {
-    let filteredSuite =  suites.find(suite => (
-      suite.test_suite_history_id === suiteDelta.test_suite_history_id
-    ))
-    // Verifying that a suite with the same suite id exists
-    if (filteredSuite) {
-      let suiteIndex = suites.indexOf(filteredSuite);
-  
-      filteredSuite.test_suite_status = suiteDelta.test_suite_status
-      updateSuite(suiteIndex, filteredSuite)
-    }
-  })
-
   return (
     <div>
       {/* left-hand side for suites list */}
@@ -151,7 +129,9 @@ export const ListOfSuites = function(props: Props) {
           marginTop: "30px",
         }}
       >
-        {suites.map(suite => (
+        {children.map(testRun => (
+          <div key={testRun.test_run_id} >
+            {testRun.test_suites.map(suite => (
               <Accordion // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}
@@ -183,9 +163,10 @@ export const ListOfSuites = function(props: Props) {
                     ></ListOfTests>
                   </List>
                 </AccordionDetails>
-               </Accordion>
-          ))}
-       
+                </Accordion>
+            ))}
+          </div>
+        ))}
       </div>
       <div
         style={{
