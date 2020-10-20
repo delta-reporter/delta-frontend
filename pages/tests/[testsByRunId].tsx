@@ -376,13 +376,11 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   </div>
                   {data[0] ? ( // if there is no data returned from filtering - show error message
                     <div>
-                      {data.map(suite => (
                         <ListOfSuites
-                          children={suite.test_suites}
+                          children={data}
                           stats={selectedStatus}
                           darkMode={state.darkMode}
                         ></ListOfSuites>
-                      ))}
                     </div>
                   ) : (
                     <div>
