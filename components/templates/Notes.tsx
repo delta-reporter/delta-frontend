@@ -15,12 +15,14 @@ const useStyles = makeStyles(theme => ({
 interface NotesProps {
     mother_test_id: number
     darkMode: boolean
+    message?: any
 }
 
 export const Notes = function(props: NotesProps) {
+    
     const classes = useStyles(props)
-    const { mother_test_id} = props;
-    const [notes, setNotes] = useState([]);
+    const { mother_test_id, message} = props;
+    const [notes, setNotes] = useState(message || []);
 
     const loading = !notes
     const noData = notes.message // if there are no notes, we get {"message": "No notes were found"}
