@@ -9,6 +9,7 @@ import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests, showIsFlakyBadge } from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
+import { Notes } from "./Notes"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -97,6 +98,7 @@ export const TestExpanded = function(props: TestProps) {
               <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode) }} >Info</Tab>
               <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Resolution</Tab>
               <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Test History</Tab>
+              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Notes</Tab>
             </TabList>
             {/* info tab */}
             <TabPanel>
@@ -164,6 +166,10 @@ export const TestExpanded = function(props: TestProps) {
             <TabPanel>
               {/* historical info tab */}
               <HistoricalTests darkMode={darkMode}>{children}</HistoricalTests>
+            </TabPanel>
+            <TabPanel>
+              {/* notes tab */}
+              <Notes darkMode={darkMode} mother_test_id={children.mother_test_id}></Notes>
             </TabPanel>
           </Tabs>
         </Paper>
