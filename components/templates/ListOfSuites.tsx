@@ -12,9 +12,12 @@ import {
   AccordionDetails,
   AccordionSummary,
   List,
+  Tooltip,
+  FormControlLabel,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { SuiteAndTest } from "../../pages"
+import UseAnimations from "react-useanimations"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -74,6 +77,9 @@ const useStyles = makeStyles(theme => ({
   },
   testBackgroundDark: {
     backgroundColor: theme.palette.secondary.main,
+  },
+  greyTick: {
+    color: "#d4d3d3"
   },
 }))
 
@@ -151,6 +157,17 @@ export const ListOfSuites = function(props: Props) {
                     suite.tests_skipped,
                     statsArray
                   )}
+                  <FormControlLabel
+            aria-label="Reviewed"
+            onClick={(event) => event.stopPropagation()} // to stop accordion from expanding
+            onFocus={(event) => event.stopPropagation()}
+            control={
+              <Tooltip title="Mark suite as reviewed"> 
+                <UseAnimations animationKey="checkbox"  style={{position: "absolute", right:"55px", width:"20px" }} className={classes.greyTick} />
+              </Tooltip>
+            } 
+            label=""
+          />
                 </AccordionSummary>
                 <AccordionDetails>
                   {/* Expandable tests list for each suite */}

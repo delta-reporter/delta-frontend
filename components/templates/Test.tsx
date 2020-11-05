@@ -1,12 +1,12 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography } from "@material-ui/core"
+import { Paper, Typography, Tooltip } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
-import { showStatusText, HistoricalTests, showIsFlakyBadge } from "."
+import { showStatusText, HistoricalTests, showIsFlakyBadgeTestExpanded } from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
 import { Notes } from "./Notes"
@@ -70,6 +70,16 @@ export const TestExpanded = function(props: TestProps) {
     else return "black"
   }
 
+  function setSlowTestBadge(duration) {
+    // if longer than 1 min
+    if (duration > "1") 
+      return (
+        <Tooltip title="This test took longer than 1 min to execute">
+            <span style={{ border:"1px solid #d62727", padding: "2px 5px 2px 5px", color:"#d62727", marginLeft:"13px"}}>Potentially slow test</span>
+        </Tooltip>
+      )
+  }
+
   return (
     <div
       key={children.test_history_id}
@@ -84,12 +94,12 @@ export const TestExpanded = function(props: TestProps) {
               fontWeight: 580,
               fontSize: "18px",
               marginTop: "20px",
-              wordBreak: "break-all",
+              wordBreak: "break-word",
               whiteSpace: "pre-wrap",
             }}
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
-            {showIsFlakyBadge(children.status, children.is_flaky)} 
+            {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
             {showStatusText(children.status, darkMode)} 
            <span style={{paddingLeft:"8px"}}> {children.name}</span>
           </Typography>
@@ -121,6 +131,7 @@ export const TestExpanded = function(props: TestProps) {
                   {children.duration.seconds}.
                   {convertToSeconds(children.duration.microseconds)}s{" "}
                 </span>
+                {setSlowTestBadge(children.duration.minutes)} 
               </Typography>
               {children.retries ? ( // if there is any retries - show
                 <Typography style={{ paddingTop: "20px" }}>
@@ -131,17 +142,7 @@ export const TestExpanded = function(props: TestProps) {
                 <div></div>
               )}
               {children.message ? ( // if there is any error message - show the info, else - test passed
-                <div>
-                  <Typography
-                    style={{ paddingTop: "20px", paddingBottom: "20px" }}
-                  >
-                    Error type:
-                    <span style={{ color: "grey" }}>
-                      {" "}
-                      {children.error_type}{" "}
-                    </span>
-                  </Typography>
-
+                <div style={{ paddingTop: "10px" }}>
                   <TestErrorMessageAccordion>
                     {children}
                   </TestErrorMessageAccordion>

@@ -17,7 +17,7 @@ export function showStatusIcon(status, isFlaky = false) {
   } else if (status === "Failed" || status === "Incomplete") {
     statusIcon = (
       <Tooltip title="Failed">
-        <CloseIcon style={{ color: "red" }}></CloseIcon>
+        <CloseIcon style={{ color: "#d62727" }}></CloseIcon>
       </Tooltip>
     )
   } else if (status === "Skipped") {
@@ -37,7 +37,7 @@ export function showStatusIcon(status, isFlaky = false) {
   }
 
   if (isFlaky && (status === "Passed" || status === "Failed")) {
-    statusIcon = showIsFlakyBadge(status, isFlaky)
+    statusIcon = showIsFlakyBadgeList(status, isFlaky)
   }
   return statusIcon
 }
@@ -78,12 +78,12 @@ export function showStatusText(status, darkMode) {
       statusIcon = (
         <button
           style={{
-            color: "red",
+            color: "#d62727",
             margin: "5px",
-            border: "1px red solid",
+            border: "1px #d62727 solid",
             backgroundColor: "#2a2a2a",
             fontSize: "13px",
-            paddingRight: "14px",
+            paddingRight: "6px",
           }}
         >
           FAILED
@@ -93,12 +93,12 @@ export function showStatusText(status, darkMode) {
       statusIcon = (
         <button
           style={{
-            color: "red",
+            color: "#d62727",
             margin: "5px",
-            border: "1px red solid",
+            border: "1px #d62727 solid",
             backgroundColor: "white",
             fontSize: "13px",
-            paddingRight: "14px",
+            paddingRight: "6px",
           }}
         >
           FAILED
@@ -170,13 +170,33 @@ export function showStatusText(status, darkMode) {
 }
 
 
-export function showIsFlakyBadge(status, isFlaky) {
+export function showIsFlakyBadgeList(status, isFlaky) {
   let statusIcon
 
   if (isFlaky && status === "Failed") {
     statusIcon = (
       <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
-        <WarningIcon style={{color: "red", width:"30px", height:"25px", marginBottom:"-7px"}}></WarningIcon>  
+        <WarningIcon style={{color: "#d62727", width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px"}}></WarningIcon>  
+      </Tooltip>
+    )
+  }
+  if (isFlaky && status === "Passed") {
+    statusIcon = (
+      <Tooltip title="Test passed this time. But might be flaky, was failing in past">
+        <WarningIcon style={{color: "green", width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px"}}></WarningIcon>  
+      </Tooltip>
+    )
+  }
+  return statusIcon
+}
+
+export function showIsFlakyBadgeTestExpanded(status, isFlaky) {
+  let statusIcon
+
+  if (isFlaky && status === "Failed") {
+    statusIcon = (
+      <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
+        <WarningIcon style={{color: "#d62727", width:"30px", height:"25px", marginBottom:"-7px"}}></WarningIcon>  
       </Tooltip>
     )
   }
