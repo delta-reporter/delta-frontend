@@ -123,7 +123,15 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
   let statusArrayForEndpoint = "1+2+3+4+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
-  const [data, setData] = useState(tests)
+  // console.log(tests)
+  const [data, setData] = useState(tests[0].test_suites)
+
+  const updateSuites = (suites) => {
+    // const newTests = [...tests];
+    // newTests[index] = test;
+    console.log(suites)
+    setData(suites);
+  }
 
   async function handleStatusFilter(status, testRunId) {
     let previousArray = selectedStatus
@@ -147,14 +155,22 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }
-    console.log(requestOptions)
+    // console.log(requestOptions)
 
     const response = await fetch(
       `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${statusArrayForEndpoint}/test_run/${testRunId}`,
       requestOptions
     )
     // we refresh the props here
-    setData(await response.json())
+    let new_data = await response.json();
+    // console.log("NEW DATA: ")
+    // console.log(new_data)
+    // console.log("NEW DATA TEST SUITES: ")
+    // console.log(new_data.test_suites)
+    // setData(new_data.test_suites)
+    updateSuites(await new_data.test_suites)
+    // console.log("DATA: ")
+    // console.log(data)
   }
 
   // dark mode switch
@@ -374,7 +390,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       </Button>
                     </div>
                   </div>
-                  {data[0] ? ( // if there is no data returned from filtering - show error message
+                  {data ? ( // if there is no data returned from filtering - show error message
                     <div>
                         <ListOfSuites
                           children={data}

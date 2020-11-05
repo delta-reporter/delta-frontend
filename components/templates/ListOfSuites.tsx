@@ -16,8 +16,11 @@ import {
   FormControlLabel,
 } from "@material-ui/core"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import { SuiteAndTest } from "../../pages"
 import UseAnimations from "react-useanimations"
+import { Suite } from "../../pages"
+import useSocket from "../../hooks/useSocket"
+
+// const fetcher = url => fetch(url).then(res => res.json())
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -84,7 +87,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  children: SuiteAndTest[]
+  children: Suite[]
   stats
   darkMode: boolean
 }
@@ -122,6 +125,30 @@ export const ListOfSuites = function(props: Props) {
     setExpandedSuite(isExpanded ? suitePanel : false)
   }
 
+  const [suites, setSuites] = useState(children || [])
+
+  const updateSuite = (index, suite) => {
+    const newSuites = [...suites];
+    newSuites[index] = suite;
+    setSuites(newSuites);
+  }
+
+  useSocket('delta_suite', suiteDelta => {
+    console.log(suiteDelta);
+    console.log(suites);
+    let filteredSuite =  suites.find(suite => (
+      suite.test_suite_history_id === suiteDelta.test_suite_history_id
+    ))
+    console.log(filteredSuite)
+    // Verifying that a suite with the same suite id exists
+    if (filteredSuite) {
+      let suiteIndex = suites.indexOf(filteredSuite);
+
+      filteredSuite.test_suite_status = suiteDelta.test_suite_status
+      updateSuite(suiteIndex, filteredSuite)
+    }
+  })
+
   return (
     <div>
       {/* left-hand side for suites list */}
@@ -135,9 +162,9 @@ export const ListOfSuites = function(props: Props) {
           marginTop: "30px",
         }}
       >
-        {children.map(testRun => (
-          <div key={testRun.test_run_id} >
-            {testRun.test_suites.map(suite => (
+        {suites.map(suite => (
+          // <div key={testRun.test_run_id} >
+            // {testRun.test_suites.map(suite => (
               <Accordion // list of expandable suites
                 key={suite.test_suite_history_id}
                 expanded={expandedSuite === suite.name}
@@ -182,8 +209,8 @@ export const ListOfSuites = function(props: Props) {
                 </AccordionDetails>
                 </Accordion>
             ))}
-          </div>
-        ))}
+          {/* </div> */}
+        {/* ))} */}
       </div>
       <div
         style={{
