@@ -388,7 +388,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                         style={{
                           fontStyle: "italic",
                           margin: "20px",
-                          color: "red",
+                          color: "#d62727",
                         }}
                       >
                         Sorry, there are no matching tests for this filter

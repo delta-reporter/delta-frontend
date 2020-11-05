@@ -7,9 +7,6 @@ import {
   List,
   NoSsr,
   Switch,
-  Button,
-  TextField,
-  Modal,
 } from "@material-ui/core"
 import { GetServerSideProps } from 'next'
 import { InferGetServerSidePropsType } from 'next'
@@ -19,7 +16,6 @@ import { BasePage } from "../components/templates"
 import fetch from "isomorphic-unfetch"
 import useSocket from '../hooks/useSocket'
 import Router from "next/router"
-import SettingsIcon from '@material-ui/icons/Settings'
 import WbSunnyIcon from '@material-ui/icons/WbSunny'
 import Brightness2Icon from '@material-ui/icons/Brightness2'
 
@@ -72,7 +68,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.light,
   },
   projectTitle: {
-    padding: "30px 0",
+    padding: "60px 0",
     textAlign: "center",
     
   },
@@ -341,51 +337,6 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-  
-  function getModalStyle() {
-    return {
-      top: `50%`,
-      left: `50%`,
-      transform: `translate(-50%, -50%)`,
-    }
-  }
-  const [openModal, setOpenModal] = React.useState(false);
-  const [modalStyle] = React.useState(getModalStyle);
-  const [openModalProjectId, setOOpenModalProjectId] = React.useState("");
-  const [openModalProjectName, setOpenModalProjectName] = React.useState("");
-
-  const handleModalOpen = (id, name) => {
-    setOOpenModalProjectId(id)
-    setOpenModalProjectName(name)
-    setOpenModal(true);
-  }
-
-  const handleModalClose = () => {
-    setOpenModal(false);
-  }
-
-  async function getNewProjectName(projectId) {
-    const projectName = (document.getElementById("modal_" + projectId) as HTMLInputElement).value
-    
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: projectId,
-        name: projectName
-      }),
-    }
-    console.log(requestOptions)
-
-    const response = await fetch(
-      `${process.env.publicDeltaCore}/api/v1/update_project_name`,
-      requestOptions
-    )
-    await response.json()
-    if (typeof window !== 'undefined') {
-      window.location.reload(false) // reloading the page whe project name is changed
-      }
-  }
 
   return (
       <NoSsr>
@@ -425,24 +376,7 @@ function Index({projects}: InferGetServerSidePropsType<typeof getServerSideProps
                           id={`paper_${project.project_id}`} 
                           onClick={() => Router.push(`/launches/${project.project_id}`)}
                         >
-                            {/* TODO: need to rethink this approach with changing name */}
-                            <Button  onClick={() => handleModalOpen(project.project_id, project.name) } id={`${project.project_id}`} disabled>
-                              <SettingsIcon style={{color: "#c7c5c5", marginLeft:"90%", width:"23px"}}></SettingsIcon>
-                            </Button> 
-                            {/* modal to update project name */}
-                            <Modal
-                              open={openModal}
-                              onClose={handleModalClose}
-                            >
-                              <div style={modalStyle}  className={state.darkMode ? classes.modalDark : classes.modalLight}>
-                                <Typography style={{ marginBottom: "15px"}}> Update project name: 
-                                </Typography>
-                                <form noValidate autoComplete="off">
-                                  <TextField type="text" id={`modal_${openModalProjectId}`} style={{width: "max-content"}} label={openModalProjectName} className={state.darkMode ? classes.rootSemiLight : classes.rootLight} variant="outlined"/>
-                                  <Button variant="contained" style={{border: "1px solid grey", marginTop: "15px", marginLeft: "30px"}} onClick={() => getNewProjectName(project.project_id)}>Submit</Button> 
-                                </form>
-                              </div>
-                            </Modal>
+
                             <Typography
                               component="p"
                               variant="h4"

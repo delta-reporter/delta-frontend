@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Button, FormControl, List, makeStyles, TextField } from '@material-ui/core';
+import { Button, FormControl, makeStyles, TextField, Paper } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   addNoteButton: {
-      backgroundColor: theme.palette.primary.main,
       width: "90px",
       height: "30px",
-      marginTop: "5px",
       border: "1px #a7bab1 solid",
       fontSize: "12px",
   }
@@ -80,26 +78,28 @@ export const Notes = function(props: NotesProps) {
 
     return (
       <>
-      <FormControl style={{display: "flex"}}>
-          <TextField id="noteText" type="text" placeholder="Enter a new note" multiline autoFocus required/>
-          <TextField id="noteAddedBy"  type="text" placeholder="Enter your name"/>
-      </FormControl>
-      <Button id="submit" onClick={() => submit()} className={classes.addNoteButton}>Add note</Button>
-      <List style={{maxHeight: 200, overflow: 'auto'}}>
-        {loading || noData ?
-          <p>There are no notes for this test. Feel free to add one :) </p>
-            : (
-            notes.reverse().map(note => (
-              <>
-              <div>{note.note_text}</div>
-              <div style={{display: 'flex', color: 'grey'}}>
-                <div style={{paddingRight: '5px'}}>{note.added_by}</div>
-                <div>{note.created_datetime}</div>
-              </div>
-              </>
-              ))
-          )} 
-          </List>
+        <div style={{overflow:"auto", paddingTop: "23px", paddingLeft:"40px", maxHeight: 430, marginLeft:"-40px"}}>
+          <FormControl style={{display: "block"}}>
+            <Paper elevation={3} style={{color:"#000", background:"#ffc", display:"block", height: "12em",  marginLeft:"1em", marginTop: "5px", float:"left", width:"12em", padding: "5px", marginBottom:"2px"}} square={true}>
+              <TextField id="noteText" type="text" placeholder="New note" autoFocus style={{justifyContent:"center", alignItems:"center", display:"flex", padding: "5px"}}/>
+              <TextField id="noteAddedBy"  type="text" placeholder="Your name" style={{justifyContent:"center", alignItems:"center", display:"flex", padding: "15px 5px 15px 5px"}}/>
+              <Button id="submit" onClick={() => submit()} className={classes.addNoteButton} style={{margin:"10px 30px 10px"}}>Add note</Button>
+            </Paper>
+          </FormControl>
+          {loading || noData ?
+            <p style={{paddingTop: "30px", paddingLeft:"240px"}}>There are no notes for this test. Feel free to add one :) </p>
+                : (
+                    notes.reverse().map(note => (
+                      <Paper elevation={3} style={{color:"#000", background:"#ffc", display:"block", height: "12em",  marginLeft:"1em", marginTop: "5px", float:"left", width:"12em", padding: "5px"}} square={true}>
+                        <p style={{fontFamily:"Kalam", fontStyle:"italic", fontSize:"1.25em", justifyContent:"center", alignItems:"center", display:"flex", wordBreak:"break-word"}}>{note.note_text}</p>
+                        <p style={{ fontStyle:"italic",  fontSize:"0.9em", color:"#8b8888"}}>{note.added_by}</p>
+                        <p style={{ fontStyle:"italic",  fontSize:"0.8em", color:"#8b8888"}}>{note.created_datetime.substring(0, note.created_datetime.length - 7)}</p>
+                      </Paper>
+                      ))
+                
+                  )
+          } 
+        </div>
       </>
     )
 }
