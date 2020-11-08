@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import useSWR from "swr"
+// import useSWR from "swr"
 import { makeStyles } from "@material-ui/core/styles"
 import {
   showStatusIcon,
@@ -20,8 +20,9 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import UseAnimations from "react-useanimations"
 import { Suite } from "../../pages"
 import useSocket from "../../hooks/useSocket"
+import getTestSuites from "../../data/TestSuites"
 
-const fetcher = url => fetch(url).then(res => res.json())
+// const fetcher = url => fetch(url).then(res => res.json())
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,14 +90,17 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   test_run_id: number
-  children: Suite[]
+  // children: Suite[]
   stats
   darkMode: boolean
 }
 
 
 export const ListOfSuites = function(props: Props) {
-  const { test_run_id, children, stats, darkMode } = props
+  // const { test_run_id, children, stats, darkMode } = props
+  const { test_run_id, stats, darkMode } = props
+  const { loading, noData, testSuites, mutate } = getTestSuites(test_run_id, stats.toString());
+
   const classes = useStyles(props)
   const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
   const [highlightedTest, setHighlightedTest] = useState(0)
@@ -127,7 +131,8 @@ export const ListOfSuites = function(props: Props) {
     setExpandedSuite(isExpanded ? suitePanel : false)
   }
 
-  const [suites, setSuites] = useState(children || [])
+  // const [suites, setSuites] = useState(children || [])
+  const [suites, setSuites] = useState(testSuites || [])
 
   console.log("#### STATS ####")
   console.log(stats.toString())
@@ -136,21 +141,23 @@ export const ListOfSuites = function(props: Props) {
   //   setSuites(suites);
   // }
 
-  const { data, error } = useSWR(
-    `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${stats.toString()}/test_run/${test_run_id}`,
-    fetcher
-  )
+  // const { data, error} = useSWR(
+  //   `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${stats.toString()}/test_run/${test_run_id}`,
+  //   fetcher
+  // )
 
   // console.log(data)
 
-  const loading = !data && !error
-  const noData = !data
+  // const loading = !data && !error
+  // const noData = !data
 
   // if (data){
   //   console.log(data)
   //   // setSuites(data.test_suites)
   //   reloadSuites(data.test_suites)
   // }
+
+  console.log(suites)
   
 
   const updateSuite = (index, suite) => {
@@ -202,9 +209,10 @@ export const ListOfSuites = function(props: Props) {
             marginTop: "30px",
           }}
         >
-          {!data.test_suites
+          {loading
           ? "Loading historical tests..."
-          : data.test_suites.map(suite => (
+          // : suites
+          : testSuites.map(suite => (
             // <div key={testRun.test_run_id} >
               // {testRun.test_suites.map(suite => (
                 <Accordion // list of expandable suites
@@ -250,7 +258,8 @@ export const ListOfSuites = function(props: Props) {
                     </List>
                   </AccordionDetails>
                   </Accordion>
-              ))}
+              ))
+              }
             {/* </div> */}
           {/* ))} */}
         </div>

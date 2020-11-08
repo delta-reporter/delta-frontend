@@ -416,7 +416,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   <div>
                     <ListOfSuites
                       test_run_id={tests[0].test_run_id}
-                      children={data}
+                      // children={data}
                       stats={selectedStatus}
                       darkMode={state.darkMode}
                     ></ListOfSuites>
