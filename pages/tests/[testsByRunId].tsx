@@ -155,20 +155,22 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }
+    console.log("### MAIN STATS ###")
+    console.log(statusArrayForEndpoint)
     // console.log(requestOptions)
 
-    const response = await fetch(
-      `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${statusArrayForEndpoint}/test_run/${testRunId}`,
-      requestOptions
-    )
+    // const response = await fetch(
+    //   `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${statusArrayForEndpoint}/test_run/${testRunId}`,
+    //   requestOptions
+    // )
     // we refresh the props here
-    let new_data = await response.json();
+    // let new_data = await response.json();
     // console.log("NEW DATA: ")
     // console.log(new_data)
     // console.log("NEW DATA TEST SUITES: ")
     // console.log(new_data.test_suites)
     // setData(new_data.test_suites)
-    updateSuites(await new_data.test_suites)
+    // updateSuites(await new_data.test_suites)
     // console.log("DATA: ")
     // console.log(data)
   }
@@ -390,7 +392,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       </Button>
                     </div>
                   </div>
-                  {data ? ( // if there is no data returned from filtering - show error message
+                  {/* {data ? ( // if there is no data returned from filtering - show error message
                     <div>
                         <ListOfSuites
                           children={data}
@@ -410,7 +412,15 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                         Sorry, there are no matching tests for this filter
                       </Typography>
                     </div>
-                  )}
+                  )} */}
+                  <div>
+                    <ListOfSuites
+                      test_run_id={tests[0].test_run_id}
+                      children={data}
+                      stats={selectedStatus}
+                      darkMode={state.darkMode}
+                    ></ListOfSuites>
+                  </div>
                 </Paper>
               </Grid>
             </Grid>
