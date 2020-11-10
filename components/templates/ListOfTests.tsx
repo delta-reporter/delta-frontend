@@ -1,12 +1,11 @@
-import React, {useState} from "react"
+import React from "react"
 import {makeStyles} from "@material-ui/core/styles"
 import {showStatusIcon, showResolutionText} from "."
 import {
     Typography,
     ListItem
 } from "@material-ui/core"
-import useSocket from '../../hooks/useSocket'
-import { Test } from "../../pages"
+import getTests from "../../data/Tests"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -73,14 +72,15 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   showTest: Function
   highlightedTest: number
-  children: Test[]
   darkMode: boolean
+  stats: string
+  test_suite_history_id: number
 }
 
 export const ListOfTests = function (props : Props) {
-const {showTest, highlightedTest, children, darkMode} = props
+const {showTest, highlightedTest, darkMode, stats, test_suite_history_id} = props
 const classes = useStyles(props)
-const [tests, setTests] = useState(children || [])
+const { loading, noData, tests, mutate } = getTests(test_suite_history_id, stats);
 
 function setTextLineStyle(isHighlighted, darkMode) {
     if (isHighlighted && ! darkMode)  // light mode - highlighted
@@ -93,75 +93,53 @@ function setTextLineStyle(isHighlighted, darkMode) {
         return classes.testBackgroundDark
 }
 
-const updateTest = (index, test) => {
-  const newTests = [...tests];
-  newTests[index] = test;
-  setTests(newTests);
-}
-
-useSocket('delta_resolution', testResolution => {
-  let filteredTest = tests.find(
-    test => test.mother_test_id === testResolution.test_id);
-
-    // We first verify that a test with the same test_id exists
-    if (filteredTest){
-      let testIndex = tests.indexOf(filteredTest);
-
-      // If the test as the same test_history_is we update it right away
-      if (filteredTest.test_id == testResolution.test_id){
-        filteredTest.test_history_resolution = testResolution.test_history_resolution
-        updateTest(testIndex, filteredTest)
-
-      // Otherwise, we just update if the matched test, doesn't have a test_history_resolution yet
-      // In the other words, we set the latest resolution regardless of the current run
-      } else if (filteredTest.test_history_resolution == 1 || !filteredTest.test_history_resolution){
-        filteredTest.test_resolution = testResolution.test_resolution
-        updateTest(testIndex, filteredTest)
-      }
-    }
-})
-
-useSocket('delta_test', testDelta => {
-  let filteredTest = tests.find(
-    test => test.test_id === testDelta.test_id);
-
-  // We first verify that a test with the same test_id exists
-  if (filteredTest){
-    let testIndex = tests.indexOf(filteredTest);
-
-    filteredTest.status = testDelta.status
-    updateTest(testIndex, filteredTest)
-  }
-})
-
-return(
-  <div>
-    {tests.map(test => (
-      <a
-      key={test.test_id}
-      href="#page-top"
-      style={{ textDecoration: "none", color: "black" }}
-    >
-      <ListItem
-        button
-        key={test.test_id}
-        onClick={() => showTest(test, test.mother_test_id)}
-        className={setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)}
-        >
-          {showStatusIcon(test.status, test.is_flaky)}
-          <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
-            {test.name}
-          </Typography>
-          {/* if resolution for the current run exists - show it, otherwise - show the historical resolution inherited from previous results */}
-          {test.test_history_resolution != 1? (
-            <>
-            {showResolutionText(test.test_history_resolution, darkMode, false)}
-            </>
-          ) : (
-            showResolutionText(test.test_resolution, darkMode, true)
-          )}
-      </ListItem>
-    </a>
-    ))}
+if (noData) {
+  return (
+      <div>
+      <Typography
+        style={{
+          fontStyle: "italic",
+          margin: "20px",
+          color: "#d62727",
+        }}
+      >
+        Sorry, there are no matching tests for this suite
+      </Typography>
     </div>
-)}
+  )
+} else {
+  return(
+    <div>
+      {loading
+          ? "Loading tests..."
+      : tests.map(test => (
+        <a
+        key={test.test_id}
+        href="#page-top"
+        style={{ textDecoration: "none", color: "black" }}
+      >
+        <ListItem
+          button
+          key={test.test_id}
+          onClick={() => showTest(test, test.mother_test_id)}
+          className={setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)}
+          >
+            {showStatusIcon(test.status, test.is_flaky)}
+            <Typography  className={darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight}>
+              {test.name}
+            </Typography>
+            {/* if resolution for the current run exists - show it, otherwise - show the historical resolution inherited from previous results */}
+            {test.test_history_resolution != 1? (
+              <>
+              {showResolutionText(test.test_history_resolution, darkMode, false)}
+              </>
+            ) : (
+              showResolutionText(test.test_resolution, darkMode, true)
+            )}
+        </ListItem>
+      </a>
+      ))
+      }
+      </div>
+  )}
+          }

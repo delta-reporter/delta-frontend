@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import { SuiteAndTest } from "../index"
+import { TestRun } from "../index"
 import { GetServerSideProps } from 'next'
 import { InferGetServerSidePropsType } from 'next'
 import { BasePage, ListOfSuites } from "../../components/templates"
@@ -114,65 +114,20 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const classes = useStyles(tests)
+function Tests({test_run}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const classes = useStyles(test_run)
 
   // We are using two things here. State and var, they will hold the same value but used for different purposes
   // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
   // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for endpoint
-  let statusArrayForEndpoint = "1+2+3+4+5"
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
-  // console.log(tests)
-  const [data, setData] = useState(tests[0].test_suites)
-
-  const updateSuites = (suites) => {
-    // const newTests = [...tests];
-    // newTests[index] = test;
-    console.log(suites)
-    setData(suites);
-  }
-
-  async function handleStatusFilter(status, testRunId) {
-    let previousArray = selectedStatus
+  async function handleStatusFilter(status) {
     if (selectedStatus.includes(status) && selectedStatus.length !== 1) {
-      // to remove the item, if it was selected already and user clicks again
       setSelectedStatus(selectedStatus.filter(item => item !== status))
-      statusArrayForEndpoint = selectedStatus
-        .filter(item => item !== status)
-        .toString()
     } else if (!selectedStatus.includes(status)) {
-      // to add status to array
       setSelectedStatus(selectedStatus.concat(status))
-      statusArrayForEndpoint = selectedStatus.concat(status).toString()
-    } else {
-      // if user tries to deselect all filters - don't allow and show previous result
-      statusArrayForEndpoint = previousArray.toString()
     }
-
-    // GET request using fetch with async/await
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-    console.log("### MAIN STATS ###")
-    console.log(statusArrayForEndpoint)
-    // console.log(requestOptions)
-
-    // const response = await fetch(
-    //   `${process.env.publicDeltaCore}/api/v1/tests_history/test_status/${statusArrayForEndpoint}/test_run/${testRunId}`,
-    //   requestOptions
-    // )
-    // we refresh the props here
-    // let new_data = await response.json();
-    // console.log("NEW DATA: ")
-    // console.log(new_data)
-    // console.log("NEW DATA TEST SUITES: ")
-    // console.log(new_data.test_suites)
-    // setData(new_data.test_suites)
-    // updateSuites(await new_data.test_suites)
-    // console.log("DATA: ")
-    // console.log(data)
   }
 
   // dark mode switch
@@ -202,7 +157,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
     <NoSsr>
     <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
     <title>Δ | Tests</title>
-      {tests[0] ? ( // checking if props exist (if there are tests for this run)
+      {test_run ? ( // checking if there data for this test_run
         //  id needed here for scrolling to the top when needed
         <div id="page-top">
           <div>
@@ -213,7 +168,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                 </Link>
                 <Link
                   color="inherit"
-                  href={`/launches/${tests[0].project_id}`}
+                  href={`/launches/${test_run.project_id}`}
                 >
                   Launches
                 </Link>
@@ -246,9 +201,9 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       color="secondary"
                     >
                       {" "}
-                      {tests[0].test_type}
+                      {test_run.test_type}
                     </Link>{" "}
-                    run of <span style={{ color: "#605959" }}>{tests[0].project_name}</span> project
+                    run of <span style={{ color: "#605959" }}>{test_run.project_name}</span> project
                   </Typography>
                   <div
                     style={{
@@ -257,12 +212,12 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       alignItems: "baseline",
                     }}
                   >
-                    {tests[0].test_run_data &&
-                    tests[0].test_run_data.spectre_test_run_url ? (
+                    {test_run.test_run_data &&
+                    test_run.test_run_data.spectre_test_run_url ? (
                       <div>
                         <Button
                           href={
-                            tests[0].test_run_data
+                            test_run.test_run_data
                               .spectre_test_run_url + "?status=fail"
                           }
                           className={classes.spectreButton}
@@ -283,9 +238,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       <Button
                         onClick={() =>
                           handleStatusFilter(
-                            "2",
-                            tests[0].test_run_id
-                          )
+                            "2"                          )
                         }
                         className={
                           selectedStatus.includes("2")
@@ -305,9 +258,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       <Button
                         onClick={() =>
                           handleStatusFilter(
-                            "1",
-                            tests[0].test_run_id
-                          )
+                            "1"                          )
                         }
                         className={
                           selectedStatus.includes("1")
@@ -327,9 +278,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       <Button
                         onClick={() =>
                           handleStatusFilter(
-                            "3",
-                            tests[0].test_run_id
-                          )
+                            "3"                          )
                         }
                         className={
                           selectedStatus.includes("3")
@@ -349,9 +298,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       <Button
                         onClick={() =>
                           handleStatusFilter(
-                            "4",
-                            tests[0].test_run_id
-                          )
+                            "4"                          )
                         }
                         className={
                           selectedStatus.includes("4")
@@ -371,9 +318,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       <Button
                         onClick={() =>
                           handleStatusFilter(
-                            "5",
-                            tests[0].test_run_id
-                          )
+                            "5"                          )
                         }
                         className={
                           selectedStatus.includes("5")
@@ -392,31 +337,9 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       </Button>
                     </div>
                   </div>
-                  {/* {data ? ( // if there is no data returned from filtering - show error message
-                    <div>
-                        <ListOfSuites
-                          children={data}
-                          stats={selectedStatus}
-                          darkMode={state.darkMode}
-                        ></ListOfSuites>
-                    </div>
-                  ) : (
-                    <div>
-                      <Typography
-                        style={{
-                          fontStyle: "italic",
-                          margin: "20px",
-                          color: "#d62727",
-                        }}
-                      >
-                        Sorry, there are no matching tests for this filter
-                      </Typography>
-                    </div>
-                  )} */}
                   <div>
                     <ListOfSuites
-                      test_run_id={tests[0].test_run_id}
-                      // children={data}
+                      test_run_id={test_run.test_run_id}
                       stats={selectedStatus}
                       darkMode={state.darkMode}
                     ></ListOfSuites>
@@ -427,7 +350,7 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
           </Container>
         </div>
       ) : (
-        <h1>No suites were found for this run! </h1>
+        <h1>There is no data for this test run! </h1>
       )}
     </BasePage>
     </NoSsr>
@@ -437,17 +360,16 @@ function Tests({tests}: InferGetServerSidePropsType<typeof getServerSideProps>) 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { testsByRunId } = context.query
 
-  // Suites and tests (inside suites)
-  const testsByTestRunIdReq = await fetch(
-    `${process.env.deltaCore}/api/v1/tests_history/test_run/${testsByRunId}`,
+  const t_run = await fetch(
+    `${process.env.deltaCore}/api/v1/test_run/${testsByRunId}`,
     {
       method: "GET",
     }
   )
-  const tests: SuiteAndTest[] = await testsByTestRunIdReq.json()
+  const test_run: TestRun = await t_run.json()
 
   return {
-    props: { tests },
+    props: { test_run },
   }
 }
 

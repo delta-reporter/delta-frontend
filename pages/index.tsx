@@ -118,6 +118,21 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(10, 15, 3),
   },
 }))
+
+export interface TestRun {
+  test_run_id: number,
+  launch_id: number,
+  project_id: number,
+  project_name: string,
+  launch: string,
+  test_type: string,
+  start_datetime: string,
+  end_datetime: string,
+  duration: string,
+  test_run_status: string,
+  test_run_data: {},
+}
+
 export interface TestProject {
   project_id: number
   name: string
@@ -143,23 +158,6 @@ export interface TestLaunch {
       tests_skipped: number
     }
   ]
-}
-export interface TestRun {
-  test_run_id: number
-  launch_id: number
-  project_id: number
-  launch_name: string
-  duration: {
-    days: number
-    hours: number
-    minutes: number
-    months: number
-    seconds: number
-    years: number
-  }
-  test_run_status: string
-  test_type: string
-  data: { url?: string }
 }
 
 export interface SuiteAndTest {
