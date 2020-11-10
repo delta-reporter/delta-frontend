@@ -83,7 +83,7 @@ export const ListOfTests = function (props : Props) {
         test_suite_history_id
     } = props
     const classes = useStyles(props)
-    const {loading, noData, tests, mutate} = getTests(test_suite_history_id, stats);
+    const {loading, noData, tests} = getTests(test_suite_history_id, stats);
 
     function setTextLineStyle(isHighlighted, darkMode) {
         if (isHighlighted && ! darkMode)  // light mode - highlighted

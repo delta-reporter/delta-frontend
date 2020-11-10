@@ -86,7 +86,7 @@ type Props = {
 
 export const ListOfSuites = function (props : Props) {
 const {test_run_id, stats, darkMode} = props
-const {loading, noData, testSuites, mutate} = getTestSuites(test_run_id, stats.toString());
+const {loading, noData, testSuites} = getTestSuites(test_run_id, stats.toString());
 
 const classes = useStyles(props)
 const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
