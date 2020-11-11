@@ -43,17 +43,17 @@ steps:
   displayName: 'Delta Frontend - PR Check'
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-- script: |
-    ./node_modules/.bin/next &
-    cd tests/end_to_end
-    node -v
-    npm install
-    npm run test:preview
-  displayName: 'Delta Frontend - PR End to End Tests Check'
-  condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+# - script: |
+#     ./node_modules/.bin/next &
+#     cd tests/end_to_end
+#     node -v
+#     npm install
+#     npm run test:preview
+#   displayName: 'Delta Frontend - PR End to End Tests Check'
+#   condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-- script: |
-    cd tests/end_to_end
-    ARGOS_COMMIT=$(Build.SourceVersion) ARGOS_BRANCH=$(branchName) \
-    ./node_modules/.bin/argos upload screenshots/reference --token $(ARGOS_TOKEN) || true
-  displayName: 'Delta Frontend - Screenshots upload to Argos'
+# - script: |
+#     cd tests/end_to_end
+#     ARGOS_COMMIT=$(Build.SourceVersion) ARGOS_BRANCH=$(branchName) \
+#     ./node_modules/.bin/argos upload screenshots/reference --token $(ARGOS_TOKEN) || true
+#   displayName: 'Delta Frontend - Screenshots upload to Argos'

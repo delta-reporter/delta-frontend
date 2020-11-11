@@ -29,8 +29,7 @@ function getScreenshotName(basePath) {
 }
 
 config.services.push("chromedriver")
-config.services.push([new DeltaService(delta_config)],
-)
+config.services.push(['wdio-delta-reporter-service', new DeltaService(delta_config)])
 config.services.push([
   "novus-visual-regression",
   {
