@@ -8,16 +8,16 @@ import {
   NoSsr,
   Switch,
 } from "@material-ui/core"
-import { GetServerSideProps } from 'next'
-import { InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from "next"
+import { InferGetServerSidePropsType } from "next"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
 import { BasePage } from "../components/templates"
 import fetch from "isomorphic-unfetch"
-import useSocket from '../hooks/useSocket'
+import useSocket from "../hooks/useSocket"
 import Router from "next/router"
-import WbSunnyIcon from '@material-ui/icons/WbSunny'
-import Brightness2Icon from '@material-ui/icons/Brightness2'
+import WbSunnyIcon from "@material-ui/icons/WbSunny"
+import Brightness2Icon from "@material-ui/icons/Brightness2"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -70,7 +70,6 @@ const useStyles = makeStyles(theme => ({
   projectTitle: {
     padding: "60px 0",
     textAlign: "center",
-
   },
   pageTitleSectionDark: {
     backgroundColor: theme.palette.secondary.dark,
@@ -99,35 +98,35 @@ const useStyles = makeStyles(theme => ({
     border: "1px grey solid",
   },
   modalLight: {
-    position: 'absolute',
+    position: "absolute",
     width: 400,
     height: 300,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(10, 15, 3),
   },
   modalDark: {
-    position: 'absolute',
+    position: "absolute",
     width: 400,
     height: 300,
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.light,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(10, 15, 3),
   },
 }))
 
 export interface TestRun {
-  test_run_id: number,
-  launch_id: number,
-  project_id: number,
-  project_name: string,
-  launch_name: string,
-  test_type: string,
-  start_datetime: string,
-  end_datetime: string,
+  test_run_id: number
+  launch_id: number
+  project_id: number
+  project_name: string
+  launch_name: string
+  test_type: string
+  start_datetime: string
+  end_datetime: string
   duration: {
     days: number
     hours: number
@@ -135,11 +134,11 @@ export interface TestRun {
     months: number
     seconds: number
     years: number
-  },
-  test_run_status: string,
+  }
+  test_run_status: string
   test_run_data: {
     spectre_test_run_url?: string
-  },
+  }
 }
 
 export interface TestProject {
@@ -318,56 +317,75 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
 
   const [testProjects, setTestProjects] = useState(projects || [])
 
-  useSocket('delta_project', testProject => {
+  useSocket("delta_project", testProject => {
     setTestProjects(testProjects => [...testProjects, testProject])
   })
 
   // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
-  });
+  })
 
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+    localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) //setting a variable in the browser storage
   }, [state.darkMode])
 
   function getInitialDarkModeState(): boolean {
-    if (typeof window !== 'undefined') {
-      const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
+    if (typeof window !== "undefined") {
+      const savedColorMode = JSON.parse(localStorage.getItem("darkMode")) //checking the 'dark' var from browser storage
       return savedColorMode || false
-    }
-    else {
+    } else {
       return false
     }
   }
 
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
+    setState({ ...state, [event.target.name]: event.target.checked })
+  }
 
   return (
     <NoSsr>
-      <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
+      <BasePage
+        className={state.darkMode ? classes.rootDark : classes.rootLight}
+        darkMode={state.darkMode}
+      >
         <title>Δ | Projects</title>
-        <Paper square={true} className={state.darkMode ? classes.pageTitleSectionDark : classes.pageTitleSectionLight}>
-          <Typography variant="h1" color="inherit" className={classes.pageTitle}>
-            Projects
-              </Typography>
+        <Paper
+          square={true}
+          className={
+            state.darkMode
+              ? classes.pageTitleSectionDark
+              : classes.pageTitleSectionLight
+          }
+        >
           <Typography
-            variant="subtitle1"
+            variant="h1"
             color="inherit"
+            className={classes.pageTitle}
           >
+            Projects
+          </Typography>
+          <Typography variant="subtitle1" color="inherit">
             Select a project to view latest test runs
-              </Typography>
+          </Typography>
         </Paper>
         <Container maxWidth="lg" className={classes.container}>
           <div style={{ float: "right", width: "15%", marginTop: "15px" }}>
             <Grid component="label" container alignItems="center" spacing={1}>
-              <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
               <Grid item>
-                <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary" />
+                <WbSunnyIcon></WbSunnyIcon>
               </Grid>
-              <Grid item><Brightness2Icon></Brightness2Icon></Grid>
+              <Grid item>
+                <Switch
+                  checked={state.darkMode}
+                  onChange={handleDarkModeChange}
+                  name="darkMode"
+                  color="primary"
+                />
+              </Grid>
+              <Grid item>
+                <Brightness2Icon></Brightness2Icon>
+              </Grid>
             </Grid>
           </div>
           {testProjects[0] ? ( // checking if props exist (if there are projects)
@@ -375,15 +393,18 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
               {testProjects.map(project => (
                 <Grid item xs={12} sm={3} key={project.project_id}>
                   <List>
-                    <ListItem
-                      button
-                    >
+                    <ListItem button>
                       <Paper
-                        className={state.darkMode ? classes.paperDark : classes.paperLight}
+                        className={
+                          state.darkMode
+                            ? classes.paperDark
+                            : classes.paperLight
+                        }
                         id={`paper_${project.project_id}`}
-                        onClick={() => Router.push(`/launches/${project.project_id}`)}
+                        onClick={() =>
+                          Router.push(`/launches/${project.project_id}`)
+                        }
                       >
-
                         <Typography
                           component="p"
                           variant="h4"
@@ -398,8 +419,8 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
               ))}
             </Grid>
           ) : (
-              <h1>No projects were found! </h1>
-            )}
+            <h1>No projects were found! </h1>
+          )}
         </Container>
       </BasePage>
     </NoSsr>
