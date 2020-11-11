@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react"
+import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
-import {makeStyles} from "@material-ui/core/styles"
-import {TestRun} from "../index"
-import {GetServerSideProps} from 'next'
-import {InferGetServerSidePropsType} from 'next'
-import {BasePage, ListOfSuites} from "../../components/templates"
+import { makeStyles } from "@material-ui/core/styles"
+import { TestRun } from "../index"
+import { GetServerSideProps } from 'next'
+import { InferGetServerSidePropsType } from 'next'
+import { BasePage, ListOfSuites } from "../../components/templates"
 import {
     Grid,
     Paper,
@@ -113,7 +113,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Tests({test_run} : InferGetServerSidePropsType < typeof getServerSideProps >) {
+function Tests({ test_run }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const classes = useStyles(test_run)
 
     // We are using two things here. State and var, they will hold the same value but used for different purposes
@@ -136,9 +136,9 @@ function Tests({test_run} : InferGetServerSidePropsType < typeof getServerSidePr
     }
 
     // dark mode switch
-    const [state, setState] = useState({darkMode: getInitialDarkModeState()});
+    const [state, setState] = useState({ darkMode: getInitialDarkModeState() });
 
-    const handleDarkModeChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+    const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({
             ...state,
             [event.target.name]: event.target.checked
@@ -159,265 +159,265 @@ function Tests({test_run} : InferGetServerSidePropsType < typeof getServerSidePr
     }
 
     return (
-    <NoSsr>
-        <BasePage className={
+        <NoSsr>
+            <BasePage className={
                 state.darkMode ? classes.rootDark : classes.rootLight
             }
-            darkMode={
-                state.darkMode
-        }>
-            <title>Δ | Tests</title>
-            {
-            test_run ? (
-                // checking if there data for this test_run
-                // id needed here for scrolling to the top when needed 
-                <div id="page-top">
-                    <div>
-                        <div style={
-                            {float: "left"}
-                        }>
-                            <Breadcrumbs style={
-                                    {
-                                        paddingLeft: "30px",
-                                        marginTop: "20px"
-                                    }
-                                }
-                                className={
-                                    state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
-                            }>
-                                <Link color="inherit"
-                                    href={`/`}>
-                                    Projects
-                                </Link>
-                                <Link color="inherit"
-                                    href={
-                                        `/launches/${
-                                            test_run.project_id
-                                        }`
+                darkMode={
+                    state.darkMode
+                }>
+                <title>Δ | Tests</title>
+                {
+                    test_run ? (
+                        // checking if there data for this test_run
+                        // id needed here for scrolling to the top when needed 
+                        <div id="page-top">
+                            <div>
+                                <div style={
+                                    { float: "left" }
                                 }>
-                                    Launches
-                                </Link>
-                                <Typography color="textPrimary"
-                                    className={
-                                        state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
-                                }>Tests</Typography>
-                            </Breadcrumbs>
-                        </div>
-                        <div style={
-                            {
-                                float: "right",
-                                width: "15%",
-                                marginTop: "15px"
-                            }
-                        }>
-                            <Grid component="label" container alignItems="center"
-                                spacing={1}>
-                                <Grid item>
-                                    <WbSunnyIcon></WbSunnyIcon>
-                                </Grid>
-                                <Grid item>
-                                    <Switch checked={
-                                            state.darkMode
+                                    <Breadcrumbs style={
+                                        {
+                                            paddingLeft: "30px",
+                                            marginTop: "20px"
                                         }
-                                        onChange={handleDarkModeChange}
-                                        name="darkMode"
-                                        color="primary"/>
-                                </Grid>
-                                <Grid item>
-                                    <Brightness2Icon></Brightness2Icon>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </div>
-                    <Container maxWidth="lg"
-                        className={
-                            classes.container
-                    }>
-                        <Grid container
-                            spacing={4}>
-                            <Grid item
-                                xs={12}>
-                                <Paper className={
-                                        state.darkMode ? classes.paperDark : classes.paperLight
                                     }
-                                    elevation={2}>
-                                    <Typography variant="h6"
-                                        style={
-                                            {
-                                                fontWeight: 400,
-                                                margin: "5px"
-                                            }
-                                        }
                                         className={
                                             state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
-                                    }>
-                                        Test suites for{" "}
-                                        <Link style={
-                                                {color: "#605959"}
+                                        }>
+                                        <Link color="inherit"
+                                            href={`/`}>
+                                            Projects
+                                </Link>
+                                        <Link color="inherit"
+                                            href={
+                                                `/launches/${test_run.project_id
+                                                }`
+                                            }>
+                                            Launches
+                                </Link>
+                                        <Typography color="textPrimary"
+                                            className={
+                                                state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
+                                            }>Tests</Typography>
+                                    </Breadcrumbs>
+                                </div>
+                                <div style={
+                                    {
+                                        float: "right",
+                                        width: "15%",
+                                        marginTop: "15px"
+                                    }
+                                }>
+                                    <Grid component="label" container alignItems="center"
+                                        spacing={1}>
+                                        <Grid item>
+                                            <WbSunnyIcon></WbSunnyIcon>
+                                        </Grid>
+                                        <Grid item>
+                                            <Switch checked={
+                                                state.darkMode
                                             }
-                                            underline="none"
-                                            color="secondary"> {" "}
-                                            {
-                                            test_run.test_type
-                                        } </Link>
-                                        {" "}
+                                                onChange={handleDarkModeChange}
+                                                name="darkMode"
+                                                color="primary" />
+                                        </Grid>
+                                        <Grid item>
+                                            <Brightness2Icon></Brightness2Icon>
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
+                            <Container maxWidth="lg"
+                                className={
+                                    classes.container
+                                }>
+                                <Grid container
+                                    spacing={4}>
+                                    <Grid item
+                                        xs={12}>
+                                        <Paper className={
+                                            state.darkMode ? classes.paperDark : classes.paperLight
+                                        }
+                                            elevation={2}>
+                                            <Typography variant="h6"
+                                                style={
+                                                    {
+                                                        fontWeight: 400,
+                                                        margin: "5px"
+                                                    }
+                                                }
+                                                className={
+                                                    state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
+                                                }>
+                                                Test suites for{" "}
+                                                <Link style={
+                                                    { color: "#605959" }
+                                                }
+                                                    underline="none"
+                                                    color="secondary"> {" "}
+                                                    {
+                                                        test_run.test_type
+                                                    } </Link>
+                                                {" "}
                                         run of
                                         <span style={
-                                            {color: "#605959"}
-                                        }> {
-                                            test_run.project_name
-                                        }</span>
+                                                    { color: "#605959" }
+                                                }> {
+                                                        test_run.project_name
+                                                    }</span>
                                         project
                                     </Typography>
-                                    <div style={
-                                        {
-                                            display: "flex",
-                                            marginTop: "30px",
-                                            alignItems: "baseline"
-                                        }
-                                    }> {
-                                        test_run.test_run_data && test_run.test_run_data.spectre_test_run_url ? (<div>
-                                            <Button href={
-                                                    test_run.test_run_data.spectre_test_run_url + "?status=fail"
+                                            <div style={
+                                                {
+                                                    display: "flex",
+                                                    marginTop: "30px",
+                                                    alignItems: "baseline"
                                                 }
-                                                className={
-                                                    classes.spectreButton
-                                                }
-                                                target="_blank">
-                                                Spectre
+                                            }> {
+                                                    test_run.test_run_data && test_run.test_run_data.spectre_test_run_url ? (<div>
+                                                        <Button href={
+                                                            test_run.test_run_data.spectre_test_run_url + "?status=fail"
+                                                        }
+                                                            className={
+                                                                classes.spectreButton
+                                                            }
+                                                            target="_blank">
+                                                            Spectre
                                             </Button>
-                                        </div>) : null
-                                    }
-                                        <div style={
-                                            {
-                                                display: "flex",
-                                                paddingLeft: "145px",
-                                                alignItems: "baseline"
-                                            }
-                                        }>
-                                            <p className={
-                                                state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
-                                            }>
-                                                Filter by Status:
+                                                    </div>) : null
+                                                }
+                                                <div style={
+                                                    {
+                                                        display: "flex",
+                                                        paddingLeft: "145px",
+                                                        alignItems: "baseline"
+                                                    }
+                                                }>
+                                                    <p className={
+                                                        state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode
+                                                    }>
+                                                        Filter by Status:
                                             </p>
-                                            <Button onClick={
-                                                    () => handleStatusFilter("2")
-                                                }
-                                                className={
-                                                    selectedStatus.includes("2") ? classes.passedSelected : classes.passedNotSelected
-                                                }
-                                                style={
-                                                    {
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        marginLeft: "10px",
-                                                        border: "1px #a7bab1 solid",
-                                                        fontSize: "12px"
+                                                    <Button onClick={
+                                                        () => handleStatusFilter("2")
                                                     }
-                                            }>
-                                                passed
+                                                        className={
+                                                            selectedStatus.includes("2") ? classes.passedSelected : classes.passedNotSelected
+                                                        }
+                                                        style={
+                                                            {
+                                                                width: "90px",
+                                                                height: "30px",
+                                                                marginLeft: "10px",
+                                                                border: "1px #a7bab1 solid",
+                                                                fontSize: "12px"
+                                                            }
+                                                        }>
+                                                        passed
                                             </Button>
-                                            <Button onClick={
-                                                    () => handleStatusFilter("1")
-                                                }
-                                                className={
-                                                    selectedStatus.includes("1") ? classes.failedSelected : classes.failedNotSelected
-                                                }
-                                                style={
-                                                    {
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        marginLeft: "10px",
-                                                        border: "1px #c3acac solid",
-                                                        fontSize: "12px"
+                                                    <Button onClick={
+                                                        () => handleStatusFilter("1")
                                                     }
-                                            }>
-                                                failed
+                                                        className={
+                                                            selectedStatus.includes("1") ? classes.failedSelected : classes.failedNotSelected
+                                                        }
+                                                        style={
+                                                            {
+                                                                width: "90px",
+                                                                height: "30px",
+                                                                marginLeft: "10px",
+                                                                border: "1px #c3acac solid",
+                                                                fontSize: "12px"
+                                                            }
+                                                        }>
+                                                        failed
                                             </Button>
-                                            <Button onClick={
-                                                    () => handleStatusFilter("3")
-                                                }
-                                                className={
-                                                    selectedStatus.includes("3") ? classes.runningSelected : classes.runningNotSelected
-                                                }
-                                                style={
-                                                    {
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        marginLeft: "10px",
-                                                        border: "1px #c5baae solid",
-                                                        fontSize: "12px"
+                                                    <Button onClick={
+                                                        () => handleStatusFilter("3")
                                                     }
-                                            }>
-                                                running
+                                                        className={
+                                                            selectedStatus.includes("3") ? classes.runningSelected : classes.runningNotSelected
+                                                        }
+                                                        style={
+                                                            {
+                                                                width: "90px",
+                                                                height: "30px",
+                                                                marginLeft: "10px",
+                                                                border: "1px #c5baae solid",
+                                                                fontSize: "12px"
+                                                            }
+                                                        }>
+                                                        running
                                             </Button>
-                                            <Button onClick={
-                                                    () => handleStatusFilter("4")
-                                                }
-                                                className={
-                                                    selectedStatus.includes("4") ? classes.incompleteSelected : classes.incompleteNotSelected
-                                                }
-                                                style={
-                                                    {
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        marginLeft: "10px",
-                                                        border: "1px #c5baae solid",
-                                                        fontSize: "12px"
+                                                    <Button onClick={
+                                                        () => handleStatusFilter("4")
                                                     }
-                                            }>
-                                                incomplete
+                                                        className={
+                                                            selectedStatus.includes("4") ? classes.incompleteSelected : classes.incompleteNotSelected
+                                                        }
+                                                        style={
+                                                            {
+                                                                width: "90px",
+                                                                height: "30px",
+                                                                marginLeft: "10px",
+                                                                border: "1px #c5baae solid",
+                                                                fontSize: "12px"
+                                                            }
+                                                        }>
+                                                        incomplete
                                             </Button>
-                                            <Button onClick={
-                                                    () => handleStatusFilter("5")
-                                                }
-                                                className={
-                                                    selectedStatus.includes("5") ? classes.skippedSelected : classes.skippedNotSelected
-                                                }
-                                                style={
-                                                    {
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        marginLeft: "10px",
-                                                        border: "1px #c7c5c5 solid",
-                                                        fontSize: "12px"
+                                                    <Button onClick={
+                                                        () => handleStatusFilter("5")
                                                     }
-                                            }>
-                                                skipped
+                                                        className={
+                                                            selectedStatus.includes("5") ? classes.skippedSelected : classes.skippedNotSelected
+                                                        }
+                                                        style={
+                                                            {
+                                                                width: "90px",
+                                                                height: "30px",
+                                                                marginLeft: "10px",
+                                                                border: "1px #c7c5c5 solid",
+                                                                fontSize: "12px"
+                                                            }
+                                                        }>
+                                                        skipped
                                             </Button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <ListOfSuites test_run_id={
-                                                test_run.test_run_id
-                                            }
-                                            stats={selectedStatus}
-                                            darkMode={
-                                                state.darkMode
-                                        }></ListOfSuites>
-                                    </div>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </Container>
-                </div>
-            ) : (<h1>There is no data for this test run!
-                </h1>)
-        } </BasePage>
-    </NoSsr>)
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <ListOfSuites test_run_id={
+                                                    test_run.test_run_id
+                                                }
+                                                    stats={selectedStatus}
+                                                    darkMode={
+                                                        state.darkMode
+                                                    }></ListOfSuites>
+                                            </div>
+                                        </Paper>
+                                    </Grid>
+                                </Grid>
+                            </Container>
+                        </div>
+                    ) : (<h1>There is no data for this test run!
+                    </h1>)
+                } </BasePage>
+        </NoSsr>)
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {testsByRunId} = context.query
+    const { testsByRunId } = context.query
 
-    const t_run = await fetch(`${
-        process.env.deltaCore
-    }/api/v1/test_run/${testsByRunId}`, {method: "GET"})
+    const t_run = await fetch(`${process.env.deltaCore
+        }/api/v1/test_run/${testsByRunId}`, { method: "GET" })
     const test_run: TestRun = await t_run.json()
 
-    return {props: {
+    return {
+        props: {
             test_run
-        }}
+        }
+    }
 }
 
 export default Tests

@@ -1,6 +1,6 @@
-import React, {useState} from "react"
-import {makeStyles} from "@material-ui/core/styles"
-import {showStatusIcon, showTestStats, TestExpanded, ListOfTests} from "."
+import React, { useState } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import { showStatusIcon, showTestStats, TestExpanded, ListOfTests } from "."
 import {
     Typography,
     Accordion,
@@ -79,157 +79,158 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type Props = {
-  test_run_id: number,
-  stats,
-  darkMode: boolean
+    test_run_id: number,
+    stats,
+    darkMode: boolean
 }
 
-export const ListOfSuites = function (props : Props) {
-const {test_run_id, stats, darkMode} = props
-const {loading, noData, testSuites} = getTestSuites(test_run_id, stats.toString());
+export const ListOfSuites = function (props: Props) {
+    const { test_run_id, stats, darkMode } = props
+    const { loading, noData, testSuites } = getTestSuites(test_run_id, stats.toString());
 
-const classes = useStyles(props)
-const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
-const [highlightedTest, setHighlightedTest] = useState(0)
+    const classes = useStyles(props)
+    const [testInfoSection, setTestInfoSection] = useState(["No test selected"])
+    const [highlightedTest, setHighlightedTest] = useState(0)
 
-function changeRightSide(value, testId) {
-    setTestInfoSection(value)
-    setHighlightedTest(testId)
-}
+    function changeRightSide(value, testId) {
+        setTestInfoSection(value)
+        setHighlightedTest(testId)
+    }
 
-function setStats() {
-    let settingStats = []
-    if (stats.includes("2")) 
-        settingStats.push("passed")
-    
-    if (stats.includes("1")) 
-        settingStats.push("failed")
-    
-    if (stats.includes("4")) 
-        settingStats.push("incomplete")
-    
-    if (stats.includes("3")) 
-        settingStats.push("running")
-    
-    if (stats.includes("5")) 
-        settingStats.push("skipped")
-    
-    return settingStats
-}
-let statsArray = setStats()
+    function setStats() {
+        let settingStats = []
+        if (stats.includes("2"))
+            settingStats.push("passed")
 
-const [expandedSuite, setExpandedSuite] = useState < string | false > (false)
-const expandCollapseSuite = (suitePanel : string) => (_event : React.ChangeEvent<{}>, isExpanded : boolean) => {
-    setExpandedSuite(isExpanded ? suitePanel : false)
-}
+        if (stats.includes("1"))
+            settingStats.push("failed")
 
-if (noData) {
-    return (<div>
-        <Typography style={
-            {
-                fontStyle: "italic",
-                margin: "20px",
-                color: "#d62727"
-            }
-        }>
-            Sorry, there are no matching tests for this filter
-        </Typography>
-    </div>)
-} else {
-    return (<div> {/* left-hand side for suites list */}
-        <div style={
-            {
-                float: "left",
-                width: "55%",
-                overflow: "hidden",
-                height: "max-content",
-                paddingRight: "20px",
-                marginTop: "30px"
-            }
-        }> {
-            loading ? "Loading test suites ..." : testSuites.map(suite => (<Accordion // list of expandable suites
-                key={
-                    suite.test_suite_history_id
+        if (stats.includes("4"))
+            settingStats.push("incomplete")
+
+        if (stats.includes("3"))
+            settingStats.push("running")
+
+        if (stats.includes("5"))
+            settingStats.push("skipped")
+
+        return settingStats
+    }
+    let statsArray = setStats()
+
+    const [expandedSuite, setExpandedSuite] = useState<string | false>(false)
+    const expandCollapseSuite = (suitePanel: string) => (_event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+        setExpandedSuite(isExpanded ? suitePanel : false)
+    }
+
+    if (noData) {
+        return (<div>
+            <Typography style={
+                {
+                    fontStyle: "italic",
+                    margin: "20px",
+                    color: "#d62727"
                 }
-                expanded={
-                    expandedSuite === suite.name
-                }
-                onChange={
-                    expandCollapseSuite(suite.name)
-                }
-                TransitionProps={
-                    {unmountOnExit: true}
-                }
-                className={
-                    darkMode ? classes.backgroundDark : classes.backgroundWhite
             }>
-                <AccordionSummary expandIcon={<ExpandMoreIcon/>}> {
-                    showStatusIcon(suite.test_suite_status)
+                Sorry, there are no matching tests for this filter
+        </Typography>
+        </div>)
+    } else {
+        return (<div> {/* left-hand side for suites list */}
+            <div style={
+                {
+                    float: "left",
+                    width: "55%",
+                    overflow: "hidden",
+                    height: "max-content",
+                    paddingRight: "20px",
+                    marginTop: "30px"
                 }
-                    <Typography className={
-                        darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight
-                    }> {
-                        suite.name
-                    } </Typography>
-                    {
-                    showTestStats(suite.tests_passed, suite.tests_failed, suite.tests_incomplete, suite.tests_skipped, statsArray)
-                }
-                    <FormControlLabel aria-label="Reviewed"
-                        onClick={
-                            (event) => event.stopPropagation()
-                        }
-                        // to stop accordion from expanding
-                        onFocus={
-                            (event) => event.stopPropagation()
-                        }
-                        control={
-                            <Tooltip
-                        title="Mark suite as reviewed">
-                        <UseAnimations
-                            animationKey="checkbox"
-                        style={
-                        {
-                            position: "absolute",
-                            right: "55px",
-                            width: "20px"
-                        }}
-                        className={
-                            classes.greyTick
-                        }/>
-                        </Tooltip>
-                        }
-                        label=""/>
-                </AccordionSummary>
-                <AccordionDetails> {/* Expandable tests list for each suite */}
-                    <List key={
+            }> {
+                    loading ? "Loading test suites ..." : testSuites.map(suite => (<Accordion // list of expandable suites
+                        key={
                             suite.test_suite_history_id
                         }
-                        dense>
-                        <ListOfTests 
-                            showTest={changeRightSide}
-                            highlightedTest={highlightedTest}
-                            darkMode={darkMode}
-                            stats={
-                                stats.toString()
+                        expanded={
+                            expandedSuite === suite.name
+                        }
+                        onChange={
+                            expandCollapseSuite(suite.name)
+                        }
+                        TransitionProps={
+                            { unmountOnExit: true }
+                        }
+                        className={
+                            darkMode ? classes.backgroundDark : classes.backgroundWhite
+                        }>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}> {
+                            showStatusIcon(suite.test_suite_status)
+                        }
+                            <Typography className={
+                                darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight
+                            }> {
+                                    suite.name
+                                } </Typography>
+                            {
+                                showTestStats(suite.tests_passed, suite.tests_failed, suite.tests_incomplete, suite.tests_skipped, statsArray)
                             }
-                            test_suite_history_id={
+                            <FormControlLabel aria-label="Reviewed"
+                                onClick={
+                                    (event) => event.stopPropagation()
+                                }
+                                // to stop accordion from expanding
+                                onFocus={
+                                    (event) => event.stopPropagation()
+                                }
+                                control={
+                                    <Tooltip
+                                        title="Mark suite as reviewed">
+                                        <UseAnimations
+                                            animationKey="checkbox"
+                                            style={
+                                                {
+                                                    position: "absolute",
+                                                    right: "55px",
+                                                    width: "20px"
+                                                }}
+                                            className={
+                                                classes.greyTick
+                                            } />
+                                    </Tooltip>
+                                }
+                                label="" />
+                        </AccordionSummary>
+                        <AccordionDetails> {/* Expandable tests list for each suite */}
+                            <List key={
                                 suite.test_suite_history_id
-                        }></ListOfTests>
-                    </List>
-                </AccordionDetails>
-            </Accordion>))
-        } </div>
-        <div style={
-            {
-                float: "left",
-                width: "45%",
-                overflow: "hidden"
-            }
-        }>
-          {/* right-hand side for test info */}
-          <TestExpanded darkMode={darkMode}>
-            {testInfoSection}
-          </TestExpanded>
-        </div>
-    </div>)
-}}
+                            }
+                                dense>
+                                <ListOfTests
+                                    showTest={changeRightSide}
+                                    highlightedTest={highlightedTest}
+                                    darkMode={darkMode}
+                                    stats={
+                                        stats.toString()
+                                    }
+                                    test_suite_history_id={
+                                        suite.test_suite_history_id
+                                    }></ListOfTests>
+                            </List>
+                        </AccordionDetails>
+                    </Accordion>))
+                } </div>
+            <div style={
+                {
+                    float: "left",
+                    width: "45%",
+                    overflow: "hidden"
+                }
+            }>
+                {/* right-hand side for test info */}
+                <TestExpanded darkMode={darkMode}>
+                    {testInfoSection}
+                </TestExpanded>
+            </div>
+        </div>)
+    }
+}

@@ -1,7 +1,7 @@
 import React from "react"
-import {makeStyles} from "@material-ui/core/styles"
-import {showStatusIcon, showResolutionText} from "."
-import {Typography, ListItem} from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles"
+import { showStatusIcon, showResolutionText } from "."
+import { Typography, ListItem } from "@material-ui/core"
 import getTests from "../../data/Tests"
 
 const useStyles = makeStyles(theme => ({
@@ -74,7 +74,7 @@ type Props = {
     test_suite_history_id: number
 }
 
-export const ListOfTests = function (props : Props) {
+export const ListOfTests = function (props: Props) {
     const {
         showTest,
         highlightedTest,
@@ -83,18 +83,18 @@ export const ListOfTests = function (props : Props) {
         test_suite_history_id
     } = props
     const classes = useStyles(props)
-    const {loading, noData, tests} = getTests(test_suite_history_id, stats);
+    const { loading, noData, tests } = getTests(test_suite_history_id, stats);
 
     function setTextLineStyle(isHighlighted, darkMode) {
-        if (isHighlighted && ! darkMode)  // light mode - highlighted
+        if (isHighlighted && !darkMode)  // light mode - highlighted
             return classes.backgroundGrey
-         else if (isHighlighted && darkMode)  // dark mode - highlighted
+        else if (isHighlighted && darkMode)  // dark mode - highlighted
             return classes.backgroundDarkGrey
-         else if (isHighlighted && ! darkMode)  // light mode - not highlighted
+        else if (isHighlighted && !darkMode)  // light mode - not highlighted
             return classes.backgroundWhite
-         else if (! isHighlighted && darkMode)  // dark mode - not highlighted
+        else if (!isHighlighted && darkMode)  // dark mode - not highlighted
             return classes.testBackgroundDark
-        
+
     }
 
     if (noData) {
@@ -112,40 +112,40 @@ export const ListOfTests = function (props : Props) {
     } else {
         return (<div> {
             loading ? "Loading tests..." : tests.map(test => (
-            <a key={
+                <a key={
                     test.test_id
                 }
-                href="#page-top"
-                style={
-                    {
-                        textDecoration: "none",
-                        color: "black"
-                    }
-            }>
-                <ListItem button
-                    key={
-                        test.test_id
-                    }
-                    onClick={
-                        () => showTest(test, test.mother_test_id)
-                    }
-                    className={
-                        setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)
-                }> {
-                    showStatusIcon(test.status, test.is_flaky)
-                }
-                    <Typography className={
-                        darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight
-                    }> {
-                        test.name
-                    } </Typography>
-                    {/* if resolution for the current run exists - show it, otherwise - show the historical resolution inherited from previous results */}
-                    {
-                    test.test_history_resolution != 1 ? (<> {
-                        showResolutionText(test.test_history_resolution, darkMode, false)
-                    } </>) : (showResolutionText(test.test_resolution, darkMode, true))
-                } </ListItem>
-            </a>))
+                    href="#page-top"
+                    style={
+                        {
+                            textDecoration: "none",
+                            color: "black"
+                        }
+                    }>
+                    <ListItem button
+                        key={
+                            test.test_id
+                        }
+                        onClick={
+                            () => showTest(test, test.mother_test_id)
+                        }
+                        className={
+                            setTextLineStyle(test.mother_test_id === highlightedTest, darkMode)
+                        }> {
+                            showStatusIcon(test.status, test.is_flaky)
+                        }
+                        <Typography className={
+                            darkMode ? classes.nameOfTestOrSuiteDark : classes.nameOfTestOrSuiteLight
+                        }> {
+                                test.name
+                            } </Typography>
+                        {/* if resolution for the current run exists - show it, otherwise - show the historical resolution inherited from previous results */}
+                        {
+                            test.test_history_resolution != 1 ? (<> {
+                                showResolutionText(test.test_history_resolution, darkMode, false)
+                            } </>) : (showResolutionText(test.test_resolution, darkMode, true))
+                        } </ListItem>
+                </a>))
         } </div>)
     }
 }
