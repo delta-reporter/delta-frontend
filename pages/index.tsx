@@ -124,13 +124,22 @@ export interface TestRun {
   launch_id: number,
   project_id: number,
   project_name: string,
-  launch: string,
+  launch_name: string,
   test_type: string,
   start_datetime: string,
   end_datetime: string,
-  duration: string,
+  duration: {
+    days: number
+    hours: number
+    minutes: number
+    months: number
+    seconds: number
+    years: number
+  },
   test_run_status: string,
-  test_run_data: {},
+  test_run_data: {
+    spectre_test_run_url?: string
+  },
 }
 
 export interface TestProject {
