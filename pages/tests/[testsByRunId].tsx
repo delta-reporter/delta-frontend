@@ -160,7 +160,7 @@ function Tests({
           test_run.map(test_run => (
           // checking if there data for this test_run
           // id needed here for scrolling to the top when needed
-          <div id="page-top">
+          <div id="page-top" key={test_run.project_id}>
             <div>
               <div style={{ float: "left" }}>
                 <Breadcrumbs
@@ -181,7 +181,7 @@ function Tests({
                     color="inherit"
                     href={`/launches/${test_run.project_id}`}
                   >
-                    Launches
+                   {test_run.project_name} Launches
                   </Link>
                   <Typography
                     color="textPrimary"
@@ -191,7 +191,7 @@ function Tests({
                         : classes.textColorLightMode
                     }
                   >
-                    Tests
+                    {test_run.test_type} Tests
                   </Typography>
                 </Breadcrumbs>
               </div>
@@ -286,7 +286,7 @@ function Tests({
                       ) : (
                      <span style={{textDecoration:'underline' }}>   {test_run.duration.minutes} minutes {" "} </span>
                       )}
-                     <span style={{textDecoration:'underline' }}> {test_run.duration.seconds} seconds{" "} to execute </span>
+                     <span style={{textDecoration:'underline' }}> {test_run.duration.seconds} seconds{" "}</span> to execute 
                   </Typography>
                   <Typography style={{fontSize:"14px", color: 'grey'}} align="center">
                       This run has <span style={{ color: "green" }}> {test_run.tests_passed} passed</span>, {" "}
