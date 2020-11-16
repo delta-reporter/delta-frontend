@@ -191,7 +191,7 @@ function Tests({
                         : classes.textColorLightMode
                     }
                   >
-                    {test_run.test_type} Tests
+                    {test_run.test_type}
                   </Typography>
                 </Breadcrumbs>
               </div>
