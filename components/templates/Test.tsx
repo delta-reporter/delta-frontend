@@ -99,7 +99,6 @@ export const TestExpanded = function(props: TestProps) {
             }}
             className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
           >
-            {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
             {showStatusText(children.status, darkMode)} 
            <span style={{paddingLeft:"8px"}}> {children.name}</span>
           </Typography>
@@ -112,6 +111,7 @@ export const TestExpanded = function(props: TestProps) {
             </TabList>
             {/* info tab */}
             <TabPanel>
+            {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
               <Typography style={{ paddingTop: "20px" }}>
                 Full path:
                 <span style={{ color: "grey" }}> {children.file}</span>

@@ -106,10 +106,10 @@ export const ListOfTests = function(props: Props) {
           style={{
             fontStyle: "italic",
             margin: "20px",
-            color: "#d62727",
+            color: "grey",
           }}
         >
-          Sorry, there are no matching tests for this suite
+        No test results yet. They either take some time to load or there are no matching tests for this filter
         </Typography>
       </div>
     )

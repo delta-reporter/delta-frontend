@@ -219,7 +219,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
           <Link color="inherit" href={`/`}>
             Projects
           </Link>
-          <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>Launches</Typography>
+          <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> {launches[0].project} Launches</Typography>
         </Breadcrumbs>
         </div>
        

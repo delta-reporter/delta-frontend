@@ -176,14 +176,14 @@ export function showIsFlakyBadgeList(status, isFlaky) {
   if (isFlaky && status === "Failed") {
     statusIcon = (
       <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
-        <WarningIcon style={{color: "#d62727", width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px"}}></WarningIcon>  
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px",color: "#d62727" }}/> 
       </Tooltip>
     )
   }
   if (isFlaky && status === "Passed") {
     statusIcon = (
       <Tooltip title="Test passed this time. But might be flaky, was failing in past">
-        <WarningIcon style={{color: "green", width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px"}}></WarningIcon>  
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px",color: "green" }}/> 
       </Tooltip>
     )
   }
@@ -196,14 +196,14 @@ export function showIsFlakyBadgeTestExpanded(status, isFlaky) {
   if (isFlaky && status === "Failed") {
     statusIcon = (
       <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
-        <WarningIcon style={{color: "#d62727", width:"30px", height:"25px", marginBottom:"-7px"}}></WarningIcon>  
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px",marginBottom:"-7px" ,color: "#d62727" }}/> 
       </Tooltip>
     )
   }
   if (isFlaky && status === "Passed") {
     statusIcon = (
       <Tooltip title="Test passed this time. But might be flaky, was failing in past">
-        <WarningIcon style={{color: "green", width:"30px", height:"25px", marginBottom:"-7px"}}></WarningIcon>  
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px",marginBottom:"-7px" ,color: "green" }}/> 
       </Tooltip>
     )
   }

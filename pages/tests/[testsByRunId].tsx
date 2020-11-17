@@ -116,17 +116,7 @@ function Tests({
   test_run,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(test_run)
-
-  // We are using two things here. State and var, they will hold the same value but used for different purposes
-  // the way states work, `selectedStatus` state doesn't update immediately and it will have a old value inside the function, and correct value outside the function
-  // So we use `selectedStatus` state for refreshing the component, and `statusArrayForEndpoint` var for endpoint
-  const [selectedStatus, setSelectedStatus] = useState([
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-  ])
+  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
   async function handleStatusFilter(status) {
     if (selectedStatus.includes(status) && selectedStatus.length !== 1) {
@@ -167,9 +157,10 @@ function Tests({
       >
         <title>Δ | Tests</title>
         {test_run ? (
+          test_run.map(test_run => (
           // checking if there data for this test_run
           // id needed here for scrolling to the top when needed
-          <div id="page-top">
+          <div id="page-top" key={test_run.project_id}>
             <div>
               <div style={{ float: "left" }}>
                 <Breadcrumbs
@@ -190,7 +181,7 @@ function Tests({
                     color="inherit"
                     href={`/launches/${test_run.project_id}`}
                   >
-                    Launches
+                   {test_run.project_name} Launches
                   </Link>
                   <Typography
                     color="textPrimary"
@@ -200,7 +191,7 @@ function Tests({
                         : classes.textColorLightMode
                     }
                   >
-                    Tests
+                    {test_run.test_type}
                   </Typography>
                 </Breadcrumbs>
               </div>
@@ -243,38 +234,71 @@ function Tests({
                     }
                     elevation={2}
                   >
-                    <Typography
-                      variant="h6"
-                      style={{
-                        fontWeight: 400,
-                        margin: "5px",
-                      }}
-                      className={
-                        state.darkMode
-                          ? classes.textColorDarkMode
-                          : classes.textColorLightMode
-                      }
-                    >
-                      Test suites for{" "}
-                      <Link
-                        style={{ color: "#605959" }}
-                        underline="none"
-                        color="secondary"
-                      >
-                        {" "}
-                        {test_run.test_type}{" "}
-                      </Link>{" "}
-                      run of
-                      <span style={{ color: "#605959" }}>
-                        {" "}
-                        {test_run.project_name}
-                      </span>
-                      project
-                    </Typography>
+                    <div>
+        <div
+          style={{
+            float: "left",
+            width: "55%",
+            overflow: "hidden",
+            height: "max-content",
+            paddingRight: "20px",
+          }}
+        >  
+        <Typography
+        variant="h6"
+        style={{
+          fontWeight: 400,
+          margin: "5px",
+        }}
+        className={
+          state.darkMode
+            ? classes.textColorDarkMode
+            : classes.textColorLightMode
+        }
+      >
+        Test suites for{" "}
+        <Link
+          style={{ color: "#605959" }}
+          underline="none"
+          color="secondary"
+        >
+          {" "}
+          {test_run.test_type}{" "}
+        </Link>{" "}
+        run of
+        <span style={{ color: "#605959" }}>
+          {" "}
+          {test_run.project_name}
+        </span> {" "}
+        project
+      </Typography>
+      </div>
+          <div style={{
+            float: "right",
+            width: "32%",
+            overflow: "hidden",
+            marginTop:"10px"
+          }}>
+                  <Typography style={{fontSize:"14px", color: 'grey'}} align="center">
+                      This run took  
+                      {test_run.duration.minutes === 0 ? (
+                        <> </>
+                      ) : (
+                     <span style={{textDecoration:'underline' }}>   {test_run.duration.minutes} minutes {" "} </span>
+                      )}
+                     <span style={{textDecoration:'underline' }}> {test_run.duration.seconds} seconds{" "}</span> to execute 
+                  </Typography>
+                  <Typography style={{fontSize:"14px", color: 'grey'}} align="center">
+                      This run has <span style={{ color: "green" }}> {test_run.tests_passed} passed</span>, {" "}
+                      <span style={{ color: "#d62727" }}> {test_run.tests_failed} failed</span>, {" "}
+                      <span style={{ color: "#605959" }}> {test_run.tests_skipped} skipped</span> tests
+                  </Typography>
+            </div>
+      </div>
                     <div
                       style={{
                         display: "flex",
-                        marginTop: "30px",
+                        marginTop: "20px",
                         alignItems: "baseline",
                       }}
                     >
@@ -409,6 +433,7 @@ function Tests({
               </Grid>
             </Container>
           </div>
+          ))
         ) : (
           <h1>There is no data for this test run!</h1>
         )}{" "}
