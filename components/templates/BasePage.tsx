@@ -10,7 +10,7 @@ import {
   Menu,
   MenuItem} from "@material-ui/core"
 import { useRouter } from "next/router"
-import MenuIcon from '@material-ui/icons/Menu'
+import HelpIcon from '@material-ui/icons/Help'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,23 +88,10 @@ export const BasePage = function(props: Props) {
               Δ Delta Reporter
             </Link>
           </Typography>
-          <div style={{ float: "right", width: "5%"}}>
-            {/* Menu dropdown */}
-            <IconButton onClick={handleMenuClick} style={{marginTop:"7%"}}>
-              <MenuIcon />
-            </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-                style={{marginTop:"2%"}}
-              >
-                <MenuItem onClick={() => router.push(`/charts`)}>Test stats</MenuItem>
-                <MenuItem onClick={() => router.push(`https://delta-reporter.github.io/delta-reporter/`)}>Delta Documentation</MenuItem>
-
-              </Menu>
+          <div  style={{ float: "right"}}>
+            <IconButton href="https://delta-reporter.github.io/delta-reporter/" target="_blank" style={{marginTop:"5px", marginLeft:"5px"}}>
+            <HelpIcon/>
+              </IconButton>
             </div>
             </div>
         </Toolbar>
