@@ -6,10 +6,8 @@ import {
   Typography,
   Link,
   Toolbar,
-  IconButton,
-  Menu,
-  MenuItem} from "@material-ui/core"
-import { useRouter } from "next/router"
+  IconButton
+  } from "@material-ui/core"
 import HelpIcon from '@material-ui/icons/Help'
 
 const useStyles = makeStyles(theme => ({
@@ -56,18 +54,6 @@ type Props = {
 export const BasePage = function(props: Props) {
   const { children, className, darkMode } = props
   const classes = useStyles(props)
-  
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-  };
-  
-  const router = useRouter()
 
   return (
     <div className={`${classes.root} ${className}`}>
