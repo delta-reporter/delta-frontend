@@ -1,6 +1,6 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import { Paper, Typography, Tooltip } from "@material-ui/core"
+import { Paper, Typography, Tooltip, Button } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
@@ -44,6 +44,17 @@ const useStyles = makeStyles(theme => ({
     color: "#8c8d8d",
   },
   textColorLightMode: {
+  },
+  externalLogsButton: {
+    backgroundColor: theme.palette.secondary.dark,
+    width: "90px",
+    height: "30px",
+    marginLeft: "10px",
+    border: "1px #696969 solid",
+    fontSize: "12px",
+    color: "#7CFC00",
+    float: "right"
+
   },
 }))
 
@@ -111,6 +122,15 @@ export const TestExpanded = function(props: TestProps) {
             </TabList>
             {/* info tab */}
             <TabPanel>
+            <div>
+                <Button
+                  href="https://jenkins.dsch.build/job/automation/job/donedeal-web-tests/job/master/800/"
+                  className={classes.externalLogsButton}
+                  target="_blank"
+                >
+                  Logs
+                </Button>
+              </div>
             {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
               <Typography style={{ paddingTop: "20px" }}>
                 Full path:

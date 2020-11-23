@@ -110,6 +110,15 @@ const useStyles = makeStyles(theme => ({
     border: "1px #a7bab1 solid",
     fontSize: "12px",
   },
+  cicdButton: {
+    backgroundColor: theme.palette.primary.dark,
+    width: "90px",
+    height: "30px",
+    marginLeft: "10px",
+    border: "1px #87CEFA solid",
+    fontSize: "12px",
+    color: "#FFFFF0"
+  },
 }))
 
 function Tests({
@@ -303,12 +312,12 @@ function Tests({
                       }}
                     >
                       {" "}
-                      {test_run.test_run_data &&
-                      test_run.test_run_data.spectre_test_run_url ? (
+                      {/* {test_run.test_run_data &&
+                      test_run.test_run_data.spectre_test_run_url ? ( */}
                         <div>
                           <Button
                             href={
-                              test_run.test_run_data.spectre_test_run_url +
+                            //   test_run.test_run_data.spectre_test_run_url +
                               "?status=fail"
                             }
                             className={classes.spectreButton}
@@ -317,7 +326,16 @@ function Tests({
                             Spectre
                           </Button>
                         </div>
-                      ) : null}
+                    {/* //   ) : null} */}
+                      <div>
+                          <Button
+                            href="https://jenkins.dsch.build/job/automation/job/donedeal-web-tests/job/master/800/"
+                            className={classes.cicdButton}
+                            target="_blank"
+                          >
+                            CI/CD Job
+                          </Button>
+                        </div>
                       <div
                         style={{
                           display: "flex",

@@ -7,6 +7,7 @@ import {
   List,
   NoSsr,
   Switch,
+  IconButton,
 } from "@material-ui/core"
 import { GetServerSideProps } from "next"
 import { InferGetServerSidePropsType } from "next"
@@ -18,6 +19,8 @@ import useSocket from "../hooks/useSocket"
 import Router from "next/router"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
+import SettingsIcon from "@material-ui/icons/Settings"
+import ProjectSettingsModal from "../components/templates/settings/ProjectSettingsModal"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -115,6 +118,13 @@ const useStyles = makeStyles(theme => ({
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(10, 15, 3),
+  },
+  settingsButton: {
+    position: "absolute",
+    // float: "right",
+    right: "10%",
+    width: "10%",
+    height: "10%",
   },
 }))
 
@@ -394,6 +404,7 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
                 <Grid item xs={12} sm={3} key={project.project_id}>
                   <List>
                     <ListItem button>
+                      <ProjectSettingsModal />
                       <Paper
                         className={
                           state.darkMode
