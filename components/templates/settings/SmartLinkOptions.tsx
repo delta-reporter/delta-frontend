@@ -1,26 +1,17 @@
 import {
   Typography,
   Divider,
-  ButtonGroup,
   Button,
   TextField,
   Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
   createStyles,
   makeStyles,
   Theme,
 } from "@material-ui/core"
-import DeleteIcon from "@material-ui/icons/Delete"
-import LabelImportantIcon from "@material-ui/icons/LabelImportant"
-import EditIcon from "@material-ui/icons/Edit"
-import SaveIcon from '@material-ui/icons/Save';
+import SaveIcon from "@material-ui/icons/Save"
+import { CirclePicker } from "react-color"
 import React from "react"
+import SmartLinks from "./SmartLinks"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,28 +26,47 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(4, 0, 2),
     },
     button: {
-        margin: theme.spacing(1),
-        position: "absolute",
-        right: "5%",
-        // top: "10%",
-        // width: "10%",
-        // height: "10%",
-      },
+      margin: theme.spacing(1),
+      position: "relative",
+      left: "80%",
+    },
   })
 )
 
-function generate(element: React.ReactElement) {
-  return [0, 1, 2].map(value =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  )
-}
-
-export default function SmartLinkOptions() {
+export default function SmartLinkOptions(children: any) {
+  const { project_id } = children
   const classes = useStyles()
-  const [dense, setDense] = React.useState(false)
-  const [secondary, setSecondary] = React.useState(false)
+  const [color, setColor] = React.useState("#fff")
+
+  const handleChangeComplete = clr => {
+    setColor(clr.hex)
+  }
+
+  console.log(project_id)
+
+  async function createSmartlink() {
+    const data = {
+      project_id: project_id,
+      environment: (document.getElementById(
+        "smart-link-environment"
+      ) as HTMLInputElement).value,
+      smart_link: (document.getElementById("smart-link") as HTMLInputElement)
+        .value,
+      label: (document.getElementById("smart-label") as HTMLInputElement).value,
+      color: color,
+    }
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }
+    const postResponse = await fetch(
+      `${process.env.publicDeltaCore}/api/v1/smart_link`,
+      options
+    )
+    await postResponse.json()
+  }
 
   return (
     <div>
@@ -71,34 +81,7 @@ export default function SmartLinkOptions() {
             </ButtonGroup> */}
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
-          <Typography variant="h6" className={classes.title}>
-            Smart links enabled:
-          </Typography>
-          <div className={classes.demo}>
-            <List dense={dense}>
-              {/* {generate( */}
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <LabelImportantIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Kibana - https://load.*.donedeal.ninja/"
-                    secondary={ "https://kibana.dsch.services/app/ki..."}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="edit">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-            {/* //   )} */}
-            </List>
-          </div>
+          <SmartLinks project_id={project_id} />
         </Grid>
       </Grid>
       <TextField
@@ -106,7 +89,7 @@ export default function SmartLinkOptions() {
         id="smart-link-environment"
         label="Environment"
         defaultValue=""
-        helperText="Environment where this link will be activated, it could a  Python regular expression"
+        helperText="Environment where this link will be activated, it could be a Python regular expression"
       />
       <Divider variant="middle" />
       <TextField
@@ -125,12 +108,17 @@ export default function SmartLinkOptions() {
         helperText="Label to be set into this button"
       />
       <Divider variant="middle" />
+      <Typography variant="subtitle1" className={classes.title}>
+        Color for this button
+      </Typography>
+      <CirclePicker color={color} onChangeComplete={handleChangeComplete} />
       <Button
         variant="contained"
         color="primary"
         size="small"
         className={classes.button}
         startIcon={<SaveIcon />}
+        onClick={() => createSmartlink()}
       >
         Save
       </Button>

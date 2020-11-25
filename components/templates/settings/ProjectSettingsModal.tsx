@@ -4,14 +4,7 @@ import Modal from "@material-ui/core/Modal"
 import Backdrop from "@material-ui/core/Backdrop"
 import Fade from "@material-ui/core/Fade"
 import SettingsIcon from "@material-ui/icons/Settings"
-import {
-  Button,
-  ButtonGroup,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "@material-ui/core"
+import { IconButton } from "@material-ui/core"
 import ProjectSettingsTabs from "./ProjectSettingsTabs"
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function ProjectSettingsModal() {
+export default function ProjectSettingsModal(children: any) {
+  const { project_id } = children
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
 
@@ -51,9 +45,6 @@ export default function ProjectSettingsModal() {
 
   return (
     <div>
-      {/* <button type="button" onClick={handleOpen}>
-        react-transition-group
-      </button> */}
       <IconButton
         className={classes.settingsButton}
         color="primary"
@@ -76,7 +67,7 @@ export default function ProjectSettingsModal() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <ProjectSettingsTabs />
+            <ProjectSettingsTabs project_id={project_id} />
           </div>
         </Fade>
       </Modal>

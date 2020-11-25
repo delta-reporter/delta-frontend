@@ -47,8 +47,8 @@ const useStyles = makeStyles(theme => ({
   },
   externalLogsButton: {
     backgroundColor: theme.palette.secondary.dark,
-    width: "90px",
-    height: "30px",
+    width: "auto",
+    height: "auto",
     marginLeft: "10px",
     border: "1px #696969 solid",
     fontSize: "12px",
@@ -128,7 +128,7 @@ export const TestExpanded = function(props: TestProps) {
                   className={classes.externalLogsButton}
                   target="_blank"
                 >
-                  Logs
+                  Kibana Logs Staging for DD
                 </Button>
               </div>
             {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 

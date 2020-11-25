@@ -49,7 +49,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-export default function ProjectSettingsTabs() {
+export default function ProjectSettingsTabs(children: any) {
+  const {project_id} = children
   const classes = useStyles()
   const theme = useTheme()
   const [value, setValue] = React.useState(0)
@@ -84,7 +85,7 @@ export default function ProjectSettingsTabs() {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <SmartLinkOptions />
+          <SmartLinkOptions project_id={project_id}/>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           Contents for second menu
