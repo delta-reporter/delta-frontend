@@ -4,6 +4,7 @@ import { Paper, Typography, Tooltip } from "@material-ui/core"
 import {
   TestErrorMessageAccordion,
   TestMediaAccordion,
+  TestParametersAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
 import { showStatusText, HistoricalTests, showIsFlakyBadgeTestExpanded } from "."
@@ -157,6 +158,11 @@ export const TestExpanded = function(props: TestProps) {
               ) : (
                 <div></div>
               )}
+              {children.parameters?
+                <TestParametersAccordion parameters={children.parameters}/>
+                :
+                <div></div>
+              }
             </TabPanel>
             <TabPanel>
               {/* set resolution tab */}

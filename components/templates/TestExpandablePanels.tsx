@@ -113,6 +113,60 @@ export const TestErrorMessageAccordion = function(props: TestProps) {
   )
 }
 
+export const TestParametersAccordion = function(children: any) {
+  const { parameters } = children
+
+  const [expandedErrorPanel, setExpandedErrorPanel] = useState<string | false>(
+    false
+  )
+  const expandCollapsePanel = (errorPanel: string) => (
+    _event: React.ChangeEvent<{}>,
+    isExpanded: boolean
+  ) => {
+    setExpandedErrorPanel(isExpanded ? errorPanel : false)
+  }
+
+  return (
+    <div style={{ paddingTop: "10px" }}>
+      <ExpandablePanel
+        key="test_parameters"
+        expanded={expandedErrorPanel === parameters}
+        onChange={expandCollapsePanel(parameters)}
+        TransitionProps={{ unmountOnExit: true }}
+        style={{
+          backgroundColor: "#DCDCDC", // error message expandable color
+          borderBottom: "1px solid #f9e6e6",
+        }}
+      >
+        <CollapsedLineSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{
+            backgroundColor: "#DCDCDC", // error message collapsed color
+            borderBottom: "1px solid #DCDCDC",
+          }}
+        >
+          <Typography
+            color="textPrimary"
+            style={{ wordBreak: "break-all", whiteSpace: "pre-wrap" }} // this is if the message is to long to make it fit the container
+          >
+            Test Parameters
+          </Typography>
+        </CollapsedLineSummary>
+        <PanelDetails>
+          <List>
+            <ListItem
+              style={{ wordBreak: "break-all", whiteSpace: "pre-wrap" }}
+            >
+              {" "}
+              {parameters}
+            </ListItem>
+          </List>
+        </PanelDetails>
+      </ExpandablePanel>
+    </div>
+  )
+}
+
 export const TestMediaAccordion = function(props: TestProps) {
   const { children } = props
 
