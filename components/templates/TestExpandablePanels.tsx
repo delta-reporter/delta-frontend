@@ -75,7 +75,7 @@ export const TestErrorMessageAccordion = function(props: TestProps) {
   return (
     <div style={{ paddingTop: "10px" }}>
       <ExpandablePanel
-        key={children.test_history_id}
+        key={children.test_id}
         expanded={expandedErrorPanel === children.message}
         onChange={expandCollapsePanel(children.message)}
         TransitionProps={{ unmountOnExit: true }}

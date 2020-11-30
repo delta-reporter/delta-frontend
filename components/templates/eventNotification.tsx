@@ -29,8 +29,6 @@ export const EventNotification = function(message: string) {
     const handleClose = () => {
         setNotificationState({ ...notificationState, open: false });
       };
-    console.log(open)
-    console.log("Hola DOS")
 
   return (
     <div>

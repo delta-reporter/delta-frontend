@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export default function ProjectSettingsTabs(children: any) {
-  const {project_id} = children
+  const { project_id } = children
   const classes = useStyles()
   const theme = useTheme()
   const [value, setValue] = React.useState(0)
@@ -75,8 +75,8 @@ export default function ProjectSettingsTabs(children: any) {
           aria-label="full width tabs example"
         >
           <Tab label="SmartLinks" {...a11yProps(0)} />
-          <Tab label="Other menu" {...a11yProps(1)} />
-          <Tab label="Other menu" {...a11yProps(2)} />
+          {/* <Tab label="Other menu" {...a11yProps(1)} />
+          <Tab label="Other menu" {...a11yProps(2)} /> */}
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -85,14 +85,14 @@ export default function ProjectSettingsTabs(children: any) {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <SmartLinkOptions project_id={project_id}/>
+          <SmartLinkOptions project_id={project_id} />
         </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
+        {/* <TabPanel value={value} index={1} dir={theme.direction}>
           Contents for second menu
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
           Contents for third menu
-        </TabPanel>
+        </TabPanel> */}
       </SwipeableViews>
     </div>
   )

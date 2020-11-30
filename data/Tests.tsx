@@ -2,7 +2,10 @@ import useSWR from "swr"
 
 const fetcher = url => fetch(url).then(res => res.json())
 
-export default function getTests(test_suite_history_id: number, stats: string) {
+export default function getTests(
+  test_suite_history_id: number,
+  stats: string
+): { loading; noData; tests; mutate } {
   const { data, mutate, error } = useSWR(
     `${
       process.env.publicDeltaCore

@@ -18,6 +18,7 @@ import {
 } from "@material-ui/core"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
+import { SmartLinksTestRun } from "../../components/templates/smartLinks/smartLinksTestRun"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -121,9 +122,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function Tests({
-  test_run,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Tests({test_run,}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(test_run)
   const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
 
@@ -312,30 +311,7 @@ function Tests({
                       }}
                     >
                       {" "}
-                      {/* {test_run.test_run_data &&
-                      test_run.test_run_data.spectre_test_run_url ? ( */}
-                        <div>
-                          <Button
-                            href={
-                            //   test_run.test_run_data.spectre_test_run_url +
-                              "?status=fail"
-                            }
-                            className={classes.spectreButton}
-                            target="_blank"
-                          >
-                            Spectre
-                          </Button>
-                        </div>
-                    {/* //   ) : null} */}
-                      <div>
-                          <Button
-                            href="https://jenkins.dsch.build/job/automation/job/donedeal-web-tests/job/master/800/"
-                            className={classes.cicdButton}
-                            target="_blank"
-                          >
-                            CI/CD Job
-                          </Button>
-                        </div>
+                      <SmartLinksTestRun project_id={test_run.project_id} environment={test_run.environment} test_run_id={test_run.test_run_id}/>
                       <div
                         style={{
                           display: "flex",
@@ -442,6 +418,8 @@ function Tests({
                     <div>
                       <ListOfSuites
                         test_run_id={test_run.test_run_id}
+                        project_id={test_run.project_id}
+                        environment={test_run.environment}
                         stats={selectedStatus}
                         darkMode={state.darkMode}
                       ></ListOfSuites>

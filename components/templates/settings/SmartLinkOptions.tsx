@@ -7,8 +7,19 @@ import {
   createStyles,
   makeStyles,
   Theme,
+  ButtonGroup,
+  Link,
+  Popper,
+  Grow,
+  Paper,
+  MenuList,
+  MenuItem,
+  ClickAwayListener,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core"
 import SaveIcon from "@material-ui/icons/Save"
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { CirclePicker } from "react-color"
 import React from "react"
 import SmartLinks from "./SmartLinks"
@@ -33,28 +44,37 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const locations = ["Test", "Test Run"]
+
 export default function SmartLinkOptions(children: any) {
   const { project_id } = children
   const classes = useStyles()
   const [color, setColor] = React.useState("#fff")
+  const [filtered, setFiltered] = React.useState(false)
+  const [location, setLocation] = React.useState(1)
 
   const handleChangeComplete = clr => {
     setColor(clr.hex)
   }
 
-  console.log(project_id)
-
   async function createSmartlink() {
     const data = {
       project_id: project_id,
-      environment: (document.getElementById(
-        "smart-link-environment"
-      ) as HTMLInputElement).value,
       smart_link: (document.getElementById("smart-link") as HTMLInputElement)
         .value,
       label: (document.getElementById("smart-label") as HTMLInputElement).value,
+      datetime_format: (document.getElementById(
+        "smart-datetime-format"
+      ) as HTMLInputElement).value,
       color: color,
+      filtered: filtered,
+      location: location,
     }
+
+    if (filtered)
+      data["environment"] = (document.getElementById(
+        "smart-link-environment"
+      ) as HTMLInputElement).value
 
     const options = {
       method: "POST",
@@ -68,30 +88,132 @@ export default function SmartLinkOptions(children: any) {
     await postResponse.json()
   }
 
+  // States and methods for Location selector
+
+  const [openLocation, setOpenLocation] = React.useState(false)
+  const anchorRefLocation = React.useRef<HTMLDivElement>(null)
+  const [selectedIndexLocation, setSelectedIndexLocation] = React.useState(0)
+
+  const handleMenuItemClickLocation = (
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
+    index: number
+  ) => {
+    setSelectedIndexLocation(index)
+    setOpenLocation(false)
+    setLocation(index + 1)
+  }
+
+  const handleToggleLocation = () => {
+    setOpenLocation(prevOpen => !prevOpen)
+  }
+
+  const handleCloseLocation = (
+    event: React.MouseEvent<Document, MouseEvent>
+  ) => {
+    if (
+      anchorRefLocation.current &&
+      anchorRefLocation.current.contains(event.target as HTMLElement)
+    ) {
+      return
+    }
+
+    setOpenLocation(false)
+  }
+
+  const handleFiltered = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFiltered(event.target.checked)
+  }
+
   return (
     <div>
-      {/* <Typography color="textSecondary" variant="body2">
-             Where you want to show this link
-            </Typography>
-            <ButtonGroup disableElevation variant="contained" color="primary">
-              <Button>Launch</Button>
-              <Button>Test Run</Button>
-              <Button>Test Suite</Button>
-              <Button>Test</Button>
-            </ButtonGroup> */}
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
           <SmartLinks project_id={project_id} />
         </Grid>
       </Grid>
-      <TextField
-        required
-        id="smart-link-environment"
-        label="Environment"
-        defaultValue=""
-        helperText="Environment where this link will be activated, it could be a Python regular expression"
+      <Typography color="textSecondary" variant="body2">
+        Where you want to show this link
+      </Typography>
+      <ButtonGroup
+        variant="contained"
+        color="primary"
+        ref={anchorRefLocation}
+        aria-label="location button"
+      >
+        <Button>{locations[selectedIndexLocation]}</Button>
+        <Button
+          color="primary"
+          size="small"
+          aria-controls={openLocation ? "split-button-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-label="Select location"
+          aria-haspopup="menu"
+          onClick={handleToggleLocation}
+        >
+          <ArrowDropDownIcon />
+        </Button>
+      </ButtonGroup>
+      <Popper
+        open={openLocation}
+        anchorEl={anchorRefLocation.current}
+        role={undefined}
+        transition
+        disablePortal
+        style={{ zIndex: 1500 }}
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom" ? "center top" : "center bottom",
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleCloseLocation}>
+                <MenuList id="split-button-menu">
+                  {locations.map((cation, index) => (
+                    <MenuItem
+                      key={cation}
+                      disabled={index === 2}
+                      selected={index === selectedIndexLocation}
+                      onClick={event =>
+                        handleMenuItemClickLocation(event, index)
+                      }
+                    >
+                      {cation}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+      <FormControlLabel
+        value="Filter by environment"
+        control={<Checkbox color="primary" />}
+        label="Filter by environment"
+        labelPlacement="end"
+        checked={filtered}
+        onChange={handleFiltered}
       />
-      <Divider variant="middle" />
+      {filtered ? (
+        <div>
+          <TextField
+            required
+            id="smart-link-environment"
+            label="Environment"
+            defaultValue=""
+            helperText="Use a regular expression to filter the environment where this link will be activated"
+          />
+          <br />
+          <Link href="https://pythex.org/">
+            Check this for help with the regular expression
+          </Link>
+          <Divider variant="middle" />
+        </div>
+      ) : null}
       <TextField
         required
         id="smart-link"
@@ -99,6 +221,18 @@ export default function SmartLinkOptions(children: any) {
         defaultValue=""
         helperText="Link to anywhere you want, include variables in this way {test_run_id}"
       />
+      <Divider variant="middle" />
+      <TextField
+        required
+        id="smart-datetime-format"
+        label="Datetime Format"
+        defaultValue="%Y-%m-%dT%H:%M:%SZ"
+        helperText="Set the format for {start_datetime} and {end_datetime}"
+      />
+      <br />
+      <Link href="http://www.strftime.net/">
+        Check this for help with the format
+      </Link>
       <Divider variant="middle" />
       <TextField
         required
