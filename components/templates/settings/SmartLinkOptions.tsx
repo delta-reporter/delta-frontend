@@ -98,6 +98,7 @@ export default function SmartLinkOptions(children: any) {
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number
   ) => {
+    console.log(event)
     setSelectedIndexLocation(index)
     setOpenLocation(false)
     setLocation(index + 1)

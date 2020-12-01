@@ -7,7 +7,6 @@ import {
   List,
   NoSsr,
   Switch,
-  IconButton,
 } from "@material-ui/core"
 import { GetServerSideProps } from "next"
 import { InferGetServerSidePropsType } from "next"
@@ -19,7 +18,6 @@ import useSocket from "../hooks/useSocket"
 import Router from "next/router"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
-import SettingsIcon from "@material-ui/icons/Settings"
 import ProjectSettingsModal from "../components/templates/settings/ProjectSettingsModal"
 
 const useStyles = makeStyles(theme => ({
