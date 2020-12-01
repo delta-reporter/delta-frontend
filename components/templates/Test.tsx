@@ -11,6 +11,7 @@ import { showStatusText, HistoricalTests, showIsFlakyBadgeTestExpanded } from ".
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
 import { Notes } from "./Notes"
+import { SmartLinksTest } from "./smartLinks/smartLinksTest"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,15 +47,28 @@ const useStyles = makeStyles(theme => ({
   },
   textColorLightMode: {
   },
+  externalLogsButton: {
+    backgroundColor: theme.palette.secondary.dark,
+    width: "auto",
+    height: "auto",
+    marginLeft: "10px",
+    border: "1px #696969 solid",
+    fontSize: "12px",
+    color: "#7CFC00",
+    float: "right"
+
+  },
 }))
 
 interface TestProps {
   children: any
   darkMode: boolean
+  project_id: number
+  environment: string
 }
 
 export const TestExpanded = function(props: TestProps) {
-  const { children, darkMode } = props
+  const { children, darkMode, project_id, environment } = props
   const classes = useStyles(props)
 
   function convertToSeconds(microseconds: number) {
@@ -83,7 +97,7 @@ export const TestExpanded = function(props: TestProps) {
 
   return (
     <div
-      key={children.test_history_id}
+      key={children.test_id}
       className={classes.root}
       style={{ paddingLeft: "50px", paddingRight: "50px", paddingBottom: "50px", marginTop: "-20px"}}
     >
@@ -112,11 +126,13 @@ export const TestExpanded = function(props: TestProps) {
             </TabList>
             {/* info tab */}
             <TabPanel>
+            <SmartLinksTest project_id={project_id} environment={environment} test_id={children.test_id}/>
             {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
               <Typography style={{ paddingTop: "20px" }}>
                 Full path:
                 <span style={{ color: "grey" }}> {children.file}</span>
               </Typography>
+              {children.duration ? (
               <Typography style={{ paddingTop: "20px" }}>
                 Duration:
                 {children.duration.minutes === 0 ? (
@@ -134,6 +150,9 @@ export const TestExpanded = function(props: TestProps) {
                 </span>
                 {setSlowTestBadge(children.duration.minutes)} 
               </Typography>
+              ) : (
+                <div></div>
+              )}
               {children.retries ? ( // if there is any retries - show
                 <Typography style={{ paddingTop: "20px" }}>
                   Retries:

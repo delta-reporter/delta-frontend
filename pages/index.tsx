@@ -18,6 +18,7 @@ import useSocket from "../hooks/useSocket"
 import Router from "next/router"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
+import ProjectSettingsModal from "../components/templates/settings/ProjectSettingsModal"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -394,6 +395,7 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
                 <Grid item xs={12} sm={3} key={project.project_id}>
                   <List>
                     <ListItem button>
+                      <ProjectSettingsModal project_id={project.project_id}/>
                       <Paper
                         className={
                           state.darkMode

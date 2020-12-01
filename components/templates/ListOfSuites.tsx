@@ -80,12 +80,14 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   test_run_id: number
+  project_id: number
+  environment: string
   stats
   darkMode: boolean
 }
 
 export const ListOfSuites = function(props: Props) {
-  const { test_run_id, stats, darkMode } = props
+  const { test_run_id, project_id, environment, stats, darkMode } = props
   const { loading, noData, testSuites } = getTestSuites(
     test_run_id,
     stats.toString()
@@ -134,7 +136,8 @@ export const ListOfSuites = function(props: Props) {
             color: "grey",
           }}
         >
-          No test results yet. They either take some time to load or there are no matching tests for this filter
+          No test results yet. They either take some time to load or there are
+          no matching tests for this filter
         </Typography>
       </div>
     )
@@ -231,7 +234,13 @@ export const ListOfSuites = function(props: Props) {
           }}
         >
           {/* right-hand side for test info */}
-          <TestExpanded darkMode={darkMode}>{testInfoSection}</TestExpanded>
+          <TestExpanded
+            darkMode={darkMode}
+            project_id={project_id}
+            environment={environment}
+          >
+            {testInfoSection}
+          </TestExpanded>
         </div>
       </div>
     )
