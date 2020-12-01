@@ -103,23 +103,6 @@ const useStyles = makeStyles(theme => ({
     border: "1px grey solid",
     marginBottom: "15px",
   },
-  spectreButton: {
-    backgroundColor: theme.palette.primary.main,
-    width: "90px",
-    height: "30px",
-    marginLeft: "10px",
-    border: "1px #a7bab1 solid",
-    fontSize: "12px",
-  },
-  cicdButton: {
-    backgroundColor: theme.palette.primary.dark,
-    width: "90px",
-    height: "30px",
-    marginLeft: "10px",
-    border: "1px #87CEFA solid",
-    fontSize: "12px",
-    color: "#FFFFF0"
-  },
 }))
 
 function Tests({test_run,}: InferGetServerSidePropsType<typeof getServerSideProps>) {

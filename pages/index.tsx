@@ -117,13 +117,6 @@ const useStyles = makeStyles(theme => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(10, 15, 3),
   },
-  settingsButton: {
-    position: "absolute",
-    // float: "right",
-    right: "10%",
-    width: "10%",
-    height: "10%",
-  },
 }))
 
 export interface TestRun {
