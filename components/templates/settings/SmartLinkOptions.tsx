@@ -58,13 +58,7 @@ export default function SmartLinkOptions(children: any) {
     setLocation(event.target.value as number);
   };
   
-  const checkFiltered = () => {
-    let isFilled = (document.getElementById("environment") as HTMLInputElement).value
-    if( isFilled != "") setFiltered(true)
-  };
-
   async function createSmartLink() {
-    checkFiltered()
 
     const data = {
       project_id: project_id,
@@ -90,7 +84,7 @@ export default function SmartLinkOptions(children: any) {
       body: JSON.stringify(data),
     }
     const postResponse = await fetch(
-      `https://delta-core.dsch.dev/api/v1/smart_link`,
+      `${process.env.publicDeltaCore}/api/v1/smart_link`,
       options
     )
     await postResponse.json()
@@ -129,11 +123,13 @@ export default function SmartLinkOptions(children: any) {
           </Tooltip>
         </div>
       <div style={{ width:"100%", paddingTop:"40px"}}>
+      <Tooltip title="Check this box, if you want your env to be filtered" id="environment" style={{ width:"20%", float: "right"}}>
           <Checkbox
         checked={filtered}
         onChange={handleCheckboxChange}
         style={{ width:"5%", float: "left", marginLeft:"-5px"}}
       />
+       </Tooltip>
        <TextField
             id="smart-link-environment"
             label="Environment regex"
@@ -208,7 +204,7 @@ export default function SmartLinkOptions(children: any) {
       </div>
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
-          <SmartLinks project_id={project_id} />
+          <SmartLinks project_id={project_id} darkMode={darkMode}/>
         </Grid>
       </Grid>
     </div>

@@ -31,11 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       margin: theme.spacing(4, 0, 2),
     },
+    dark:{
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.secondary.light,
+    },
+    light:{
+    },
   })
 )
 
 export default function SmartLinks(children: any) {
-  const { project_id } = children
+  const { project_id, darkMode } = children
   const classes = useStyles()
 
   const { loading, noData, smart_links, mutate } = getSmartLinks(project_id)
@@ -70,7 +76,7 @@ export default function SmartLinks(children: any) {
                Smart links for this project <ArrowDownwardIcon style={{marginBottom:"-5px"}}></ArrowDownwardIcon>
             </Typography>
             <div className={classes.demo} style={{marginTop:"15px"}}>
-              <List dense={true}>
+              <List dense={true} className={darkMode ? classes.dark : classes.light}>
                 {smart_links.map(smart_link => (
                   <ListItem key={smart_link.smart_link_id}>
                     <ListItemAvatar>
@@ -89,7 +95,7 @@ export default function SmartLinks(children: any) {
                       }
                     />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="edit">
+                      <IconButton edge="end" aria-label="edit" className={darkMode ? classes.dark : classes.light}>
                         <EditIcon />
                       </IconButton>
                       <IconButton
@@ -98,6 +104,7 @@ export default function SmartLinks(children: any) {
                         onClick={() =>
                           deleteSmartLink(smart_link.smart_link_id)
                         }
+                        className={darkMode ? classes.dark : classes.light}
                       >
                         <DeleteIcon />
                       </IconButton>

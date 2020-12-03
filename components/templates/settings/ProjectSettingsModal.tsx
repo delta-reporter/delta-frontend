@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles"
 import Modal from "@material-ui/core/Modal"
 import Backdrop from "@material-ui/core/Backdrop"
 import Fade from "@material-ui/core/Fade"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { IconButton } from "@material-ui/core"
-import ProjectSettingsTabs from "./ProjectSettingsTabs"
 import SmartLinkOptions from "./SmartLinkOptions"
 
 const useStyles = makeStyles((theme: Theme) =>
