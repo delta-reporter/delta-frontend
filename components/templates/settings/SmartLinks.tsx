@@ -10,12 +10,14 @@ import {
   createStyles,
   makeStyles,
   Theme,
+  Divider,
 } from "@material-ui/core"
 import DeleteIcon from "@material-ui/icons/Delete"
 import LabelImportantIcon from "@material-ui/icons/LabelImportant"
 import EditIcon from "@material-ui/icons/Edit"
 import React from "react"
 import getSmartLinks from "../../../data/SmartLinks"
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,7 +40,7 @@ export default function SmartLinks(children: any) {
 
   const { loading, noData, smart_links, mutate } = getSmartLinks(project_id)
 
-  async function deleteSmartlink(smart_link_id) {
+  async function deleteSmartLink(smart_link_id) {
     const options = {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -53,11 +55,7 @@ export default function SmartLinks(children: any) {
 
   if (noData) {
     return (
-      <div>
-        <Typography variant="h6" className={classes.title}>
-          There are no Smart Links yet
-        </Typography>
-      </div>
+      <></>
     )
   } else {
     return (
@@ -67,10 +65,11 @@ export default function SmartLinks(children: any) {
           "Loading smart links..."
         ) : (
           <div>
-            <Typography variant="h6" className={classes.title}>
-              Smart links enabled:
+            <Divider style={{marginTop:"5px"}} />
+            <Typography  variant="h5" style={{marginLeft:"19%", marginTop:"25px"}} >
+               Smart links for this project <ArrowDownwardIcon style={{marginBottom:"-5px"}}></ArrowDownwardIcon>
             </Typography>
-            <div className={classes.demo}>
+            <div className={classes.demo} style={{marginTop:"15px"}}>
               <List dense={true}>
                 {smart_links.map(smart_link => (
                   <ListItem key={smart_link.smart_link_id}>
@@ -97,7 +96,7 @@ export default function SmartLinks(children: any) {
                         edge="end"
                         aria-label="delete"
                         onClick={() =>
-                          deleteSmartlink(smart_link.smart_link_id)
+                          deleteSmartLink(smart_link.smart_link_id)
                         }
                       >
                         <DeleteIcon />

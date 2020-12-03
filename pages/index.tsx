@@ -395,7 +395,7 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
                 <Grid item xs={12} sm={3} key={project.project_id}>
                   <List>
                     <ListItem button>
-                      <ProjectSettingsModal project_id={project.project_id}/>
+                      <ProjectSettingsModal project_id={project.project_id}  darkMode={state.darkMode}/>
                       <Paper
                         className={
                           state.darkMode

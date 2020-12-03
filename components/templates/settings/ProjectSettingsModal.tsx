@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles"
 import Modal from "@material-ui/core/Modal"
 import Backdrop from "@material-ui/core/Backdrop"
@@ -6,6 +6,7 @@ import Fade from "@material-ui/core/Fade"
 import SettingsIcon from "@material-ui/icons/Settings"
 import { IconButton } from "@material-ui/core"
 import ProjectSettingsTabs from "./ProjectSettingsTabs"
+import SmartLinkOptions from "./SmartLinkOptions"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,11 +15,21 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
     },
-    paper: {
+    frameLight: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
+      height: "90%",
+      overflowY: "auto",
+    },
+    frameDark: {
+      backgroundColor: theme.palette.secondary.main,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      height: "90%",
+      overflowY: "auto",
     },
     settingsButton: {
       position: "absolute",
@@ -26,12 +37,13 @@ const useStyles = makeStyles((theme: Theme) =>
       top: "10%",
       width: "10%",
       height: "10%",
+      color: "#bfbbbb",
     },
   })
 )
 
 export default function ProjectSettingsModal(children: any) {
-  const { project_id } = children
+  const { project_id, darkMode } = children
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
 
@@ -47,7 +59,6 @@ export default function ProjectSettingsModal(children: any) {
     <div>
       <IconButton
         className={classes.settingsButton}
-        color="primary"
         aria-label="Project settings"
         onClick={handleOpen}
       >
@@ -66,8 +77,12 @@ export default function ProjectSettingsModal(children: any) {
         }}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
-            <ProjectSettingsTabs project_id={project_id} />
+          <div className={ darkMode
+            ? classes.frameDark
+            : classes.frameLight} id="frame">
+              <div id="scroll">
+              <SmartLinkOptions project_id={project_id} darkMode={darkMode}/>
+            </div>
           </div>
         </Fade>
       </Modal>

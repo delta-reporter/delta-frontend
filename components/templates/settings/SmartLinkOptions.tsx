@@ -1,28 +1,21 @@
 import {
   Typography,
-  Divider,
-  Button,
   TextField,
   Grid,
   createStyles,
   makeStyles,
   Theme,
-  ButtonGroup,
   Link,
-  Popper,
-  Grow,
-  Paper,
-  MenuList,
   MenuItem,
-  ClickAwayListener,
-  FormControlLabel,
+  Select,
+  Tooltip,
+  Button,
   Checkbox,
 } from "@material-ui/core"
-import SaveIcon from "@material-ui/icons/Save"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { CirclePicker } from "react-color"
 import React from "react"
 import SmartLinks from "./SmartLinks"
+import HelpIcon from '@material-ui/icons/Help'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,15 +34,19 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       left: "80%",
     },
+    textDark:{
+      color: theme.palette.secondary.light
+    },
+    textLight:{
+      color: "black"
+    },
   })
 )
 
-const locations = ["Test", "Test Run"]
-
 export default function SmartLinkOptions(children: any) {
-  const { project_id } = children
+  const { project_id, darkMode } = children
   const classes = useStyles()
-  const [color, setColor] = React.useState("#fff")
+  const [color, setColor] = React.useState("#90caf9")
   const [filtered, setFiltered] = React.useState(false)
   const [location, setLocation] = React.useState(1)
 
@@ -57,7 +54,18 @@ export default function SmartLinkOptions(children: any) {
     setColor(clr.hex)
   }
 
-  async function createSmartlink() {
+  const handleLinkLocationChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setLocation(event.target.value as number);
+  };
+  
+  const checkFiltered = () => {
+    let isFilled = (document.getElementById("environment") as HTMLInputElement).value
+    if( isFilled != "") setFiltered(true)
+  };
+
+  async function createSmartLink() {
+    checkFiltered()
+
     const data = {
       project_id: project_id,
       smart_link: (document.getElementById("smart-link") as HTMLInputElement)
@@ -82,184 +90,127 @@ export default function SmartLinkOptions(children: any) {
       body: JSON.stringify(data),
     }
     const postResponse = await fetch(
-      `${process.env.publicDeltaCore}/api/v1/smart_link`,
+      `https://delta-core.dsch.dev/api/v1/smart_link`,
       options
     )
     await postResponse.json()
   }
 
-  // States and methods for Location selector
-
-  const [openLocation, setOpenLocation] = React.useState(false)
-  const anchorRefLocation = React.useRef<HTMLDivElement>(null)
-  const [selectedIndexLocation, setSelectedIndexLocation] = React.useState(0)
-
-  const handleMenuItemClickLocation = (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number
-  ) => {
-    console.log(event)
-    setSelectedIndexLocation(index)
-    setOpenLocation(false)
-    setLocation(index + 1)
-  }
-
-  const handleToggleLocation = () => {
-    setOpenLocation(prevOpen => !prevOpen)
-  }
-
-  const handleCloseLocation = (
-    event: React.MouseEvent<Document, MouseEvent>
-  ) => {
-    if (
-      anchorRefLocation.current &&
-      anchorRefLocation.current.contains(event.target as HTMLElement)
-    ) {
-      return
-    }
-
-    setOpenLocation(false)
-  }
-
-  const handleFiltered = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFiltered(event.target.checked)
-  }
-
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFiltered(event.target.checked);
+  };
+  
   return (
-    <div>
-      <Grid container spacing={1}>
-        <Grid item xs={12} md={12}>
-          <SmartLinks project_id={project_id} />
-        </Grid>
-      </Grid>
-      <Typography color="textSecondary" variant="body2">
-        Where you want to show this link
+    <div className={darkMode ? classes.textDark : classes.textLight}>
+       <Typography  variant="h5" style={{marginLeft:"19%"}} >
+        Add useful links to test report
       </Typography>
-      <ButtonGroup
-        variant="contained"
-        color="primary"
-        ref={anchorRefLocation}
-        aria-label="location button"
-      >
-        <Button>{locations[selectedIndexLocation]}</Button>
-        <Button
-          color="primary"
-          size="small"
-          aria-controls={openLocation ? "split-button-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-label="Select location"
-          aria-haspopup="menu"
-          onClick={handleToggleLocation}
+      <div style={{ width:"100%", marginTop: "35px"}}>
+      <Typography  style={{width:"60%", float: "left"}}>
+       1. Where to display the button:
+      </Typography>
+        <Select
+          value={location}
+          onChange={handleLinkLocationChange}
+          style={{ width:"25%", float: "right", marginLeft:"5px"}}
+          className={darkMode ? classes.textDark : classes.textLight }
         >
-          <ArrowDropDownIcon />
-        </Button>
-      </ButtonGroup>
-      <Popper
-        open={openLocation}
-        anchorEl={anchorRefLocation.current}
-        role={undefined}
-        transition
-        disablePortal
-        style={{ zIndex: 1500 }}
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === "bottom" ? "center top" : "center bottom",
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleCloseLocation}>
-                <MenuList id="split-button-menu">
-                  {locations.map((cation, index) => (
-                    <MenuItem
-                      key={cation}
-                      disabled={index === 2}
-                      selected={index === selectedIndexLocation}
-                      onClick={event =>
-                        handleMenuItemClickLocation(event, index)
-                      }
-                    >
-                      {cation}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-      <FormControlLabel
-        value="Filter by environment"
-        control={<Checkbox color="primary" />}
-        label="Filter by environment"
-        labelPlacement="end"
+          <MenuItem value="1">Test Level</MenuItem>
+          <MenuItem value="2">Test Run Level</MenuItem>
+        </Select>
+        </div>
+
+        <div style={{ width:"100%", marginTop: "100px"}}>
+        <Typography  style={{width:"80%", float: "left"}}>
+      2. Regular expression for the environment (optional):
+      </Typography>
+      <Tooltip title="Click this for help with the regular expression" id="environment" style={{ width:"20%", float: "right"}}>
+          <Link href="https://pythex.org/"> <HelpIcon style={{color:"#bfbbbb"}}/> </Link>
+          </Tooltip>
+        </div>
+      <div style={{ width:"100%", paddingTop:"40px"}}>
+          <Checkbox
         checked={filtered}
-        onChange={handleFiltered}
+        onChange={handleCheckboxChange}
+        style={{ width:"5%", float: "left", marginLeft:"-5px"}}
       />
-      {filtered ? (
-        <div>
-          <TextField
-            required
+       <TextField
             id="smart-link-environment"
-            label="Environment"
+            label="Environment regex"
             defaultValue=""
             inputProps={{maxLength: 2000}}
-            helperText="Use a regular expression to filter the environment where this link will be activated"
+            style={{ width:"80%", float: "left",  marginLeft:"25px", marginTop:"-15px"}}
           />
-          <br />
-          <Link href="https://pythex.org/">
-            Check this for help with the regular expression
-          </Link>
-          <Divider variant="middle" />
         </div>
-      ) : null}
-      <TextField
+
+        <div style={{ width:"100%", marginTop: "70px"}}>
+        <Typography  style={{width:"80%", float: "left"}}>
+       3. Smart Link to anywhere you want (e.g. logs):
+      </Typography>
+      <Tooltip title="Include variables in this way  { foo }"   style={{ width:"20%", float: "right"}}>
+         <HelpIcon style={{color:"#bfbbbb"}}/>
+          </Tooltip>
+          <TextField
         required
         id="smart-link"
         label="Smart Link"
         defaultValue=""
-        helperText="Link to anywhere you want, include variables in this way {test_run_id}"
+        style={{width:"100%"}}
       />
-      <Divider variant="middle" />
+        </div>
+
+        <div style={{ width:"100%", marginTop: "40px"}}>
+        <Typography  style={{width:"50%", float: "left"}}>
+      4.  Datetime format for start date:
+      </Typography>
+      <Tooltip title="Click this for help with time format"   style={{ width:"3%", float: "left"}}>
+          <Link href="http://www.strftime.net/"> <HelpIcon style={{color:"#bfbbbb"}}/> </Link>
+      </Tooltip>
       <TextField
         required
         id="smart-datetime-format"
-        label="Datetime Format"
         defaultValue="%Y-%m-%dT%H:%M:%SZ"
         inputProps={{maxLength: 300}}
-        helperText="Set the format for {start_datetime} and {end_datetime}"
+        style={{ width:"40%", float: "right", fontSize:"0.5em", marginTop:"-10px"}}
       />
-      <br />
-      <Link href="http://www.strftime.net/">
-        Check this for help with the format
-      </Link>
-      <Divider variant="middle" />
+        </div>
+
+        <div style={{ width:"100%", marginTop: "90px"}}>
+        <Typography  style={{width:"50%", float: "left"}}>
+       5. Label to be set for this button:
+      </Typography>
       <TextField
         required
         id="smart-label"
         label="Label"
         defaultValue=""
         inputProps={{maxLength: 30}}
-        helperText="Label to be set into this button"
+        style={{ width:"40%", float: "right", fontSize:"0.5em", marginTop:"-25px"}}
       />
-      <Divider variant="middle" />
-      <Typography variant="subtitle1" className={classes.title}>
-        Color for this button
+        </div>
+
+    <div  style={{ width:"100%", marginTop: "140px", marginBottom:"10px"}}>
+        <Typography>
+       6. Choose the color for the button (optional):
       </Typography>
+      <div  style={{ paddingTop: "20px", paddingLeft:"10%"}}>
       <CirclePicker color={color} onChangeComplete={handleChangeComplete} />
+      </div>
       <Button
         variant="contained"
         color="primary"
-        size="small"
+        size="large"
         className={classes.button}
-        startIcon={<SaveIcon />}
-        onClick={() => createSmartlink()}
+        onClick={() => createSmartLink()}
       >
         Save
       </Button>
+      </div>
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={12}>
+          <SmartLinks project_id={project_id} />
+        </Grid>
+      </Grid>
     </div>
   )
 }
