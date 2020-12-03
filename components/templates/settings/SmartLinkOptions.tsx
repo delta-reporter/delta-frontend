@@ -127,7 +127,7 @@ export default function SmartLinkOptions(children: any) {
           <Checkbox
         checked={filtered}
         onChange={handleCheckboxChange}
-        style={{ width:"5%", float: "left", marginLeft:"-5px"}}
+        style={{ width:"5%", float: "left", marginLeft:"-5px", color:"#bfbbbb"}} 
       />
        </Tooltip>
        <TextField
