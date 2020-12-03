@@ -206,6 +206,7 @@ export default function SmartLinkOptions(children: any) {
             id="smart-link-environment"
             label="Environment"
             defaultValue=""
+            inputProps={{maxLength: 2000}}
             helperText="Use a regular expression to filter the environment where this link will be activated"
           />
           <br />
@@ -228,6 +229,7 @@ export default function SmartLinkOptions(children: any) {
         id="smart-datetime-format"
         label="Datetime Format"
         defaultValue="%Y-%m-%dT%H:%M:%SZ"
+        inputProps={{maxLength: 300}}
         helperText="Set the format for {start_datetime} and {end_datetime}"
       />
       <br />
@@ -240,6 +242,7 @@ export default function SmartLinkOptions(children: any) {
         id="smart-label"
         label="Label"
         defaultValue=""
+        inputProps={{maxLength: 30}}
         helperText="Label to be set into this button"
       />
       <Divider variant="middle" />

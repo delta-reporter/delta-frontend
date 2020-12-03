@@ -81,9 +81,13 @@ export default function SmartLinks(children: any) {
                     </ListItemAvatar>
                     <ListItemText
                       primary={
-                        smart_link.label + " - " + smart_link.environment
+                          smart_link.environment
+                          ? smart_link.label + " - " + smart_link.environment.substring(0, 25)
+                          : smart_link.label
                       }
-                      secondary={smart_link.smart_link}
+                      secondary={
+                        smart_link.smart_link.substring(0, 40)
+                      }
                     />
                     <ListItemSecondaryAction>
                       <IconButton edge="end" aria-label="edit">
