@@ -11,10 +11,11 @@ import {
   makeStyles,
   Theme,
   Divider,
+  Tooltip,
 } from "@material-ui/core"
 import DeleteIcon from "@material-ui/icons/Delete"
 import LabelImportantIcon from "@material-ui/icons/LabelImportant"
-import EditIcon from "@material-ui/icons/Edit"
+import FileCopyIcon from '@material-ui/icons/FileCopy'
 import React from "react"
 import getSmartLinks from "../../../data/SmartLinks"
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
@@ -85,20 +86,27 @@ export default function SmartLinks(children: any) {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
+                    className={darkMode ? classes.dark : classes.light}
                       primary={
                           smart_link.environment
                           ? smart_link.label + " - " + smart_link.environment.substring(0, 25)
                           : smart_link.label
-                      }
+                      } 
                       secondary={
                         smart_link.smart_link.substring(0, 40)
                       }
                     />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="edit" className={darkMode ? classes.dark : classes.light}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
+                    <IconButton
+                        edge="end"
+                        onClick={() => navigator.clipboard.writeText(smart_link.smart_link) }
+                        className={darkMode ? classes.dark : classes.light}
+                    >  
+                      <Tooltip title="Copy the link to clipboard"> 
+                        <FileCopyIcon />
+                      </Tooltip>
+                    </IconButton>
+                    <IconButton
                         edge="end"
                         aria-label="delete"
                         onClick={() =>

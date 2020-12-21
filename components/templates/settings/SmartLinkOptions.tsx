@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SmartLinkOptions(children: any) {
   const { project_id, darkMode } = children
   const classes = useStyles()
-  const [color, setColor] = React.useState("#f2c0b3")
+  const [color, setColor] = React.useState("#eacba9")
   const [filtered, setFiltered] = React.useState(false)
   const [location, setLocation] = React.useState(1)
 
@@ -216,9 +216,10 @@ export default function SmartLinkOptions(children: any) {
         Save
       </Button>
       </div>
+      {/* Existing links list */}
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
-          <SmartLinks project_id={project_id} darkMode={darkMode}/>
+          <SmartLinks project_id={project_id} darkMode={darkMode} id="existing_smart_links"/>
         </Grid>
       </Grid>
     </div>
