@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SmartLinkOptions(children: any) {
   const { project_id, darkMode } = children
   const classes = useStyles()
-  const [color, setColor] = React.useState("#d8846f")
+  const [color, setColor] = React.useState("#f2c0b3")
   const [filtered, setFiltered] = React.useState(false)
   const [location, setLocation] = React.useState(1)
 
@@ -62,8 +62,8 @@ export default function SmartLinkOptions(children: any) {
     setLocation(event.target.value as number);
   };
 
-  const colorSet1 = ["#d8846f", "#d8a66f" ,"#d2d86f", "#88d86f", "#6fd8a0"]
-  const colorSet2 = ["#81bdf0", "#6fa0d8", "#886fd8", "#cd6fd8", "#d86f7a"]
+  const colorSet1 = ["#f2c0b3", "#eacba9" ,"#d2d86f", "#b7eea6", "#88d86f"]
+  const colorSet2 = ["#94CAF7", "#b7b6f6", "#dbbeff", "#f0b8f6", "#f2bbbb"]
 
   async function createSmartLink() {
 
