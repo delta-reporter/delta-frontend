@@ -62,8 +62,8 @@ export default function SmartLinkOptions(children: any) {
     setLocation(event.target.value as number);
   };
 
-  const colorSet1 = ["#f2c0b3", "#eacba9" ,"#d2d86f", "#b7eea6", "#88d86f"]
-  const colorSet2 = ["#94CAF7", "#b7b6f6", "#dbbeff", "#f0b8f6", "#f2bbbb"]
+  const colorSet1 = ["#eacba9", "#ecf6b6", "#d2d86f", "#b7eea6", "#88d86f"]
+  const colorSet2 = ["#94CAF7", "#b7b6f6", "#dbbeff", "#f0b8f6", "#f6bdb6"]
 
   async function createSmartLink() {
 
