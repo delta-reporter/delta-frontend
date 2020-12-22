@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, FormControl, makeStyles, TextField, Paper } from '@material-ui/core';
+import { Button, FormControl, makeStyles, Paper, TextareaAutosize } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   addNoteButton: {
@@ -81,8 +81,8 @@ export const Notes = function(props: NotesProps) {
         <div style={{overflow:"auto", paddingTop: "23px", paddingLeft:"40px", maxHeight: 430, marginLeft:"-40px"}}>
           <FormControl style={{display: "block"}}>
             <Paper elevation={3} style={{color:"#000", background:"#ffc", display:"block", height: "12em",  marginLeft:"1em", marginTop: "5px", float:"left", width:"12em", padding: "5px", marginBottom:"2px"}} square={true}>
-              <TextField id="noteText" type="text" placeholder="New note" autoFocus style={{justifyContent:"center", alignItems:"center", display:"flex", padding: "5px"}}/>
-              <TextField id="noteAddedBy"  type="text" placeholder="Your name" style={{justifyContent:"center", alignItems:"center", display:"flex", padding: "15px 5px 15px 5px"}}/>
+              <TextareaAutosize id="noteText" placeholder="Note" style={{justifyContent:"center", alignItems:"center", display:"flex", paddingBottom: "65px", paddingTop: "15px", marginTop: "8px", marginLeft: "8px", width: "90%", backgroundColor:"#ffc", borderColor:"#ffc"}} />
+              {/* <TextField id="noteAddedBy"  type="text" placeholder="Author" autoFocus style={{justifyContent:"center", alignItems:"center", display:"flex", paddingTop: "5px", paddingLeft:"7px", width:"97%"}}/> */}
               <Button id="submit" onClick={() => submit()} className={classes.addNoteButton} style={{margin:"10px 30px 10px"}}>Add note</Button>
             </Paper>
           </FormControl>

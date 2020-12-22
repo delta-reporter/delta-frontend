@@ -128,10 +128,14 @@ export const TestExpanded = function(props: TestProps) {
             <TabPanel>
             <SmartLinksTest project_id={project_id} environment={environment} test_id={children.test_id}/>
             {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
+            {children.duration ? (
               <Typography style={{ paddingTop: "20px" }}>
                 Full path:
                 <span style={{ color: "grey" }}> {children.file}</span>
               </Typography>
+            ) : (
+              <></>
+            )}
               {children.duration ? (
               <Typography style={{ paddingTop: "20px" }}>
                 Duration:
