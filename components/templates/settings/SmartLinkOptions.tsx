@@ -12,7 +12,6 @@ import {
   Button,
   Checkbox,
 } from "@material-ui/core"
-import { CirclePicker } from "react-color"
 import React from "react"
 import SmartLinks from "./SmartLinks"
 import HelpIcon from '@material-ui/icons/Help'
@@ -34,11 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       left: "80%",
     },
-    textDark:{
+    textDark: {
       color: theme.palette.secondary.light
     },
     textLight:{
       color: "black"
+    },
+    colorButton: {      
+      margin: "5px",
     },
   })
 )
@@ -46,18 +48,23 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SmartLinkOptions(children: any) {
   const { project_id, darkMode } = children
   const classes = useStyles()
-  const [color, setColor] = React.useState("#90caf9")
+  const [color, setColor] = React.useState("#eacba9")
   const [filtered, setFiltered] = React.useState(false)
   const [location, setLocation] = React.useState(1)
 
-  const handleChangeComplete = clr => {
-    setColor(clr.hex)
+  const handleColourPicking = (hex) => {
+    document.getElementById(color).style.color = color
+    setColor(hex)
+    document.getElementById(hex).style.color = 'black'
   }
 
   const handleLinkLocationChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocation(event.target.value as number);
   };
-  
+
+  const colorSet1 = ["#eacba9", "#ecf6b6", "#d2d86f", "#b7eea6", "#88d86f"]
+  const colorSet2 = ["#94CAF7", "#b7b6f6", "#dbbeff", "#f0b8f6", "#f6bdb6"]
+
   async function createSmartLink() {
 
     const data = {
@@ -189,8 +196,15 @@ export default function SmartLinkOptions(children: any) {
         <Typography>
        6. Choose the color for the button (optional):
       </Typography>
-      <div  style={{ paddingTop: "20px", paddingLeft:"10%"}}>
-      <CirclePicker color={color} onChangeComplete={handleChangeComplete} />
+      <div  style={{ paddingTop: "20px"}}>
+      {colorSet1.map(color =>
+      <Button id ={color} className={classes.colorButton} style={{backgroundColor: color, color: color}} onClick={() => handleColourPicking(color)}>✓</Button>
+      )}
+      </div>
+      <div  style={{paddingBottom: "30px"}}>
+      {colorSet2.map(color =>
+      <Button id ={color} className={classes.colorButton} style={{backgroundColor: color, color: color}} onClick={() => handleColourPicking(color)}>✓</Button>
+      )}
       </div>
       <Button
         variant="contained"
@@ -202,9 +216,10 @@ export default function SmartLinkOptions(children: any) {
         Save
       </Button>
       </div>
+      {/* Existing links list */}
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
-          <SmartLinks project_id={project_id} darkMode={darkMode}/>
+          <SmartLinks project_id={project_id} darkMode={darkMode} id="existing_smart_links"/>
         </Grid>
       </Grid>
     </div>
