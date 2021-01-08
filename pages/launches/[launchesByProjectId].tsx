@@ -30,7 +30,6 @@ import {
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
-import useSocket from '../../hooks/useSocket'
 import {
   testRunButtonsDefaultView,
   testRunButtonsDeltaPyramidView,
@@ -153,30 +152,6 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-
-  // const [notification, setNotification] = useState(0)
-
-  useSocket('delta_launch', testLaunch => {
-    // setNotification(1);
-    if (launches[0].project_id == testLaunch.project_id) {
-      let msg: string;
-      switch(testLaunch.launch_status) {
-        case "Failed": {
-          msg = "💥 Launch Failed: " + testLaunch.name
-           break;
-        }
-        case "Successful": {
-          msg = "✨ Launch Successful: " + testLaunch.name
-           break;
-        }
-        default: {
-           msg = "🚀 There is a new launch: " + testLaunch.name
-           break;
-        }
-     }
-      setNotificationState({ ...notificationState, open: true, message: msg });
-    }
-  })
   
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage

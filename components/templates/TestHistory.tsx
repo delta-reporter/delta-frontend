@@ -109,24 +109,6 @@ export const HistoricalTests = function(props: TestProps) {
                 </AccordionSummary>
                 <AccordionDetails>
                   <Container maxWidth="sm">
-                    {test.error_type ? (
-                      <Typography
-                        align="center"
-                        variant="subtitle2"
-                        style={{
-                          paddingTop: "1em",
-                          paddingBottom: "1em",
-                          color: "#C71585",
-                          margin: "5px",
-                          border: "1px #C71585 solid",
-                          backgroundColor: "white",
-                        }}
-                      >
-                        {test.error_type}
-                      </Typography>
-                    ) : (
-                      <div></div>
-                    )}
                     {test.trace ? (
                       <TestErrorMessageAccordion>
                         {test}
