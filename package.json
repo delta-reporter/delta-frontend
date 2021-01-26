@@ -33,7 +33,7 @@
     "echarts-for-react": "^2.0.16",
     "eslint": "^7.13.0",
     "express": "^4.17.1",
-    "immer": "^4.0.2",
+    "immer": "^8.0.1",
     "isomorphic-unfetch": "^3.0.0",
     "material-ui": "^0.20.2",
     "next": "^9.5.4",
