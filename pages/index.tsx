@@ -14,7 +14,6 @@ import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
 import { BasePage } from "../components/templates"
 import fetch from "isomorphic-unfetch"
-import useSocket from "../hooks/useSocket"
 import Router from "next/router"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
@@ -316,12 +315,6 @@ export interface Test {
 function Index({ projects }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(projects)
 
-  const [testProjects, setTestProjects] = useState(projects || [])
-
-  useSocket("delta_project", testProject => {
-    setTestProjects(testProjects => [...testProjects, testProject])
-  })
-
   // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
@@ -389,9 +382,9 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
               </Grid>
             </Grid>
           </div>
-          {testProjects[0] ? ( // checking if props exist (if there are projects)
+          {projects[0] ? ( // checking if props exist (if there are projects)
             <Grid container spacing={3}>
-              {testProjects.map(project => (
+              {projects.map(project => (
                 <Grid item xs={12} sm={3} key={project.project_id}>
                   <List>
                     <ListItem button>
