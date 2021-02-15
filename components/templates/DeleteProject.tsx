@@ -73,7 +73,8 @@ export default function DeleteProject(children: any) {
       `${process.env.publicDeltaCore}/api/v1/project/${project_id}`,
       options
     )
-    await postResponse.json()
+    await postResponse.json();
+    location.reload();
   }
 
   return (
