@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     settingsButton: {
       position: "absolute",
-      right: "10%",
+      right: "20%",
       top: "10%",
       width: "10%",
       height: "10%",
