@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       left: "30%",
     },
+    textDeletionMessage: {
+      color: "#fb4f14"
+    },
   })
 )
 
@@ -55,6 +58,7 @@ export default function DeleteProject(children: any) {
   const { project_id, darkMode } = children
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
+  const [showMessage, setShowMessage] = React.useState(null)
 
   const handleOpen = () => {
     setOpen(true)
@@ -69,12 +73,18 @@ export default function DeleteProject(children: any) {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     }
-    const postResponse = await fetch(
+    await fetch(
       `${process.env.publicDeltaCore}/api/v1/project/${project_id}`,
       options
+    ).catch(
+      () => {
+        setShowMessage("There was a problem deleting this project")
+      }
+    ).then(
+      () => {
+        setShowMessage("The project deletion was scheduled, all the data related to it will be removed in a few minutes")
+      }
     )
-    await postResponse.json();
-    location.reload();
   }
 
   return (
@@ -104,29 +114,39 @@ export default function DeleteProject(children: any) {
               ? classes.frameDark
               : classes.frameLight} id="frame">
               <div className={darkMode ? classes.textDark : classes.textLight}>
-                <Typography variant="h6" >
-                  Deleting the project will also delete test runs, test suites and tests.
-                <br />
-                Are you sure?
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  className={classes.button}
-                  onClick={handleClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  className={classes.button}
-                  onClick={() => deleteProject()}
-                >
-                  Delete
-                </Button>
+                {showMessage ? (
+                  <div className={darkMode ? classes.textDark : classes.textLight}>
+                    <Typography variant="h6" className={classes.textDeletionMessage}>
+                      {showMessage}
+                    </Typography>
+                  </div>
+                ) : (
+                    <div className={darkMode ? classes.textDark : classes.textLight}>
+                      <Typography variant="h6" >
+                        Deleting the project will also delete test runs, test suites and tests.
+                  <br />
+                  Are you sure?
+                  </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        className={classes.button}
+                        onClick={handleClose}
+                      >
+                        Cancel
+                  </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        className={classes.button}
+                        onClick={() => deleteProject()}
+                      >
+                        Delete
+                  </Button>
+                    </div>
+                  )}
               </div>
             </div>
           </div>
