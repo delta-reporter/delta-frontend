@@ -34,9 +34,9 @@ export const SmartLinksTest = function(props: SmartLinksProps) {
                   width: "auto",
                   height: "auto",
                   marginLeft: "10px",
-                  border: "1px #696969 solid",
+                  border: "1px grey solid",
                   fontSize: "12px",
-                  color: "#F5F5DC",
+                  color: "black",
                   float: "right",
                 }}
                 target="_blank"
