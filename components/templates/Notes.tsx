@@ -34,7 +34,7 @@ export const Notes = function(props: NotesProps) {
 
   const getData = async () => {
     const response = await fetch(
-      `${process.env.deltaCore}/api/v1/notes/${mother_test_id}`
+      `${process.env.publicDeltaCore}/api/v1/notes/${mother_test_id}`
     )
     const data = await response.json()
     setNotes(data)
@@ -51,7 +51,7 @@ export const Notes = function(props: NotesProps) {
       headers: { "Content-Type": "application/json" },
     }
     const getNotesResponse = await fetch(
-      `${process.env.deltaCore}/api/v1/notes/${mother_test_id}`,
+      `${process.env.publicDeltaCore}/api/v1/notes/${mother_test_id}`,
       options
     )
     return await getNotesResponse.json()
@@ -69,7 +69,7 @@ export const Notes = function(props: NotesProps) {
       }),
     }
     const postResponse = await fetch(
-      `${process.env.deltaCore}/api/v1/notes`,
+      `${process.env.publicDeltaCore}/api/v1/notes`,
       options
     )
     await postResponse.json()

@@ -74,7 +74,7 @@ export default function DeleteProject(children: any) {
       headers: { "Content-Type": "application/json" },
     }
     await fetch(
-      `${process.env.deltaCore}/api/v1/project/${project_id}`,
+      `${process.env.publicDeltaCore}/api/v1/project/${project_id}`,
       options
     )
       .catch(() => {

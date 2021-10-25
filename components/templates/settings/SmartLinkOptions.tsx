@@ -92,7 +92,7 @@ export default function SmartLinkOptions(children: any) {
       body: JSON.stringify(data),
     }
     const postResponse = await fetch(
-      `${process.env.deltaCore}/api/v1/smart_link`,
+      `${process.env.publicDeltaCore}/api/v1/smart_link`,
       options
     )
     await postResponse.json()
