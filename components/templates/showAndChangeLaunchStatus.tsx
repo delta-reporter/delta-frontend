@@ -4,7 +4,10 @@ import { showStatusIcon } from "."
 import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
 
-export function showStatusAndEnableToStopRunningLaunch(status, launchId) {
+export function showStatusAndEnableToStopRunningLaunch(
+  status: any,
+  launchId: any
+) {
   const [openPopUp, setOpenPopUp] = useState(false)
 
   const handleStopButtonClick = async (launchId: string | number) => {

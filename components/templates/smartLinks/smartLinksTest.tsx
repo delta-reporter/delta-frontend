@@ -12,7 +12,7 @@ interface SmartLinksProps {
 export const SmartLinksTest = function(props: SmartLinksProps) {
   const { project_id, environment, test_id } = props
 
-  const { loading, noData, smart_links } = getSmartLinksForTest(
+  const { loading, noData, smartLinks: smart_links } = getSmartLinksForTest(
     project_id,
     environment,
     test_id
@@ -40,6 +40,7 @@ export const SmartLinksTest = function(props: SmartLinksProps) {
                   float: "right",
                 }}
                 target="_blank"
+                rel="noreferrer"
               >
                 {smart_link.label}
               </Button>

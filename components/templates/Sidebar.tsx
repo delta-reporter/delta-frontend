@@ -1,7 +1,8 @@
 import React from "react"
-import { ListItem, ListItemText, ListItemIcon, Link } from "@material-ui/core/"
+import { ListItem, ListItemText, ListItemIcon, Link, ListSubheader } from "@material-ui/core/"
 import HomeIcon from "@material-ui/icons/Home"
 import InsertChartIcon from '@material-ui/icons/InsertChart';
+import BarChartIcon from '@material-ui/icons/BarChart';
 
 export const SideBarMainItems = (
   <div>
@@ -25,12 +26,12 @@ export const SideBarMainItems = (
 export const SideBarSecondaryItems = (
   <div>
     {/* for the later use */}
-    {/* <ListSubheader inset>Title</ListSubheader>
+    <ListSubheader inset>Title</ListSubheader>
     <ListItem button disabled>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Text" />
-    </ListItem> */}
+    </ListItem>
   </div>
 )

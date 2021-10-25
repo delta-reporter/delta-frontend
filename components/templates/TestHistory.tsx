@@ -28,12 +28,12 @@ export const HistoricalTests = function(props: TestProps) {
   const { children, darkMode } = props
 
   function getBackgroundColor(darkMode) {
-    if(darkMode) return "#2a2a2a"
+    if (darkMode) return "#2a2a2a"
     else return "white"
   }
 
   function getTextColor(darkMode) {
-    if(darkMode) return "#8c8d8d"
+    if (darkMode) return "#8c8d8d"
     else return "black"
   }
 
@@ -49,7 +49,7 @@ export const HistoricalTests = function(props: TestProps) {
     setHistoricalTestsExpandedPanel,
   ] = React.useState<string | false>(false)
   const expandCollapsePanel = (historicalTestsPanel: string) => (
-    _event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<unknown>,
     isExpanded: boolean
   ) => {
     setHistoricalTestsExpandedPanel(isExpanded ? historicalTestsPanel : false)
@@ -83,14 +83,17 @@ export const HistoricalTests = function(props: TestProps) {
                 expanded={historicalTestsExpandedPanel === test.test_history_id}
                 onChange={expandCollapsePanel(test.test_history_id)}
                 TransitionProps={{ unmountOnExit: true }}
-                style={{backgroundColor: getBackgroundColor(darkMode), color: getTextColor(darkMode)}}
+                style={{
+                  backgroundColor: getBackgroundColor(darkMode),
+                  color: getTextColor(darkMode),
+                }}
               >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography>
                     {showStatusText(test.status, darkMode)}{" "}
                     {showDateText(test.end_datetime, darkMode)}
                     {showResolutionText(test.resolution, darkMode, false)}{" "}
-                    {test.test_history_id === children.test_id ? ( // if it's current test - show the badge 
+                    {test.test_history_id === children.test_id ? ( // if it's current test - show the badge
                       <Tooltip title="Current test">
                         <button
                           style={{
