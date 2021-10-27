@@ -62,11 +62,11 @@ interface TestProps {
 export const TestErrorMessageAccordion = function(props: TestProps) {
   const { children } = props
 
-  const [expandedErrorPanel, setExpandedErrorPanel] = useState<
-    string | false
-  >(false)
+  const [expandedErrorPanel, setExpandedErrorPanel] = useState<string | false>(
+    false
+  )
   const expandCollapsePanel = (errorPanel: string) => (
-    _event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<unknown>,
     isExpanded: boolean
   ) => {
     setExpandedErrorPanel(isExpanded ? errorPanel : false)
@@ -120,7 +120,7 @@ export const TestParametersAccordion = function(children: any) {
     false
   )
   const expandCollapsePanel = (errorPanel: string) => (
-    _event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<unknown>,
     isExpanded: boolean
   ) => {
     setExpandedErrorPanel(isExpanded ? errorPanel : false)
@@ -170,11 +170,11 @@ export const TestParametersAccordion = function(children: any) {
 export const TestMediaAccordion = function(props: TestProps) {
   const { children } = props
 
-  const [mediaExpandedPanel, setMediaExpandedPanel] = useState<
-    string | false
-  >(false)
+  const [mediaExpandedPanel, setMediaExpandedPanel] = useState<string | false>(
+    false
+  )
   const expandCollapsePanel = (mediaPanel: string) => (
-    _event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<unknown>,
     isExpanded: boolean
   ) => {
     setMediaExpandedPanel(isExpanded ? mediaPanel : false)
@@ -211,8 +211,14 @@ export const TestMediaAccordion = function(props: TestProps) {
               <PanelDetails>
                 <CardActionArea>
                   {media.type === "img" ? (
-                    <a href={`${process.env.publicDeltaCore}/api/v1/get_file/` +
-                    media.file_id} target="_blank">
+                    <a
+                      href={
+                        `${process.env.publicDeltaCore}/api/v1/get_file/` +
+                        media.file_id
+                      }
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <CardMedia
                         component="img"
                         alt={media.filename}

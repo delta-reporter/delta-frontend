@@ -91,9 +91,6 @@ export const ListOfTests = function(props: Props) {
     else if (isHighlighted && darkMode)
       // dark mode - highlighted
       return classes.backgroundDarkGrey
-    else if (isHighlighted && !darkMode)
-      // light mode - not highlighted
-      return classes.backgroundWhite
     else if (!isHighlighted && darkMode)
       // dark mode - not highlighted
       return classes.testBackgroundDark
@@ -109,7 +106,8 @@ export const ListOfTests = function(props: Props) {
             color: "grey",
           }}
         >
-        No test results yet. They either take some time to load or there are no matching tests for this filter
+          No test results yet. They either take some time to load or there are
+          no matching tests for this filter
         </Typography>
       </div>
     )

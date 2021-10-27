@@ -105,9 +105,17 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function Tests({test_run,}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Tests({
+  test_run,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(test_run)
-  const [selectedStatus, setSelectedStatus] = useState(["1", "2", "3", "4", "5"])
+  const [selectedStatus, setSelectedStatus] = useState([
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+  ])
 
   async function handleStatusFilter(status) {
     if (selectedStatus.includes(status) && selectedStatus.length !== 1) {
@@ -149,269 +157,301 @@ function Tests({test_run,}: InferGetServerSidePropsType<typeof getServerSideProp
         <title>Δ | Tests</title>
         {test_run ? (
           test_run.map(test_run => (
-          // checking if there data for this test_run
-          // id needed here for scrolling to the top when needed
-          <div id="page-top" key={test_run.project_id}>
-            <div>
-              <div style={{ float: "left" }}>
-                <Breadcrumbs
-                  style={{
-                    paddingLeft: "30px",
-                    marginTop: "20px",
-                  }}
-                  className={
-                    state.darkMode
-                      ? classes.textColorDarkMode
-                      : classes.textColorLightMode
-                  }
-                >
-                  <Link color="inherit" href={`/`}>
-                    Projects
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={`/launches/${test_run.project_id}`}
-                  >
-                   {test_run.project_name} Launches
-                  </Link>
-                  <Typography
-                    color="textPrimary"
+            // checking if there data for this test_run
+            // id needed here for scrolling to the top when needed
+            <div id="page-top" key={test_run.project_id}>
+              <div>
+                <div style={{ float: "left" }}>
+                  <Breadcrumbs
+                    style={{
+                      paddingLeft: "30px",
+                      marginTop: "20px",
+                    }}
                     className={
                       state.darkMode
                         ? classes.textColorDarkMode
                         : classes.textColorLightMode
                     }
                   >
-                    {test_run.test_type}
-                  </Typography>
-                </Breadcrumbs>
-              </div>
-              <div
-                style={{
-                  float: "right",
-                  width: "15%",
-                  marginTop: "15px",
-                }}
-              >
-                <Grid
-                  component="label"
-                  container
-                  alignItems="center"
-                  spacing={1}
-                >
-                  <Grid item>
-                    <WbSunnyIcon></WbSunnyIcon>
-                  </Grid>
-                  <Grid item>
-                    <Switch
-                      checked={state.darkMode}
-                      onChange={handleDarkModeChange}
-                      name="darkMode"
-                      color="primary"
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Brightness2Icon></Brightness2Icon>
-                  </Grid>
-                </Grid>
-              </div>
-            </div>
-            <Container maxWidth="lg" className={classes.container}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  <Paper
-                    className={
-                      state.darkMode ? classes.paperDark : classes.paperLight
-                    }
-                    elevation={2}
-                  >
-                    <div>
-        <div
-          style={{
-            float: "left",
-            width: "55%",
-            overflow: "hidden",
-            height: "max-content",
-            paddingRight: "20px",
-          }}
-        >  
-        <Typography
-        variant="h6"
-        style={{
-          fontWeight: 400,
-          margin: "5px",
-        }}
-        className={
-          state.darkMode
-            ? classes.textColorDarkMode
-            : classes.textColorLightMode
-        }
-      >
-        Test suites for{" "}
-        <Link
-          style={{ color: "#605959" }}
-          underline="none"
-          color="secondary"
-        >
-          {" "}
-          {test_run.test_type}{" "}
-        </Link>{" "}
-        run of
-        <span style={{ color: "#605959" }}>
-          {" "}
-          {test_run.project_name}
-        </span> {" "}
-        project
-      </Typography>
-      </div>
-          <div style={{
-            float: "right",
-            width: "32%",
-            overflow: "hidden",
-            marginTop:"10px"
-          }}>
-                  <Typography style={{fontSize:"14px", color: 'grey'}} align="center">
-                      This run took  
-                      {test_run.duration.minutes === 0 ? (
-                        <> </>
-                      ) : (
-                     <span style={{textDecoration:'underline' }}>   {test_run.duration.minutes} minutes {" "} </span>
-                      )}
-                     <span style={{textDecoration:'underline' }}> {test_run.duration.seconds} seconds{" "}</span> to execute 
-                  </Typography>
-                  <Typography style={{fontSize:"14px", color: 'grey'}} align="center">
-                      This run has <span style={{ color: "green" }}> {test_run.tests_passed} passed</span>, {" "}
-                      <span style={{ color: "#d62727" }}> {test_run.tests_failed} failed</span>, {" "}
-                      <span style={{ color: "#605959" }}> {test_run.tests_skipped} skipped</span> tests
-                  </Typography>
-            </div>
-      </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        marginTop: "20px",
-                        alignItems: "baseline",
-                      }}
+                    <Link color="inherit" href={`/`}>
+                      Projects
+                    </Link>
+                    <Link
+                      color="inherit"
+                      href={`/launches/${test_run.project_id}`}
                     >
-                      {" "}
-                      <SmartLinksTestRun project_id={test_run.project_id} environment={test_run.environment} test_run_id={test_run.test_run_id}/>
+                      {test_run.project_name} Launches
+                    </Link>
+                    <Typography
+                      color="textPrimary"
+                      className={
+                        state.darkMode
+                          ? classes.textColorDarkMode
+                          : classes.textColorLightMode
+                      }
+                    >
+                      {test_run.test_type}
+                    </Typography>
+                  </Breadcrumbs>
+                </div>
+                <div
+                  style={{
+                    float: "right",
+                    width: "15%",
+                    marginTop: "15px",
+                  }}
+                >
+                  <Grid
+                    component="label"
+                    container
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item>
+                      <WbSunnyIcon></WbSunnyIcon>
+                    </Grid>
+                    <Grid item>
+                      <Switch
+                        checked={state.darkMode}
+                        onChange={handleDarkModeChange}
+                        name="darkMode"
+                        color="primary"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Brightness2Icon></Brightness2Icon>
+                    </Grid>
+                  </Grid>
+                </div>
+              </div>
+              <Container maxWidth="lg" className={classes.container}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    <Paper
+                      className={
+                        state.darkMode ? classes.paperDark : classes.paperLight
+                      }
+                      elevation={2}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            float: "left",
+                            width: "55%",
+                            overflow: "hidden",
+                            height: "max-content",
+                            paddingRight: "20px",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            style={{
+                              fontWeight: 400,
+                              margin: "5px",
+                            }}
+                            className={
+                              state.darkMode
+                                ? classes.textColorDarkMode
+                                : classes.textColorLightMode
+                            }
+                          >
+                            Test suites for{" "}
+                            <Link
+                              style={{ color: "#605959" }}
+                              underline="none"
+                              color="secondary"
+                            >
+                              {" "}
+                              {test_run.test_type}{" "}
+                            </Link>{" "}
+                            run of
+                            <span style={{ color: "#605959" }}>
+                              {" "}
+                              {test_run.project_name}
+                            </span>{" "}
+                            project
+                          </Typography>
+                        </div>
+                        <div
+                          style={{
+                            float: "right",
+                            width: "32%",
+                            overflow: "hidden",
+                            marginTop: "10px",
+                          }}
+                        >
+                          <Typography
+                            style={{ fontSize: "14px", color: "grey" }}
+                            align="center"
+                          >
+                            This run took
+                            {test_run.duration.minutes === 0 ? (
+                              <> </>
+                            ) : (
+                              <span style={{ textDecoration: "underline" }}>
+                                {" "}
+                                {test_run.duration.minutes} minutes{" "}
+                              </span>
+                            )}
+                            <span style={{ textDecoration: "underline" }}>
+                              {" "}
+                              {test_run.duration.seconds} seconds{" "}
+                            </span>{" "}
+                            to execute
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "grey" }}
+                            align="center"
+                          >
+                            This run has{" "}
+                            <span style={{ color: "green" }}>
+                              {" "}
+                              {test_run.tests_passed} passed
+                            </span>
+                            ,{" "}
+                            <span style={{ color: "#d62727" }}>
+                              {" "}
+                              {test_run.tests_failed} failed
+                            </span>
+                            ,{" "}
+                            <span style={{ color: "#605959" }}>
+                              {" "}
+                              {test_run.tests_skipped} skipped
+                            </span>{" "}
+                            tests
+                          </Typography>
+                        </div>
+                      </div>
                       <div
                         style={{
                           display: "flex",
-                          paddingLeft: "145px",
+                          marginTop: "20px",
                           alignItems: "baseline",
                         }}
                       >
-                        <p
-                          className={
-                            state.darkMode
-                              ? classes.textColorDarkMode
-                              : classes.textColorLightMode
-                          }
-                        >
-                          Filter by Status:
-                        </p>
-                        <Button
-                          onClick={() => handleStatusFilter("2")}
-                          className={
-                            selectedStatus.includes("2")
-                              ? classes.passedSelected
-                              : classes.passedNotSelected
-                          }
+                        {" "}
+                        <SmartLinksTestRun
+                          project_id={test_run.project_id}
+                          environment={test_run.environment}
+                          test_run_id={test_run.test_run_id}
+                        />
+                        <div
                           style={{
-                            width: "90px",
-                            height: "30px",
-                            marginLeft: "10px",
-                            border: "1px #a7bab1 solid",
-                            fontSize: "12px",
+                            display: "flex",
+                            paddingLeft: "145px",
+                            alignItems: "baseline",
                           }}
                         >
-                          passed
-                        </Button>
-                        <Button
-                          onClick={() => handleStatusFilter("1")}
-                          className={
-                            selectedStatus.includes("1")
-                              ? classes.failedSelected
-                              : classes.failedNotSelected
-                          }
-                          style={{
-                            width: "90px",
-                            height: "30px",
-                            marginLeft: "10px",
-                            border: "1px #c3acac solid",
-                            fontSize: "12px",
-                          }}
-                        >
-                          failed
-                        </Button>
-                        <Button
-                          onClick={() => handleStatusFilter("3")}
-                          className={
-                            selectedStatus.includes("3")
-                              ? classes.runningSelected
-                              : classes.runningNotSelected
-                          }
-                          style={{
-                            width: "90px",
-                            height: "30px",
-                            marginLeft: "10px",
-                            border: "1px #c5baae solid",
-                            fontSize: "12px",
-                          }}
-                        >
-                          running
-                        </Button>
-                        <Button
-                          onClick={() => handleStatusFilter("4")}
-                          className={
-                            selectedStatus.includes("4")
-                              ? classes.incompleteSelected
-                              : classes.incompleteNotSelected
-                          }
-                          style={{
-                            width: "90px",
-                            height: "30px",
-                            marginLeft: "10px",
-                            border: "1px #c5baae solid",
-                            fontSize: "12px",
-                          }}
-                        >
-                          incomplete
-                        </Button>
-                        <Button
-                          onClick={() => handleStatusFilter("5")}
-                          className={
-                            selectedStatus.includes("5")
-                              ? classes.skippedSelected
-                              : classes.skippedNotSelected
-                          }
-                          style={{
-                            width: "90px",
-                            height: "30px",
-                            marginLeft: "10px",
-                            border: "1px #c7c5c5 solid",
-                            fontSize: "12px",
-                          }}
-                        >
-                          skipped
-                        </Button>
+                          <p
+                            className={
+                              state.darkMode
+                                ? classes.textColorDarkMode
+                                : classes.textColorLightMode
+                            }
+                          >
+                            Filter by Status:
+                          </p>
+                          <Button
+                            onClick={() => handleStatusFilter("2")}
+                            className={
+                              selectedStatus.includes("2")
+                                ? classes.passedSelected
+                                : classes.passedNotSelected
+                            }
+                            style={{
+                              width: "90px",
+                              height: "30px",
+                              marginLeft: "10px",
+                              border: "1px #a7bab1 solid",
+                              fontSize: "12px",
+                            }}
+                          >
+                            passed
+                          </Button>
+                          <Button
+                            onClick={() => handleStatusFilter("1")}
+                            className={
+                              selectedStatus.includes("1")
+                                ? classes.failedSelected
+                                : classes.failedNotSelected
+                            }
+                            style={{
+                              width: "90px",
+                              height: "30px",
+                              marginLeft: "10px",
+                              border: "1px #c3acac solid",
+                              fontSize: "12px",
+                            }}
+                          >
+                            failed
+                          </Button>
+                          <Button
+                            onClick={() => handleStatusFilter("3")}
+                            className={
+                              selectedStatus.includes("3")
+                                ? classes.runningSelected
+                                : classes.runningNotSelected
+                            }
+                            style={{
+                              width: "90px",
+                              height: "30px",
+                              marginLeft: "10px",
+                              border: "1px #c5baae solid",
+                              fontSize: "12px",
+                            }}
+                          >
+                            running
+                          </Button>
+                          <Button
+                            onClick={() => handleStatusFilter("4")}
+                            className={
+                              selectedStatus.includes("4")
+                                ? classes.incompleteSelected
+                                : classes.incompleteNotSelected
+                            }
+                            style={{
+                              width: "90px",
+                              height: "30px",
+                              marginLeft: "10px",
+                              border: "1px #c5baae solid",
+                              fontSize: "12px",
+                            }}
+                          >
+                            incomplete
+                          </Button>
+                          <Button
+                            onClick={() => handleStatusFilter("5")}
+                            className={
+                              selectedStatus.includes("5")
+                                ? classes.skippedSelected
+                                : classes.skippedNotSelected
+                            }
+                            style={{
+                              width: "90px",
+                              height: "30px",
+                              marginLeft: "10px",
+                              border: "1px #c7c5c5 solid",
+                              fontSize: "12px",
+                            }}
+                          >
+                            skipped
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <ListOfSuites
-                        test_run_id={test_run.test_run_id}
-                        project_id={test_run.project_id}
-                        environment={test_run.environment}
-                        stats={selectedStatus}
-                        darkMode={state.darkMode}
-                      ></ListOfSuites>
-                    </div>
-                  </Paper>
+                      <div>
+                        <ListOfSuites
+                          test_run_id={test_run.test_run_id}
+                          project_id={test_run.project_id}
+                          environment={test_run.environment}
+                          stats={selectedStatus}
+                          darkMode={state.darkMode}
+                        ></ListOfSuites>
+                      </div>
+                    </Paper>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Container>
-          </div>
+              </Container>
+            </div>
           ))
         ) : (
           <h1>There is no data for this test run!</h1>

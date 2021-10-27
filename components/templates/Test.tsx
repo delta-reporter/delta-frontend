@@ -7,7 +7,11 @@ import {
   TestParametersAccordion,
 } from "./TestExpandablePanels"
 import { TestResolution } from "./TestResolution"
-import { showStatusText, HistoricalTests, showIsFlakyBadgeTestExpanded } from "."
+import {
+  showStatusText,
+  HistoricalTests,
+  showIsFlakyBadgeTestExpanded,
+} from "."
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import "react-tabs/style/react-tabs.css"
 import { Notes } from "./Notes"
@@ -35,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    backgroundColor:"#2a2a2a",
+    backgroundColor: "#2a2a2a",
   },
   paperNoPaddingLight: {
     display: "flex",
@@ -45,8 +49,7 @@ const useStyles = makeStyles(theme => ({
   textColorDarkMode: {
     color: "#8c8d8d",
   },
-  textColorLightMode: {
-  },
+  textColorLightMode: {},
   externalLogsButton: {
     backgroundColor: theme.palette.secondary.dark,
     width: "auto",
@@ -55,8 +58,7 @@ const useStyles = makeStyles(theme => ({
     border: "1px #696969 solid",
     fontSize: "12px",
     color: "#7CFC00",
-    float: "right"
-
+    float: "right",
   },
 }))
 
@@ -76,21 +78,30 @@ export const TestExpanded = function(props: TestProps) {
   }
 
   function getBackgroundColorForTheTab(darkMode) {
-    if(darkMode) return "#2a2a2a"
+    if (darkMode) return "#2a2a2a"
     else return "white"
   }
 
   function getTextColorForTheTab(darkMode) {
-    if(darkMode) return "#8c8d8d"
+    if (darkMode) return "#8c8d8d"
     else return "black"
   }
 
   function setSlowTestBadge(duration) {
     // if longer than 1 min
-    if (duration > "1") 
+    if (duration > "1")
       return (
         <Tooltip title="This test took longer than 1 min to execute">
-            <span style={{ border:"1px solid #d62727", padding: "2px 5px 2px 5px", color:"#d62727", marginLeft:"13px"}}>Potentially slow test</span>
+          <span
+            style={{
+              border: "1px solid #d62727",
+              padding: "2px 5px 2px 5px",
+              color: "#d62727",
+              marginLeft: "13px",
+            }}
+          >
+            Potentially slow test
+          </span>
         </Tooltip>
       )
   }
@@ -99,10 +110,20 @@ export const TestExpanded = function(props: TestProps) {
     <div
       key={children.test_id}
       className={classes.root}
-      style={{ paddingLeft: "50px", paddingRight: "50px", paddingBottom: "50px", marginTop: "-20px"}}
+      style={{
+        paddingLeft: "50px",
+        paddingRight: "50px",
+        paddingBottom: "50px",
+        marginTop: "-20px",
+      }}
     >
       {children.name ? ( // when page is just loaded and no test selected - half page to be blank
-        <Paper className={darkMode ? classes.paperNoPaddingDark : classes.paperNoPaddingLight} elevation={0}>
+        <Paper
+          className={
+            darkMode ? classes.paperNoPaddingDark : classes.paperNoPaddingLight
+          }
+          elevation={0}
+        >
           <Typography
             style={{
               padding: "10px",
@@ -112,48 +133,91 @@ export const TestExpanded = function(props: TestProps) {
               wordBreak: "break-word",
               whiteSpace: "pre-wrap",
             }}
-            className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+            className={
+              darkMode ? classes.textColorDarkMode : classes.textColorLightMode
+            }
           >
-            {showStatusText(children.status, darkMode)} 
-           <span style={{paddingLeft:"8px"}}> {children.name}</span>
+            {showStatusText(children.status, darkMode)}
+            <span style={{ paddingLeft: "8px" }}> {children.name}</span>
           </Typography>
-          <Tabs style={{ marginTop: "20px" }} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+          <Tabs
+            style={{ marginTop: "20px" }}
+            className={
+              darkMode ? classes.textColorDarkMode : classes.textColorLightMode
+            }
+          >
             <TabList>
-              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode) }} >Info</Tab>
-              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Resolution</Tab>
-              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Test History</Tab>
-              <Tab style={{ fontSize: "16px", backgroundColor: getBackgroundColorForTheTab(darkMode), color: getTextColorForTheTab(darkMode)  }}>Notes</Tab>
+              <Tab
+                style={{
+                  fontSize: "16px",
+                  backgroundColor: getBackgroundColorForTheTab(darkMode),
+                  color: getTextColorForTheTab(darkMode),
+                }}
+              >
+                Info
+              </Tab>
+              <Tab
+                style={{
+                  fontSize: "16px",
+                  backgroundColor: getBackgroundColorForTheTab(darkMode),
+                  color: getTextColorForTheTab(darkMode),
+                }}
+              >
+                Resolution
+              </Tab>
+              <Tab
+                style={{
+                  fontSize: "16px",
+                  backgroundColor: getBackgroundColorForTheTab(darkMode),
+                  color: getTextColorForTheTab(darkMode),
+                }}
+              >
+                Test History
+              </Tab>
+              <Tab
+                style={{
+                  fontSize: "16px",
+                  backgroundColor: getBackgroundColorForTheTab(darkMode),
+                  color: getTextColorForTheTab(darkMode),
+                }}
+              >
+                Notes
+              </Tab>
             </TabList>
             {/* info tab */}
             <TabPanel>
-            <SmartLinksTest project_id={project_id} environment={environment} test_id={children.test_id}/>
-            {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)} 
-            {children.duration ? (
-              <Typography style={{ paddingTop: "20px" }}>
-                Full path:
-                <span style={{ color: "grey" }}> {children.file}</span>
-              </Typography>
-            ) : (
-              <></>
-            )}
+              <SmartLinksTest
+                project_id={project_id}
+                environment={environment}
+                test_id={children.test_id}
+              />
+              {showIsFlakyBadgeTestExpanded(children.status, children.is_flaky)}
               {children.duration ? (
-              <Typography style={{ paddingTop: "20px" }}>
-                Duration:
-                {children.duration.minutes === 0 ? (
-                  <span style={{ color: "grey" }}> </span>
-                ) : (
+                <Typography style={{ paddingTop: "20px" }}>
+                  Full path:
+                  <span style={{ color: "grey" }}> {children.file}</span>
+                </Typography>
+              ) : (
+                <></>
+              )}
+              {children.duration ? (
+                <Typography style={{ paddingTop: "20px" }}>
+                  Duration:
+                  {children.duration.minutes === 0 ? (
+                    <span style={{ color: "grey" }}> </span>
+                  ) : (
+                    <span style={{ color: "grey" }}>
+                      {" "}
+                      {children.duration.minutes}m{" "}
+                    </span>
+                  )}
                   <span style={{ color: "grey" }}>
                     {" "}
-                    {children.duration.minutes}m{" "}
+                    {children.duration.seconds}.
+                    {convertToSeconds(children.duration.microseconds)}s{" "}
                   </span>
-                )}
-                <span style={{ color: "grey" }}>
-                  {" "}
-                  {children.duration.seconds}.
-                  {convertToSeconds(children.duration.microseconds)}s{" "}
-                </span>
-                {setSlowTestBadge(children.duration.minutes)} 
-              </Typography>
+                  {setSlowTestBadge(children.duration.minutes)}
+                </Typography>
               ) : (
                 <div></div>
               )}
@@ -181,16 +245,20 @@ export const TestExpanded = function(props: TestProps) {
               ) : (
                 <div></div>
               )}
-              {children.parameters?
-                <TestParametersAccordion parameters={children.parameters}/>
-                :
+              {children.parameters ? (
+                <TestParametersAccordion parameters={children.parameters} />
+              ) : (
                 <div></div>
-              }
+              )}
             </TabPanel>
             <TabPanel>
               {/* set resolution tab */}
               <div style={{ paddingTop: "20px" }}>
-                  <TestResolution resolution = {children.test_history_resolution} motherTestId={children.mother_test_id} testId={children.test_id}></TestResolution>
+                <TestResolution
+                  resolution={children.test_history_resolution}
+                  motherTestId={children.mother_test_id}
+                  testId={children.test_id}
+                ></TestResolution>
               </div>
             </TabPanel>
             <TabPanel>
@@ -199,7 +267,10 @@ export const TestExpanded = function(props: TestProps) {
             </TabPanel>
             <TabPanel>
               {/* notes tab */}
-              <Notes darkMode={darkMode} mother_test_id={children.mother_test_id}></Notes>
+              <Notes
+                darkMode={darkMode}
+                mother_test_id={children.mother_test_id}
+              ></Notes>
             </TabPanel>
           </Tabs>
         </Paper>

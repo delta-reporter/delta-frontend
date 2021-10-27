@@ -8,8 +8,7 @@ import {
   NoSsr,
   Switch,
 } from "@material-ui/core"
-import { GetServerSideProps } from "next"
-import { InferGetServerSidePropsType } from "next"
+import { InferGetServerSidePropsType, GetServerSideProps } from "next"
 import { makeStyles } from "@material-ui/core/styles"
 import React, { useState, useEffect } from "react"
 import { BasePage } from "../components/templates"
@@ -313,7 +312,9 @@ export interface Test {
   is_flaky: boolean
 }
 
-function Index({ projects }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Index({
+  projects,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(projects)
 
   // dark mode switch
@@ -322,12 +323,12 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
   })
 
   useEffect(() => {
-    localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+    localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) // setting a variable in the browser storage
   }, [state.darkMode])
 
   function getInitialDarkModeState(): boolean {
     if (typeof window !== "undefined") {
-      const savedColorMode = JSON.parse(localStorage.getItem("darkMode")) //checking the 'dark' var from browser storage
+      const savedColorMode = JSON.parse(localStorage.getItem("darkMode")) // checking the 'dark' var from browser storage
       return savedColorMode || false
     } else {
       return false
@@ -389,8 +390,14 @@ function Index({ projects }: InferGetServerSidePropsType<typeof getServerSidePro
                 <Grid item xs={12} sm={3} key={project.project_id}>
                   <List>
                     <ListItem button>
-                      <ProjectSettingsModal project_id={project.project_id}  darkMode={state.darkMode}/>
-                      <DeleteProject project_id={project.project_id}  darkMode={state.darkMode}/>
+                      <ProjectSettingsModal
+                        project_id={project.project_id}
+                        darkMode={state.darkMode}
+                      />
+                      <DeleteProject
+                        project_id={project.project_id}
+                        darkMode={state.darkMode}
+                      />
                       <Paper
                         className={
                           state.darkMode

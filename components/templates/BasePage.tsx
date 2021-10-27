@@ -6,9 +6,9 @@ import {
   Typography,
   Link,
   Toolbar,
-  IconButton
-  } from "@material-ui/core"
-import HelpIcon from '@material-ui/icons/Help'
+  IconButton,
+} from "@material-ui/core"
+import HelpIcon from "@material-ui/icons/Help"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,34 +57,48 @@ export const BasePage = function(props: Props) {
 
   return (
     <div className={`${classes.root} ${className}`}>
-        {/* top nav bar with Delta name */}
+      {/* top nav bar with Delta name */}
       <CssBaseline />
       <AppBar position="absolute">
-        <Toolbar className={darkMode ? classes.toolbarDark : classes.toolbarLight}>
-        <div  style={{ width: "100%"}}>
-          <Typography
-            variant="h5"
-            style={{ fontWeight: 400, margin: "5px", fontSize: "25px", float: "left"}}
-          >
-            <Link
-              underline="none"
-              href="/"
-              className={darkMode ? classes.deltaTitleDark : classes.deltaTitleLight}
+        <Toolbar
+          className={darkMode ? classes.toolbarDark : classes.toolbarLight}
+        >
+          <div style={{ width: "100%" }}>
+            <Typography
+              variant="h5"
+              style={{
+                fontWeight: 400,
+                margin: "5px",
+                fontSize: "25px",
+                float: "left",
+              }}
             >
-              Δ Delta Reporter
-            </Link>
-          </Typography>
-          <div  style={{ float: "right"}}>
-            <IconButton href="https://delta-reporter.github.io/delta-reporter/" target="_blank" style={{marginTop:"5px", marginLeft:"5px"}}>
-            <HelpIcon/>
+              <Link
+                underline="none"
+                href="/"
+                className={
+                  darkMode ? classes.deltaTitleDark : classes.deltaTitleLight
+                }
+              >
+                Δ Delta Reporter
+              </Link>
+            </Typography>
+            <div style={{ float: "right" }}>
+              <IconButton
+                href="https://delta-reporter.github.io/delta-reporter/"
+                target="_blank"
+                rel="noreferrer"
+                style={{ marginTop: "5px", marginLeft: "5px" }}
+              >
+                <HelpIcon />
               </IconButton>
             </div>
-            </div>
+          </div>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
         <div className={classes.spaceAfterNavBar} />
-          {/* all the main body */}
+        {/* all the main body */}
         <section>{children}</section>
       </main>
     </div>

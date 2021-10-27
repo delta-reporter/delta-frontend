@@ -76,11 +76,12 @@ export default function ProjectSettingsModal(children: any) {
         }}
       >
         <Fade in={open}>
-          <div className={ darkMode
-            ? classes.frameDark
-            : classes.frameLight} id="frame">
-              <div id="scroll">
-              <SmartLinkOptions project_id={project_id} darkMode={darkMode}/>
+          <div
+            className={darkMode ? classes.frameDark : classes.frameLight}
+            id="frame"
+          >
+            <div id="scroll">
+              <SmartLinkOptions project_id={project_id} darkMode={darkMode} />
             </div>
           </div>
         </Fade>

@@ -2,24 +2,29 @@ import { Button } from "@material-ui/core"
 import { showStatusIcon } from "."
 import ReactEcharts from "echarts-for-react"
 import Router from "next/router"
+import React from "react"
 
 let pyramidData = []
 let roseData = []
 
 function setButtonsBackgroundColor(darkMode) {
-  if(darkMode) //light mode - highlighted
-   return "#2a2a2a"
+  if (darkMode)
+    //light mode - highlighted
+    return "#2a2a2a"
   else return "#e0e0e0"
 }
 
 function setButtonsTextColor(darkMode) {
-  if(darkMode) //light mode - highlighted
-   return "#8c8d8d"
+  if (darkMode)
+    //light mode - highlighted
+    return "#8c8d8d"
   else return "black"
 }
 
-export function testRunButtonsDefaultView(testRunStats: any, darkMode: boolean) {
-
+export function testRunButtonsDefaultView(
+  testRunStats: any,
+  darkMode: boolean
+) {
   return testRunStats.map(testRun => (
     <Button
       key={testRun.test_run_id}
@@ -34,7 +39,7 @@ export function testRunButtonsDefaultView(testRunStats: any, darkMode: boolean) 
         marginLeft: "5px",
         backgroundColor: setButtonsBackgroundColor(darkMode),
         border: "1px grey solid",
-        color: setButtonsTextColor(darkMode)
+        color: setButtonsTextColor(darkMode),
       }}
     >
       {testRun.test_type}{" "}
@@ -47,7 +52,10 @@ export function testRunButtonsDefaultView(testRunStats: any, darkMode: boolean) 
   ))
 }
 
-export function testRunButtonsDeltaPyramidView(testRunStats: any, launchId: number) {
+export function testRunButtonsDeltaPyramidView(
+  testRunStats: any,
+  launchId: number
+) {
   const deltaViewStyle = { height: "190px", width: "800px" }
 
   // The param echarts could be pass into this function as well
@@ -59,7 +67,7 @@ export function testRunButtonsDeltaPyramidView(testRunStats: any, launchId: numb
     }
   }
 
-  let onChartEvents = {
+  const onChartEvents = {
     click: onChartClick,
   }
 
@@ -119,9 +127,9 @@ export function testRunButtonsDeltaPyramidView(testRunStats: any, launchId: numb
     if (key === "pyramid") {
       pyramidData.push({ value: value, name: name, test_run_id: itemId })
     } else if (key === "rose") {
-      let testTypeIndex = roseData.findIndex(arr => arr.name === name)
+      const testTypeIndex = roseData.findIndex(arr => arr.name === name)
       if (testTypeIndex >= 0) {
-        let newValue = roseData[testTypeIndex].value + value
+        const newValue = roseData[testTypeIndex].value + value
         roseData[testTypeIndex] = {
           value: newValue,
           name: name,
