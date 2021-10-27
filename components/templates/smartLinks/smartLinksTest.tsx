@@ -12,7 +12,7 @@ interface SmartLinksProps {
 export const SmartLinksTest = function(props: SmartLinksProps) {
   const { project_id, environment, test_id } = props
 
-  const { loading, noData, smartLinks: smart_links } = getSmartLinksForTest(
+  const { loading, noData, smartLinks } = getSmartLinksForTest(
     project_id,
     environment,
     test_id
@@ -25,7 +25,7 @@ export const SmartLinksTest = function(props: SmartLinksProps) {
       <div>
         {loading
           ? "Loading smart links..."
-          : smart_links.map(smart_link => (
+          : smartLinks.map(smart_link => (
               <Button
                 key={smart_link.smart_link_id}
                 href={smart_link.smart_link}

@@ -44,7 +44,7 @@ export default function SmartLinks(children: any) {
   const { project_id, darkMode } = children
   const classes = useStyles()
 
-  const { loading, noData, smart_links, mutate } = getSmartLinks(project_id)
+  const { loading, noData, smartLinks, mutate } = getSmartLinks(project_id)
 
   async function deleteSmartLink(smart_link_id) {
     const options = {
@@ -84,7 +84,7 @@ export default function SmartLinks(children: any) {
                 dense={true}
                 className={darkMode ? classes.dark : classes.light}
               >
-                {smart_links.map(smart_link => (
+                {smartLinks.map(smart_link => (
                   <ListItem key={smart_link.smart_link_id}>
                     <ListItemAvatar>
                       <Avatar>

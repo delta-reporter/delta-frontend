@@ -16,5 +16,5 @@ export default function getSmartLinks(projectId: number) {
   const loading = !data && !error
   const noData = !data
 
-  return { loading, noData, smart_links: data, mutate }
+  return { loading, noData, smartLinks: data, mutate }
 }
