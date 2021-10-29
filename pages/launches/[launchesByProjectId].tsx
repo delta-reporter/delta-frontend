@@ -8,6 +8,7 @@ import { InferGetServerSidePropsType } from 'next'
 import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
+  InfoDashboard,
   // EventNotification
 } from "../../components/templates"
 import { TestLaunch } from "../index"
@@ -48,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.light,
-  }, 
+  },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -72,11 +73,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.secondary.light,
     border: "1px grey solid",
     marginBottom: "15px",
-  }, 
+  },
   toggleModeLight: {
     border: "1px grey solid",
     marginBottom: "15px",
-  }, 
+  },
   textColorDarkMode: {
     color: theme.palette.secondary.light,
   },
@@ -148,11 +149,11 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
   });
-  
+
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-  
+
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
   }, [state.darkMode])
@@ -197,7 +198,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
           <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> {launches[0].project} Launches</Typography>
         </Breadcrumbs>
         </div>
-       
+
         <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
         <Grid component="label" container alignItems="center" spacing={1}>
           <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
@@ -208,7 +209,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
         </Grid>
         </div>
       </div>
-       
+
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
@@ -228,6 +229,15 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
         />
         {/* Attempt to use notification as a component */}
         {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={4} >
+            <Grid item xs={12} >
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
+                  <InfoDashboard project={launches[0].project} darkMode={state.darkMode}/>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={4} >
             <Grid item xs={12} >
@@ -260,8 +270,8 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
                               color="primary"
                             />
                           }
-                          label="Δ View"    
-                    />   
+                          label="Δ View"
+                    />
                   </Grid>
                 </Grid>
                 {launches[0] ? ( // checking if props exist
