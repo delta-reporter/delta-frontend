@@ -120,7 +120,7 @@ export const ListOfSuites = function(props: Props) {
 
   const [expandedSuite, setExpandedSuite] = useState<string | false>(false)
   const expandCollapseSuite = (suitePanel: string) => (
-    _event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<unknown>,
     isExpanded: boolean
   ) => {
     setExpandedSuite(isExpanded ? suitePanel : false)

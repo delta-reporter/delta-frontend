@@ -1,16 +1,16 @@
 import useSWR from "swr"
 
 export default function getSmartLinksForTestRun(
-  project_id: number,
+  projectId: number,
   environment: string,
-  test_run_id: number
-): { loading; noData; smart_links; mutate } {
+  testRunId: number
+): { loading; noData; smartLinks; mutate } {
   const url = `${process.env.publicDeltaCore}/api/v1/smart_links_for_test_run`
 
   const payload = {
-    project_id: project_id,
+    project_id: projectId,
     environment: environment,
-    test_run_id: test_run_id,
+    test_run_id: testRunId,
   }
 
   const fetcher = () =>
@@ -27,5 +27,5 @@ export default function getSmartLinksForTestRun(
   const loading = !data && !error
   const noData = !data
 
-  return { loading, noData, smart_links: data, mutate }
+  return { loading, noData, smartLinks: data, mutate }
 }

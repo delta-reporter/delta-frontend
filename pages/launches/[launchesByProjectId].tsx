@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles } from "@material-ui/core/styles"
-import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
-import { useRouter } from 'next/router'
-import { GetServerSideProps } from 'next'
-import { InferGetServerSidePropsType } from 'next'
+import Snackbar, { SnackbarOrigin } from "@material-ui/core/Snackbar"
+import { useRouter } from "next/router"
+import { GetServerSideProps } from "next"
+import { InferGetServerSidePropsType } from "next"
 import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
@@ -36,16 +36,16 @@ import {
   testRunButtonsDeltaPyramidView,
   clearChartDataOnDeltaView,
 } from "../../components/templates/DeltaViewForLaunches"
-import ReplayIcon from '@material-ui/icons/Replay'
-import WbSunnyIcon from '@material-ui/icons/WbSunny'
-import Brightness2Icon from '@material-ui/icons/Brightness2'
+import ReplayIcon from "@material-ui/icons/Replay"
+import WbSunnyIcon from "@material-ui/icons/WbSunny"
+import Brightness2Icon from "@material-ui/icons/Brightness2"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
     flexGrow: 1,
     color: theme.palette.secondary.light,
   },
-  rootDark:{
+  rootDark: {
     flexGrow: 1,
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.light,
@@ -81,16 +81,17 @@ const useStyles = makeStyles(theme => ({
   textColorDarkMode: {
     color: theme.palette.secondary.light,
   },
-  textColorLightMode: {
-  },
+  textColorLightMode: {},
 }))
 
 export interface SnackbarState extends SnackbarOrigin {
-  open: boolean;
-  message: string;
+  open: boolean
+  message: string
 }
 
-function Launches({launches}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Launches({
+  launches,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(launches)
   const [launchesList, setLaunchesList] = useState([])
   const router = useRouter()
@@ -107,10 +108,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   const indexOfLastItem = currentPage * launchesPerPage
   const indexOfFirstItem = indexOfLastItem - launchesPerPage
   // pagination (first 20)
-  const currentLaunches = launches.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  )
+  const currentLaunches = launches.slice(indexOfFirstItem, indexOfLastItem)
 
   const [highlightedTest, setHighlightedTest] = useState(0)
 
@@ -132,15 +130,14 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   }
 
   useEffect(() => {
-    localStorage.setItem('deltaView', JSON.stringify(switchViews.deltaView)) //setting a variable in the browser storage
+    localStorage.setItem("deltaView", JSON.stringify(switchViews.deltaView)) //setting a variable in the browser storage
   }, [switchViews.deltaView])
 
-  function getInitialDeltaViewState() :boolean {
-    if (typeof window !== 'undefined') {
-     const savedDeltaView = JSON.parse(localStorage.getItem('deltaView')) //checking the 'dark' var from browser storage
-     return savedDeltaView || false
-    }
-    else {
+  function getInitialDeltaViewState(): boolean {
+    if (typeof window !== "undefined") {
+      const savedDeltaView = JSON.parse(localStorage.getItem("deltaView")) //checking the 'dark' var from browser storage
+      return savedDeltaView || false
+    } else {
       return false
     }
   }
@@ -155,60 +152,90 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   };
 
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(state.darkMode)) //setting a variable in the browser storage
+    localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) //setting a variable in the browser storage
   }, [state.darkMode])
 
-  function getInitialDarkModeState() :boolean {
-    if (typeof window !== 'undefined') {
-     const savedColorMode = JSON.parse(localStorage.getItem('darkMode')) //checking the 'dark' var from browser storage
-     return savedColorMode || false
-    }
-    else {
+  function getInitialDarkModeState(): boolean {
+    if (typeof window !== "undefined") {
+      const savedColorMode = JSON.parse(localStorage.getItem("darkMode")) //checking the 'dark' var from browser storage
+      return savedColorMode || false
+    } else {
       return false
     }
   }
 
-  const [notificationState, setNotificationState] = React.useState<SnackbarState>({
+  const [notificationState, setNotificationState] = React.useState<
+    SnackbarState
+  >({
     open: false,
-    vertical: 'top',
-    horizontal: 'right',
-    message: '',
-  });
-  const { vertical, horizontal, open, message } = notificationState;
+    vertical: "top",
+    horizontal: "right",
+    message: "",
+  })
+  const { vertical, horizontal, open, message } = notificationState
 
   const handleReloadPage = () => {
-    setNotificationState({ ...notificationState, open: false });
-    router.reload();
-  };
+    setNotificationState({ ...notificationState, open: false })
+    router.reload()
+  }
 
   const handleCloseNotification = () => {
-      setNotificationState({ ...notificationState, open: false });
-    };
+    setNotificationState({ ...notificationState, open: false })
+  }
 
   return (
     <NoSsr>
-      <BasePage className={state.darkMode ? classes.rootDark : classes.rootLight} darkMode={state.darkMode}>
-      <title>Δ | Launches</title>
-      <div>
-        <div style={{ float: "left"}}>
-        <Breadcrumbs style={{ paddingLeft: "30px", marginTop: "20px"}}  className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
-          <Link color="inherit" href={`/`}>
-            Projects
-          </Link>
-          <Typography color="textPrimary" className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> {launches[0].project} Launches</Typography>
-        </Breadcrumbs>
-        </div>
+      <BasePage
+        className={state.darkMode ? classes.rootDark : classes.rootLight}
+        darkMode={state.darkMode}
+      >
+        <title>Δ | Launches</title>
+        <div>
+          <div style={{ float: "left" }}>
+            <Breadcrumbs
+              style={{ paddingLeft: "30px", marginTop: "20px" }}
+              className={
+                state.darkMode
+                  ? classes.textColorDarkMode
+                  : classes.textColorLightMode
+              }
+            >
+              <Link color="inherit" href={`/`}>
+                Projects
+              </Link>
+              <Typography
+                color="textPrimary"
+                className={
+                  state.darkMode
+                    ? classes.textColorDarkMode
+                    : classes.textColorLightMode
+                }
+              >
+                {" "}
+                {launches[0].project} Launches
+              </Typography>
+            </Breadcrumbs>
+          </div>
 
-        <div style={{ float: "right", width: "15%", marginTop: "15px"}}>
-        <Grid component="label" container alignItems="center" spacing={1}>
-          <Grid item><WbSunnyIcon></WbSunnyIcon></Grid>
-          <Grid item>
-            <Switch checked={state.darkMode} onChange={handleDarkModeChange} name="darkMode" color="primary"/>
-          </Grid>
-          <Grid item><Brightness2Icon></Brightness2Icon></Grid>
-        </Grid>
+          <div style={{ float: "right", width: "15%", marginTop: "15px" }}>
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item>
+                <WbSunnyIcon></WbSunnyIcon>
+              </Grid>
+              <Grid item>
+                <Switch
+                  checked={state.darkMode}
+                  onChange={handleDarkModeChange}
+                  name="darkMode"
+                  color="primary"
+                />
+              </Grid>
+              <Grid item>
+                <Brightness2Icon></Brightness2Icon>
+              </Grid>
+            </Grid>
+          </div>
         </div>
-      </div>
 
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
@@ -219,9 +246,13 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
           action={
             <React.Fragment>
               <Tooltip title="Reload page">
-              <Button color="secondary" size="small" onClick={handleReloadPage}>
-              <ReplayIcon fontSize="small" color="primary"/>
-              </Button>
+                <Button
+                  color="secondary"
+                  size="small"
+                  onClick={handleReloadPage}
+                >
+                  <ReplayIcon fontSize="small" color="primary" />
+                </Button>
               </Tooltip>
             </React.Fragment>
           }
@@ -232,7 +263,12 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={4} >
             <Grid item xs={12} >
-              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
+              <Paper
+                  className={
+                    state.darkMode ? classes.paperDark : classes.paperLight
+                  }
+                  elevation={3}
+                >
                   <InfoDashboard project={launches[0].project_id} darkMode={state.darkMode}/>
               </Paper>
             </Grid>
@@ -247,36 +283,37 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
                     <Typography
                       variant="h6"
                       style={{ fontWeight: 400, margin: "5px" }}
-                      className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                      className={
+                        state.darkMode
+                          ? classes.textColorDarkMode
+                          : classes.textColorLightMode
+                      }
                     >
                       Launches for{" "}
-                      <Link
-                        style={{ color: "#605959" }}
-                        underline="none"
-                      >
+                      <Link style={{ color: "#605959" }} underline="none">
                         {" "}
                         {launches[0].project}
                       </Link>{" "}
                       project
                     </Typography>
                   </Grid>
-                  <Grid item xs={2} style={{color:"grey"}}>
+                  <Grid item xs={2} style={{ color: "grey" }}>
                     <FormControlLabel
-                          control={
-                            <Switch
-                              checked={switchViews.deltaView}
-                              onChange={handleSwitchViewsChange}
-                              name="deltaView"
-                              color="primary"
-                            />
-                          }
-                          label="Δ View"
+                      control={
+                        <Switch
+                          checked={switchViews.deltaView}
+                          onChange={handleSwitchViewsChange}
+                          name="deltaView"
+                          color="primary"
+                        />
+                      }
+                      label="Δ View"
                     />
                   </Grid>
                 </Grid>
                 {launches[0] ? ( // checking if props exist
-                  <div style={{paddingTop:"15px"}}>
-                    <Table size="small" >
+                  <div style={{ paddingTop: "15px" }}>
+                    <Table size="small">
                       <TableHead>
                         <TableRow>
                           <TableCell></TableCell>
@@ -284,7 +321,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
                           <TableCell></TableCell>
                         </TableRow>
                       </TableHead>
-                      <TableBody >
+                      <TableBody>
                         {currentLaunches.map(launch => (
                           <TableRow key={launch.launch_id} hover>
                             <TableCell>
@@ -293,11 +330,23 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
                                 launch.launch_id
                               )}
                             </TableCell>
-                            <TableCell style={{width: "500px"}} className={state.darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>{launch.name}</TableCell>
+                            <TableCell
+                              style={{ width: "500px" }}
+                              className={
+                                state.darkMode
+                                  ? classes.textColorDarkMode
+                                  : classes.textColorLightMode
+                              }
+                            >
+                              {launch.name}
+                            </TableCell>
                             <TableCell>
                               {/* Switch option for Delta View (pyramid style) */}
                               {!switchViews.deltaView
-                                ? testRunButtonsDefaultView(launch.test_run_stats, state.darkMode)
+                                ? testRunButtonsDefaultView(
+                                    launch.test_run_stats,
+                                    state.darkMode
+                                  )
                                 : testRunButtonsDeltaPyramidView(
                                     launch.test_run_stats,
                                     launch.launch_id
@@ -329,7 +378,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const { launchesByProjectId } = context.query
   const launchesByProjectIdReq = await fetch(
     `${process.env.deltaCore}/api/v1/launch/project/${launchesByProjectId}`,

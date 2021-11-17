@@ -55,7 +55,10 @@ export default function ProjectSettingsTabs(children: any) {
   const theme = useTheme()
   const [value, setValue] = React.useState(0)
 
-  const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
+  const handleChange = (
+    event: React.ChangeEvent<unknown>,
+    newValue: number
+  ) => {
     console.log(event)
     setValue(newValue)
   }

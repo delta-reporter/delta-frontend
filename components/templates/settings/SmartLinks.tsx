@@ -15,10 +15,10 @@ import {
 } from "@material-ui/core"
 import DeleteIcon from "@material-ui/icons/Delete"
 import LabelImportantIcon from "@material-ui/icons/LabelImportant"
-import FileCopyIcon from '@material-ui/icons/FileCopy'
+import FileCopyIcon from "@material-ui/icons/FileCopy"
 import React from "react"
 import getSmartLinks from "../../../data/SmartLinks"
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,12 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       margin: theme.spacing(4, 0, 2),
     },
-    dark:{
+    dark: {
       backgroundColor: theme.palette.secondary.main,
       color: theme.palette.secondary.light,
     },
-    light:{
-    },
+    light: {},
   })
 )
 
@@ -45,7 +44,7 @@ export default function SmartLinks(children: any) {
   const { project_id, darkMode } = children
   const classes = useStyles()
 
-  const { loading, noData, smart_links, mutate } = getSmartLinks(project_id)
+  const { loading, noData, smartLinks, mutate } = getSmartLinks(project_id)
 
   async function deleteSmartLink(smart_link_id) {
     const options = {
@@ -61,9 +60,7 @@ export default function SmartLinks(children: any) {
   }
 
   if (noData) {
-    return (
-      <></>
-    )
+    return <></>
   } else {
     return (
       <div>
@@ -72,13 +69,22 @@ export default function SmartLinks(children: any) {
           "Loading smart links..."
         ) : (
           <div>
-            <Divider style={{marginTop:"5px"}} />
-            <Typography  variant="h5" style={{marginLeft:"19%", marginTop:"25px"}} >
-               Smart links for this project <ArrowDownwardIcon style={{marginBottom:"-5px"}}></ArrowDownwardIcon>
+            <Divider style={{ marginTop: "5px" }} />
+            <Typography
+              variant="h5"
+              style={{ marginLeft: "19%", marginTop: "25px" }}
+            >
+              Smart links for this project{" "}
+              <ArrowDownwardIcon
+                style={{ marginBottom: "-5px" }}
+              ></ArrowDownwardIcon>
             </Typography>
-            <div className={classes.demo} style={{marginTop:"15px"}}>
-              <List dense={true} className={darkMode ? classes.dark : classes.light}>
-                {smart_links.map(smart_link => (
+            <div className={classes.demo} style={{ marginTop: "15px" }}>
+              <List
+                dense={true}
+                className={darkMode ? classes.dark : classes.light}
+              >
+                {smartLinks.map(smart_link => (
                   <ListItem key={smart_link.smart_link_id}>
                     <ListItemAvatar>
                       <Avatar>
@@ -86,27 +92,29 @@ export default function SmartLinks(children: any) {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                    className={darkMode ? classes.dark : classes.light}
+                      className={darkMode ? classes.dark : classes.light}
                       primary={
-                          smart_link.environment
-                          ? smart_link.label + " - " + smart_link.environment.substring(0, 25)
+                        smart_link.environment
+                          ? smart_link.label +
+                            " - " +
+                            smart_link.environment.substring(0, 25)
                           : smart_link.label
-                      } 
-                      secondary={
-                        smart_link.smart_link.substring(0, 40)
                       }
+                      secondary={smart_link.smart_link.substring(0, 40)}
                     />
                     <ListItemSecondaryAction>
-                    <IconButton
+                      <IconButton
                         edge="end"
-                        onClick={() => navigator.clipboard.writeText(smart_link.smart_link) }
+                        onClick={() =>
+                          navigator.clipboard.writeText(smart_link.smart_link)
+                        }
                         className={darkMode ? classes.dark : classes.light}
-                    >  
-                      <Tooltip title="Copy the link to clipboard"> 
-                        <FileCopyIcon />
-                      </Tooltip>
-                    </IconButton>
-                    <IconButton
+                      >
+                        <Tooltip title="Copy the link to clipboard">
+                          <FileCopyIcon />
+                        </Tooltip>
+                      </IconButton>
+                      <IconButton
                         edge="end"
                         aria-label="delete"
                         onClick={() =>

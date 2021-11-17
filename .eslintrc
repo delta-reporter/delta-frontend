@@ -2,7 +2,8 @@
     "plugins": ["styled-components-a11y"],
     "extends": [
       "./node_modules/@dsch/eslint-rules",
-      "plugin:styled-components-a11y/recommended"
+      "plugin:styled-components-a11y/recommended",
+      "plugin:@next/next/recommended"
     ],
     "rules": {
       "jsx-a11y/anchor-is-valid": 0,
