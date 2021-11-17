@@ -233,7 +233,7 @@ function Launches({launches}: InferGetServerSidePropsType<typeof getServerSidePr
           <Grid container spacing={4} >
             <Grid item xs={12} >
               <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
-                  <InfoDashboard project={launches[0].project} darkMode={state.darkMode}/>
+                  <InfoDashboard project={launches[0].project_id} darkMode={state.darkMode}/>
               </Paper>
             </Grid>
           </Grid>

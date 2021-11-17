@@ -1,7 +1,8 @@
 import React from 'react';
-import { Grid, Link, makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import ReactEcharts from "echarts-for-react"
-import RealTimeChart from './RealTimeChart';
+// import RealTimeChart from './RealTimeChart';
+import getWeeklyStats from '../../data/WeeklyStats';
 
 const useStyles = makeStyles((theme) => ({
   textColorDarkMode: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface DashboardProps {
-  project: string
+  project: number
   darkMode: boolean
 }
 
@@ -21,82 +22,137 @@ export const InfoDashboard = function(props: DashboardProps) {
   const classes = useStyles(props)
   const { project, darkMode} = props;
 
-  const option = {
-    title: {
-      text: 'Project testing stability'
-    },
-    tooltip : {
-      trigger: 'axis'
-    },
-    legend: {
-      data:['Failures','N/A','Passing']
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {}
-      }
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis : [
-      {
-        type : 'category',
-        boundaryGap : false,
-        data : ['Monday','Tuesday','Wednesday','Thrusday','Friday','Saturday','Sunday']
-      }
-    ],
-    yAxis : [
-      {
-        type : 'value'
-      }
-    ],
-    series : [
-      {
-        name:'Failures',
-        type:'line',
-        stack: '总量',
-        areaStyle: {normal: {}},
-        data:[120, 132, 101, 134, 90, 230, 210]
-      },
-      {
-        name:'N/A',
-        type:'line',
-        stack: '总量',
-        areaStyle: {normal: {}},
-        data:[220, 182, 191, 234, 290, 330, 310]
-      },
-      {
-        name:'Passing',
-        type:'line',
-        stack: '总量',
-        areaStyle: {normal: {}},
-        data:[150, 232, 201, 154, 190, 330, 410]
-      }
-    ]
-  };
+  const { loading, noData, weekly_stats } = getWeeklyStats(project)
 
-  return (
-    <>
+
+
+
+  function getData(stats: any) {
+
+    const options: Intl.DateTimeFormatOptions = { weekday: "long", year: "numeric", month: "short", day: "numeric" }
+    function getDays(): Array<string>{return stats.map(x => new Date(x.date).toLocaleString([], options))}
+    // function getDays(): Array<string>{return stats.map(x => x.date)}
+    const failed = []
+    const incomplete = []
+    const passed = []
+    const running = []
+    const skipped = []
+
+    console.log(getDays().length);
+    console.log(getDays());
+
+    stats.forEach(day => {
+      failed.push(day.tests_failed)
+      incomplete.push(day.tests_incomplete)
+      passed.push(day.tests_passed)
+      running.push(day.tests_running)
+      skipped.push(day.tests_skipped)
+    });
+
+    return {
+      title: {
+        text: 'Project testing stability'
+      },
+      tooltip : {
+        trigger: 'axis'
+      },
+      legend: {
+        data:['Failures','Incomplete','Passing', 'Running', 'Skipped']
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis : [
+        {
+          type : 'category',
+          boundaryGap : false,
+          data : getDays()
+        }
+      ],
+      yAxis : [
+        {
+          type : 'value'
+        }
+      ],
+      series : [
+        {
+          name: 'Failures',
+          type: 'line',
+          areaStyle: {normal: {}},
+          data: failed
+        },
+        {
+          name: 'Incomplete',
+          type: 'line',
+          areaStyle: {normal: {}},
+          data: incomplete
+        },
+        {
+          name: 'Passing',
+          type: 'line',
+          areaStyle: {normal: {}},
+          data: passed
+        },
+        {
+          name: 'Running',
+          type: 'line',
+          areaStyle: {normal: {}},
+          data: running
+        },
+        {
+          name: 'Skipped',
+          type: 'line',
+          areaStyle: {normal: {}},
+          data: skipped
+        }
+      ]
+    };
+  }
+
+  if (noData) {
+    return (
       <div>
-      <Grid item xs={10}>
         <Typography
-          variant="h6"
-          style={{ fontWeight: 400, margin: "5px" }}
-          className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+          style={{
+            fontStyle: "italic",
+            margin: "20px",
+            color: "grey",
+          }}
         >
-          Statistics
+        No weekly statistics were found...
         </Typography>
-      </Grid>
-      <ReactEcharts
-      option={option}
-      style={{ height: 400 }}
-    />
-    <RealTimeChart/>
       </div>
-    </>
-  )
+    )
+  } else {
+    return (
+      <>
+        <div>
+        {" "}
+        {loading
+            ? "Loading weekly statistics..."
+            :
+            <div>
+              <Grid item xs={10}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 400, margin: "5px" }}
+                  className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                >
+                  Statistics
+                </Typography>
+              </Grid>
+              <ReactEcharts
+                option={getData(weekly_stats)}
+                style={{ height: 400 }}
+              />
+            </div>
+        }
+        {" "}
+        </div>
+      </>
+    )
+  }
 }
