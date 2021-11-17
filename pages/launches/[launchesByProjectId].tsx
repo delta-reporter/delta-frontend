@@ -8,6 +8,7 @@ import { InferGetServerSidePropsType } from "next"
 import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
+  InfoDashboard,
   // EventNotification
 } from "../../components/templates"
 import { TestLaunch } from "../index"
@@ -144,11 +145,11 @@ function Launches({
   // dark mode switch
   const [state, setState] = useState({
     darkMode: getInitialDarkModeState(),
-  })
+  });
 
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked })
-  }
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) //setting a variable in the browser storage
@@ -260,14 +261,23 @@ function Launches({
         {/* Attempt to use notification as a component */}
         {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
+          <Grid container spacing={4} >
+            <Grid item xs={12} >
               <Paper
-                className={
-                  state.darkMode ? classes.paperDark : classes.paperLight
-                }
-                elevation={3}
-              >
+                  className={
+                    state.darkMode ? classes.paperDark : classes.paperLight
+                  }
+                  elevation={3}
+                >
+                  <InfoDashboard project={launches[0].project_id} darkMode={state.darkMode}/>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={4} >
+            <Grid item xs={12} >
+              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
                 <Grid container>
                   <Grid item xs={10}>
                     <Typography
