@@ -39,6 +39,7 @@ import {
 import ReplayIcon from "@material-ui/icons/Replay"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
+import TestsFailingTheMost from "../../components/templates/TestsFailingTheMost"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -270,6 +271,7 @@ function Launches({
                   elevation={3}
                 >
                   <InfoDashboard project={launches[0].project_id} darkMode={state.darkMode}/>
+                  <TestsFailingTheMost project={launches[0].project_id} darkMode={state.darkMode}/>
               </Paper>
             </Grid>
           </Grid>
