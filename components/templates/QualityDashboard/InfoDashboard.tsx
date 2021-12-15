@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import ReactEcharts from "echarts-for-react"
 // import RealTimeChart from './RealTimeChart';
-import getWeeklyStats from '../../data/WeeklyStats';
+import getWeeklyStats from '../../../data/WeeklyStats';
 
 const useStyles = makeStyles((theme) => ({
   textColorDarkMode: {

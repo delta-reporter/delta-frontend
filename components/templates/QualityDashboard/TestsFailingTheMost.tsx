@@ -13,9 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import getMostFailedTests from '../../data/TestsFailingMost';
+import getMostFailedTests from '../../../data/TestsFailingMost';
 import UseAnimations from "react-useanimations"
-import { Tooltip } from '@material-ui/core';
+import { Grid, Tooltip } from '@material-ui/core';
 
 const useRowStyles = makeStyles({
   root: {
@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.light,
   },
   textColorLightMode: {
+  },
+  container: {
+    maxHeight: 400,
   },
 }))
 
@@ -80,7 +83,7 @@ function Row(props: FailedTest ) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                Details
+                Test Details
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
@@ -112,7 +115,7 @@ function Row(props: FailedTest ) {
   );
 }
 
-export default function TestsFailingTheMost(props: TestFailingMostProps) {
+export const TestsFailingTheMost = function(props: TestFailingMostProps) {
 
   const classes = useStyles(props);
   const { project, darkMode} = props;
@@ -142,7 +145,17 @@ export default function TestsFailingTheMost(props: TestFailingMostProps) {
             ? "Loading tests failing the most..."
             :
             <div>
-          <TableContainer component={Paper} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}>
+          <Grid item xs={10}>
+            <Typography
+              variant="h6"
+              style={{ fontWeight: 400, margin: "5px" }}
+              className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+            >
+              Tests failing the most
+            </Typography>
+          </Grid>
+          <TableContainer component={Paper} className={classes.container}>
+          {/* <TableContainer component={Paper} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> */}
             <Table aria-label="collapsible table">
               <TableHead>
                 <TableRow>

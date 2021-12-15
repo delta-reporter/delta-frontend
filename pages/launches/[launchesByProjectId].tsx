@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles, useTheme } from "@material-ui/core/styles"
 import Snackbar, { SnackbarOrigin } from "@material-ui/core/Snackbar"
 import { useRouter } from "next/router"
 import { GetServerSideProps } from "next"
@@ -9,6 +9,7 @@ import {
   BasePage,
   showStatusAndEnableToStopRunningLaunch,
   InfoDashboard,
+  TestsFailingTheMost
   // EventNotification
 } from "../../components/templates"
 import { TestLaunch } from "../index"
@@ -28,6 +29,10 @@ import {
   NoSsr,
   Tooltip,
   Button,
+  Box,
+  Tab,
+  AppBar,
+  Tabs,
 } from "@material-ui/core"
 import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
@@ -39,7 +44,8 @@ import {
 import ReplayIcon from "@material-ui/icons/Replay"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
-import TestsFailingTheMost from "../../components/templates/TestsFailingTheMost"
+import SwipeableViews from 'react-swipeable-views';
+import QADashboard from "../../components/templates/QualityDashboard/QADashboard"
 
 const useStyles = makeStyles(theme => ({
   rootLight: {
@@ -90,10 +96,45 @@ export interface SnackbarState extends SnackbarOrigin {
   message: string
 }
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  dir?: string;
+  index: any;
+  value: any;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: any) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
+
 function Launches({
   launches,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(launches)
+  const theme = useTheme();
   const [launchesList, setLaunchesList] = useState([])
   const router = useRouter()
 
@@ -184,6 +225,16 @@ function Launches({
     setNotificationState({ ...notificationState, open: false })
   }
 
+  const [tabIndex, setTabIndex] = React.useState(0);
+
+  const handleTabChange = (_: React.ChangeEvent<unknown>, newValue: number) => {
+    setTabIndex(newValue);
+  };
+
+  const handleTabChangeIndex = (index: number) => {
+    setTabIndex(index);
+  };
+
   return (
     <NoSsr>
       <BasePage
@@ -261,120 +312,129 @@ function Launches({
         />
         {/* Attempt to use notification as a component */}
         {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={4} >
-            <Grid item xs={12} >
-              <Paper
-                  className={
-                    state.darkMode ? classes.paperDark : classes.paperLight
-                  }
-                  elevation={3}
-                >
-                  <InfoDashboard project={launches[0].project_id} darkMode={state.darkMode}/>
-                  <TestsFailingTheMost project={launches[0].project_id} darkMode={state.darkMode}/>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={4} >
-            <Grid item xs={12} >
-              <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
-                <Grid container>
-                  <Grid item xs={10}>
-                    <Typography
-                      variant="h6"
-                      style={{ fontWeight: 400, margin: "5px" }}
-                      className={
-                        state.darkMode
-                          ? classes.textColorDarkMode
-                          : classes.textColorLightMode
-                      }
-                    >
-                      Launches for{" "}
-                      <Link style={{ color: "#605959" }} underline="none">
-                        {" "}
-                        {launches[0].project}
-                      </Link>{" "}
-                      project
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2} style={{ color: "grey" }}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={switchViews.deltaView}
-                          onChange={handleSwitchViewsChange}
-                          name="deltaView"
-                          color="primary"
+        <AppBar position="static" color="default">
+          <Tabs
+            value={tabIndex}
+            onChange={handleTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Launches" {...a11yProps(0)} />
+            <Tab label="Quality Dashboard" {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={tabIndex}
+          onChangeIndex={handleTabChangeIndex}
+        >
+          <TabPanel value={tabIndex} index={0} dir={theme.direction}>
+            <Container maxWidth="lg" className={classes.container}>
+              <Grid container spacing={4} >
+                <Grid item xs={12} >
+                  <Paper className={state.darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
+                    <Grid container>
+                      <Grid item xs={10}>
+                        <Typography
+                          variant="h6"
+                          style={{ fontWeight: 400, margin: "5px" }}
+                          className={
+                            state.darkMode
+                              ? classes.textColorDarkMode
+                              : classes.textColorLightMode
+                          }
+                        >
+                          Launches for{" "}
+                          <Link style={{ color: "#605959" }} underline="none">
+                            {" "}
+                            {launches[0].project}
+                          </Link>{" "}
+                          project
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={2} style={{ color: "grey" }}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={switchViews.deltaView}
+                              onChange={handleSwitchViewsChange}
+                              name="deltaView"
+                              color="primary"
+                            />
+                          }
+                          label="Δ View"
                         />
-                      }
-                      label="Δ View"
-                    />
-                  </Grid>
-                </Grid>
-                {launches[0] ? ( // checking if props exist
-                  <div style={{ paddingTop: "15px" }}>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {currentLaunches.map(launch => (
-                          <TableRow key={launch.launch_id} hover>
-                            <TableCell>
-                              {showStatusAndEnableToStopRunningLaunch(
-                                launch.launch_status,
-                                launch.launch_id
-                              )}
-                            </TableCell>
-                            <TableCell
-                              style={{ width: "500px" }}
-                              className={
-                                state.darkMode
-                                  ? classes.textColorDarkMode
-                                  : classes.textColorLightMode
-                              }
-                            >
-                              {launch.name}
-                            </TableCell>
-                            <TableCell>
-                              {/* Switch option for Delta View (pyramid style) */}
-                              {!switchViews.deltaView
-                                ? testRunButtonsDefaultView(
-                                    launch.test_run_stats,
-                                    state.darkMode
-                                  )
-                                : testRunButtonsDeltaPyramidView(
-                                    launch.test_run_stats,
+                      </Grid>
+                    </Grid>
+                    {launches[0] ? ( // checking if props exist
+                      <div style={{ paddingTop: "15px" }}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {currentLaunches.map(launch => (
+                              <TableRow key={launch.launch_id} hover>
+                                <TableCell>
+                                  {showStatusAndEnableToStopRunningLaunch(
+                                    launch.launch_status,
                                     launch.launch_id
                                   )}
-                            </TableCell>
-                            {clearChartDataOnDeltaView()}
-                          </TableRow>
-                        ))}
-                      </TableBody>{" "}
-                    </Table>
+                                </TableCell>
+                                <TableCell
+                                  style={{ width: "500px" }}
+                                  className={
+                                    state.darkMode
+                                      ? classes.textColorDarkMode
+                                      : classes.textColorLightMode
+                                  }
+                                >
+                                  {launch.name}
+                                </TableCell>
+                                <TableCell>
+                                  {/* Switch option for Delta View (pyramid style) */}
+                                  {!switchViews.deltaView
+                                    ? testRunButtonsDefaultView(
+                                        launch.test_run_stats,
+                                        state.darkMode
+                                      )
+                                    : testRunButtonsDeltaPyramidView(
+                                        launch.test_run_stats,
+                                        launch.launch_id
+                                      )}
+                                </TableCell>
+                                {clearChartDataOnDeltaView()}
+                              </TableRow>
+                            ))}
+                          </TableBody>{" "}
+                        </Table>
 
-                    <Pagination
-                      itemsPerPage={launchesPerPage}
-                      totalNumber={launchesList.length}
-                      paginate={paginate}
-                      highlightedTest={highlightedTest}
-                    />
-                  </div>
-                ) : (
-                  // if props don't exist
-                  <h1>No runs were found for this launch! </h1>
-                )}
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
+                        <Pagination
+                          itemsPerPage={launchesPerPage}
+                          totalNumber={launchesList.length}
+                          paginate={paginate}
+                          highlightedTest={highlightedTest}
+                        />
+                      </div>
+                    ) : (
+                      // if props don't exist
+                      <h1>No runs were found for this launch! </h1>
+                    )}
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+          </TabPanel>
+          <TabPanel value={tabIndex} index={1} dir={theme.direction}>
+          <QADashboard project={launches[0].project_id} darkMode={state.darkMode}/>
+          </TabPanel>
+        </SwipeableViews>
       </BasePage>
     </NoSsr>
   )
