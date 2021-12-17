@@ -1,47 +1,24 @@
 import React, { useState, useEffect } from "react"
 import fetch from "isomorphic-unfetch"
 import { makeStyles, useTheme } from "@material-ui/core/styles"
-// import Snackbar, { SnackbarOrigin } from "@material-ui/core/Snackbar"
-// import { useRouter } from "next/router"
 import { GetServerSideProps } from "next"
 import { InferGetServerSidePropsType } from "next"
 import {
   BasePage,
-  // showStatusAndEnableToStopRunningLaunch,
-  // InfoDashboard,
-  // TestsFailingTheMost
-  // EventNotification
 } from "../../components/templates"
 import { TestProject } from "../index"
 import {
-  Container,
   Grid,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Typography,
   Link,
   Breadcrumbs,
-  FormControlLabel,
   NoSsr,
-  Tooltip,
-  Button,
   Box,
   Tab,
   AppBar,
   Tabs,
 } from "@material-ui/core"
-// import Pagination from "../../components/templates/Pagination"
 import Switch from "@material-ui/core/Switch"
-// import {
-//   testRunButtonsDefaultView,
-//   testRunButtonsDeltaPyramidView,
-//   clearChartDataOnDeltaView,
-// } from "../../components/templates/TestLaunches/DeltaViewForLaunches"
-// import ReplayIcon from "@material-ui/icons/Replay"
 import WbSunnyIcon from "@material-ui/icons/WbSunny"
 import Brightness2Icon from "@material-ui/icons/Brightness2"
 import SwipeableViews from 'react-swipeable-views';
@@ -92,11 +69,6 @@ const useStyles = makeStyles(theme => ({
   textColorLightMode: {},
 }))
 
-// export interface SnackbarState extends SnackbarOrigin {
-//   open: boolean
-//   message: string
-// }
-
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -136,95 +108,6 @@ function Launches({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const classes = useStyles(project)
   const theme = useTheme();
-  // const [launchesList, setLaunchesList] = useState([])
-  // const router = useRouter()
-
-  // useEffect(() => {
-  //   const fetchLaunches = async () => {
-  //     setLaunchesList(launches)
-  //   }
-  //   fetchLaunches()
-  // }, [])
-
-  // const [currentPage, setCurrentPage] = useState(1)
-  // const [launchesPerPage] = useState(20)
-  // const indexOfLastItem = currentPage * launchesPerPage
-  // const indexOfFirstItem = indexOfLastItem - launchesPerPage
-  // // pagination (first 20)
-  // const currentLaunches = launches.slice(indexOfFirstItem, indexOfLastItem)
-
-  // const [highlightedTest, setHighlightedTest] = useState(0)
-
-  // function paginate(pageNumber) {
-  //   setCurrentPage(pageNumber)
-  //   setHighlightedTest(pageNumber)
-  // }
-
-  // // delta view switch
-  // const [switchViews, setSwitchViews] = useState({
-  //   deltaView: getInitialDeltaViewState(),
-  // })
-
-  // const handleSwitchViewsChange = event => {
-  //   setSwitchViews({
-  //     ...switchViews,
-  //     [event.target.name]: event.target.checked,
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   localStorage.setItem("deltaView", JSON.stringify(switchViews.deltaView)) //setting a variable in the browser storage
-  // }, [switchViews.deltaView])
-
-  // function getInitialDeltaViewState(): boolean {
-  //   if (typeof window !== "undefined") {
-  //     const savedDeltaView = JSON.parse(localStorage.getItem("deltaView")) //checking the 'dark' var from browser storage
-  //     return savedDeltaView || false
-  //   } else {
-  //     return false
-  //   }
-  // }
-
-  // // dark mode switch
-  // const [state, setState] = useState({
-  //   darkMode: getInitialDarkModeState(),
-  // });
-
-  // const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setState({ ...state, [event.target.name]: event.target.checked });
-  // };
-
-  // useEffect(() => {
-  //   localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) //setting a variable in the browser storage
-  // }, [state.darkMode])
-
-  // function getInitialDarkModeState(): boolean {
-  //   if (typeof window !== "undefined") {
-  //     const savedColorMode = JSON.parse(localStorage.getItem("darkMode")) //checking the 'dark' var from browser storage
-  //     return savedColorMode || false
-  //   } else {
-  //     return false
-  //   }
-  // }
-
-  // const [notificationState, setNotificationState] = React.useState<
-  //   SnackbarState
-  // >({
-  //   open: false,
-  //   vertical: "top",
-  //   horizontal: "right",
-  //   message: "",
-  // })
-  // const { vertical, horizontal, open, message } = notificationState
-
-  // const handleReloadPage = () => {
-  //   setNotificationState({ ...notificationState, open: false })
-  //   router.reload()
-  // }
-
-  // const handleCloseNotification = () => {
-  //   setNotificationState({ ...notificationState, open: false })
-  // }
 
   const [tabIndex, setTabIndex] = React.useState(0);
 
@@ -235,19 +118,6 @@ function Launches({
   const handleTabChangeIndex = (index: number) => {
     setTabIndex(index);
   };
-
-  // useEffect(() => {
-  //   localStorage.setItem("deltaView", JSON.stringify(switchViews.deltaView)) //setting a variable in the browser storage
-  // }, [switchViews.deltaView])
-
-  // function getInitialDeltaViewState(): boolean {
-  //   if (typeof window !== "undefined") {
-  //     const savedDeltaView = JSON.parse(localStorage.getItem("deltaView")) //checking the 'dark' var from browser storage
-  //     return savedDeltaView || false
-  //   } else {
-  //     return false
-  //   }
-  // }
 
     // dark mode switch
     const [state, setState] = useState({
@@ -325,29 +195,6 @@ function Launches({
           </div>
         </div>
 
-        {/* <Snackbar
-          anchorOrigin={{ vertical, horizontal }}
-          open={open}
-          onClose={handleCloseNotification}
-          message={message}
-          autoHideDuration={5000}
-          action={
-            <React.Fragment>
-              <Tooltip title="Reload page">
-                <Button
-                  color="secondary"
-                  size="small"
-                  onClick={handleReloadPage}
-                >
-                  <ReplayIcon fontSize="small" color="primary" />
-                </Button>
-              </Tooltip>
-            </React.Fragment>
-          }
-          key={vertical + horizontal}
-        /> */}
-        {/* Attempt to use notification as a component */}
-        {/* {notification? EventNotification("There are new launches 🚀") : EventNotification("Connecting for events...") }  */}
         <AppBar position="static" color="default">
           <Tabs
             value={tabIndex}

@@ -1,9 +1,9 @@
 import { Container, FormControlLabel, Grid, Link, makeStyles, Paper, Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography, useTheme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { clearChartDataOnDeltaView, testRunButtonsDefaultView, testRunButtonsDeltaPyramidView } from './DeltaViewForLaunches';
-// import { showStatusAndEnableToStopRunningLaunch } from './showAndChangeLaunchStatus'
+import LaunchStatusButton from './LaunchStatusButton'
 import getTestLaunches from '../../../data/TestLaunches';
-import Pagination from '../Pagination';
+import Pagination from './Pagination';
 import { TestProject } from '../../../pages';
 
 
@@ -110,28 +110,6 @@ export default function LaunchesList(props: LaunchesProps) {
     }
   }
 
-    // // dark mode switch
-    // const [state, setState] = useState({
-    //   darkMode: getInitialDarkModeState(),
-    // });
-
-    // const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //   setState({ ...state, [event.target.name]: event.target.checked });
-    // };
-
-    // useEffect(() => {
-    //   localStorage.setItem("darkMode", JSON.stringify(state.darkMode)) //setting a variable in the browser storage
-    // }, [state.darkMode])
-
-    // function getInitialDarkModeState(): boolean {
-    //   if (typeof window !== "undefined") {
-    //     const savedColorMode = JSON.parse(localStorage.getItem("darkMode")) //checking the 'dark' var from browser storage
-    //     return savedColorMode || false
-    //   } else {
-    //     return false
-    //   }
-    // }
-
     if (noData) {
       return (
         <div>
@@ -155,109 +133,106 @@ export default function LaunchesList(props: LaunchesProps) {
             ? "Loading tests failing the most..."
             :
             <div>
-  <Container maxWidth="lg" className={classes.container}>
-  <Grid container spacing={4} >
-    <Grid item xs={12} >
-      <Paper className={darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
-        <Grid container>
-          <Grid item xs={10}>
-            <Typography
-              variant="h6"
-              style={{ fontWeight: 400, margin: "5px" }}
-              className={
-                darkMode
-                  ? classes.textColorDarkMode
-                  : classes.textColorLightMode
-              }
-            >
-              Launches for{" "}
-              <Link style={{ color: "#605959" }} underline="none">
-                {" "}
-                {project.name}
-              </Link>{" "}
-              project
-            </Typography>
-          </Grid>
-          <Grid item xs={2} style={{ color: "grey" }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchViews.deltaView}
-                  onChange={handleSwitchViewsChange}
-                  name="deltaView"
-                  color="primary"
-                />
-              }
-              label="Δ View"
-            />
-          </Grid>
-        </Grid>
-        {launches[0] ? ( // checking if props exist
-          <div style={{ paddingTop: "15px" }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* {currentLaunches.map(launch => ( */}
-                {launches.map(launch => (
-                  <TableRow key={launch.launch_id} hover>
-                    {/* <TableCell>
-                      {showStatusAndEnableToStopRunningLaunch(
-                        launch.launch_status,
-                        launch.launch_id
-                      )}
-                    </TableCell> */}
-                    <TableCell
-                      style={{ width: "500px" }}
-                      className={
-                        darkMode
-                          ? classes.textColorDarkMode
-                          : classes.textColorLightMode
-                      }
-                    >
-                      {launch.name}
-                    </TableCell>
-                    <TableCell>
-                      {/* Switch option for Delta View (pyramid style) */}
-                      {!switchViews.deltaView
-                        ? testRunButtonsDefaultView(
-                            launch.test_run_stats,
+              <Container maxWidth="lg" className={classes.container}>
+              <Grid container spacing={4} >
+                <Grid item xs={12} >
+                  <Paper className={darkMode ? classes.paperDark : classes.paperLight} elevation={3}>
+                    <Grid container>
+                      <Grid item xs={10}>
+                        <Typography
+                          variant="h6"
+                          style={{ fontWeight: 400, margin: "5px" }}
+                          className={
                             darkMode
-                          )
-                        : testRunButtonsDeltaPyramidView(
-                            launch.test_run_stats,
-                            launch.launch_id
-                          )}
-                    </TableCell>
-                    {clearChartDataOnDeltaView()}
-                  </TableRow>
-                ))}
-              </TableBody>{" "}
-            </Table>
+                              ? classes.textColorDarkMode
+                              : classes.textColorLightMode
+                          }
+                        >
+                          Launches for{" "}
+                          <Link style={{ color: "#605959" }} underline="none">
+                            {" "}
+                            {project.name}
+                          </Link>{" "}
+                          project
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={2} style={{ color: "grey" }}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={switchViews.deltaView}
+                              onChange={handleSwitchViewsChange}
+                              name="deltaView"
+                              color="primary"
+                            />
+                          }
+                          label="Δ View"
+                        />
+                      </Grid>
+                    </Grid>
+                    {launches[0] ? ( // checking if props exist
+                      <div style={{ paddingTop: "15px" }}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {/* {currentLaunches.map(launch => ( */}
+                            {launches.map(launch => (
+                              <TableRow key={launch.launch_id} hover>
+                                <TableCell>
+                                  <LaunchStatusButton launch_id={launch.launch_id} launch_status={launch.launch_status} />
+                                </TableCell>
+                                <TableCell
+                                  style={{ width: "500px" }}
+                                  className={
+                                    darkMode
+                                      ? classes.textColorDarkMode
+                                      : classes.textColorLightMode
+                                  }
+                                >
+                                  {launch.name}
+                                </TableCell>
+                                <TableCell>
+                                  {/* Switch option for Delta View (pyramid style) */}
+                                  {!switchViews.deltaView
+                                    ? testRunButtonsDefaultView(
+                                        launch.test_run_stats,
+                                        darkMode
+                                      )
+                                    : testRunButtonsDeltaPyramidView(
+                                        launch.test_run_stats,
+                                        launch.launch_id
+                                      )}
+                                </TableCell>
+                                {clearChartDataOnDeltaView()}
+                              </TableRow>
+                            ))}
+                          </TableBody>{" "}
+                        </Table>
 
-            <Pagination
-              // itemsPerPage={launches}
-              totalNumber={launches.length}
-              itemsPerPage={launchesPerPage}
-              // totalNumber={launchesList.length}
-              paginate={paginate}
-              highlightedTest={highlightedTest}
-            />
-          </div>
-        ) : (
-          // if props don't exist
-          <h1>No runs were found for this launch! </h1>
-        )}
-      </Paper>
-    </Grid>
-  </Grid>
-</Container>
-</div>
+                        <Pagination
+                          // itemsPerPage={launches}
+                          totalNumber={launches.length}
+                          itemsPerPage={launchesPerPage}
+                          // totalNumber={launchesList.length}
+                          paginate={paginate}
+                          highlightedTest={highlightedTest}
+                        />
+                      </div>
+                    ) : (
+                      // if props don't exist
+                      <h1>No runs were found for this launch! </h1>
+                    )}
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+            </div>
         }
         {" "}
         </div>

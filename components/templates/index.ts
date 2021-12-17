@@ -1,6 +1,5 @@
 export * from "./BasePage"
 export * from "./Test"
-export * from "./Pagination"
 export * from "./showDate"
 export * from "./showResolution"
 export * from "./showStatusIcon"

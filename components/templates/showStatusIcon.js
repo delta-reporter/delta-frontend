@@ -9,11 +9,9 @@ import WarningIcon from '@material-ui/icons/Warning'
 export function showStatusIcon(status, isFlaky = false) {
   let statusIcon
   if (status === "Passed" || status === "Successful") {
-    statusIcon = (
-      <Tooltip title="Passed">
+    statusIcon = <Tooltip title="Passed">
         <CheckIcon style={{ color: "green" }}></CheckIcon>
       </Tooltip>
-    )
   } else if (status === "Failed" || status === "Incomplete") {
     statusIcon = (
       <Tooltip title="Failed">
@@ -45,7 +43,7 @@ export function showStatusIcon(status, isFlaky = false) {
 export function showStatusText(status, darkMode) {
   let statusIcon
   if (status === "Passed" || status === "Successful") {
-    if(darkMode) 
+    if(darkMode)
       statusIcon = (
         <button
           style={{
@@ -59,7 +57,7 @@ export function showStatusText(status, darkMode) {
           PASSED
         </button>
       )
-    else 
+    else
       statusIcon = (
         <button
           style={{
@@ -74,7 +72,7 @@ export function showStatusText(status, darkMode) {
         </button>
       )
   } else if (status === "Failed" || status === "Incomplete") {
-    if(darkMode) 
+    if(darkMode)
       statusIcon = (
         <button
           style={{
@@ -89,7 +87,7 @@ export function showStatusText(status, darkMode) {
           FAILED
         </button>
       )
-    else 
+    else
       statusIcon = (
         <button
           style={{
@@ -176,14 +174,14 @@ export function showIsFlakyBadgeList(status, isFlaky) {
   if (isFlaky && status === "Failed") {
     statusIcon = (
       <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
-        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px",color: "#d62727" }}/> 
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px",color: "#d62727" }}/>
       </Tooltip>
     )
   }
   if (isFlaky && status === "Passed") {
     statusIcon = (
       <Tooltip title="Test passed this time. But might be flaky, was failing in past">
-        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px",color: "green" }}/> 
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px", marginBottom:"3px", marginLeft:"-3px",color: "green" }}/>
       </Tooltip>
     )
   }
@@ -196,14 +194,14 @@ export function showIsFlakyBadgeTestExpanded(status, isFlaky) {
   if (isFlaky && status === "Failed") {
     statusIcon = (
       <Tooltip title="Test failed. Might be flaky. Failing more than 5/10 times">
-        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px",marginBottom:"-7px" ,color: "#d62727" }}/> 
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px",marginBottom:"-7px" ,color: "#d62727" }}/>
       </Tooltip>
     )
   }
   if (isFlaky && status === "Passed") {
     statusIcon = (
       <Tooltip title="Test passed this time. But might be flaky, was failing in past">
-        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px",marginBottom:"-7px" ,color: "green" }}/> 
+        <UseAnimations animationKey="alertCircle" style={{ width:"30px", height:"25px",marginBottom:"-7px" ,color: "green" }}/>
       </Tooltip>
     )
   }
