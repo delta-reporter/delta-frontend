@@ -145,42 +145,59 @@ export const TestsFailingTheMost = function(props: TestFailingMostProps) {
             ? "Loading tests failing the most..."
             :
             <div>
-          <Grid item xs={10}>
-            <Typography
-              variant="h6"
-              style={{ fontWeight: 400, margin: "5px" }}
-              className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
-            >
-              Tests failing the most
-            </Typography>
-          </Grid>
-          <TableContainer component={Paper} className={classes.container}>
-          {/* <TableContainer component={Paper} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> */}
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <TableCell />
-                  <TableCell>Test</TableCell>
-                  <TableCell align="right">Test Suite</TableCell>
-                  <TableCell align="right">Type</TableCell>
-                  <TableCell align="right">Times Failed</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {most_failed_tests.map((failed_test) => (
-                  <Row
-                    key={failed_test.id}
-                    id={failed_test.id}
-                    name={failed_test.name}
-                    test_suite={failed_test.test_suite}
-                    test_type={failed_test.test_type}
-                    is_flaky={failed_test.is_flaky}
-                    failed_count={failed_test.failed_count}
-                    />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          {most_failed_tests.length == 0
+            ?
+                  <Grid item xs={10}>
+                     <Typography
+                      style={{
+                        fontStyle: "italic",
+                        margin: "20px",
+                        color: "grey",
+                      }}
+                    >
+                    No tests failing the most were found...
+                    </Typography>
+                  </Grid>
+            :
+                <div>
+                  <Grid item xs={10}>
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: 400, margin: "5px" }}
+                    className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}
+                  >
+                    Tests failing the most
+                  </Typography>
+                  </Grid>
+                  <TableContainer component={Paper} className={classes.container}>
+                  {/* <TableContainer component={Paper} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> */}
+                    <Table aria-label="collapsible table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell />
+                          <TableCell>Test</TableCell>
+                          <TableCell align="right">Test Suite</TableCell>
+                          <TableCell align="right">Type</TableCell>
+                          <TableCell align="right">Times Failed</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {most_failed_tests.map((failed_test) => (
+                          <Row
+                            key={failed_test.id}
+                            id={failed_test.id}
+                            name={failed_test.name}
+                            test_suite={failed_test.test_suite}
+                            test_type={failed_test.test_type}
+                            is_flaky={failed_test.is_flaky}
+                            failed_count={failed_test.failed_count}
+                            />
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
+            }
           </div>
         }
         {" "}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { clearChartDataOnDeltaView, testRunButtonsDefaultView, testRunButtonsDeltaPyramidView } from './DeltaViewForLaunches';
 // import { showStatusAndEnableToStopRunningLaunch } from './showAndChangeLaunchStatus'
 import getTestLaunches from '../../../data/TestLaunches';
-// import Pagination from '../Pagination';
+import Pagination from '../Pagination';
 import { TestProject } from '../../../pages';
 
 
@@ -71,19 +71,19 @@ export default function LaunchesList(props: LaunchesProps) {
   //   fetchLaunches()
   // }, [])
 
-  // const [currentPage, setCurrentPage] = useState(1)
-  // const [launchesPerPage] = useState(20)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [launchesPerPage] = useState(20)
   // const indexOfLastItem = currentPage * launchesPerPage
   // const indexOfFirstItem = indexOfLastItem - launchesPerPage
   // pagination (first 20)
   // const currentLaunches = launches.slice(indexOfFirstItem, indexOfLastItem)
 
-  // const [highlightedTest, setHighlightedTest] = useState(0)
+  const [highlightedTest, setHighlightedTest] = useState(0)
 
-  // function paginate(pageNumber) {
-  //   setCurrentPage(pageNumber)
-  //   setHighlightedTest(pageNumber)
-  // }
+  function paginate(pageNumber) {
+    setCurrentPage(pageNumber)
+    setHighlightedTest(pageNumber)
+  }
 
   // delta view switch
   const [switchViews, setSwitchViews] = useState({
@@ -240,12 +240,14 @@ export default function LaunchesList(props: LaunchesProps) {
               </TableBody>{" "}
             </Table>
 
-            {/* <Pagination
+            <Pagination
+              // itemsPerPage={launches}
+              totalNumber={launches.length}
               itemsPerPage={launchesPerPage}
-              totalNumber={launchesList.length}
+              // totalNumber={launchesList.length}
               paginate={paginate}
               highlightedTest={highlightedTest}
-            /> */}
+            />
           </div>
         ) : (
           // if props don't exist
