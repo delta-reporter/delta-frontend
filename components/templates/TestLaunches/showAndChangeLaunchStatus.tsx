@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Tooltip, IconButton, Snackbar } from "@material-ui/core"
-import { showStatusIcon } from "."
+import { showStatusIcon } from ".."
 import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
 
