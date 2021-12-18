@@ -1,25 +1,30 @@
 import React, { useState } from "react"
 import { Tooltip, IconButton, Snackbar } from "@material-ui/core"
-import { showStatusIcon } from "."
+import { showStatusIcon } from ".."
 import StopIcon from "@material-ui/icons/Stop"
 import CloseIcon from "@material-ui/icons/Close"
 
-export function showStatusAndEnableToStopRunningLaunch(
-  status: any,
-  launchId: any
+interface LaunchButtonProps {
+  launch_id: number
+  launch_status: string
+}
+
+// export function showStatusAndEnableToStopRunningLaunch(
+const LaunchStatusButton = function(
+  props: LaunchButtonProps
 ) {
+  const { launch_id, launch_status} = props;
   const [openPopUp, setOpenPopUp] = useState(false)
 
-  const handleStopButtonClick = async (launchId: string | number) => {
+  const handleStopButtonClick = async (launch_id: string | number) => {
     // PUT request using fetch with async/await
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        launch_id: launchId,
+        launch_id: launch_id,
       }),
     }
-    console.log(requestOptions)
 
     const response = await fetch(
       `${process.env.publicDeltaCore}/api/v1/finish_launch`,
@@ -48,7 +53,7 @@ export function showStatusAndEnableToStopRunningLaunch(
   }
 
   let statusIcon = <div></div>
-  if (status === "Running" || status === "In Process") {
+  if (launch_status === "Running" || launch_status === "In Process") {
     statusIcon = (
       <Tooltip title="Stop this launch">
         <div>
@@ -59,7 +64,7 @@ export function showStatusAndEnableToStopRunningLaunch(
               paddingLeft: "0px",
               paddingRight: "0px",
             }}
-            onClick={() => handleStopButtonClick(launchId)}
+            onClick={() => handleStopButtonClick(launch_id)}
             onMouseEnter={hoverOn}
             onMouseLeave={hoverOff}
           >
@@ -70,7 +75,7 @@ export function showStatusAndEnableToStopRunningLaunch(
                 }}
               />
             ) : (
-              showStatusIcon(status)
+              showStatusIcon(launch_status)
             )}
           </IconButton>
           <Snackbar
@@ -97,6 +102,8 @@ export function showStatusAndEnableToStopRunningLaunch(
         </div>
       </Tooltip>
     )
-  } else statusIcon = showStatusIcon(status)
+  } else statusIcon = showStatusIcon(launch_status)
   return statusIcon
 }
+
+export default LaunchStatusButton;

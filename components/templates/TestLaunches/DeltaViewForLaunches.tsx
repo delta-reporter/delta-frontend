@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core"
-import { showStatusIcon } from "."
+import { showStatusIcon } from ".."
 import ReactEcharts from "echarts-for-react"
 import Router from "next/router"
 import React from "react"

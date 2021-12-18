@@ -96,7 +96,7 @@ export const Notes = function(props: NotesProps) {
           maxHeight: 430,
           marginLeft: "-40px",
         }}
-        key={notes[0].created_datetime}
+        key={mother_test_id}
       >
         <FormControl style={{ display: "block" }}>
           <Paper
@@ -105,7 +105,7 @@ export const Notes = function(props: NotesProps) {
               color: "#000",
               background: "#ffc",
               display: "block",
-              height: "13em",
+              height: "14em",
               marginLeft: "1em",
               marginTop: "5px",
               float: "left",
@@ -167,7 +167,7 @@ export const Notes = function(props: NotesProps) {
                 color: "#000",
                 background: "#ffc",
                 display: "block",
-                height: "13em",
+                height: "14em",
                 marginLeft: "1em",
                 marginTop: "5px",
                 float: "left",
