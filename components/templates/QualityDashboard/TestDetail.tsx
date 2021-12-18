@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import Typography from '@material-ui/core/Typography';
 import getTestHistory from '../../../data/TestsHistory';
@@ -7,26 +6,13 @@ import { Accordion, AccordionDetails, AccordionSummary, Container } from '@mater
 import { showDateText, showResolutionText, showStatusText, TestErrorMessageAccordion, TestMediaAccordion } from '..';
 
 
-const useStyles = makeStyles((theme) => ({
-  textColorDarkMode: {
-    color: theme.palette.secondary.light,
-  },
-  textColorLightMode: {
-  },
-  container: {
-    maxHeight: 400,
-  },
-}))
-
 interface TestDetailMostProps {
   mother_test_id: number
   darkMode: boolean
 }
 
-
 export const TestDetail = function(props: TestDetailMostProps) {
 
-  const classes = useStyles(props);
   const { mother_test_id, darkMode} = props;
 
   function getBackgroundColor(darkMode) {
