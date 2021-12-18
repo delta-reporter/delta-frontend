@@ -227,8 +227,6 @@ function Launches({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { projectId } = context.query
-  console.log(projectId)
-  console.log(context.query)
   const projectData = await fetch(
     `${process.env.deltaCore}/api/v1/project/${projectId}`,
     {

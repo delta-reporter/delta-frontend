@@ -25,7 +25,6 @@ const LaunchStatusButton = function(
         launch_id: launch_id,
       }),
     }
-    console.log(requestOptions)
 
     const response = await fetch(
       `${process.env.publicDeltaCore}/api/v1/finish_launch`,

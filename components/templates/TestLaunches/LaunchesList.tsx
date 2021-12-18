@@ -4,7 +4,7 @@ import { clearChartDataOnDeltaView, testRunButtonsDefaultView, testRunButtonsDel
 import LaunchStatusButton from './LaunchStatusButton'
 import getTestLaunches from '../../../data/TestLaunches';
 import Pagination from './Pagination';
-import { TestProject } from '../../../pages';
+import { TestLaunch, TestProject } from '../../../pages';
 
 
 const useStyles = makeStyles(theme => ({
@@ -56,27 +56,24 @@ interface LaunchesProps {
   darkMode: boolean
 }
 
+
 export default function LaunchesList(props: LaunchesProps) {
 
   const classes = useStyles(props)
   const { project, darkMode} = props;
-  // const theme = useTheme();
   const { loading, noData, launches } = getTestLaunches(project.project_id)
-  // const [launchesList, setLaunchesList] = useState([])
-
-  // useEffect(() => {
-  //   const fetchLaunches = async () => {
-  //     setLaunchesList(launches)
-  //   }
-  //   fetchLaunches()
-  // }, [])
 
   const [currentPage, setCurrentPage] = useState(1)
   const [launchesPerPage] = useState(20)
-  // const indexOfLastItem = currentPage * launchesPerPage
-  // const indexOfFirstItem = indexOfLastItem - launchesPerPage
+
+
+  const indexOfLastItem = currentPage * launchesPerPage
+  const indexOfFirstItem = indexOfLastItem - launchesPerPage
   // pagination (first 20)
-  // const currentLaunches = launches.slice(indexOfFirstItem, indexOfLastItem)
+
+  function getCurrentLaunches(launches: TestLaunch[]): TestLaunch[] {
+    return launches.slice(indexOfFirstItem, indexOfLastItem);
+  }
 
   const [highlightedTest, setHighlightedTest] = useState(0)
 
@@ -181,8 +178,7 @@ export default function LaunchesList(props: LaunchesProps) {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {/* {currentLaunches.map(launch => ( */}
-                            {launches.map(launch => (
+                            {getCurrentLaunches(launches).map(launch => (
                               <TableRow key={launch.launch_id} hover>
                                 <TableCell>
                                   <LaunchStatusButton launch_id={launch.launch_id} launch_status={launch.launch_status} />
@@ -216,10 +212,8 @@ export default function LaunchesList(props: LaunchesProps) {
                         </Table>
 
                         <Pagination
-                          // itemsPerPage={launches}
                           totalNumber={launches.length}
                           itemsPerPage={launchesPerPage}
-                          // totalNumber={launchesList.length}
                           paginate={paginate}
                           highlightedTest={highlightedTest}
                         />
