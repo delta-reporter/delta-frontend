@@ -195,13 +195,12 @@ function Launches({
           </div>
         </div>
 
-        <AppBar position="static" color="default">
+        <AppBar position="static" className={state.darkMode ? classes.rootDark : classes.rootLight}>
           <Tabs
             value={tabIndex}
             onChange={handleTabChange}
-            indicatorColor="primary"
-            textColor="primary"
             variant="fullWidth"
+            textColor="inherit"
             aria-label="full width tabs example"
           >
             <Tab label="Launches" {...a11yProps(0)} />

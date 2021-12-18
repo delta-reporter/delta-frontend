@@ -16,6 +16,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import getMostFailedTests from '../../../data/TestsFailingMost';
 import UseAnimations from "react-useanimations"
 import { Grid, Tooltip } from '@material-ui/core';
+import { TestDetail } from './TestDetail';
 
 const useRowStyles = makeStyles({
   root: {
@@ -26,6 +27,15 @@ const useRowStyles = makeStyles({
 });
 
 const useStyles = makeStyles((theme) => ({
+  rootLight: {
+    flexGrow: 1,
+    color: theme.palette.secondary.light,
+  },
+  rootDark: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.light,
+  },
   textColorDarkMode: {
     color: theme.palette.secondary.light,
   },
@@ -35,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 400,
   },
 }))
+
+function getBackgroundColor(darkMode) {
+  if (darkMode) return "#2a2a2a"
+  else return "white"
+}
 
 interface TestFailingMostProps {
   project: number
@@ -48,11 +63,12 @@ interface FailedTest {
   test_type: string
   is_flaky: boolean
   failed_count: number
+  darkMode: boolean
 }
 
 
 function Row(props: FailedTest ) {
-  const { id, name, test_suite, test_type, is_flaky, failed_count } = props;
+  const { id, name, test_suite, test_type, is_flaky, failed_count, darkMode } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
@@ -85,28 +101,7 @@ function Row(props: FailedTest ) {
               <Typography variant="h6" gutterBottom component="div">
                 Test Details
               </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow key={id}>
-                      <TableCell component="th" scope="row">
-                        September 22th
-                      </TableCell>
-                      <TableCell>56585867</TableCell>
-                      <TableCell align="right">678678678678</TableCell>
-                      <TableCell align="right">
-                        4.586.745.896
-                      </TableCell>
-                    </TableRow>
-                </TableBody>
-              </Table>
+              <TestDetail mother_test_id={id} darkMode={darkMode}/>
             </Box>
           </Collapse>
         </TableCell>
@@ -169,8 +164,13 @@ export const TestsFailingTheMost = function(props: TestFailingMostProps) {
                     Tests failing the most
                   </Typography>
                   </Grid>
-                  <TableContainer component={Paper} className={classes.container}>
-                  {/* <TableContainer component={Paper} className={darkMode ? classes.textColorDarkMode : classes.textColorLightMode}> */}
+                  <TableContainer
+                    component={Paper}
+                    className={darkMode ? classes.rootDark : classes.rootLight}
+                    style={{
+                      backgroundColor: getBackgroundColor(darkMode)
+                    }}
+                    >
                     <Table aria-label="collapsible table">
                       <TableHead>
                         <TableRow>
@@ -191,6 +191,7 @@ export const TestsFailingTheMost = function(props: TestFailingMostProps) {
                             test_type={failed_test.test_type}
                             is_flaky={failed_test.is_flaky}
                             failed_count={failed_test.failed_count}
+                            darkMode={darkMode}
                             />
                         ))}
                       </TableBody>
