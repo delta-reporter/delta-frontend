@@ -39,7 +39,7 @@
     "immer": "^9.0.6",
     "isomorphic-unfetch": "^3.0.0",
     "material-ui": "^0.20.2",
-    "next": "^11.1.2",
+    "next": "^12.1.0",
     "next-redux-wrapper": "^4.0.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
